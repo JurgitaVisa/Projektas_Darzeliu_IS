@@ -36,7 +36,7 @@ export class LoginContainer extends Component {
             { headers: { 'Content-type': 'application/x-www-form-urlencoded' } })
             .then((resp) => {
                 console.log("user " + resp.data.username + " logged in");
-                this.props.history.push("/darzelis/home");
+                this.props.history.push("/home");
             })
             .catch((error) => {
                 console.log("Error log from Login submit", error);

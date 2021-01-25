@@ -7,7 +7,7 @@ const NotFound = () => {
     return (
         <div>
             <p className="ml-2">Puslapis adresu: {location.pathname} nerastas</p>
-            <Link to="/darzelis/home" className="btn btn-primary ml-2">Pradinis</Link>
+            <Link to="/home" className="btn btn-primary ml-2">Pradinis</Link>
         </div>
     );
 }

@@ -15,8 +15,8 @@ function App() {
     <div className="container pt-5">       
         <Switch >
           <Route exact path="/" component={Login} />   
-          <Route path="/darzelis/home" component={Main} />      
-          <Route path="/darzelis/admin" component={Admin} />
+          <Route path="/home" component={Main} />      
+          <Route path="/admin" component={Admin} />
           
           <Route path='*' component={NotFound} />
           <Route component={NotFound} />

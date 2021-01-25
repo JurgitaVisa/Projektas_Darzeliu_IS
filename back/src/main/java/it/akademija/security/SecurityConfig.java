@@ -100,6 +100,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	                @Override
 	                public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 	                        Authentication authentication) throws IOException, ServletException {
+	                	response.setHeader("Access-Control-Allow-Credentials", "true");
+						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+						response.setHeader("Content-Type", "application/json;charset=UTF-8");
+						
 						LOG.info("** SecurityConfig: Naudotojas atsijunge nuo sistemos **");
 								
 	                }

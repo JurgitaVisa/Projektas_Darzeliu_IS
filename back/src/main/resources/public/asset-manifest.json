@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "./static/css/main.d3aaa3ee.chunk.css",
-    "main.js": "./static/js/main.7caeb058.chunk.js",
-    "main.js.map": "./static/js/main.7caeb058.chunk.js.map",
-    "runtime-main.js": "./static/js/runtime-main.58e45c31.js",
-    "runtime-main.js.map": "./static/js/runtime-main.58e45c31.js.map",
-    "static/css/2.437d98bc.chunk.css": "./static/css/2.437d98bc.chunk.css",
-    "static/js/2.cb8b44e5.chunk.js": "./static/js/2.cb8b44e5.chunk.js",
-    "static/js/2.cb8b44e5.chunk.js.map": "./static/js/2.cb8b44e5.chunk.js.map",
-    "static/js/3.f9d43482.chunk.js": "./static/js/3.f9d43482.chunk.js",
-    "static/js/3.f9d43482.chunk.js.map": "./static/js/3.f9d43482.chunk.js.map",
-    "index.html": "./index.html",
-    "precache-manifest.a6b733d3bc45782f05afd4dfe5f77447.js": "./precache-manifest.a6b733d3bc45782f05afd4dfe5f77447.js",
-    "service-worker.js": "./service-worker.js",
-    "static/css/2.437d98bc.chunk.css.map": "./static/css/2.437d98bc.chunk.css.map",
-    "static/css/main.d3aaa3ee.chunk.css.map": "./static/css/main.d3aaa3ee.chunk.css.map",
-    "static/js/2.cb8b44e5.chunk.js.LICENSE.txt": "./static/js/2.cb8b44e5.chunk.js.LICENSE.txt"
+    "main.css": "/darzelis/static/css/main.d3aaa3ee.chunk.css",
+    "main.js": "/darzelis/static/js/main.021e359c.chunk.js",
+    "main.js.map": "/darzelis/static/js/main.021e359c.chunk.js.map",
+    "runtime-main.js": "/darzelis/static/js/runtime-main.26d9b402.js",
+    "runtime-main.js.map": "/darzelis/static/js/runtime-main.26d9b402.js.map",
+    "static/css/2.437d98bc.chunk.css": "/darzelis/static/css/2.437d98bc.chunk.css",
+    "static/js/2.cb8b44e5.chunk.js": "/darzelis/static/js/2.cb8b44e5.chunk.js",
+    "static/js/2.cb8b44e5.chunk.js.map": "/darzelis/static/js/2.cb8b44e5.chunk.js.map",
+    "static/js/3.f9d43482.chunk.js": "/darzelis/static/js/3.f9d43482.chunk.js",
+    "static/js/3.f9d43482.chunk.js.map": "/darzelis/static/js/3.f9d43482.chunk.js.map",
+    "index.html": "/darzelis/index.html",
+    "precache-manifest.f16f2889b7a5452f68a8b75f4f696ca3.js": "/darzelis/precache-manifest.f16f2889b7a5452f68a8b75f4f696ca3.js",
+    "service-worker.js": "/darzelis/service-worker.js",
+    "static/css/2.437d98bc.chunk.css.map": "/darzelis/static/css/2.437d98bc.chunk.css.map",
+    "static/css/main.d3aaa3ee.chunk.css.map": "/darzelis/static/css/main.d3aaa3ee.chunk.css.map",
+    "static/js/2.cb8b44e5.chunk.js.LICENSE.txt": "/darzelis/static/js/2.cb8b44e5.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.58e45c31.js",
+    "static/js/runtime-main.26d9b402.js",
     "static/css/2.437d98bc.chunk.css",
     "static/js/2.cb8b44e5.chunk.js",
     "static/css/main.d3aaa3ee.chunk.css",
-    "static/js/main.7caeb058.chunk.js"
+    "static/js/main.021e359c.chunk.js"
   ]
 }

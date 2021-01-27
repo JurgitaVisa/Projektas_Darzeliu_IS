@@ -42,7 +42,7 @@ export class LoginContainer extends Component {
                 console.log("Error log from Login submit", error);
                 if (error.response.status === 401) {
                     this.setState({ loginError: true });
-                }
+                } else alert("Prisijungimo klaida: " + error.response.status)
             });
 
         event.preventDefault();

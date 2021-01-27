@@ -4,13 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,13 +20,12 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "user")
 
 public class UserController {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
+	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private UserService userService;
-	
+
 	/* Kaip gauti prisijungusį vartotoją servise (12 pamoka, 29 skaidrė): */
 
 //	@RequestMapping(path = "/loggedUsername", method = RequestMethod.GET)
@@ -46,7 +44,9 @@ public class UserController {
 	@ApiOperation(value = "Create user", notes = "Creates user with data")
 	public void createUser(@RequestBody UserDTO userInfo) {
 		LOG.info("** Usercontroller: kuriamas naujas vartotojas **");
+
 		userService.createUser(userInfo);
+
 	}
 
 	/* Apdoros užklausas: DELETE /api/users/<vartotojas> */
@@ -56,6 +56,14 @@ public class UserController {
 	public void deleteUser(@PathVariable final String username) {
 
 		userService.deleteUser(username);
+	}
+
+	@GetMapping(path = "/api/admin/users")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Show all users", notes = "Showing all users")
+	public @ResponseBody Iterable<User> getAll() {
+
+		return userService.getAll();
 	}
 
 	public UserService getUserService() {

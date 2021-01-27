@@ -9,7 +9,7 @@ import it.akademija.role.Role;
 public interface UserDAO extends JpaRepository<User, Long> {
 
 	User findByUsername(String username);
-	
+
 	List<User> findByRole(Role role);
 
 	void deleteByUsername(String username);

@@ -17,7 +17,7 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserDAO userDao;
-	
+
 	private PasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	@Override
@@ -43,16 +43,22 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public void createUser(UserDTO userData) {
 		User newUser = new User();
-		
-		newUser.setUsername(userData.getUsername());
+
+		newUser.setRole(Role.valueOf(userData.getRole()));
 		newUser.setName(userData.getName());
 		newUser.setSurname(userData.getSurname());
+		newUser.setBirthdate(userData.getBirthdate());
+		newUser.setPersonalCode(userData.getPersonalCode());
+		newUser.setAddress(userData.getAddress());
+		newUser.setPhone(userData.getPhone());
+		newUser.setEmail(userData.getEmail());
+		newUser.setUsername(userData.getUsername());
 		newUser.setPassword(encoder.encode(userData.getPassword()));
-		newUser.setRole(Role.valueOf(userData.getRole()));
 
 		userDao.save(newUser);
 
-		if (userData.getRole().equals("ADMIN") && userDao.findByRole(Role.ADMIN).size() > 1 && userDao.findByUsername("admin")!=null) {
+		if (userData.getRole().equals("ADMIN") && userDao.findByRole(Role.ADMIN).size() > 1
+				&& userDao.findByUsername("admin") != null) {
 			userDao.deleteByUsername("admin");
 		}
 
@@ -68,12 +74,16 @@ public class UserService implements UserDetailsService {
 	 */
 	@Transactional
 	public void deleteUser(String username) {
-		
+
 		if (findByUsername(username).getRole().equals(Role.ADMIN) && userDao.findByRole(Role.ADMIN).size() == 1) {
-			userDao.save(new User("admin", "admin", "admin", encoder.encode("laikinas"), Role.ADMIN));
+			userDao.save(new User(Role.ADMIN, "admin", "admin", "admin", encoder.encode("laikinas")));
 		}
-		
+
 		userDao.deleteByUsername(username);
+	}
+
+	public Iterable<User> getAll() {
+		return userDao.findAll();
 	}
 
 	/**
@@ -83,6 +93,7 @@ public class UserService implements UserDetailsService {
 	 * @param username
 	 * @return
 	 */
+
 	@Transactional(readOnly = true)
 	public User findByUsername(String username) {
 

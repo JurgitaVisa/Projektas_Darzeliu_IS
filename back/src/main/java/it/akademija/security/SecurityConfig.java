@@ -107,8 +107,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						LOG.info("** SecurityConfig: Naudotojas atsijunge nuo sistemos **");
 								
 	                }
-	            }).deleteCookies("JSESSIONID")
-				
+	            })
+	            //ištrina sausainėlius ir uždaro sesiją
+	            .clearAuthentication(true)
+	            .invalidateHttpSession(true) 
+	            .deleteCookies("JSESSIONID")
 				.permitAll() // leidziam																												// /logout
 				.and().csrf().disable() // nenaudojam tokenu
 				// toliau forbidden klaidai

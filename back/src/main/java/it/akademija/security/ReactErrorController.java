@@ -4,13 +4,16 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.web.ServerProperties.Tomcat.Resource;
+
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+@Controller
 public class ReactErrorController implements ErrorController {
 
 	@Value("classpath:public/index.html")
@@ -31,7 +34,7 @@ public class ReactErrorController implements ErrorController {
 	@Override
 	public String getErrorPath() {
 
-		return "/index";
+		return null;
 	}
 
 }

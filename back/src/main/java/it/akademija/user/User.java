@@ -15,41 +15,63 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long UserId;	
-	
-	@Column(nullable = false)
-	private String name;
+	private Long UserId;
 
-	@Column(nullable = false)
-	private String surname;
-	
-//	private String city;
-//	
-//	private String address;
-//	
-//	private String email;
-//	
-//	private String personId;
-//	
-//	private String phoneNumber;
-//	
-	@Column(unique = true)
-	private String username;
-	
-	private String password;	
-	
 	@Enumerated(EnumType.STRING)
 	private Role role;
+
+	@Column
+	private String name;
+
+	@Column
+	private String surname;
+
+	@Column
+	private String birthdate;
+
+	@Column
+	private String personalCode;
+
+	@Column
+	private String address;
+
+	@Column
+	private String phone;
+
+	@Column
+	private String email;
+
+	@Column
+	private String username;
+
+	@Column
+	private String password;
 
 	public User() {
 	}
 
-	public User(String username, String name, String surname, String password, Role role) {
-		this.username = username;
+	public User(Role role, String name, String surname, String username, String password) {
+		super();
+		this.role = role;
 		this.name = name;
 		this.surname = surname;
+		this.username = username;
 		this.password = password;
+	}
+
+	public User(Role role, String name, String surname, String birthdate, String personalCode, String address,
+			String phone, String email, String username, String password) {
+		super();
 		this.role = role;
+		this.name = name;
+		this.surname = surname;
+		this.birthdate = birthdate;
+		this.personalCode = personalCode;
+		this.address = address;
+		this.phone = phone;
+		this.email = email;
+		this.username = username;
+		this.password = password;
 	}
 
 	public String getUsername() {
@@ -83,7 +105,6 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
 
 	public Role getRole() {
 		return role;
@@ -93,8 +114,44 @@ public class User {
 		this.role = role;
 	}
 
-	
+	public String getBirthdate() {
+		return birthdate;
+	}
 
-	
+	public void setBirthdate(String birthdate) {
+		this.birthdate = birthdate;
+	}
+
+	public String getPersonalCode() {
+		return personalCode;
+	}
+
+	public void setPersonalCode(String personalCode) {
+		this.personalCode = personalCode;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 }

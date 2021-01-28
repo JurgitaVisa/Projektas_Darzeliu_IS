@@ -11,24 +11,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import it.akademija.user.UserDAO;
 
@@ -61,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		http.cors().and().authorizeRequests()
 				// be saugumo UI dalis ir swaggeris
 				.antMatchers("/", "/swagger-ui/", "/hello/**", "/createuser", "/darzelis/**").permitAll()
 				// visi /api/ saugus (dar galima .anyRequest() )
@@ -93,22 +88,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 				})
 				// esant blogiems user/pass
-				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
-				.loginPage("/login").permitAll() // jis jau
-													// egzistuoja
+
+				.failureHandler(new SimpleUrlAuthenticationFailureHandler()).loginPage("/login").permitAll() // jis jau
+																												// egzistuoja
+
+				.failureHandler(new SimpleUrlAuthenticationFailureHandler()).loginPage("/login").permitAll() // jis jau
+																												// egzistuoja
+
 				.and().logout().logoutUrl("/logout").logoutSuccessHandler(new LogoutSuccessHandler() {
 
 					@Override
 					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 							Authentication authentication) throws IOException, ServletException {
-						response.setHeader("Access-Control-Allow-Credentials", "true");
-						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-						response.setHeader("Content-Type", "application/json;charset=UTF-8");
+
+//						response.setHeader("Access-Control-Allow-Credentials", "true");
+//						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+//						response.setHeader("Content-Type", "application/json;charset=UTF-8");
 
 						LOG.info("** SecurityConfig: Naudotojas atsijunge nuo sistemos **");
 
 					}
 				}).logoutSuccessUrl("/login")
+
 				// ištrina sausainėlius ir uždaro sesiją
 				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll() // leidziam
 																												// //

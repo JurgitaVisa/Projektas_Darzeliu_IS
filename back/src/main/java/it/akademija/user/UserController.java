@@ -6,13 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,8 +46,11 @@ public class UserController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Create user", notes = "Creates user with data")
 	public void createUser(@RequestBody UserDTO userInfo) {
+
 		LOG.info("** Usercontroller: kuriamas naujas naudotojas **");
+
 		userService.createUser(userInfo);
+
 	}
 
 	/**
@@ -70,6 +72,14 @@ public class UserController {
 		}
 
 		return new ResponseEntity<String>("Naudotojas tokiu vardu nerastas", HttpStatus.NOT_FOUND);
+	}
+
+	@GetMapping(path = "/api/admin/users")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Show all users", notes = "Showing all users")
+	public @ResponseBody Iterable<User> getAll() {
+
+		return userService.getAll();
 	}
 
 	public UserService getUserService() {

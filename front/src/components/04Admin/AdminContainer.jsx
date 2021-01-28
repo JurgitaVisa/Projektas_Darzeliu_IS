@@ -4,7 +4,7 @@ import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 
 import NavBar from '../00Navigation/NavBar';
-
+import AdminCreateUser from '../04Admin/AdminCreateUser';
 
 export class AdminContainer extends Component {
 
@@ -41,6 +41,7 @@ export class AdminContainer extends Component {
                 <p>Servisus siūlau kviesti per "httpService" ir "apiEndpoint" (užkomentuotas pavyzdys įdėtas Admin komponente), kad galėtume bet kada pakeisti axios arba url adresą, jei reiks. </p>
                 <p>Pavadinimai gali būti keičiami, kad visiems būtų aiškūs. Aš juos iš Mosh tutorial paėmiau, kai mokiausi; 
                 vėliau adresus reiks sutvarkyti ir papildyti. </p>
+                <AdminCreateUser/>
             </div>
         )
     }

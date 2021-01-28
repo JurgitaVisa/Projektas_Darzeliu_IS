@@ -17,6 +17,10 @@ const LoginForm = (({ username, password, loginError, onPassChange, onUsernameCh
                         id="username"
                         value={username}
                         onChange={onUsernameChange}
+                        required
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Įveskite naudotojo prisijungimo vardą"
                     />
                 </div>
 
@@ -30,6 +34,10 @@ const LoginForm = (({ username, password, loginError, onPassChange, onUsernameCh
                         id="password"
                         value={password}
                         onChange={onPassChange}
+                        required
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Įveskite naudotojo slaptažodį"
                     />
                 </div>
 

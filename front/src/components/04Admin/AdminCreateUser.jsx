@@ -190,20 +190,20 @@ export default class AdminCreateUser extends Component {
                     {this.drawSelector()}
                     {this.drawForm(this.state.role)}
                     <h4><b>Naudotojo prisijungimai</b></h4>
-                    <div className="col-8">
+                    <div className="col-12">
                          <div className="row">
-                            <div className="col-4">
+                            <div className="col-md-3">
                                 <p><b>Vartotojo vardas</b></p>
                             </div>
-                            <div className="col-8">
+                            <div className="col-md-9">
                                 <p>{this.state.email}</p>
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-4">
+                            <div className="col-md-3">
                                 <p><b>Slaptažodis</b></p>
                             </div>
-                            <div className="col-8">
+                            <div className="col-md-9">
                                 <p>{this.state.email}</p>
                             </div>
                         </div>

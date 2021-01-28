@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		http.cors().and().authorizeRequests()
 				// be saugumo UI dalis ir swaggeris
 				.antMatchers("/", "/swagger-ui/", "/hello/**", "/createuser", "/darzelis/**").permitAll()
 				// visi /api/ saugus (dar galima .anyRequest() )
@@ -101,10 +101,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					@Override
 					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 							Authentication authentication) throws IOException, ServletException {
-						response.setHeader("Access-Control-Allow-Credentials", "true");
-						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-						response.setHeader("Content-Type", "application/json;charset=UTF-8");
+//						response.setHeader("Access-Control-Allow-Credentials", "true");
+//						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+//						response.setHeader("Content-Type", "application/json;charset=UTF-8");
 
+						
 						LOG.info("** SecurityConfig: Naudotojas atsijunge nuo sistemos **");
 
 					}

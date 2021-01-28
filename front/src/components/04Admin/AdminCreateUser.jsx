@@ -108,19 +108,25 @@ export default class AdminCreateUser extends Component {
         }
     }
 
-    roleDropdownOnChange(event) {
-        event.preventDefault()
+    resetState = () => {
         this.setState({
-            role: event.target.value,
-            //reset state
             name: "",
             surname: "",
             birthdate: "",
             identificationCode: "",
             address: "",
             telno: "",
-            email: "",
+            email: ""
         })
+    }
+
+    roleDropdownOnChange(event) {
+        event.preventDefault()
+        this.setState({
+            role: event.target.value,
+        })
+        //reset state
+        this.resetState();
     }
 
     handleChange(event) {
@@ -131,7 +137,6 @@ export default class AdminCreateUser extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log(this.state.telno + " " + this.state.personalCode);
         if(this.state.role==="ADMIN" || this.state.role==="MANAGER") {
             http.post(`${apiEndpoint}/createuser`, {
                 "name": this.state.name,
@@ -144,6 +149,7 @@ export default class AdminCreateUser extends Component {
                     console.log("Naujas vartotojas sukurtas");
                     console.log(this.state);
                     alert('Naujas vartotojas sėkmingai sukurtas!');
+                    this.resetState();
                 })
                 .catch((error) => {
                     console.log(error);
@@ -167,6 +173,7 @@ export default class AdminCreateUser extends Component {
                     console.log("Naujas vartotojas sukurtas");
                     console.log(this.state);
                     alert('Naujas vartotojas sėkmingai sukurtas!');
+                    this.resetState();
                 })
                 .catch((error) => {
                     console.log(error);

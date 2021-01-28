@@ -54,7 +54,6 @@ export class LoginContainer extends Component {
             <div >
                 <div className="text-center">
                     <h5>Sveiki atvykę! </h5>
-                    <p>Login iš Andriaus skaidrių:</p>
 
                 </div>
 

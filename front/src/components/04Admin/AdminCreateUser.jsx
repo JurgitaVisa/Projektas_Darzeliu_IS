@@ -37,10 +37,9 @@ export default class AdminCreateUser extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    drawSelector (role) {
-        if(role === "ADMIN" || role === "MANAGER") {
-            return (
-                <div className="form-row">
+    drawSelector () {
+        return (
+            <div className="form-row">
                     <div className="form-group col">
                         <label for="role-selector">Naudotojo rolė:</label>
                         <select name="role-selector" id="selectpicker" className="form-control" value={this.state.role} onChange={this.roleDropdownOnChange}>
@@ -53,23 +52,8 @@ export default class AdminCreateUser extends Component {
                         <label for="txtEmail">El. paštas <span style={styleFieldRequired}>Būtinas</span></label>
                         <input type="email" className="form-control" id="txtEmail" name="email" value={this.state.email} onChange={this.handleChange} placeholder="El. paštas" required="required"></input>
                     </div>
-                </div>
-            )
-        }
-        else if(role === "USER") {
-            return (
-                <div className="form-row">
-                    <div className="form-group col-6">
-                        <label for="role-selector">Naudotojo rolė:</label>
-                        <select name="role-selector" id="selectpicker" className="form-control" value={this.state.role} onChange={this.roleDropdownOnChange}>
-                            <option value="ADMIN">Administratorius</option>
-                            <option value="MANAGER">Švietimo specialistas</option>
-                            <option value="USER">Vaiko atstovas</option>
-                        </select>
-                    </div>
-                </div>
-            )
-        }
+            </div>
+        )
     }
 
     drawForm (role) {
@@ -92,8 +76,8 @@ export default class AdminCreateUser extends Component {
             <div className="innerForm">
                 <div className="form-row">
                     <div className="form-group col">
-                        <label for="txtEmail">El. paštas <span style={styleFieldRequired}>Būtinas</span></label>
-                        <input type="email" className="form-control" id="txtEmail" name="email" value={this.state.email} onChange={this.handleChange} placeholder="El. paštas" required="required" maxLength="32"></input>
+                        <label for="txt">Gimimo data <span style={styleFieldRequired}>Būtinas</span></label>
+                        <input type="date" className="form-control" id="txtBirthdate" name="birthdate" value={this.state.birthdate} onChange={this.handleChange} placeholder="Gimimo data" required="required"></input>
                     </div>
                     <div className="form-group col">
                         <label for="txtIdentificationCode">Asmens kodas <span style={styleFieldRequired}>Būtinas</span></label>
@@ -120,12 +104,6 @@ export default class AdminCreateUser extends Component {
                         <input type="tel" className="form-control" id="txtTelNo" name="telno" value={this.state.telno} onChange={this.handleChange} placeholder="+370xxxxxxxx" required="required" pattern="[+,0-9]{12}"></input>
                     </div>
                 </div>
-                {/*
-                <div className="form-group">
-                    <label for="txt">Gimimo data:</label>
-                    <input type="date" className="form-control" id="txtBirthdate" name="birthdate" value={this.state.birthdate} onChange={this.handleChange} placeholder="Gimimo data" required="required"></input>
-                </div>
-                */}
             </div>
             )
         }
@@ -155,42 +133,56 @@ export default class AdminCreateUser extends Component {
     }
 
     handleSubmit(event) {
-        /*
-            Todo:
-                Post data to server
-                Handle errors
-        */
         event.preventDefault();
         if(this.state.role==="ADMIN" || this.state.role==="MANAGER") {
-            this.setState({
-                username: this.state.email,
-                password: this.state.email
-            }, () => 
-            // Todo: change post url
-            http.post(`http://localhost:8080/createuser`, {
+            http.post(`${apiEndpoint}/createuser`, {
                 "name": this.state.name,
-                "password": this.state.password,
-                "role": this.state.role,
                 "surname": this.state.surname,
-                "username": this.state.username
+                "role": this.state.role,
+                "username": this.state.email,
+                "password": this.state.email
             })
                 .then((response) => {
                     console.log("Naujas vartotojas sukurtas");
                     console.log(this.state);
-                    alert('Naujas vartotojas sėkmingai sukurtas!')
+                    alert('Naujas vartotojas sėkmingai sukurtas!');
                 })
-            )
+                .catch((error) => {
+                    console.log(error);
+                    alert('Įvyko klaida');
+                })
+        }
+        else if(this.state.role==="USER") {
+            http.post(`${apiEndpoint}/createuser`, {
+                "name": this.state.name,
+                "surname": this.state.surname,
+                "password": this.state.password,
+                "role": this.state.role,
+                "personalCode": this.state.personalCode,
+                "address": this.state.address,
+                "phone": this.state.telno,
+                "email": this.state.email,
+                "username": this.state.email,
+                "password": this.state.email
+            })
+                .then((response) => {
+                    console.log("Naujas vartotojas sukurtas");
+                    console.log(this.state);
+                    alert('Naujas vartotojas sėkmingai sukurtas!');
+                })
+                .catch((error) => {
+                    console.log(error);
+                    alert('Įvyko klaida');
+                })
         }
     }
-
-    const 
     render() {
         return (
             <div className="container">
                 <h4><b>Naujo vartotojo sukūrimas</b></h4>
                 <div className="row">
                 <form className="col-8" onSubmit={this.handleSubmit}>
-                    {this.drawSelector(this.state.role)}
+                    {this.drawSelector()}
                     {this.drawForm(this.state.role)}
                     <h4><b>Naudotojo prisijungimai</b></h4>
                     <div className="col-8">

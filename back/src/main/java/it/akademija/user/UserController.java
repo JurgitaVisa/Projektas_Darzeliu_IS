@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,18 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @Api(value = "user")
 
 public class UserController {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
+	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private UserService userService;
-	
+
 	/* Kaip gauti prisijungusį vartotoją servise (12 pamoka, 29 skaidrė): */
 
 //	@RequestMapping(path = "/loggedUsername", method = RequestMethod.GET)
@@ -45,17 +47,29 @@ public class UserController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Create user", notes = "Creates user with data")
 	public void createUser(@RequestBody UserDTO userInfo) {
-		LOG.info("** Usercontroller: kuriamas naujas vartotojas **");
+		LOG.info("** Usercontroller: kuriamas naujas naudotojas **");
 		userService.createUser(userInfo);
 	}
 
-	/* Apdoros užklausas: DELETE /api/users/<vartotojas> */
+	/**
+	 * 
+	 * Deletes user with specified username. Method only accessible to ADMIN users
+	 * 
+	 * @param username
+	 */
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping(path = "/api/admin/users/delete/{username}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Delete user", notes = "Deletes user by username")
-	public void deleteUser(@PathVariable final String username) {
+	public ResponseEntity<String> deleteUser(
+			@ApiParam(value = "Username", required = true) @PathVariable final String username) {
+		if (userService.findByUsername(username) != null) {
+			userService.deleteUser(username);
+			LOG.info("** Usercontroller: trinamas naudotojas vardu [{}] **", username);
+			return new ResponseEntity<String>("Naudotojas panaikintas sėkmingai", HttpStatus.OK);
+		}
 
-		userService.deleteUser(username);
+		return new ResponseEntity<String>("Naudotojas tokiu vardu nerastas", HttpStatus.NOT_FOUND);
 	}
 
 	public UserService getUserService() {

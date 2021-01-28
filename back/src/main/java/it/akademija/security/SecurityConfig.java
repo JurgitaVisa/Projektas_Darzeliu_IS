@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -92,34 +93,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 				})
 				// esant blogiems user/pass
-				.failureHandler(new SimpleUrlAuthenticationFailureHandler()).loginPage("/login").permitAll() // jis jau
-																												// egzistuoja
-				.and().logout().logoutUrl("/logout")
-	            .logoutSuccessHandler(new LogoutSuccessHandler() {
+				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
+				.loginPage("/login").permitAll() // jis jau
+													// egzistuoja
+				.and().logout().logoutUrl("/logout").logoutSuccessHandler(new LogoutSuccessHandler() {
 
-	                @Override
-	                public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
-	                        Authentication authentication) throws IOException, ServletException {
-	                	response.setHeader("Access-Control-Allow-Credentials", "true");
+					@Override
+					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+							Authentication authentication) throws IOException, ServletException {
+						response.setHeader("Access-Control-Allow-Credentials", "true");
 						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
 						response.setHeader("Content-Type", "application/json;charset=UTF-8");
-						
+
 						LOG.info("** SecurityConfig: Naudotojas atsijunge nuo sistemos **");
-								
-	                }
-	            })
-	            //ištrina sausainėlius ir uždaro sesiją
-	            .clearAuthentication(true)
-	            .invalidateHttpSession(true) 
-	            .deleteCookies("JSESSIONID")
-				.permitAll() // leidziam																												// /logout
+
+					}
+				}).logoutSuccessUrl("/login")
+				// ištrina sausainėlius ir uždaro sesiją
+				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll() // leidziam
+																												// //
+																												// /logout
 				.and().csrf().disable() // nenaudojam tokenu
 				// toliau forbidden klaidai
 				.exceptionHandling().authenticationEntryPoint(securityEntryPoint).and().headers().frameOptions()
 				.disable(); // H2 konsolei
 	}
-	
-	
-	
-	
+
 }

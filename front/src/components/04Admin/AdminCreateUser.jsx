@@ -30,7 +30,6 @@ export default class AdminCreateUser extends Component {
             address: "",
             telno: "",
             email: "",
-            password: ""
         }
         this.roleDropdownOnChange = this.roleDropdownOnChange.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -41,7 +40,7 @@ export default class AdminCreateUser extends Component {
         return (
             <div className="form-row">
                     <div className="form-group col">
-                        <label for="role-selector">Naudotojo rolė:</label>
+                        <label htmlFor="role-selector">Naudotojo rolė:</label>
                         <select name="role-selector" id="selectpicker" className="form-control" value={this.state.role} onChange={this.roleDropdownOnChange}>
                             <option value="ADMIN">Administratorius</option>
                             <option value="MANAGER">Švietimo specialistas</option>
@@ -49,7 +48,7 @@ export default class AdminCreateUser extends Component {
                         </select>
                     </div>
                     <div className="form-group col">
-                        <label for="txtEmail">El. paštas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtEmail">El. paštas <span style={styleFieldRequired}>Būtinas</span></label>
                         <input type="email" className="form-control" id="txtEmail" name="email" value={this.state.email} onChange={this.handleChange} placeholder="El. paštas" required="required"></input>
                     </div>
             </div>
@@ -61,11 +60,11 @@ export default class AdminCreateUser extends Component {
             return (
                 <div className="form-row">
                     <div className="form-group col">
-                        <label for="txtName">Vardas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtName">Vardas <span style={styleFieldRequired}>Būtinas</span></label>
                         <input type="text" className="form-control" id="txtName" name="name" value={this.state.name} onChange={this.handleChange} placeholder="Vardas" required="required"></input>
                     </div>
                     <div className="form-group col">
-                        <label for="txtSurname">Pavardė <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtSurname">Pavardė <span style={styleFieldRequired}>Būtinas</span></label>
                         <input type="text" className="form-control" id="txtSurname" name="surname" value={this.state.surname} onChange={this.handleChange} placeholder="Pavardė" required="required"></input>
                     </div>
                 </div>
@@ -76,32 +75,32 @@ export default class AdminCreateUser extends Component {
             <div className="innerForm">
                 <div className="form-row">
                     <div className="form-group col">
-                        <label for="txt">Gimimo data <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txt">Gimimo data <span style={styleFieldRequired}>Būtinas</span></label>
                         <input type="date" className="form-control" id="txtBirthdate" name="birthdate" value={this.state.birthdate} onChange={this.handleChange} placeholder="Gimimo data" required="required"></input>
                     </div>
                     <div className="form-group col">
-                        <label for="txtIdentificationCode">Asmens kodas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtIdentificationCode">Asmens kodas <span style={styleFieldRequired}>Būtinas</span></label>
                         <input type="text" className="form-control" id="txtIdentificationCode" name="identificationCode" value={this.state.identificationCode} onChange={this.handleChange} placeholder="Asmens kodas" required="required" pattern="[0-9]{11}"></input>
                     </div>
                 </div>
                 <div className="form-row">
                     <div className="form-group col">
-                        <label for="txtName">Vardas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtName">Vardas <span style={styleFieldRequired}>Būtinas</span></label>
                         <input type="text" className="form-control" id="txtName" name="name" value={this.state.name} onChange={this.handleChange} placeholder="Vardas" required="required"></input>
                     </div>
                     <div className="form-group col">
-                        <label for="txtSurname">Pavardė <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtSurname">Pavardė <span style={styleFieldRequired}>Būtinas</span></label>
                         <input type="text" className="form-control" id="txtSurname" name="surname" value={this.state.surname} onChange={this.handleChange} placeholder="Pavardė" required="required"></input>
                     </div>
                 </div>
                 <div className="form-row">
                     <div className="form-group col">
-                        <label for="txtAddress">Adresas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtAddress">Adresas <span style={styleFieldRequired}>Būtinas</span></label>
                         <input type="text" className="form-control" id="txtAddress" name="address" value={this.state.address} onChange={this.handleChange} placeholder="Adresas" required="required"></input>
                     </div>
                     <div className="form-group col">
-                        <label for="txtTelNo">Telefonas <span style={styleFieldRequired}>Būtinas</span></label>
-                        <input type="tel" className="form-control" id="txtTelNo" name="telno" value={this.state.telno} onChange={this.handleChange} placeholder="+370xxxxxxxx" required="required" pattern="[+,0-9]{12}"></input>
+                        <label htmlFor="txtTelNo">Telefonas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <input type="text" className="form-control" id="txtTelNo" name="telno" value={this.state.telno} onChange={this.handleChange} placeholder="+370xxxxxxxx" required="required" pattern="[+,0-9]{12}"></input>
                     </div>
                 </div>
             </div>
@@ -121,8 +120,6 @@ export default class AdminCreateUser extends Component {
             address: "",
             telno: "",
             email: "",
-            username: "",
-            password: ""
         })
     }
 
@@ -134,6 +131,7 @@ export default class AdminCreateUser extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        console.log(this.state.telno + " " + this.state.personalCode);
         if(this.state.role==="ADMIN" || this.state.role==="MANAGER") {
             http.post(`${apiEndpoint}/createuser`, {
                 "name": this.state.name,
@@ -154,16 +152,16 @@ export default class AdminCreateUser extends Component {
         }
         else if(this.state.role==="USER") {
             http.post(`${apiEndpoint}/createuser`, {
-                "name": this.state.name,
-                "surname": this.state.surname,
-                "password": this.state.password,
-                "role": this.state.role,
-                "personalCode": this.state.personalCode,
                 "address": this.state.address,
-                "phone": this.state.telno,
+                "birthdate": this.state.birthdate,
                 "email": this.state.email,
-                "username": this.state.email,
-                "password": this.state.email
+                "name": this.state.name,
+                "password": this.state.email,
+                "personalCode": this.state.identificationCode,
+                "phone": this.state.telno,
+                "role": this.state.role,
+                "surname": this.state.surname,
+                "username": this.state.email
             })
                 .then((response) => {
                     console.log("Naujas vartotojas sukurtas");

@@ -22,14 +22,15 @@ export default class AdminCreateUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            role: "ADMIN",
-            name: "",
-            surname: "",
+            role: "USER",
+            name: "test",
+            surname: "test",
             birthdate: "",
-            identificationCode: "",
-            address: "",
-            telno: "",
-            email: "",
+            identificationCode: "12345678999",
+            address: "test",
+            telno: "+37000000000",
+            email: "test@test",
+            currentDate: new Date(new Date().toDateString()).toLocaleDateString()
         }
         this.roleDropdownOnChange = this.roleDropdownOnChange.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -40,7 +41,7 @@ export default class AdminCreateUser extends Component {
         return (
             <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="role-selector">Naudotojo rolė:</label>
+                        <label htmlFor="role-selector">Vartotojo rolė:</label>
                         <select name="role-selector" id="selectpicker" className="form-control" value={this.state.role} onChange={this.roleDropdownOnChange}>
                             <option value="ADMIN">Administratorius</option>
                             <option value="MANAGER">Švietimo specialistas</option>
@@ -60,12 +61,10 @@ export default class AdminCreateUser extends Component {
             return (
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txtName">Vardas <span style={styleFieldRequired}>Būtinas</span></label>
-                        <input type="text" className="form-control" id="txtName" name="name" value={this.state.name} onChange={this.handleChange} placeholder="Vardas" required="required"></input>
+                        <input type="text" className="form-control" id="txtName" name="name" value={this.state.name} onChange={this.handleChange} placeholder="Vardas"></input>
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtSurname">Pavardė <span style={styleFieldRequired}>Būtinas</span></label>
-                        <input type="text" className="form-control" id="txtSurname" name="surname" value={this.state.surname} onChange={this.handleChange} placeholder="Pavardė" required="required"></input>
+                        <input type="text" className="form-control" id="txtSurname" name="surname" value={this.state.surname} onChange={this.handleChange} placeholder="Pavardė"></input>
                     </div>
                 </div>
             )
@@ -76,7 +75,8 @@ export default class AdminCreateUser extends Component {
                 <div className="form-row">
                     <div className="form-group col">
                         <label htmlFor="txt">Gimimo data <span style={styleFieldRequired}>Būtinas</span></label>
-                        <input type="date" className="form-control" id="txtBirthdate" name="birthdate" value={this.state.birthdate} onChange={this.handleChange} placeholder="Gimimo data" required="required"></input>
+                        <input type="text" className="form-control" id="txtBirthdate" name="birthdate" value={this.state.birthdate} onChange={this.handleChange} placeholder="MMMM-MM-DD" required="required" max={this.state.currentDate}></input>
+                        
                     </div>
                     <div className="form-group col">
                         <label htmlFor="txtIdentificationCode">Asmens kodas <span style={styleFieldRequired}>Būtinas</span></label>
@@ -125,7 +125,6 @@ export default class AdminCreateUser extends Component {
         this.setState({
             role: event.target.value,
         })
-        //reset state
         this.resetState();
     }
 
@@ -133,6 +132,7 @@ export default class AdminCreateUser extends Component {
         this.setState({
             [event.target.name]: event.target.value
         })
+        console.log(this.state);
     }
 
     handleSubmit(event) {
@@ -189,7 +189,7 @@ export default class AdminCreateUser extends Component {
                 <form className="col-8" onSubmit={this.handleSubmit}>
                     {this.drawSelector()}
                     {this.drawForm(this.state.role)}
-                    <h4><b>Naudotojo prisijungimai</b></h4>
+                    <h4><b>Vartotojo prisijungimai</b></h4>
                     <div className="col-12">
                          <div className="row">
                             <div className="col-md-3">
@@ -208,7 +208,8 @@ export default class AdminCreateUser extends Component {
                             </div>
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-primary float-left">Sukurti</button>
+                    <button type="submit" className="btn btn-primary">Sukurti</button>
+                    <button className="btn btn-primary float-right" onClick={this.resetState}>Išvalyti</button>
                 </form>
                 </div>
             </div>

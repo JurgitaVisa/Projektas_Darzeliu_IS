@@ -23,7 +23,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 
 import it.akademija.user.UserDAO;
 
@@ -88,32 +90,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 				})
 				// esant blogiems user/pass
+				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
+				.loginPage("/login").permitAll() // jis jau egzistuoja
 
-				.failureHandler(new SimpleUrlAuthenticationFailureHandler()).loginPage("/login").permitAll() // jis jau
-																												// egzistuoja
-
-				.failureHandler(new SimpleUrlAuthenticationFailureHandler()).loginPage("/login").permitAll() // jis jau
-																												// egzistuoja
-
-				.and().logout().logoutUrl("/logout").logoutSuccessHandler(new LogoutSuccessHandler() {
+				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
+				.loginPage("/login").permitAll() // jis jau egzistuoja
+				
+				.and().logout().logoutUrl("/logout")
+				// ištrina sausainėlius ir uždaro sesiją
+				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID")
+				
+				.logoutSuccessHandler(new LogoutSuccessHandler() {
 
 					@Override
 					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 							Authentication authentication) throws IOException, ServletException {
 
-//						response.setHeader("Access-Control-Allow-Credentials", "true");
-//						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-//						response.setHeader("Content-Type", "application/json;charset=UTF-8");
-
 						LOG.info("** SecurityConfig: Naudotojas atsijunge nuo sistemos **");
 
 					}
-				}).logoutSuccessUrl("/login")
-
-				// ištrina sausainėlius ir uždaro sesiją
-				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll() // leidziam
-																												// //
-																												// /logout
+				})
+				.permitAll() // leidziam logout
+				.logoutSuccessUrl("/login")																							
 				.and().csrf().disable() // nenaudojam tokenu
 				// toliau forbidden klaidai
 				.exceptionHandling().authenticationEntryPoint(securityEntryPoint).and().headers().frameOptions()

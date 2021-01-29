@@ -7,20 +7,24 @@ const Table = (props) => {
     const { columns, data } = props;
 
     return (
-        <table className="table">
+        <div className="table-responsive-sm">
 
-            <TableHeader
-                columns={columns}
 
-            />
+            <table className="table">
 
-            <TableBody
-                columns={columns}
-                data={data}
+                <TableHeader
+                    columns={columns}
 
-            />
+                />
 
-        </table>
+                <TableBody
+                    columns={columns}
+                    data={data}
+
+                />
+
+            </table>
+        </div>
 
     );
 }

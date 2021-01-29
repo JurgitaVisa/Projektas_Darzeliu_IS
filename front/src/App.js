@@ -8,6 +8,7 @@ import Login  from './components/01Login/LoginContainer';
 import Main from './components/02Main/MainContainer';
 import NotFound from './components/03NotFound/NotFound';
 import Admin from './components/04Admin/AdminContainer';
+import UserListContainer from './components/04Admin/UserListContainer';
 
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
           <Route exact path="/" component={Login} />   
           <Route path="/home" component={Main} />      
           <Route path="/admin" component={Admin} />
-          
+          <Route path="/naudotojai" component={UserListContainer} />
           <Route path='*' component={NotFound} />
           <Route component={NotFound} />
 

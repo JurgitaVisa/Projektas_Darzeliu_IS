@@ -1,0 +1,80 @@
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
+import http from '../10Services/httpService';
+import apiEndpoint from '../10Services/endpoint';
+
+import NavBar from '../00Navigation/NavBar';
+import UserListTable from './UserListTable';
+
+
+export class UserListContainer extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            naudotojai: []
+        }
+    }
+    componentDidMount() {
+        http
+            .get(`${apiEndpoint}/api/admin/users`)
+            .then((response) => {
+                this.setState({ naudotojai: response.data });
+
+            }).catch(error => {
+                console.log(error.response);
+                if (error && error.response.status === 401)
+                    alert("Puslapis pasiekiamas tik administratoriaus teises turintiems naudotojams")
+                this.props.history.replace("/home");
+            }
+            );
+
+    }
+
+    handleDelete = (item) => {
+        const username = item.username;
+        console.log("Trinti naudotoja", username);
+
+        http
+            .delete(`${apiEndpoint}/api/admin/users/delete/${username}`)
+            .then((response) => {
+                alert(response.data);
+                http
+                    .get(`${apiEndpoint}/api/admin/users`)
+                    .then((response) => {
+                        this.setState({ naudotojai: response.data });
+
+                    });
+
+            }).catch(error => {
+                if (error && error.response.status > 400 && error.response.status < 500) alert("Veiksmas neleidžiamas");
+
+            }
+            );
+
+    }
+
+
+    render() {
+        return (<div>
+            <NavBar />
+            <div className="row ">
+                <div className="col-12 text-center">
+                    <h5 className="text-center p-3">Sistemos naudotojų sąrašas </h5>
+
+                </div>
+            </div>
+
+            <Link to="/admin" className="btn btn-primary my-2">Sukurti naują</Link>
+
+            <UserListTable
+                naudotojai={this.state.naudotojai}
+                onDelete={this.handleDelete}
+            />
+        </div>
+        )
+    }
+}
+
+export default UserListContainer

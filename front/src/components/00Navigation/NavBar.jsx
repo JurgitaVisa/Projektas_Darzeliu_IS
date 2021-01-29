@@ -17,6 +17,10 @@ function Navigation() {
                         
                         <li className="nav-item p-1">
                             <NavLink className="nav-link" to={"/admin"}>Naudotojų administravimas</NavLink>
+                        </li> 
+
+                         <li className="nav-item p-1">
+                            <NavLink className="nav-link" to={"/naudotojai"}>Naudotojų sąrašas</NavLink>
                         </li>                        
                         
 

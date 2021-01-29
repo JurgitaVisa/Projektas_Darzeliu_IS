@@ -22,10 +22,7 @@ function transformMonth(month) {
     else return month;
 }
 
-var dt = (new Date().getUTCFullYear()) + "-" + transformMonth(new Date().getUTCMonth() + 1) + "-" + (new Date().getUTCDate());
-var currentDate = dt;
-
-
+var currentDate = (new Date().getUTCFullYear()) + "-" + transformMonth(new Date().getUTCMonth() + 1) + "-" + (new Date().getUTCDate());
 
 export default class AdminCreateUser extends Component {
     

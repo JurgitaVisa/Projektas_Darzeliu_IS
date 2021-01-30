@@ -70,23 +70,26 @@ export class UserListContainer extends Component {
     }
 
     render() {
-        return (<div>
-            <NavBar />
-            <div className="row ">
-                <div className="col-12 text-center">
-                    <h5 className="text-center p-3">Sistemos naudotojų sąrašas </h5>
+        return (
+            <div >
+                <NavBar />
+                <div className="container">
+                    <div className="row ">
+                        <div className="col-12 pb-2">
+                            <h5 className="h5">Sistemos naudotojų sąrašas </h5>
 
+                        </div>
+                    </div>
+
+                    <Link to="/admin" className="btn btn-primary my-2">Sukurti naują</Link>
+
+                    <UserListTable
+                        naudotojai={this.state.naudotojai}
+                        onDelete={this.handleDelete}
+                        onRestorePassword={this.handleRestorePassword}
+                    />
                 </div>
             </div>
-
-            <Link to="/admin" className="btn btn-primary my-2">Sukurti naują</Link>
-
-            <UserListTable
-                naudotojai={this.state.naudotojai}
-                onDelete={this.handleDelete}
-                onRestorePassword={this.handleRestorePassword}
-            />
-        </div>
         )
     }
 }

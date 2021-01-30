@@ -13,7 +13,7 @@ import UserListContainer from './components/04Admin/UserListContainer';
 
 function App() {
   return (
-    <div className="container pt-5">       
+    <div className="container-fluid px-0">       
         <Switch >
           <Route exact path="/" component={Login} />   
           <Route path="/home" component={Main} />      

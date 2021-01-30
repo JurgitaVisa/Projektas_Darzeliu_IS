@@ -18,14 +18,14 @@ export class UserListContainer extends Component {
     }
     componentDidMount() {
         http
-            .get(`${apiEndpoint}/api/admin/users`)
+            .get(`${apiEndpoint}/api/users/admin/allusers`)
             .then((response) => {
                 this.setState({ naudotojai: response.data });
 
             }).catch(error => {
-                console.log(error.response);
-                if (error && error.response.status === 401)
-                    alert("Puslapis pasiekiamas tik administratoriaus teises turintiems naudotojams")
+                console.log("Naudotojai container error", error.response);
+                // if (error && error.response.status === 401)
+                //     alert("Puslapis pasiekiamas tik administratoriaus teises turintiems naudotojams")
                 this.props.history.replace("/home");
             }
             );
@@ -37,16 +37,15 @@ export class UserListContainer extends Component {
         console.log("Trinti naudotoja", username);
 
         http
-            .delete(`${apiEndpoint}/api/admin/users/delete/${username}`)
+            .delete(`${apiEndpoint}/api/users/admin/delete/${username}`)
             .then((response) => {
                 alert(response.data);
                 http
-                    .get(`${apiEndpoint}/api/admin/users`)
+                    .get(`${apiEndpoint}/api/users/admin/allusers`)
                     .then((response) => {
                         this.setState({ naudotojai: response.data });
 
                     });
-
             }).catch(error => {
                 if (error && error.response.status > 400 && error.response.status < 500) alert("Veiksmas neleidžiamas");
 
@@ -55,6 +54,20 @@ export class UserListContainer extends Component {
 
     }
 
+    handleRestorePassword = (item) => {
+        const username = item.username;
+        console.log("Atstatyti slaptazodi naudotojui", username);
+
+        http
+            .put(`${apiEndpoint}/api/users/admin/password/${username}`)
+            .then((response) => {
+                alert(response.data);
+            }).catch(error => {
+                if (error && error.response.status > 400 && error.response.status < 500) alert("Veiksmas neleidžiamas");
+            }
+            );
+
+    }
 
     render() {
         return (<div>
@@ -71,6 +84,7 @@ export class UserListContainer extends Component {
             <UserListTable
                 naudotojai={this.state.naudotojai}
                 onDelete={this.handleDelete}
+                onRestorePassword={this.handleRestorePassword}
             />
         </div>
         )

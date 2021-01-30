@@ -21,8 +21,8 @@ class UserListTable extends Component {
         },
 
         {           
-            key: 'name',
-            path: 'name',
+            key: 'surname',
+            path: 'surname',
             label: 'Vardas, pavardė',
             content: naudotojas => <span>{naudotojas.name} {naudotojas.surname}</span>
         },

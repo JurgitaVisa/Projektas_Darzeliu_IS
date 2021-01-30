@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().authorizeRequests()
 				// be saugumo UI dalis ir swaggeris
-				.antMatchers("/", "/swagger-ui/", "/hello/**", "/createuser", "/darzelis/**").permitAll()
+				.antMatchers("/", "/swagger-ui/", "/hello/**").permitAll()
 				// visi /api/ saugus (dar galima .anyRequest() )
 				.antMatchers("/api/**").authenticated().and().formLogin() // leidziam login
 				// prisijungus
@@ -91,10 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				})
 				// esant blogiems user/pass
 				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
-				.loginPage("/login").permitAll() // jis jau egzistuoja
-
-				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
-				.loginPage("/login").permitAll() // jis jau egzistuoja
+				.loginPage("/login").permitAll() // jis jau egzistuoja				
 				
 				.and().logout().logoutUrl("/logout")
 				// ištrina sausainėlius ir uždaro sesiją
@@ -111,7 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					}
 				})
 				.permitAll() // leidziam logout
-				.logoutSuccessUrl("/login")																							
+																								
 				.and().csrf().disable() // nenaudojam tokenu
 				// toliau forbidden klaidai
 				.exceptionHandling().authenticationEntryPoint(securityEntryPoint).and().headers().frameOptions()

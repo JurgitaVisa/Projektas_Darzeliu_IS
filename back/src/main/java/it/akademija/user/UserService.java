@@ -82,22 +82,43 @@ public class UserService implements UserDetailsService {
 		userDao.deleteByUsername(username);
 	}
 
+	/**
+	 * Siulau aprasyti savo metodus, kad butu aisku, ka jie turetu daryti Sitas
+	 * metodas neturetu grazinti pilno User i front, nes ten yra per daug info, tame
+	 * tarpe psw ir asmens kodas
+	 * 
+	 * @return list of user details for ADMIN
+	 */
 	public Iterable<User> getAll() {
 		return userDao.findAll();
 	}
 
 	/**
 	 * 
-	 * Finds user with a specified username
+	 * Finds user with a specified username. Don't return User entity via REST. 
 	 * 
 	 * @param username
-	 * @return
+	 * @return User entity (includes sensitive data)
 	 */
-
 	@Transactional(readOnly = true)
 	public User findByUsername(String username) {
 
 		return userDao.findByUsername(username);
+
+	}
+
+	/**
+	 * Restores user password to initial value for user with specified username.
+	 * Initial password value equals to username
+	 * 
+	 * @param username
+	 */
+	@Transactional
+	public void restorePassword(String username) {
+		User user=findByUsername(username);
+		user.setPassword(encoder.encode(username));
+
+		userDao.save(user);
 
 	}
 

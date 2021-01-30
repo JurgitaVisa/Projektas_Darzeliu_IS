@@ -5,8 +5,6 @@ import apiEndpoint from '../10Services/endpoint';
 
 /*
     Todo:
-        handleSubmit();
-        fix Naudotojo prisijungimai style
         Optional: Bootstrap validation
 */
 
@@ -17,20 +15,28 @@ const styleFieldRequired = {
     fontWeight: "bold"
 }
 
+function transformMonth(month) {
+    if(month>=1 && month<=9) {
+        return "0" + month;
+    }
+    else return month;
+}
+
+var currentDate = (new Date().getUTCFullYear()) + "-" + transformMonth(new Date().getUTCMonth() + 1) + "-" + (new Date().getUTCDate());
+
 export default class AdminCreateUser extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-            role: "USER",
-            name: "test",
-            surname: "test",
+            role: "ADMIN",
+            name: "",
+            surname: "",
             birthdate: "",
-            identificationCode: "12345678999",
-            address: "test",
-            telno: "+37000000000",
-            email: "test@test",
-            currentDate: new Date(new Date().toDateString()).toLocaleDateString()
+            identificationCode: "",
+            address: "",
+            telno: "",
+            email: "",
         }
         this.roleDropdownOnChange = this.roleDropdownOnChange.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -75,7 +81,7 @@ export default class AdminCreateUser extends Component {
                 <div className="form-row">
                     <div className="form-group col">
                         <label htmlFor="txt">Gimimo data <span style={styleFieldRequired}>Būtinas</span></label>
-                        <input type="text" className="form-control" id="txtBirthdate" name="birthdate" value={this.state.birthdate} onChange={this.handleChange} placeholder="MMMM-MM-DD" required="required" max={this.state.currentDate}></input>
+                        <input type="date" data-date-format="YYYY-MM-DD" min='1900-01-01' max={currentDate} className="form-control" id="txtBirthdate" name="birthdate" value={this.state.birthdate} onChange={this.handleChange} placeholder="MMMM-MM-DD" required="required"></input>
                         
                     </div>
                     <div className="form-group col">
@@ -132,7 +138,6 @@ export default class AdminCreateUser extends Component {
         this.setState({
             [event.target.name]: event.target.value
         })
-        console.log(this.state);
     }
 
     handleSubmit(event) {

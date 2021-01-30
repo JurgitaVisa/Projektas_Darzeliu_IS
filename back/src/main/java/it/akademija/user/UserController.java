@@ -93,7 +93,7 @@ public class UserController {
 	 * @param username
 	 */
 	@Secured({ "ROLE_ADMIN" })
-	@PutMapping(path = "/admin/delete/{username}")
+	@PutMapping(path = "/admin/password/{username}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Restore user password", notes = "Restore user password to initial value")
 	public ResponseEntity<String> restorePassword(

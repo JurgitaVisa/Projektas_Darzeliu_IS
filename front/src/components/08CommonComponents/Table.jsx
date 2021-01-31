@@ -7,7 +7,7 @@ const Table = (props) => {
     const { columns, data } = props;
 
     return (
-        <div className="table-responsive-sm">
+        <div className="table-responsive-sm pt-2">
 
 
             <table className="table">

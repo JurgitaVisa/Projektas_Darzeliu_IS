@@ -29,13 +29,13 @@ class UserListTable extends Component {
         {            
             key: 'update',
             label: 'Pirminis slaptažodis',
-            content: naudotojas => <button onClick={() => this.props.onRestorePassword(naudotojas)} className="btn btn-warning btn-sm btn-block">Atkurti</button>
+            content: naudotojas => <button onClick={() => this.props.onRestorePassword(naudotojas)} className="btn btn-outline-secondary btn-sm btn-block">Atkurti</button>
         },
        
         {            
             key: 'delete',
             label: 'Ištrinti naudotoją',
-            content: naudotojas => <button onClick={() => this.props.onDelete(naudotojas)} className="btn btn-danger btn-sm btn-block">Ištrinti</button>
+            content: naudotojas => <button onClick={() => this.props.onDelete(naudotojas)} className="btn btn-outline-danger btn-sm btn-block">Ištrinti</button>
            
         }
         

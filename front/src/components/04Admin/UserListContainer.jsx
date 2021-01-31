@@ -81,9 +81,9 @@ export class UserListContainer extends Component {
                         </div>
                     </div>
 
-                    <Link to="/admin" className="btn btn-primary my-2">Sukurti naują</Link>
-
-                    <UserListTable
+                    <Link to="/admin" className="btn btn-outline-primary my-2">Sukurti naują</Link>
+                    <br />
+                    <UserListTable 
                         naudotojai={this.state.naudotojai}
                         onDelete={this.handleDelete}
                         onRestorePassword={this.handleRestorePassword}

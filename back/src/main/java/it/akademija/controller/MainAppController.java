@@ -49,7 +49,8 @@ public class MainAppController {
 	public String getLoggedInUserRole() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			String currentUserRole = authentication.getAuthorities().toString();
+			String currentUserName = authentication.getName();
+			String currentUserRole = userDao.findByUsername(currentUserName).getRole().name();
 
 			return currentUserRole;
 		}

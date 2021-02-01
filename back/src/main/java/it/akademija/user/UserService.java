@@ -38,7 +38,7 @@ public class UserService implements UserDetailsService {
 	 * was initialized at start up if there are other users with ADMIN authorization
 	 * in the user repository
 	 * 
-	 * @param userData
+	 * @param userData data for new user
 	 */
 	@Transactional
 	public void createUser(UserDTO userData) {
@@ -93,9 +93,16 @@ public class UserService implements UserDetailsService {
 		return userDao.findAll();
 	}
 
+	@Transactional
+	public UserInfo getUserDetails(String username) {
+		User user = userDao.findByUsername(username);
+		return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(), user.getBirthdate(), user.getPersonalCode(), user.getAddress(),
+				user.getPhone(), user.getEmail(), user.getUsername());
+	}
+
 	/**
 	 * 
-	 * Finds user with a specified username. Don't return User entity via REST. 
+	 * Finds user with a specified username. Don't return User entity via REST.
 	 * 
 	 * @param username
 	 * @return User entity (includes sensitive data)
@@ -115,8 +122,34 @@ public class UserService implements UserDetailsService {
 	 */
 	@Transactional
 	public void restorePassword(String username) {
-		User user=findByUsername(username);
+		User user = findByUsername(username);
 		user.setPassword(encoder.encode(username));
+
+		userDao.save(user);
+
+	}
+
+	/**
+	 * 
+	 * Updates fields for user with specified username. Field for setting user role
+	 * can not be updated. Any user can update their own data.
+	 * 
+	 * @param userData new user data
+	 * @param username
+	 */
+	@Transactional
+	public void updateUserData(UserDTO userData, String username) {
+		User user = findByUsername(username);
+
+		user.setName(userData.getName());
+		user.setSurname(userData.getSurname());
+		user.setBirthdate(userData.getBirthdate());
+		user.setPersonalCode(userData.getPersonalCode());
+		user.setAddress(userData.getAddress());
+		user.setPhone(userData.getPhone());
+		user.setEmail(userData.getEmail());
+		user.setUsername(userData.getUsername());
+		user.setPassword(encoder.encode(userData.getPassword()));
 
 		userDao.save(user);
 

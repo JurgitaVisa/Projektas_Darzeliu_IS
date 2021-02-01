@@ -84,6 +84,22 @@ public class UserController {
 
 		return userService.getAll();
 	}
+	
+	
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
+	@GetMapping(path = "/{username}")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Get details for user with specified username")
+	public UserInfo getUserDetails(@ApiParam(value = "Username", required = true) @PathVariable final String username) {
+		if (userService.findByUsername(username) != null) {
+			
+			LOG.info("** Usercontroller: ieškomas naudotojas vardu [{}] **", username);
+			
+			return userService.getUserDetails(username);
+			
+		}
+		return new UserInfo();
+	}
 
 	/**
 	 * 
@@ -91,7 +107,7 @@ public class UserController {
 	 * Method only accessible to ADMIN users
 	 * 
 	 * @param username
-	 */
+	 */	
 	@Secured({ "ROLE_ADMIN" })
 	@PutMapping(path = "/admin/password/{username}")
 	@ResponseStatus(HttpStatus.OK)
@@ -101,13 +117,30 @@ public class UserController {
 		
 		if (userService.findByUsername(username) != null) {
 			userService.restorePassword(username);
-			LOG.info("** Usercontroller: keiciamas slaptazodis vartotojui vardu [{}] **", username);
+			LOG.info("** Usercontroller: keiciamas slaptazodis naudotojui vardu [{}] **", username);
 			return new ResponseEntity<String>("Slaptažodis atstatytas sėkmingai", HttpStatus.OK);
 		}
 
 		return new ResponseEntity<String>("Naudotojas tokiu vardu nerastas", HttpStatus.NOT_FOUND);
 	}
 
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
+	@PutMapping(path = "/update/{username}")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Update user datails")
+	public ResponseEntity<String> updateUserData(
+			 @PathVariable final String username, @RequestBody UserDTO userData) {
+		
+		if (userService.findByUsername(username) != null) {
+			userService.updateUserData(userData, username);
+			LOG.info("** Usercontroller: keiciami duomenys naudotojui vardu [{}] **", username);
+			return new ResponseEntity<String>("Duomenys pakeisti sėkmingai", HttpStatus.OK);
+		}
+
+		return new ResponseEntity<String>("Naudotojas tokiu vardu nerastas", HttpStatus.NOT_FOUND);
+	}
+	
+	
 	public UserService getUserService() {
 		return userService;
 	}

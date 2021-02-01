@@ -143,7 +143,7 @@ export default class AdminCreateUser extends Component {
     handleSubmit(event) {
         event.preventDefault();
         if(this.state.role==="ADMIN" || this.state.role==="MANAGER") {
-            http.post(`${apiEndpoint}/createuser`, {
+            http.post(`${apiEndpoint}/api/users/admin/createuser`, {
                 "name": this.state.name,
                 "surname": this.state.surname,
                 "role": this.state.role,
@@ -162,7 +162,7 @@ export default class AdminCreateUser extends Component {
                 })
         }
         else if(this.state.role==="USER") {
-            http.post(`${apiEndpoint}/createuser`, {
+            http.post(`${apiEndpoint}/api/users/admin/createuser`, {
                 "address": this.state.address,
                 "birthdate": this.state.birthdate,
                 "email": this.state.email,

@@ -1,46 +1,30 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 
-import "./index.css";
-import "./App.css";
+import './index.css';
+import './App.css';
 
-import Login from "./components/01Login/LoginContainer";
-import Main from "./components/02Main/MainContainer";
-import NotFound from "./components/03NotFound/NotFound";
-import Admin from "./components/04Admin/AdminContainer";
-import UserContext from "./components/11Context/UserContext";
+import Login  from './components/01Login/LoginContainer';
+import Main from './components/02Main/MainContainer';
+import NotFound from './components/03NotFound/NotFound';
+import Admin from './components/04Admin/AdminContainer';
+import UserListContainer from './components/04Admin/UserListContainer';
 
-export class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.updateUserName = () => {
-      this.setState(state => ({
-        userName: state.userName
-      }));
-    };
-    this.state = {
-      userName: "App.constructor",
-      updateUserName: this.updateUserName,
-    }
-  }
 
-  render() {
-    console.log(this.state)
-    return (
-      <UserContext.Provider value={this.state}>
-        <div className="container pt-5">
-          <Switch>
-            <Route exact path="/" component={Login} />
-            <Route path="/home" component={Main} />
-            <Route path="/admin" component={Admin} />
+function App() {
+  return (
+    <div className="container-fluid px-0">       
+        <Switch >
+          <Route exact path="/" component={Login} />   
+          <Route path="/home" component={Main} />      
+          <Route path="/admin" component={Admin} />
+          <Route path="/naudotojai" component={UserListContainer} />
+          <Route path='*' component={NotFound} />
+          <Route component={NotFound} />
 
-            <Route path="*" component={NotFound} />
-            <Route component={NotFound} />
-          </Switch>
-        </div>
-      </UserContext.Provider>
-    );
-  }
+        </Switch>
+      </div>
+  );
 }
 
 export default App;

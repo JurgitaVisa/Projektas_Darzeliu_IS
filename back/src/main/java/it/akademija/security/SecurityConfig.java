@@ -23,10 +23,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
-
 import it.akademija.user.UserDAO;
 
 @Configuration
@@ -60,9 +56,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().authorizeRequests()
 				// be saugumo UI dalis ir swaggeris
-				.antMatchers("/", "/swagger-ui/", "/hello/**", "/createuser", "/darzelis/**").permitAll()
+				.antMatchers("/", "/swagger-ui/", "/hello/**").permitAll()
 				// visi /api/ saugus (dar galima .anyRequest() )
-				.antMatchers("/api/**").authenticated().and().formLogin() // leidziam login
+				.antMatchers("/home/**", "/api/**", "/admin/**", "/naudotojai/**").authenticated()
+				.and().formLogin() // leidziam login
 				// prisijungus
 				.successHandler(new AuthenticationSuccessHandler() {
 
@@ -91,27 +88,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				})
 				// esant blogiems user/pass
 				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
-				.loginPage("/login").permitAll() // jis jau egzistuoja
-
-				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
-				.loginPage("/login").permitAll() // jis jau egzistuoja
-				
+				.loginPage("/login").permitAll() // jis jau egzistuoja				
+				//atsijungimas nuo sistemos
 				.and().logout().logoutUrl("/logout")
 				// ištrina sausainėlius ir uždaro sesiją
-				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID")
+				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID")	
 				
-				.logoutSuccessHandler(new LogoutSuccessHandler() {
-
-					@Override
-					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
-							Authentication authentication) throws IOException, ServletException {
-
-						LOG.info("** SecurityConfig: Naudotojas atsijunge nuo sistemos **");
-
-					}
-				})
+//				.logoutSuccessHandler(new LogoutSuccessHandler() {
+//
+//					@Override
+//					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+//							Authentication authentication) throws IOException, ServletException {
+//
+//						LOG.info("** SecurityConfig: Naudotojas atsijunge nuo sistemos **");
+//
+//					}
+//				})
+				.logoutSuccessUrl("/")
 				.permitAll() // leidziam logout
-				.logoutSuccessUrl("/login")																							
+																							
 				.and().csrf().disable() // nenaudojam tokenu
 				// toliau forbidden klaidai
 				.exceptionHandling().authenticationEntryPoint(securityEntryPoint).and().headers().frameOptions()

@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,7 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserDAO userDao;
-	
+
 	private PasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	@Override
@@ -39,21 +38,27 @@ public class UserService implements UserDetailsService {
 	 * was initialized at start up if there are other users with ADMIN authorization
 	 * in the user repository
 	 * 
-	 * @param userData
+	 * @param userData data for new user
 	 */
 	@Transactional
 	public void createUser(UserDTO userData) {
 		User newUser = new User();
-		
-		newUser.setUsername(userData.getUsername());
+
+		newUser.setRole(Role.valueOf(userData.getRole()));
 		newUser.setName(userData.getName());
 		newUser.setSurname(userData.getSurname());
+		newUser.setBirthdate(userData.getBirthdate());
+		newUser.setPersonalCode(userData.getPersonalCode());
+		newUser.setAddress(userData.getAddress());
+		newUser.setPhone(userData.getPhone());
+		newUser.setEmail(userData.getEmail());
+		newUser.setUsername(userData.getUsername());
 		newUser.setPassword(encoder.encode(userData.getPassword()));
-		newUser.setRole(Role.valueOf(userData.getRole()));
 
 		userDao.save(newUser);
 
-		if (userData.getRole().equals("ADMIN") && userDao.findByRole(Role.ADMIN).size() > 1 && userDao.findByUsername("admin")!=null) {
+		if (userData.getRole().equals("ADMIN") && userDao.findByRole(Role.ADMIN).size() > 1
+				&& userDao.findByUsername("admin") != null) {
 			userDao.deleteByUsername("admin");
 		}
 
@@ -69,25 +74,84 @@ public class UserService implements UserDetailsService {
 	 */
 	@Transactional
 	public void deleteUser(String username) {
-		
+
 		if (findByUsername(username).getRole().equals(Role.ADMIN) && userDao.findByRole(Role.ADMIN).size() == 1) {
-			userDao.save(new User("admin", "admin", "admin", encoder.encode("laikinas"), Role.ADMIN));
+			userDao.save(new User(Role.ADMIN, "admin", "admin", "admin", encoder.encode("laikinas")));
 		}
-		
+
 		userDao.deleteByUsername(username);
 	}
 
 	/**
+	 * Siulau aprasyti savo metodus, kad butu aisku, ka jie turetu daryti Sitas
+	 * metodas neturetu grazinti pilno User i front, nes ten yra per daug info, tame
+	 * tarpe psw ir asmens kodas
 	 * 
-	 * Finds user with a specified username
+	 * @return list of user details for ADMIN
+	 */
+	public Iterable<User> getAll() {
+		return userDao.findAll();
+	}
+
+	@Transactional
+	public UserInfo getUserDetails(String username) {
+		User user = userDao.findByUsername(username);
+		return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(), user.getBirthdate(), user.getPersonalCode(), user.getAddress(),
+				user.getPhone(), user.getEmail(), user.getUsername());
+	}
+
+	/**
+	 * 
+	 * Finds user with a specified username. Don't return User entity via REST.
 	 * 
 	 * @param username
-	 * @return
+	 * @return User entity (includes sensitive data)
 	 */
 	@Transactional(readOnly = true)
 	public User findByUsername(String username) {
 
 		return userDao.findByUsername(username);
+
+	}
+
+	/**
+	 * Restores user password to initial value for user with specified username.
+	 * Initial password value equals to username
+	 * 
+	 * @param username
+	 */
+	@Transactional
+	public void restorePassword(String username) {
+		User user = findByUsername(username);
+		user.setPassword(encoder.encode(username));
+
+		userDao.save(user);
+
+	}
+
+	/**
+	 * 
+	 * Updates fields for user with specified username. Field for setting user role
+	 * can not be updated. Any user can update their own data.
+	 * 
+	 * @param userData new user data
+	 * @param username
+	 */
+	@Transactional
+	public void updateUserData(UserDTO userData, String username) {
+		User user = findByUsername(username);
+
+		user.setName(userData.getName());
+		user.setSurname(userData.getSurname());
+		user.setBirthdate(userData.getBirthdate());
+		user.setPersonalCode(userData.getPersonalCode());
+		user.setAddress(userData.getAddress());
+		user.setPhone(userData.getPhone());
+		user.setEmail(userData.getEmail());
+		user.setUsername(userData.getUsername());
+		user.setPassword(encoder.encode(userData.getPassword()));
+
+		userDao.save(user);
 
 	}
 

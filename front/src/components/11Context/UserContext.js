@@ -1,6 +1,10 @@
 import React from 'react';
 
-const UserContext = React.createContext(null);
-UserContext.displayName = "UserContext";
+const UserContext = React.createContext({
+    userName: "",
+    userRole: "",
+    updateUserName: () => {},
+    updateUserRole: () => {}
+});
 
 export default UserContext;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios";
+import { useContext } from 'react';
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
@@ -36,6 +37,10 @@ export class LoginContainer extends Component {
             { headers: { 'Content-type': 'application/x-www-form-urlencoded' } })
             .then((resp) => {
                 console.log("user " + resp.data.username + " logged in");
+                // keičiamas kontekstas priskiriant prisijungusį user'į
+                // {userName = resp.data.username}
+                //
+                console.log(resp.data);
                 this.props.history.push("/home");
             })
             .catch((error) => {

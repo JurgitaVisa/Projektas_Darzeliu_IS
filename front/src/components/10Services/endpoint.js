@@ -3,7 +3,7 @@
 
 //dirbant lokaliai per yarn start paleidus react app per localhost:3000
 //pakeisti localhost:8080 į vartus ant kurių paleidžiat aplikaciją:
- //const apiEndpoint = "http://localhost:8080";
+ const apiEndpoint = "http://localhost:8080";
 
  
  //Jurgitos endpoint :)

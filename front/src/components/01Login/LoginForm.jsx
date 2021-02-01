@@ -9,9 +9,7 @@ const LoginForm = ({
   onUsernameChange,
   onSubmit,
 }) => {
-  let { userCredentials } = useContext(UserContext);
-  console.log(UserContext + " from LoginForm");
-  // console.log(userCredentials + " from LoginForm");
+
   return (
     <div className="container">
       <div className="row d-flex justify-content-center">

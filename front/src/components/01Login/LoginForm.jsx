@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import UserContext from "../11Context/UserContext";
 
 const LoginForm = ({
   username,
@@ -8,6 +9,9 @@ const LoginForm = ({
   onUsernameChange,
   onSubmit,
 }) => {
+  let { userCredentials } = useContext(UserContext);
+  console.log(UserContext + " from LoginForm");
+  // console.log(userCredentials + " from LoginForm");
   return (
     <div className="container">
       <div className="row d-flex justify-content-center">
@@ -45,10 +49,6 @@ const LoginForm = ({
           <button type="submit" className="btn btn-primary">
             Prisijungti
           </button>
-
-          {/* <input className="form-control" type="text" value={username} onChange={onUsernameChange} />
-                <input type="password" value={password} onChange={onPassChange} />
-                <input type="submit" /> */}
         </form>
       </div>
       <div className="row d-flex justify-content-center px-5 mt-3">

@@ -9,11 +9,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import './index.css';
 import App from './App';
 
-
-
 document.title = "Never Latte";
-
-
 
 ReactDOM.render(
 

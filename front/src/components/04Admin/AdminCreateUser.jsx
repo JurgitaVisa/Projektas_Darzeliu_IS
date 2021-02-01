@@ -16,14 +16,14 @@ const styleFieldRequired = {
     verticalAlign: "text-top"
 }
 
-function transformMonth(month) {
-    if(month>=1 && month<=9) {
-        return "0" + month;
+function dateFormat(num) {
+    if(num>=1 && num<=9) {
+        return "0" + num;
     }
-    else return month;
+    else return num;
 }
 
-var currentDate = (new Date().getUTCFullYear()) + "-" + transformMonth(new Date().getUTCMonth() + 1) + "-" + (new Date().getUTCDate());
+var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
 
 export default class AdminCreateUser extends Component {
     
@@ -143,49 +143,28 @@ export default class AdminCreateUser extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        if(this.state.role==="ADMIN" || this.state.role==="MANAGER") {
-            http.post(`${apiEndpoint}/createuser`, {
-                "name": this.state.name,
-                "surname": this.state.surname,
-                "role": this.state.role,
-                "username": this.state.email,
-                "password": this.state.email
-            })
-                .then((response) => {
-                    console.log("Naujas naudotojas sukurtas");
-                    console.log(this.state);
-                    alert('Naujas naudotojas sėkmingai sukurtas!');
-                    this.resetState();
-                })
-                .catch((error) => {
-                    console.log(error);
-                    alert('Įvyko klaida');
-                })
-        }
-        else if(this.state.role==="USER") {
-            http.post(`${apiEndpoint}/createuser`, {
-                "address": this.state.address,
-                "birthdate": this.state.birthdate,
-                "email": this.state.email,
-                "name": this.state.name,
-                "password": this.state.email,
-                "personalCode": this.state.identificationCode,
-                "phone": this.state.telno,
-                "role": this.state.role,
-                "surname": this.state.surname,
-                "username": this.state.email
-            })
-                .then((response) => {
-                    console.log("Naujas naudotojas sukurtas");
-                    console.log(this.state);
-                    alert('Naujas naudotojas sėkmingai sukurtas!');
-                    this.resetState();
-                })
-                .catch((error) => {
-                    console.log(error);
-                    alert('Įvyko klaida');
-                })
-        }
+        http.post(`${apiEndpoint}/api/users/admin/createuser`, {
+            "address": this.state.address,
+            "birthdate": this.state.birthdate,
+            "email": this.state.email,
+            "name": this.state.name,
+            "password": this.state.email,
+            "personalCode": this.state.identificationCode,
+            "phone": this.state.telno,
+            "role": this.state.role,
+            "surname": this.state.surname,
+            "username": this.state.email
+        })
+        .then((response) => {
+            console.log("Naujas naudotojas sukurtas");
+            console.log(this.state);
+            alert('Naujas naudotojas sėkmingai sukurtas!');
+            this.resetState();
+        })
+        .catch((error) => {
+            console.log(error);
+            alert('Įvyko klaida');
+        })
     }
     render() {
         return (

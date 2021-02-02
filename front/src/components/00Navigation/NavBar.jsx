@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import logo from '../../images/logo-baltas.png';
+import logo from '../../images/logo.png';
 import '../../index.css';
 
 import LogoutContainer from './LogoutContainer';
@@ -10,7 +10,7 @@ function Navigation() {
 
     return (
         <div className="pb-4" >
-            <nav className="navbar navbar-expand-md py-4 navbar-dark bg-primary">
+            <nav className="navbar navbar-expand-md py-4 navbar-light bg-light">
 
                 <div className="container">
 

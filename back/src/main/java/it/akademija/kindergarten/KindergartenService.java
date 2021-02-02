@@ -1,7 +1,6 @@
 package it.akademija.kindergarten;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +15,15 @@ public class KindergartenService {
 	
 	@Transactional(readOnly = true)
 	public List<KindergartenDTO> getAllKindergarten() {
-		List<Kindergarten> kindergartens = gartenDao.findAllOrderByNameAsc();
-		return kindergartens.stream().map(garten-> new KindergartenDTO(garten.getId(), garten.getName(), garten.getAddress())).collect(Collectors.toList());
+		List<Kindergarten> kindergartens = gartenDao.findAll();
+		return kindergartens.stream().map(garten-> new KindergartenDTO(garten.getName(), garten.getAddress())).collect(Collectors.toList());
 	}
 	
 	
-	@Transactional(readOnly = true)
+	//@Transactional(readOnly = true)
 	public Kindergarten findByName(String name) {
 		
-		return gartenDao.findByName(name);
+		return gartenDao.findByNameIgnoreCase(name);			
 	}
 	
 	@Transactional

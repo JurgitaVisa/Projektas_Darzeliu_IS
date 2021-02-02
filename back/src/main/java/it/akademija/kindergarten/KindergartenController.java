@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,19 +54,22 @@ public class KindergartenController {
 	 */
 	@Secured({ "ROLE_MANAGER" })
 	@PostMapping("/createKindergarten")
-	//@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Create new kindergarten")
 	public ResponseEntity<String> createNewKindergarten(
-			@ApiParam(value = "Kindergarten", required = true) 
-			@Valid @RequestBody Kindergarten kindergarten) {
+			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody Kindergarten kindergarten) {
 
-		if (kindergartenService.findByName(kindergarten.getName()) == null) {
+		Kindergarten newKindengarten = kindergartenService.findByName(kindergarten.getName().trim());
+		
+		if (newKindengarten != null) {
+			return new ResponseEntity<String>("Darželis tokiu pavadinimu jau yra", HttpStatus.CONFLICT);
 
+		} else {
 			kindergartenService.createNewKindergarten(kindergarten);
+			LOG.info("**KindergartenController: kuriamas darzelis pavadinimu [{}] **", kindergarten.getName());
+
 			return new ResponseEntity<String>("Darželis sukurtas sėkmingai", HttpStatus.OK);
 		}
 
-		return new ResponseEntity<String>("Darželis tokiu pavadinimu jau yra", HttpStatus.CONFLICT);
 	}
 
 	public KindergartenService getGartenService() {

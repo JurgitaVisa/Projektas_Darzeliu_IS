@@ -2,34 +2,47 @@ package it.akademija.kindergarten;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OrderBy;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Kindergarten {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	@Column(unique = true)
-	@NotBlank(message = "Pavadinimas privalomas")	
+	@NotBlank(message = "Pavadinimas privalomas")
+	@Column(name="name", unique=true)
 	private String name;
 
 	@Column
-	@NotBlank(message = "Pavadinimas privalomas")
+	@NotBlank(message = "Adresas privalomas")
 	private String address;
+
+	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
+	private int capacityAgeGroup2to3 = 0;
+
+	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
+	private int capacityAgeGroup3to6 = 0;
 
 	public Kindergarten() {
 
 	}
 
-	public Kindergarten(String name, String address) {
+	public Kindergarten(@NotBlank(message = "Pavadinimas privalomas") String name,
+			@NotBlank(message = "Adresas privalomas") String address) {		
 		this.name = name;
 		this.address = address;
+	}
+
+	public Kindergarten(@NotBlank(message = "Pavadinimas privalomas") String name,
+			@NotBlank(message = "Adresas privalomas") String address,
+			@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0") int capacityAgeGroup2to3,
+			@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0") int capacityAgeGroup3to6) {
+		super();
+		this.name = name;
+		this.address = address;
+		this.capacityAgeGroup2to3 = capacityAgeGroup2to3;
+		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
 	}
 
 	public String getName() {
@@ -48,9 +61,47 @@ public class Kindergarten {
 		this.address = address;
 	}
 
-	public Long getId() {
-		return id;
+	public int getCapacityAgeGroup2to3() {
+		return capacityAgeGroup2to3;
+	}
+
+	public void setCapacityAgeGroup2to3(int capacityAgeGroup2to3) {
+		this.capacityAgeGroup2to3 = capacityAgeGroup2to3;
+	}
+
+	public int getCapacityAgeGroup3to6() {
+		return capacityAgeGroup3to6;
+	}
+
+	public void setCapacityAgeGroup3to6(int capacityAgeGroup3to6) {
+		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Kindergarten other = (Kindergarten) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 
 	
+
 }

@@ -11,18 +11,19 @@ import apiEndpoint from '../10Services/endpoint';
 const styleFieldRequired = {
     color: "red",
     textTransform: "uppercase",
-    fontSize: "10px",
-    fontWeight: "bold"
+    fontSize: "12px",
+    fontWeight: "bold",
+    verticalAlign: "text-top"
 }
 
-function transformMonth(month) {
-    if(month>=1 && month<=9) {
-        return "0" + month;
+function dateFormat(num) {
+    if(num>=1 && num<=9) {
+        return "0" + num;
     }
-    else return month;
+    else return num;
 }
 
-var currentDate = (new Date().getUTCFullYear()) + "-" + transformMonth(new Date().getUTCMonth() + 1) + "-" + (new Date().getUTCDate());
+var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
 
 export default class AdminCreateUser extends Component {
     
@@ -47,7 +48,7 @@ export default class AdminCreateUser extends Component {
         return (
             <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="role-selector">Vartotojo rolė:</label>
+                        <label htmlFor="role-selector">Naudotojo rolė:</label>
                         <select name="role-selector" id="selectpicker" className="form-control" value={this.state.role} onChange={this.roleDropdownOnChange}>
                             <option value="ADMIN">Administratorius</option>
                             <option value="MANAGER">Švietimo specialistas</option>
@@ -55,7 +56,7 @@ export default class AdminCreateUser extends Component {
                         </select>
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtEmail">El. paštas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtEmail">El. paštas <span style={styleFieldRequired}>*</span></label>
                         <input type="email" className="form-control" id="txtEmail" name="email" value={this.state.email} onChange={this.handleChange} placeholder="El. paštas" required="required"></input>
                     </div>
             </div>
@@ -80,32 +81,32 @@ export default class AdminCreateUser extends Component {
             <div className="innerForm">
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txt">Gimimo data <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txt">Gimimo data <span style={styleFieldRequired}>*</span></label>
                         <input type="date" data-date-format="YYYY-MM-DD" min='1900-01-01' max={currentDate} className="form-control" id="txtBirthdate" name="birthdate" value={this.state.birthdate} onChange={this.handleChange} placeholder="MMMM-MM-DD" required="required"></input>
                         
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtIdentificationCode">Asmens kodas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtIdentificationCode">Asmens kodas <span style={styleFieldRequired}>*</span></label>
                         <input type="text" className="form-control" id="txtIdentificationCode" name="identificationCode" value={this.state.identificationCode} onChange={this.handleChange} placeholder="Asmens kodas" required="required" pattern="[0-9]{11}"></input>
                     </div>
                 </div>
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txtName">Vardas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtName">Vardas <span style={styleFieldRequired}>*</span></label>
                         <input type="text" className="form-control" id="txtName" name="name" value={this.state.name} onChange={this.handleChange} placeholder="Vardas" required="required"></input>
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtSurname">Pavardė <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtSurname">Pavardė <span style={styleFieldRequired}>*</span></label>
                         <input type="text" className="form-control" id="txtSurname" name="surname" value={this.state.surname} onChange={this.handleChange} placeholder="Pavardė" required="required"></input>
                     </div>
                 </div>
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txtAddress">Adresas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtAddress">Adresas <span style={styleFieldRequired}>*</span></label>
                         <input type="text" className="form-control" id="txtAddress" name="address" value={this.state.address} onChange={this.handleChange} placeholder="Adresas" required="required"></input>
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtTelNo">Telefonas <span style={styleFieldRequired}>Būtinas</span></label>
+                        <label htmlFor="txtTelNo">Telefonas <span style={styleFieldRequired}>*</span></label>
                         <input type="text" className="form-control" id="txtTelNo" name="telno" value={this.state.telno} onChange={this.handleChange} placeholder="+370xxxxxxxx" required="required" pattern="[+,0-9]{12}"></input>
                     </div>
                 </div>
@@ -142,63 +143,42 @@ export default class AdminCreateUser extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        if(this.state.role==="ADMIN" || this.state.role==="MANAGER") {
-            http.post(`${apiEndpoint}/api/users/admin/createuser`, {
-                "name": this.state.name,
-                "surname": this.state.surname,
-                "role": this.state.role,
-                "username": this.state.email,
-                "password": this.state.email
-            })
-                .then((response) => {
-                    console.log("Naujas vartotojas sukurtas");
-                    console.log(this.state);
-                    alert('Naujas vartotojas sėkmingai sukurtas!');
-                    this.resetState();
-                })
-                .catch((error) => {
-                    console.log(error);
-                    alert('Įvyko klaida');
-                })
-        }
-        else if(this.state.role==="USER") {
-            http.post(`${apiEndpoint}/api/users/admin/createuser`, {
-                "address": this.state.address,
-                "birthdate": this.state.birthdate,
-                "email": this.state.email,
-                "name": this.state.name,
-                "password": this.state.email,
-                "personalCode": this.state.identificationCode,
-                "phone": this.state.telno,
-                "role": this.state.role,
-                "surname": this.state.surname,
-                "username": this.state.email
-            })
-                .then((response) => {
-                    console.log("Naujas vartotojas sukurtas");
-                    console.log(this.state);
-                    alert('Naujas vartotojas sėkmingai sukurtas!');
-                    this.resetState();
-                })
-                .catch((error) => {
-                    console.log(error);
-                    alert('Įvyko klaida');
-                })
-        }
+        http.post(`${apiEndpoint}/api/users/admin/createuser`, {
+            "address": this.state.address,
+            "birthdate": this.state.birthdate,
+            "email": this.state.email,
+            "name": this.state.name,
+            "password": this.state.email,
+            "personalCode": this.state.identificationCode,
+            "phone": this.state.telno,
+            "role": this.state.role,
+            "surname": this.state.surname,
+            "username": this.state.email
+        })
+        .then((response) => {
+            console.log("Naujas naudotojas sukurtas");
+            console.log(this.state);
+            alert('Naujas naudotojas sėkmingai sukurtas!');
+            this.resetState();
+        })
+        .catch((error) => {
+            console.log(error);
+            alert('Įvyko klaida');
+        })
     }
     render() {
         return (
             <div className="container">
-                <h4><b>Naujo vartotojo sukūrimas</b></h4>
+                <h4><b>Naujo naudotojo sukūrimas</b></h4>
                 <div className="row">
                 <form className="col-8" onSubmit={this.handleSubmit}>
                     {this.drawSelector()}
                     {this.drawForm(this.state.role)}
-                    <h4><b>Vartotojo prisijungimai</b></h4>
+                    <h4><b>Naudotojo prisijungimai</b></h4>
                     <div className="col-12">
                          <div className="row">
                             <div className="col-md-3">
-                                <p><b>Vartotojo vardas</b></p>
+                                <p><b>Naudotojo vardas</b></p>
                             </div>
                             <div className="col-md-9">
                                 <p>{this.state.email}</p>
@@ -213,8 +193,8 @@ export default class AdminCreateUser extends Component {
                             </div>
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-primary">Sukurti</button>
-                    <button className="btn btn-primary float-right" onClick={this.resetState}>Išvalyti</button>
+                    <button className="btn btn-danger float-left" onClick={this.resetState}>Išvalyti</button>
+                    <button type="submit" className="btn btn-primary float-right">Sukurti</button>
                 </form>
                 </div>
             </div>

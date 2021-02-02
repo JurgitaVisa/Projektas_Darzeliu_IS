@@ -5,18 +5,19 @@ import { useContext } from 'react';
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import LoginForm from './LoginForm';
+import AuthContext from '../11Context/AuthContext';
 
 axios.defaults.withCredentials = true;
 
-export class LoginContainer extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: "",
-            password: "",
-            loginError: false
-        };
-    }
+export const LoginContainer = () => {
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         username: "",
+    //         password: "",
+    //         loginError: false
+    //     };
+    // }
 
     handleUsernameChange = (event) => {
         this.setState({ username: event.target.value })
@@ -53,8 +54,6 @@ export class LoginContainer extends Component {
         event.preventDefault();
     }
 
-
-    render() {
         return (
             <div >
                 <div className="text-center">
@@ -73,7 +72,6 @@ export class LoginContainer extends Component {
             </div>
         )
     }
-}
 
 export default LoginContainer
 

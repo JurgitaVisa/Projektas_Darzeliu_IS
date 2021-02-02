@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import "./index.css";
 import "./App.css";
@@ -15,23 +15,29 @@ const initState = {
   isAuthenticated: false,
   username: null,
   role: null,
-  token: null,
 };
+
+const checkIfLoggedIn = (props) => {
+  if (sessionStorage.length > 0) {
+    console.log(sessionStorage.getItem("username"));
+    console.log("how many entries: " + sessionStorage.length);
+    console.log(props);
+  }
+}
 
 const reducer = (state, action) => {
   switch (action.type){
     case "LOGIN":
-      localStorage.setItem("username", action.payload.username);
-      localStorage.setItem("token", action.payload.token);
+      sessionStorage.setItem("username", action.payload.username);
+      sessionStorage.setItem("role", action.payload.role);
       return{
         ...state,
         isAuthenticated: true,
         username: action.payload.username,
         role: action.payload.role,
-        token: action.payload.token 
       };
     case "LOGOUT":
-      localStorage.clear();
+      sessionStorage.clear();
       return{
         ...state,
         isAuthenticated: false,
@@ -44,19 +50,23 @@ const reducer = (state, action) => {
 };
 
 function App() {
-    const [state, distpatch] = React.useReducer(reducer, initState);
+    const [state, dispatch] = React.useReducer(reducer, initState);
+    checkIfLoggedIn(state);
   return (
-    <AuthContext.Provider value={{state, distpatch}}>
+    <AuthContext.Provider value={{state, dispatch}}>
       <div className="container-fluid px-0">
         <Switch>
-          <Route exact path="/" component={Login} />
-          <Route path="/home" component={Main} />
+          {/* <Route exact path="/" component={Login} /> */}
+          <Route exact path="/" render={() => state.isAuthenticated ? <Redirect to="/home" /> : <Login />} />
+          <Route path="/home" render={() => state.isAuthenticated ? <Main /> : <Redirect to="/" />} />
+          {/* <Route path="/home" component={Main} /> */}
           <Route path="/admin" component={Admin} />
           <Route path="/naudotojai" component={UserListContainer} />
           <Route path="*" component={NotFound} />
           <Route component={NotFound} />
         </Switch>
       </div>
+      {!state.isAuthenticated ? <Redirect to="/" />: <Redirect to="/home" />}
     </AuthContext.Provider>
   );
 }

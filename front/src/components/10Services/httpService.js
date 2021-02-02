@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import swal from 'sweetalert';
 // import { toast } from 'react-toastify';
 
 //default response when an unexpected error occurs
@@ -9,7 +10,7 @@ axios.interceptors.response.use(null, error => {
 
     if (!expectedError) {
         console.log("Logging unexpected error", error);
-        alert('Įvyko klaida, puslapis nurodytu adresu nepasiekiamas');
+        swal('Įvyko klaida, puslapis nurodytu adresu nepasiekiamas');
     }
 
     return Promise.reject(error);

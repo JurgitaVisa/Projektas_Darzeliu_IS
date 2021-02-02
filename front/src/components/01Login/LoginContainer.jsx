@@ -1,77 +1,125 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import axios from "axios";
-import { useContext } from 'react';
+import { useContext } from "react";
 
-import http from '../10Services/httpService';
-import apiEndpoint from '../10Services/endpoint';
-import LoginForm from './LoginForm';
-import AuthContext from '../11Context/AuthContext';
+import http from "../10Services/httpService";
+import apiEndpoint from "../10Services/endpoint";
+import AuthContext from "../11Context/AuthContext";
+import logo from "../../images/logo.png";
+import swal from "sweetalert";
 
 axios.defaults.withCredentials = true;
 
 export const LoginContainer = () => {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         username: "",
-    //         password: "",
-    //         loginError: false
-    //     };
-    // }
 
-    handleUsernameChange = (event) => {
-        this.setState({ username: event.target.value })
-    }
+  const { dispatch } = React.useContext(AuthContext);
 
-    handlePassChange = (event) => {
-        this.setState({ password: event.target.value })
-    }
+  const initState = {
+    username: "",
+    password: "",
+    loginError: false,
+    loggingIn: false,
+  };
 
-    handleSubmit = (event) => {
-        let userData = new URLSearchParams();
-        userData.append('username'
-            , this.state.username);
-        userData.append('password'
-            , this.state.password);
-        http.post(`${apiEndpoint}/login`
-            , userData,
-            { headers: { 'Content-type': 'application/x-www-form-urlencoded' } })
-            .then((resp) => {
-                console.log("user " + resp.data.username + " logged in");
-                // keičiamas kontekstas priskiriant prisijungusį user'į
-                // {userName = resp.data.username}
-                //
-                console.log(resp.data);
-                this.props.history.push("/home");
-            })
-            .catch((error) => {
-                console.log("Error log from Login submit", error);
-                if (error.response.status === 401) {
-                    this.setState({ loginError: true });
-                } else alert("Prisijungimo klaida: " + error.response.status)
-            });
+  const [data, setData] = React.useState(initState);
 
-        event.preventDefault();
-    }
+  const handleChange = (event) => {
+    setData({
+      ...data,
+      loginError: false,  // po nesėkmingo įvedimo pradėjus vesti duomenis iš naujo, paslepia klaidos pranešimą
+      [event.target.name]: event.target.value,
+    });
+  };
 
-        return (
-            <div >
-                <div className="text-center">
-                    <h5>Sveiki atvykę! </h5>
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setData({
+        ...data,
+        loginError: false,
+        loggingIn: true,
+    });
+    let userData = new URLSearchParams();
+    userData.append("username", data.username);
+    userData.append("password", data.password);
+    http
+      .post(`${apiEndpoint}/login`, userData, {
+        headers: { "Content-type": "application/x-www-form-urlencoded" },
+      })
+      .then(resp => {
+        console.log("user " + resp.data.username + " logged in");
+        console.log(resp);
+        dispatch({
+            type: "LOGIN",
+            payload: resp.data
+        })
+        // this.props.history.push("/home");
+      })
+      .catch(error => {
+        console.log("Error log from Login submit", error);
+        // if (error.response.status === 401) {
+        //   this.setState({ loginError: true });
+        // } else swal("Prisijungimo klaida", error.response.status);
+      });
+  };
 
-                </div>
+  return (
+    <div className="d-flex flex-column justify-content-center align-items-center min-vh-100">
+      <div className="card p-5">
+        <img src={logo} className="img-flex mb-3" />
+        <form onSubmit={handleSubmit}>
+          <h3>Prisijungti</h3>
+          <div className="form-group">
+            <label htmlFor="username">
+              Naudotojo vardas <span className="required">*</span>
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              name="username"
+              id="username"
+              value={data.username}
+              onChange={handleChange}
+              required
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Įveskite naudotojo prisijungimo vardą"
+            />
+          </div>
 
-                <LoginForm
-                    username={this.state.username}
-                    password={this.state.password}
-                    loginError={this.state.loginError}
-                    onUsernameChange={this.handleUsernameChange}
-                    onPassChange={this.handlePassChange}
-                    onSubmit={this.handleSubmit}
-                />
-            </div>
-        )
-    }
+          <div className="form-group">
+            <label htmlFor="password">
+              Slaptažodis <span className="required">*</span>
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              name="password"
+              id="password"
+              value={data.password}
+              onChange={handleChange}
+              required
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Įveskite naudotojo slaptažodį"
+            />
+          </div>
 
-export default LoginContainer
+          <button type="submit" className="btn btn-primary" disabled={data.loggingIn}>
+              {data.loggingIn ? (
+                "Jungiamasi..."
+              ) : (
+                "Prisijungti"
+              )}
+          </button>
+        </form>
+        {data.loginError && (
+        <span className="alert alert-danger mt-3" role="alert">
+          Neteisingas prisijungimo vardas ir/arba slaptažodis!
+        </span>
+       )}
+      </div>
+    </div>
+  );
+};
 
+export default LoginContainer;

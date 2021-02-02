@@ -20,10 +20,6 @@ function dateFormat(num) {
     else return num;
 }
 
-const errorMessages = {
-    errorInvalidEmail: "Neteisingas el. pašto formatas!"
-}
-
 export default class AdminCreateUser extends Component {
     
     constructor(props) {
@@ -58,7 +54,7 @@ export default class AdminCreateUser extends Component {
                     <div className="form-group col">
                         <label htmlFor="txtEmail">El. paštas <span style={styleFieldRequired}>*</span></label>
                         <input 
-                            type="email" 
+                            type="text" 
                             className="form-control" 
                             id="txtEmail" 
                             name="email" 
@@ -66,7 +62,7 @@ export default class AdminCreateUser extends Component {
                             placeholder="El. paštas" 
                             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
                             onChange={this.handleChange} 
-                            onInvalid={(e) => { e.target.setCustomValidity(`${errorMessages.errorInvalidEmail}`) }}
+                            onInvalid={(e) => this.validateText(e)}
                             required
                         />
                     </div>
@@ -212,6 +208,21 @@ export default class AdminCreateUser extends Component {
         })
     }
 
+    validateText(event) {
+        const target = event.target;
+        if(target.id==="txtEmail") {
+            if(target.validity.valueMissing) {
+                target.setCustomValidity("El. paštas yra privalomas laukelis")
+            }
+            else if(target.validity.patternMismatch) {
+                target.setCustomValidity("Neteisingas el. pašto formatas")
+            }
+            else {
+                target.setCustomValidity("");
+            }
+        }
+    }
+
     roleDropdownOnChange(event) {
         event.preventDefault()
         this.setState({
@@ -222,11 +233,9 @@ export default class AdminCreateUser extends Component {
 
     handleChange(event) {
         const target = event.target;
-        if(!target.validity.patternMismatch) {
-            target.setCustomValidity("");
-        }
+        this.validateText(event);
         this.setState({
-            [event.target.name]: event.target.value
+            [target.name]: target.value
         })
     }
 

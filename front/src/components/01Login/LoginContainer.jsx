@@ -1,6 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
 import axios from "axios";
-import { useContext } from "react";
 
 import http from "../10Services/httpService";
 import apiEndpoint from "../10Services/endpoint";
@@ -65,7 +64,7 @@ export const LoginContainer = () => {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center min-vh-100">
       <div className="card p-5">
-        <img src={logo} className="img-flex mb-3" />
+        <img src={logo} alt="Vilniaus miesto savivaldybės vaikų darželių informacinė sistema" className="img-flex mb-3" />
         <form onSubmit={handleSubmit}>
           <h3>Prisijungti</h3>
           <div className="form-group">

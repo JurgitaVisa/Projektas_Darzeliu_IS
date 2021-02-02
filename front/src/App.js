@@ -10,6 +10,8 @@ import NotFound from "./components/03NotFound/NotFound";
 import Admin from "./components/04Admin/AdminContainer";
 import UserListContainer from "./components/04Admin/UserListContainer";
 import AuthContext from "./components/11Context/AuthContext";
+import http from "./components/10Services/httpService";
+import apiEndpoint from "./components/10Services/endpoint";
 
 const initState = {
   isAuthenticated: false,
@@ -17,20 +19,30 @@ const initState = {
   role: null,
 };
 
-const checkIfLoggedIn = (props) => {
-  if (sessionStorage.length > 0) {
-    console.log(sessionStorage.getItem("username"));
-    console.log("how many entries: " + sessionStorage.length);
-    console.log(props);
-  }
-}
+const checkIfLoggedIn = () => { // šitas gali būti konvertuotas į useEffect
+  return sessionStorage.getItem("username");
+  // TODO 
+  // problema su kreipimusi į serverį yra ta, kad užklausa yra asincroninė ir kol grąžinami rezultatai, tolimesnis kodas dirba su isAuthenticated === false, nors realiai yra prisijungęs useris
+    // http
+    //   .get(`${apiEndpoint}/api/loggedUser`)
+    //   .then((resp) => {
+    //     console.log("user " + resp.data + " is logged in <- message from checkIfLoggedIn");
+    //     initState.isAuthenticated = true;
+    //     return true;
+    //   })
+    //   .catch((error) => {
+    //     console.log("deja");
+    //     initState.isAuthenticated = false;
+    //     return false;
+    //   });
+  };
 
 const reducer = (state, action) => {
-  switch (action.type){
+  switch (action.type) {
     case "LOGIN":
       sessionStorage.setItem("username", action.payload.username);
       sessionStorage.setItem("role", action.payload.role);
-      return{
+      return {
         ...state,
         isAuthenticated: true,
         username: action.payload.username,
@@ -38,11 +50,12 @@ const reducer = (state, action) => {
       };
     case "LOGOUT":
       sessionStorage.clear();
-      return{
+      console.log("reducer: logging out")
+      return {
         ...state,
         isAuthenticated: false,
         username: null,
-        role: null
+        role: null,
       };
     default:
       return state;
@@ -50,23 +63,52 @@ const reducer = (state, action) => {
 };
 
 function App() {
-    const [state, dispatch] = React.useReducer(reducer, initState);
-    checkIfLoggedIn(state);
+  if (checkIfLoggedIn() !== null){
+    initState.isAuthenticated = true
+  }
+  const [state, dispatch] = React.useReducer(reducer, initState);
+  
   return (
-    <AuthContext.Provider value={{state, dispatch}}>
+    <AuthContext.Provider value={{ state, dispatch }}>
+      {/* galima naudoti useEffect ir jame kviesti /api/loggedUser */}
+      {/* reikia autorizuotą routinimą perkelti į Main'ą, o app'e palikti tik pasirinkimą tarp dviejų komponentų - login vs main; 
+      problema, kad surinkus ranka adresą, aplikacija paleidžiama iš naujo ir grąžinama initialState*/}
       <div className="container-fluid px-0">
         <Switch>
-          {/* <Route exact path="/" component={Login} /> */}
-          <Route exact path="/" render={() => state.isAuthenticated ? <Redirect to="/home" /> : <Login />} />
-          <Route path="/home" render={() => state.isAuthenticated ? <Main /> : <Redirect to="/" />} />
-          {/* <Route path="/home" component={Main} /> */}
-          <Route path="/admin" component={Admin} />
-          <Route path="/naudotojai" component={UserListContainer} />
-          <Route path="*" component={NotFound} />
+          <Route
+            exact
+            path="/"
+            render={() =>
+              state.isAuthenticated ? <Redirect to="/home" /> : <Login />
+            }
+          />
+          <Route
+            path="/home"
+            render={() =>
+              state.isAuthenticated ? <Main /> : <Redirect to="/" />
+            }
+          />
+          <Route
+            path="/admin"
+            render={() =>
+              state.isAuthenticated ? <Admin /> : <Redirect to="/" />
+            }
+          />
+          <Route
+            path="/naudotojai"
+            render={() =>
+              state.isAuthenticated ? <UserListContainer /> : <Redirect to="/" />
+            }
+          />
+          <Route
+            path="*"
+            render={() =>
+              state.isAuthenticated ? <NotFound /> : <Redirect to="/" />
+            }
+          />
           <Route component={NotFound} />
         </Switch>
       </div>
-      {!state.isAuthenticated ? <Redirect to="/" />: <Redirect to="/home" />}
     </AuthContext.Provider>
   );
 }

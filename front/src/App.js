@@ -80,7 +80,7 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
-      {/* TODO prieiga prie puslapių pagal roles. 
+      {/* TODO prieiga prie puslapių pagal roles. Subuildinus neveikia neprisijungusių vartotojų peradresavimas į login ("/") puslapį
       TODO Atskiri NavBar'ai useriui, adminui ir švietimo specialistui*/}
 
       <div className="container-fluid px-0">

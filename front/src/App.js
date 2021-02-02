@@ -13,29 +13,42 @@ import AuthContext from "./components/11Context/AuthContext";
 import http from "./components/10Services/httpService";
 import apiEndpoint from "./components/10Services/endpoint";
 
-const initState = {
+var initState = {
   isAuthenticated: false,
   username: null,
   role: null,
 };
 
-const checkIfLoggedIn = () => { // šitas gali būti konvertuotas į useEffect
-  return sessionStorage.getItem("username");
-  // TODO 
+const checkIfLoggedIn = () => {
+  if (sessionStorage.length > 0) {
+    initState = {
+      isAuthenticated: true,
+      username: sessionStorage.getItem("username"),
+      role: sessionStorage.getItem("role"),
+    };
+  } else
+    initState = {
+      isAuthenticated: false,
+      username: null,
+      role: null,
+    };
+
+  /* galima naudoti useEffect ir jame kviesti /api/loggedUser */
+
   // problema su kreipimusi į serverį yra ta, kad užklausa yra asincroninė ir kol grąžinami rezultatai, tolimesnis kodas dirba su isAuthenticated === false, nors realiai yra prisijungęs useris
-    // http
-    //   .get(`${apiEndpoint}/api/loggedUser`)
-    //   .then((resp) => {
-    //     console.log("user " + resp.data + " is logged in <- message from checkIfLoggedIn");
-    //     initState.isAuthenticated = true;
-    //     return true;
-    //   })
-    //   .catch((error) => {
-    //     console.log("deja");
-    //     initState.isAuthenticated = false;
-    //     return false;
-    //   });
-  };
+  // http
+  //   .get(`${apiEndpoint}/api/loggedUser`)
+  //   .then((resp) => {
+  //     console.log("user " + resp.data + " is logged in <- message from checkIfLoggedIn");
+  //     initState.isAuthenticated = true;
+  //     return true;
+  //   })
+  //   .catch((error) => {
+  //     console.log("deja");
+  //     initState.isAuthenticated = false;
+  //     return false;
+  //   });
+};
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -50,7 +63,6 @@ const reducer = (state, action) => {
       };
     case "LOGOUT":
       sessionStorage.clear();
-      console.log("reducer: logging out")
       return {
         ...state,
         isAuthenticated: false,
@@ -63,42 +75,34 @@ const reducer = (state, action) => {
 };
 
 function App() {
-  if (checkIfLoggedIn() !== null){
-    initState.isAuthenticated = true
-  }
+  checkIfLoggedIn();
   const [state, dispatch] = React.useReducer(reducer, initState);
-  
+
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
-      {/* galima naudoti useEffect ir jame kviesti /api/loggedUser */}
-      {/* reikia autorizuotą routinimą perkelti į Main'ą, o app'e palikti tik pasirinkimą tarp dviejų komponentų - login vs main; 
-      problema, kad surinkus ranka adresą, aplikacija paleidžiama iš naujo ir grąžinama initialState*/}
+      {/* TODO prieiga prie puslapių pagal roles. 
+      TODO Atskiri NavBar'ai useriui, adminui ir švietimo specialistui*/}
+
       <div className="container-fluid px-0">
         <Switch>
           <Route
             exact
             path="/"
-            render={() =>
-              state.isAuthenticated ? <Redirect to="/home" /> : <Login />
+            render={() => state.isAuthenticated ? <Redirect to="/home" /> : <Login />
             }
           />
           <Route
             path="/home"
-            render={() =>
-              state.isAuthenticated ? <Main /> : <Redirect to="/" />
+            render={() => state.isAuthenticated ? <Main /> : <Redirect to="/" />
             }
           />
           <Route
             path="/admin"
-            render={() =>
-              state.isAuthenticated ? <Admin /> : <Redirect to="/" />
-            }
+            render={() => state.isAuthenticated ? (state.role === "ADMIN" ? <Admin /> : <NotFound />) : <Redirect to="/" />}
           />
           <Route
             path="/naudotojai"
-            render={() =>
-              state.isAuthenticated ? <UserListContainer /> : <Redirect to="/" />
-            }
+            render={() => state.isAuthenticated ? (state.role === "ADMIN" ? <UserListContainer /> : <NotFound />) : <Redirect to="/" />}
           />
           <Route
             path="*"

@@ -181,7 +181,6 @@ export default class AdminCreateUser extends Component {
                             name="address"
                             value={this.state.address}
                             onChange={this.handleChange}
-                            
                             onInvalid={(e) => this.validateText(e)}
                             placeholder="Adresas"
                             required

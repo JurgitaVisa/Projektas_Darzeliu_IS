@@ -2,6 +2,7 @@ package it.akademija.kindergarten;
 
 public class KindergartenDTO {
 
+	private Long id;
 	private String name;
 	private String address;
 	private int capacityAgeGroup2to3;
@@ -10,10 +11,13 @@ public class KindergartenDTO {
 	public KindergartenDTO() {
 	}
 
-	public KindergartenDTO(String name, String address) {
+	
+	public KindergartenDTO(Long id, String name, String address) {		
+		this.id = id;
 		this.name = name;
 		this.address = address;
 	}
+
 
 	public KindergartenDTO(String name, String address, int capacityAgeGroup2to3, int capacityAgeGroup3to6) {
 		this.name = name;
@@ -22,6 +26,16 @@ public class KindergartenDTO {
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
 	}
 	
+	
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 
 	public String getName() {
 		return name;

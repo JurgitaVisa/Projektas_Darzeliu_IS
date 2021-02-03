@@ -1,5 +1,8 @@
 package it.akademija.user;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +33,6 @@ public class UserService implements UserDetailsService {
 			return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
 					AuthorityUtils.createAuthorityList(new String[] { "ROLE_" + user.getRole().toString() }));
 		}
-
 	}
 
 	/**
@@ -39,10 +41,20 @@ public class UserService implements UserDetailsService {
 	 * in the user repository
 	 * 
 	 * @param userData data for new user
+	 * @throws Exception
 	 */
+
 	@Transactional
-	public void createUser(UserDTO userData) {
+	public void createUser(UserDTO userData) throws Exception {
 		User newUser = new User();
+
+		if (userData.getRole().equals("USER") && ((userData.getPhone() == null || userData.getPhone().isEmpty())
+				|| (userData.getAddress() == null || userData.getAddress().isEmpty())
+				|| (userData.getPersonalCode() == null || userData.getPersonalCode().isEmpty())
+				|| (userData.getBirthdate() == null))) {
+
+			throw new Exception("Negali buti tuscia");
+		}
 
 		newUser.setRole(Role.valueOf(userData.getRole()));
 		newUser.setName(userData.getName());
@@ -53,8 +65,7 @@ public class UserService implements UserDetailsService {
 		newUser.setPhone(userData.getPhone());
 		newUser.setEmail(userData.getEmail());
 		newUser.setUsername(userData.getUsername());
-		newUser.setPassword(encoder.encode(userData.getPassword()));
-
+		newUser.setPassword(encoder.encode(userData.getUsername()));
 		userDao.save(newUser);
 
 		if (userData.getRole().equals("ADMIN") && userDao.findByRole(Role.ADMIN).size() > 1
@@ -89,15 +100,19 @@ public class UserService implements UserDetailsService {
 	 * 
 	 * @return list of user details for ADMIN
 	 */
-	public Iterable<User> getAll() {
-		return userDao.findAll();
+
+	@Transactional(readOnly = true)
+	public List<UserInfo> getAllUsers() {
+		List<User> users = userDao.findAll();
+		return users.stream().map(user -> new UserInfo(user.getUserId(), user.getRole().name(), user.getName(),
+				user.getSurname(), user.getUsername())).collect(Collectors.toList());
 	}
 
 	@Transactional
 	public UserInfo getUserDetails(String username) {
 		User user = userDao.findByUsername(username);
-		return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(), user.getBirthdate(), user.getPersonalCode(), user.getAddress(),
-				user.getPhone(), user.getEmail(), user.getUsername());
+		return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(), user.getBirthdate(),
+				user.getAddress(), user.getPersonalCode(), user.getPhone(), user.getEmail(), user.getUsername());
 	}
 
 	/**
@@ -111,7 +126,20 @@ public class UserService implements UserDetailsService {
 	public User findByUsername(String username) {
 
 		return userDao.findByUsername(username);
+	}
 
+	/**
+	 * 
+	 * Finds user with a specified personal code. Don't return User entity via REST.
+	 * 
+	 * @param personalCode
+	 * @return User entity (includes sensitive data)
+	 */
+
+	@Transactional(readOnly = true)
+	public User findByPersonalCode(String personalCode) {
+
+		return userDao.findByPersonalCode(personalCode);
 	}
 
 	/**
@@ -143,9 +171,9 @@ public class UserService implements UserDetailsService {
 
 		user.setName(userData.getName());
 		user.setSurname(userData.getSurname());
+		user.setAddress(userData.getAddress());
 		user.setBirthdate(userData.getBirthdate());
 		user.setPersonalCode(userData.getPersonalCode());
-		user.setAddress(userData.getAddress());
 		user.setPhone(userData.getPhone());
 		user.setEmail(userData.getEmail());
 		user.setUsername(userData.getUsername());

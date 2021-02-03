@@ -12,30 +12,37 @@ public class KindergartenService {
 
 	@Autowired
 	private KindergartenDAO gartenDao;
-	
+
 	@Transactional(readOnly = true)
 	public List<KindergartenDTO> getAllKindergarten() {
 		List<Kindergarten> kindergartens = gartenDao.findAll();
-		return kindergartens.stream().map(garten-> new KindergartenDTO(garten.getName(), garten.getAddress())).collect(Collectors.toList());
+		return kindergartens.stream().map(garten -> new KindergartenDTO(garten.getId(), garten.getName(), garten.getAddress()))
+				.collect(Collectors.toList());
 	}
-	
-	
-	//@Transactional(readOnly = true)
+
+	@Transactional(readOnly = true)
 	public Kindergarten findByName(String name) {
-		
-		return gartenDao.findByNameIgnoreCase(name);			
+
+		return gartenDao.findByNameIgnoreCase(name);
 	}
-	
+
 	@Transactional
 	public void createNewKindergarten(Kindergarten kindergarten) {
 		gartenDao.save(kindergarten);
-		
+
 	}
-	
-	
-	
-	
-	
+
+	@Transactional(readOnly = true)
+	public Object findById(Long id) {
+
+		return gartenDao.findById(id).orElse(null);
+	}
+
+	@Transactional
+	public void deleteKindergarten(Long id) {
+		gartenDao.deleteById(id);
+
+	}
 
 	public KindergartenDAO getGartenDao() {
 		return gartenDao;
@@ -45,12 +52,4 @@ public class KindergartenService {
 		this.gartenDao = gartenDao;
 	}
 
-
-	
-
-	
-	
-	
-	
-	
 }

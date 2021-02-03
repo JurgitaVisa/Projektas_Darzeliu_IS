@@ -1,11 +1,13 @@
 package it.akademija.user;
 
+import java.time.LocalDate;
+
 public class UserDTO {
 
 	private String role;
 	private String name;
 	private String surname;
-	private String birthdate;
+	private LocalDate birthdate;
 	private String personalCode;
 	private String address;
 	private String phone;
@@ -17,51 +19,51 @@ public class UserDTO {
 
 	}
 
-	public UserDTO(String role, String name, String surname, String username, String password) {
+	public UserDTO(String role, String name, String surname, String email, String username, String password) {
 		super();
 		this.role = role;
 		this.name = name;
 		this.surname = surname;
+		this.email = email;
 		this.username = username;
 		this.password = password;
 	}
 
-	public UserDTO(String role, String name, String surname, String birthdate, String personalCode, String address,
+	public UserDTO(String role, String name, String surname, LocalDate birthdate, String personalCode, String address,
 			String phone, String email, String username, String password) {
 		super();
 		this.role = role;
 		this.name = name;
 		this.surname = surname;
 		this.birthdate = birthdate;
-		this.personalCode = personalCode;
 		this.address = address;
+		this.personalCode = personalCode;
 		this.phone = phone;
 		this.email = email;
 		this.username = username;
 		this.password = password;
-	}	
-	
+	}
 
-	public UserDTO(String name, String surname, String birthdate, String personalCode, String address, String phone,
+	public UserDTO(String name, String surname, LocalDate birthdate, String personalCode, String address, String phone,
 			String email, String username, String password) {
 		super();
 		this.name = name;
 		this.surname = surname;
 		this.birthdate = birthdate;
-		this.personalCode = personalCode;
 		this.address = address;
+		this.personalCode = personalCode;
 		this.phone = phone;
 		this.email = email;
 		this.username = username;
 		this.password = password;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getRole() {
+		return role;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public String getName() {
@@ -80,27 +82,11 @@ public class UserDTO {
 		this.surname = surname;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	public String getBirthdate() {
+	public LocalDate getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(String birthdate) {
+	public void setBirthdate(LocalDate birthdate) {
 		this.birthdate = birthdate;
 	}
 
@@ -134,6 +120,22 @@ public class UserDTO {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }

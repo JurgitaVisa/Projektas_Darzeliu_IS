@@ -1,6 +1,7 @@
 package it.akademija.user;
 
-import javax.validation.Validator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -19,9 +20,6 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserDAO userDao;
-
-	@Autowired
-	private Validator validator;
 
 	private PasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -103,9 +101,11 @@ public class UserService implements UserDetailsService {
 	 * @return list of user details for ADMIN
 	 */
 
-	@Transactional
-	public Iterable<User> getAll() {
-		return userDao.findAll();
+	@Transactional(readOnly = true)
+	public List<UserInfo> getAllUsers() {
+		List<User> users = userDao.findAll();
+		return users.stream().map(user -> new UserInfo(user.getUserId(), user.getRole().name(), user.getName(),
+				user.getSurname(), user.getUsername())).collect(Collectors.toList());
 	}
 
 	@Transactional
@@ -189,14 +189,6 @@ public class UserService implements UserDetailsService {
 
 	public void setUserDao(UserDAO userDao) {
 		this.userDao = userDao;
-	}
-
-	public Validator getValidator() {
-		return validator;
-	}
-
-	public void setValidator(Validator validator) {
-		this.validator = validator;
 	}
 
 }

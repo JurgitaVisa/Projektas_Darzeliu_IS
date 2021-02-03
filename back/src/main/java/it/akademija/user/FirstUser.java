@@ -31,7 +31,7 @@ public class FirstUser {
 	public void addFirstUser() throws Exception {
 
 		if (userDao.findByRole(Role.ADMIN).size() == 0) {
-			UserDTO firstUser = new UserDTO("ADMIN", "admin", "admin", "admin@admin", "admin@admin.lt",
+			UserDTO firstUser = new UserDTO("ADMIN", "admin", "admin", "admin@admin.lt", "admin@admin.lt",
 					"admin@admin.lt");
 			userService.createUser(firstUser);
 			LOG.warn("Pirmas ADMIN naudotojas sukurtas");

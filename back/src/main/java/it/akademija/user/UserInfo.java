@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class UserInfo {
 
+	private Long userId;
 	private String role;
 	private String name;
 	private String surname;
@@ -16,6 +17,14 @@ public class UserInfo {
 
 	public UserInfo() {
 
+	}
+
+	public UserInfo(Long userId, String role, String name, String surname, String username) {
+		this.userId = userId;
+		this.role = role;
+		this.name = name;
+		this.surname = surname;
+		this.username = username;
 	}
 
 	public UserInfo(String role, String name, String surname, LocalDate birthdate, String personalCode, String address,
@@ -102,6 +111,14 @@ public class UserInfo {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

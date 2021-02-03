@@ -30,20 +30,20 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@NotEmpty
+	@NotEmpty(message = "Vardas privalomas!")
 	@Size(min = 2, max = 70)
 	@Pattern(regexp = "^\\p{L}+(?: \\p{L}+)*$")
 	@Column
 	private String name;
 
-	@NotEmpty
+	@NotEmpty(message = "Pavardė privaloma!")
 	@Size(min = 2, max = 70)
 	@Pattern(regexp = "^\\p{L}+(?: \\p{L}+)*$")
 	@Column
 	private String surname;
 
 	@Email
-	@NotEmpty
+	@NotEmpty(message = "El. paštas privalomas!")
 	@Column
 	private String email;
 
@@ -51,14 +51,14 @@ public class User {
 	@Column
 	private LocalDate birthdate;
 
-	@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{11}$")
+	@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{11}$|")
 	@Column
 	private String personalCode;
 
 	@Column
 	private String address;
 
-	@Pattern(regexp = "^\\+(?!\\s*$)[0-9\\s]{11}$")
+	@Pattern(regexp = "^\\+(?!\\s*$)[0-9\\s]{11}$|")
 	@Column
 	private String phone;
 
@@ -176,6 +176,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

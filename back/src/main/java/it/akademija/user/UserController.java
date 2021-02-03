@@ -1,5 +1,7 @@
 package it.akademija.user;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,16 +38,28 @@ public class UserController {
 	 * Create new user. Method only accessible to ADMIN users
 	 * 
 	 * @param userInfo
+	 * @throws Exception
 	 */
 	@Secured({ "ROLE_ADMIN" })
 	@PostMapping(path = "/admin/createuser")
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Create user", notes = "Creates user with data")
-	public void createUser(@RequestBody UserDTO userInfo) {
+	public ResponseEntity<String> createUser(@Valid @RequestBody UserDTO userInfo) throws Exception {
 
 		LOG.info("** Usercontroller: kuriamas naujas naudotojas **");
 
-		userService.createUser(userInfo);
+		if (userService.findByUsername(userInfo.getUsername()) == null) {
+
+			userService.createUser(userInfo);
+			return new ResponseEntity<String>("Naudotojas sukurtas sėkmingai!", HttpStatus.CREATED);
+		}
+
+		if (userInfo.getRole().equals("USER") && userService.findByPersonalCode(userInfo.getPersonalCode()) == null) {
+			userService.createUser(userInfo);
+			return new ResponseEntity<String>("Naudotojas sukurtas sėkmingai!", HttpStatus.CREATED);
+		}
+
+		return new ResponseEntity<String>("Toks naudotojas jau egzituoja!", HttpStatus.BAD_REQUEST);
 
 	}
 
@@ -84,19 +97,18 @@ public class UserController {
 
 		return userService.getAll();
 	}
-	
-	
+
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
 	@GetMapping(path = "/{username}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get details for user with specified username")
 	public UserInfo getUserDetails(@ApiParam(value = "Username", required = true) @PathVariable final String username) {
 		if (userService.findByUsername(username) != null) {
-			
+
 			LOG.info("** Usercontroller: ieškomas naudotojas vardu [{}] **", username);
-			
+
 			return userService.getUserDetails(username);
-			
+
 		}
 		return new UserInfo();
 	}
@@ -107,14 +119,14 @@ public class UserController {
 	 * Method only accessible to ADMIN users
 	 * 
 	 * @param username
-	 */	
+	 */
 	@Secured({ "ROLE_ADMIN" })
 	@PutMapping(path = "/admin/password/{username}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Restore user password", notes = "Restore user password to initial value")
 	public ResponseEntity<String> restorePassword(
 			@ApiParam(value = "Username", required = true) @PathVariable final String username) {
-		
+
 		if (userService.findByUsername(username) != null) {
 			userService.restorePassword(username);
 			LOG.info("** Usercontroller: keiciamas slaptazodis naudotojui vardu [{}] **", username);
@@ -128,9 +140,8 @@ public class UserController {
 	@PutMapping(path = "/update/{username}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Update user datails")
-	public ResponseEntity<String> updateUserData(
-			 @PathVariable final String username, @RequestBody UserDTO userData) {
-		
+	public ResponseEntity<String> updateUserData(@PathVariable final String username, @RequestBody UserDTO userData) {
+
 		if (userService.findByUsername(username) != null) {
 			userService.updateUserData(userData, username);
 			LOG.info("** Usercontroller: keiciami duomenys naudotojui vardu [{}] **", username);
@@ -139,8 +150,7 @@ public class UserController {
 
 		return new ResponseEntity<String>("Naudotojas tokiu vardu nerastas", HttpStatus.NOT_FOUND);
 	}
-	
-	
+
 	public UserService getUserService() {
 		return userService;
 	}

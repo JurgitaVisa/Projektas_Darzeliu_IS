@@ -34,7 +34,6 @@ export default class AdminCreateUser extends Component {
             telno: "",
             email: ""
         }
-        this.textInput = React.createRef();
         this.roleDropdownOnChange = this.roleDropdownOnChange.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -60,10 +59,10 @@ export default class AdminCreateUser extends Component {
                             name="email" 
                             value={this.state.email} 
                             placeholder="El. paštas" 
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
-                            onChange={this.handleChange} 
+                            onChange={this.handleChange}
                             onInvalid={(e) => this.validateText(e)}
                             required
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
                         />
                     </div>
             </div>
@@ -84,6 +83,7 @@ export default class AdminCreateUser extends Component {
                             value={this.state.name}
                             onChange={this.handleChange}
                             placeholder="Vardas"
+                            pattern="[A-z]{1,32}"
                         />
                     </div>
                     <div className="form-group col">
@@ -96,6 +96,7 @@ export default class AdminCreateUser extends Component {
                             value={this.state.surname}
                             onChange={this.handleChange}
                             placeholder="Pavardė"
+                            pattern="[A-z]{1,32}"
                         />
                     </div>
                 </div>
@@ -117,6 +118,7 @@ export default class AdminCreateUser extends Component {
                             name="birthdate"
                             value={this.state.birthdate}
                             onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
                             placeholder="MMMM-MM-DD"
                             required
                         />
@@ -130,8 +132,10 @@ export default class AdminCreateUser extends Component {
                             name="identificationCode"
                             value={this.state.identificationCode}
                             onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
                             placeholder="Asmens kodas"
-                            required pattern="[0-9]{11}"
+                            required 
+                            pattern="[0-9]{11}"
                         />
                     </div>
                 </div>
@@ -145,8 +149,10 @@ export default class AdminCreateUser extends Component {
                             name="name"
                             value={this.state.name}
                             onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
                             placeholder="Vardas"
                             required
+                            pattern="[A-z]{1,32}"
                         />
                     </div>
                     <div className="form-group col">
@@ -157,9 +163,11 @@ export default class AdminCreateUser extends Component {
                             id="txtSurname" 
                             name="surname" 
                             value={this.state.surname} 
-                            onChange={this.handleChange} 
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
                             placeholder="Pavardė" 
                             required
+                            pattern="[A-z]{1,32}"
                         />
                     </div>
                 </div>
@@ -173,6 +181,8 @@ export default class AdminCreateUser extends Component {
                             name="address"
                             value={this.state.address}
                             onChange={this.handleChange}
+                            
+                            onInvalid={(e) => this.validateText(e)}
                             placeholder="Adresas"
                             required
                         />
@@ -186,6 +196,7 @@ export default class AdminCreateUser extends Component {
                             name="telno" 
                             value={this.state.telno}
                             onChange={this.handleChange} 
+                            onInvalid={(e) => this.validateText(e)}
                             placeholder="+370xxxxxxxx" 
                             required pattern="[+,0-9]{12}"
                         />
@@ -210,15 +221,69 @@ export default class AdminCreateUser extends Component {
 
     validateText(event) {
         const target = event.target;
-        if(target.id==="txtEmail") {
-            if(target.validity.valueMissing) {
-                target.setCustomValidity("El. paštas yra privalomas laukelis")
+        if(target.validity.valueMissing && target.id!="txtBirthdate") {
+            target.setCustomValidity(target.placeholder + " yra privalomas laukelis")
+        }
+        else {
+            if(target.id==="txtEmail") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Neteisingas el. pašto formatas")
+                }
+                else {
+                    target.setCustomValidity("")
+                }
             }
-            else if(target.validity.patternMismatch) {
-                target.setCustomValidity("Neteisingas el. pašto formatas")
+            else if(target.id==="txtBirthdate") {
+                if(target.validity.valueMissing) {
+                    target.setCustomValidity("Gimimo data yra privalomas laukelis")
+                }
+                else if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Neteisingas gimimo datos formatas")
+                }
+                else if(target.validity.rangeOverflow) {
+                    target.setCustomValidity("Gimimo data negali būti ateityje")
+                }
+                else if(target.validity.rangeUnderflow) {
+                    target.setCustomValidity("Gimimo data negali būti ankstesnė nei 01.01.1900")
+                }
+                else {
+                    target.setCustomValidity("")
+                }
             }
-            else {
+            else if(target.id==="txtIdentificationCode") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Asmens koda sudaro 11 skaičių, laukelyje įrašyta: " + target.value.length + " skaičiai.")
+                }
+                else {
+                    target.setCustomValidity("")
+                }
+            }
+            else if(target.id==="txtName") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Netinkamo formato vardas")
+                }
+                else {
+                    target.setCustomValidity("")
+                }
+            }
+            else if(target.id==="txtSurname") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Netinkamo formato pavardė")
+                }
+                else {
+                    target.setCustomValidity("")
+                }
+            }
+            else if(target.id==="txtAddress") {
                 target.setCustomValidity("");
+            }
+            else if(target.id==="txtTelNo") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Neteisingas telefono numerio formatas(+370)")
+                }
+                else {
+                    target.setCustomValidity("");
+                }
             }
         }
     }

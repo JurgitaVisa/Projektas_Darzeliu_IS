@@ -20,7 +20,8 @@ public class KindergartenInit {
 
 	@PostConstruct
 	public void uploadKindergartenData() {
-
+		
+		//pirmas darželis sąraše pavadinimu test dėl bug
 		Path path = Paths.get("src/main/resources/darzeliu_adresai.csv");
 
 		if (gartenDao.findAll().size() == 0) {
@@ -38,6 +39,9 @@ public class KindergartenInit {
 					gartenDao.save(kindergarten);
 
 				}
+				
+				// ištrinam pirmą darželį test -- apėjimas bug, kadangi pirmo įkelto darželio DB nenuskaito pagal pavadinimą
+				gartenDao.deleteById(1l);
 
 			} catch (IOException e) {
 				e.printStackTrace();

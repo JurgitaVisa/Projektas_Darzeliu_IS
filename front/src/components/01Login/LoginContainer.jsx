@@ -55,9 +55,13 @@ export const LoginContainer = () => {
       })
       .catch(error => {
         console.log("Error log from Login submit", error);
-        // if (error.response.status === 401) {
-        //   this.setState({ loginError: true });
-        // } else swal("Prisijungimo klaida", error.response.status);
+        if (error.response.status === 401) {
+          setData({
+            ...data,
+            loginError: true,
+            loggingIn: false,
+          });
+        } else swal("Prisijungimo klaida", error.response.status);
       });
   };
 

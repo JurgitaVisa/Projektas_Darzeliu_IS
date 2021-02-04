@@ -66,12 +66,14 @@ public class UserService implements UserDetailsService {
 		newUser.setEmail(userData.getEmail());
 		newUser.setUsername(userData.getUsername());
 		newUser.setPassword(encoder.encode(userData.getUsername()));
-		userDao.save(newUser);
+		userDao.saveAndFlush(newUser);
 
-		if (userData.getRole().equals("ADMIN") && userDao.findByRole(Role.ADMIN).size() > 1
-				&& userDao.findByUsername("admin") != null) {
-			userDao.deleteByUsername("admin");
-		}
+		/*
+		 * if (userData.getRole().equals("ADMIN") &&
+		 * userDao.findByRole(Role.ADMIN).size() > 1 &&
+		 * userDao.findByUsername("admin@admin.lt") != null) {
+		 * userDao.deleteByUsername("admin@admin.lt"); }
+		 */
 
 	}
 
@@ -87,7 +89,8 @@ public class UserService implements UserDetailsService {
 	public void deleteUser(String username) {
 
 		if (findByUsername(username).getRole().equals(Role.ADMIN) && userDao.findByRole(Role.ADMIN).size() == 1) {
-			userDao.save(new User(Role.ADMIN, "admin", "admin", "admin", encoder.encode("laikinas")));
+			userDao.save(new User(Role.ADMIN, "admin", "admin", "admin@admin.lt", "admin@admin.lt",
+					encoder.encode("admin@admin.lt")));
 		}
 
 		userDao.deleteByUsername(username);

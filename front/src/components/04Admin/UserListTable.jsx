@@ -16,8 +16,8 @@ class UserListTable extends Component {
         {            
             key: 'role',
             path: 'role',
-            label: 'Rolė',
-            content: naudotojas => <span>{naudotojas.role}</span>
+            label: 'Naudotojo rolė',
+            content: naudotojas => <span>{naudotojas.role === "ADMIN" ? "Administratorius" : (naudotojas.role === "USER" ? "Vaiko atstovas" : "Švietimo specialistas")}</span>
         },
 
        

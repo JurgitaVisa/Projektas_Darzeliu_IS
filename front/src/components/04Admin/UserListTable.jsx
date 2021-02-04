@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Table from '../08CommonComponents/Table';
-import Modal from '../08CommonComponents/Modal';
+//import Modal from '../08CommonComponents/Modal';
 
 class UserListTable extends Component {
 
@@ -20,16 +20,11 @@ class UserListTable extends Component {
             content: naudotojas => <span>{naudotojas.role}</span>
         },
 
-        {           
-            key: 'surname',
-            path: 'surname',
-            label: 'Vardas, pavardė',
-            content: naudotojas => <span>{naudotojas.name} {naudotojas.surname}</span>
-        },
+       
         {            
             key: 'update',
             label: 'Pirminis slaptažodis',
-            content: naudotojas => <button onClick={() => this.props.onRestorePassword(naudotojas)} className="btn btn-outline-secondary btn-sm btn-block">Atkurti</button>
+            content: naudotojas => <button onClick={() => this.props.onRestorePassword(naudotojas)} className="btn btn-outline-primary btn-sm btn-block">Atkurti</button>
         },
        
         {            

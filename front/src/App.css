@@ -15,3 +15,7 @@
   color: #ff0000;
   font-weight: bold;
 }
+
+.nav-img {
+  max-width: 19rem;
+}

@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
+import '../../App.css';
 
 import NavBar from '../00Navigation/NavBar';
 import UserListTable from './UserListTable';
+import Pagination from './../08CommonComponents/Pagination';
 
 
 export class UserListContainer extends Component {
@@ -13,7 +15,10 @@ export class UserListContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            naudotojai: []
+            naudotojai: [],
+            pageSize: 10,
+            currentPage: 1,
+            itemsCount: 100
         }
     }
     componentDidMount() {
@@ -69,6 +74,10 @@ export class UserListContainer extends Component {
 
     }
 
+    handlePageChange = (page) => {
+        this.setState({ currentPage: page });
+    };
+
     render() {
         return (
             <div >
@@ -83,11 +92,19 @@ export class UserListContainer extends Component {
 
                     <Link to="/admin" className="btn btn-outline-primary my-2">Sukurti naują</Link>
                     <br />
-                    <UserListTable 
+                    <UserListTable
                         naudotojai={this.state.naudotojai}
                         onDelete={this.handleDelete}
                         onRestorePassword={this.handleRestorePassword}
                     />
+
+                    <Pagination
+                        itemsCount={this.state.itemsCount}
+                        pageSize={this.state.pageSize}
+                        onPageChange={this.handlePageChange}
+                        currentPage={this.state.currentPage}
+                    />
+
                 </div>
             </div>
         )

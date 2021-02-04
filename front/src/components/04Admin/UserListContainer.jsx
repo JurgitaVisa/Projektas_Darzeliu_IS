@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import swal from 'sweetalert';
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
+import '../../App.css';
 
-import NavBar from '../00Navigation/NavBar';
+//import NavBar from '../00Navigation/NavBar';
 import UserListTable from './UserListTable';
+import Pagination from './../08CommonComponents/Pagination';
+import { paginate } from './../08CommonComponents/paginate';
 
 
 export class UserListContainer extends Component {
@@ -13,7 +17,9 @@ export class UserListContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            naudotojai: []
+            naudotojai: [],
+            pageSize: 10,
+            currentPage: 1            
         }
     }
     componentDidMount() {
@@ -24,8 +30,8 @@ export class UserListContainer extends Component {
 
             }).catch(error => {
                 console.log("Naudotojai container error", error.response);
-                // if (error && error.response.status === 401)
-                //     alert("Puslapis pasiekiamas tik administratoriaus teises turintiems naudotojams")
+                if (error && error.response.status === 401)
+                    swal("Puslapis pasiekiamas tik administratoriaus teises turintiems naudotojams")
                 this.props.history.replace("/home");
             }
             );
@@ -47,7 +53,7 @@ export class UserListContainer extends Component {
 
                     });
             }).catch(error => {
-                if (error && error.response.status > 400 && error.response.status < 500) alert("Veiksmas neleidžiamas");
+                if (error && error.response.status > 400 && error.response.status < 500) swal("Veiksmas neleidžiamas");
 
             }
             );
@@ -63,31 +69,59 @@ export class UserListContainer extends Component {
             .then((response) => {
                 alert(response.data);
             }).catch(error => {
-                if (error && error.response.status > 400 && error.response.status < 500) alert("Veiksmas neleidžiamas");
+                if (error && error.response.status > 400 && error.response.status < 500) swal("Veiksmas neleidžiamas");
             }
             );
 
     }
 
+    handlePageChange = (page) => {
+        this.setState({ currentPage: page });
+    };
+
+    
+    getPageData = () => {
+        const {
+            pageSize,
+            currentPage,           
+            naudotojai: allData
+        } = this.state;         
+
+        const naudotojai = paginate(allData, currentPage, pageSize);
+
+        return { totalCount: allData.length, naudotojai: naudotojai }
+    }
+
     render() {
+
+        const { totalCount, naudotojai } = this.getPageData();
+       
         return (
             <div >
-                <NavBar />
+                {/* <NavBar /> */}
                 <div className="container">
-                    <div className="row ">
+                    {/* <div className="row ">
                         <div className="col-12 pb-2">
                             <h5 className="h5">Sistemos naudotojų sąrašas </h5>
 
                         </div>
-                    </div>
+                    </div> */}
 
-                    <Link to="/admin" className="btn btn-outline-primary my-2">Sukurti naują</Link>
+                    {/* <Link to="/admin" className="btn btn-outline-primary my-2">Sukurti naują</Link> */}
                     <br />
-                    <UserListTable 
-                        naudotojai={this.state.naudotojai}
+                    <UserListTable
+                        naudotojai={naudotojai}
                         onDelete={this.handleDelete}
                         onRestorePassword={this.handleRestorePassword}
                     />
+
+                    <Pagination
+                        itemsCount={totalCount}
+                        pageSize={this.state.pageSize}
+                        onPageChange={this.handlePageChange}
+                        currentPage={this.state.currentPage}
+                    />
+
                 </div>
             </div>
         )

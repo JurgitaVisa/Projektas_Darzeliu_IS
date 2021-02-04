@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Table from '../08CommonComponents/Table';
-import Modal from '../08CommonComponents/Modal';
+//import Modal from '../08CommonComponents/Modal';
 
 class UserListTable extends Component {
 
@@ -16,20 +16,15 @@ class UserListTable extends Component {
         {            
             key: 'role',
             path: 'role',
-            label: 'Rolė',
-            content: naudotojas => <span>{naudotojas.role}</span>
+            label: 'Naudotojo rolė',
+            content: naudotojas => <span>{naudotojas.role === "ADMIN" ? "Administratorius" : (naudotojas.role === "USER" ? "Vaiko atstovas" : "Švietimo specialistas")}</span>
         },
 
-        {           
-            key: 'surname',
-            path: 'surname',
-            label: 'Vardas, pavardė',
-            content: naudotojas => <span>{naudotojas.name} {naudotojas.surname}</span>
-        },
+       
         {            
             key: 'update',
             label: 'Pirminis slaptažodis',
-            content: naudotojas => <button onClick={() => this.props.onRestorePassword(naudotojas)} className="btn btn-outline-secondary btn-sm btn-block">Atkurti</button>
+            content: naudotojas => <button onClick={() => this.props.onRestorePassword(naudotojas)} className="btn btn-outline-primary btn-sm btn-block">Atkurti</button>
         },
        
         {            

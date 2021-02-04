@@ -5,14 +5,6 @@ import apiEndpoint from '../10Services/endpoint';
 
 var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
 
-const styleFieldRequired = {
-    color: "red",
-    textTransform: "uppercase",
-    fontSize: "12px",
-    fontWeight: "bold",
-    verticalAlign: "text-top"
-}
-
 function dateFormat(num) {
     if(num>=1 && num<=9) {
         return "0" + num;
@@ -51,7 +43,7 @@ export default class AdminCreateUser extends Component {
                         </select>
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtEmail">El. paštas <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtEmail">El. paštas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text" 
                             className="form-control" 
@@ -107,7 +99,7 @@ export default class AdminCreateUser extends Component {
             <div className="innerForm">
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txt">Gimimo data <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txt">Gimimo data <span className="fieldRequired">*</span></label>
                         <input 
                             type="date"
                             data-date-format="YYYY-MM-DD"
@@ -124,7 +116,7 @@ export default class AdminCreateUser extends Component {
                         />
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtIdentificationCode">Asmens kodas <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtIdentificationCode">Asmens kodas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
                             className="form-control"
@@ -141,7 +133,7 @@ export default class AdminCreateUser extends Component {
                 </div>
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txtName">Vardas <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
                             className="form-control"
@@ -156,7 +148,7 @@ export default class AdminCreateUser extends Component {
                         />
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtSurname">Pavardė <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
                         <input 
                             type="text" 
                             className="form-control" 
@@ -173,7 +165,7 @@ export default class AdminCreateUser extends Component {
                 </div>
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txtAddress">Adresas <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtAddress">Adresas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
                             className="form-control"
@@ -187,7 +179,7 @@ export default class AdminCreateUser extends Component {
                         />
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtTelNo">Telefonas <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
                         <input 
                             type="tel" 
                             className="form-control" 

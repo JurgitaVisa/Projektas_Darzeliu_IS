@@ -99,40 +99,6 @@ export default class AdminCreateUser extends Component {
             <div className="innerForm">
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txt">Gimimo data <span className="fieldRequired">*</span></label>
-                        <input 
-                            type="date"
-                            data-date-format="YYYY-MM-DD"
-                            min='1900-01-01'
-                            max={currentDate}
-                            className="form-control"
-                            id="txtBirthdate"
-                            name="birthdate"
-                            value={this.state.birthdate}
-                            onChange={this.handleChange}
-                            onInvalid={(e) => this.validateText(e)}
-                            placeholder="MMMM-MM-DD"
-                            required
-                        />
-                    </div>
-                    <div className="form-group col">
-                        <label htmlFor="txtIdentificationCode">Asmens kodas <span className="fieldRequired">*</span></label>
-                        <input 
-                            type="text"
-                            className="form-control"
-                            id="txtIdentificationCode"
-                            name="identificationCode"
-                            value={this.state.identificationCode}
-                            onChange={this.handleChange}
-                            onInvalid={(e) => this.validateText(e)}
-                            placeholder="Asmens kodas"
-                            required 
-                            pattern="[0-9]{11}"
-                        />
-                    </div>
-                </div>
-                <div className="form-row">
-                    <div className="form-group col">
                         <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
@@ -164,6 +130,62 @@ export default class AdminCreateUser extends Component {
                     </div>
                 </div>
                 <div className="form-row">
+                    {/*<div className="form-group col">
+                        <label htmlFor="txt">Gimimo data <span className="fieldRequired">*</span></label>
+                        {<input 
+                            type="date"
+                            data-date-format="DD/MM/YYYY"
+                            min='1900-01-01'
+                            max={currentDate}
+                            className="form-control"
+                            id="txtBirthdate"
+                            name="birthdate"
+                            value={this.state.birthdate}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="MMMM-MM-DD"
+                            required
+                        />
+                        </div>*/}
+                    <div className="form-group col">
+                        <label htmlFor="txtIdentificationCode">Asmens kodas <span className="fieldRequired">*</span></label>
+                        <input 
+                            type="text"
+                            className="form-control"
+                            id="txtIdentificationCode"
+                            name="identificationCode"
+                            value={this.state.identificationCode}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="Asmens kodas"
+                            required 
+                            pattern="[0-9]{11}"
+                        />
+                    </div>
+                    <div className="form-group col">
+                        <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
+                        <div className="input-group">
+                        <div className="input-group-prepend">
+                            <div className="input-group-text">
+                                +370
+                            </div>
+                        </div>
+                        <input 
+                            type="tel" 
+                            className="form-control" 
+                            id="txtTelNo" 
+                            name="telno" 
+                            value={this.state.telno}
+                            onChange={this.handleChange} 
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="Telefono numeris" 
+                            required pattern="[0-9]{8}">
+                        </input>
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="form-row">
                     <div className="form-group col">
                         <label htmlFor="txtAddress">Adresas <span className="fieldRequired">*</span></label>
                         <input 
@@ -178,7 +200,7 @@ export default class AdminCreateUser extends Component {
                             required
                         />
                     </div>
-                    <div className="form-group col">
+                    {/*<div className="form-group col">
                         <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
                         <input 
                             type="tel" 
@@ -191,7 +213,7 @@ export default class AdminCreateUser extends Component {
                             placeholder="+370xxxxxxxx" 
                             required pattern="[+,0-9]{12}"
                         />
-                    </div>
+                    </div>*/}
                 </div>
             </div>
             )
@@ -270,7 +292,7 @@ export default class AdminCreateUser extends Component {
             }
             else if(target.id==="txtTelNo") {
                 if(target.validity.patternMismatch) {
-                    target.setCustomValidity("Neteisingas telefono numerio formatas(+370)")
+                    target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, laukelyje įrašyta: " + target.value.length + " skaičiai.")
                 }
                 else {
                     target.setCustomValidity("");
@@ -312,6 +334,7 @@ export default class AdminCreateUser extends Component {
         .then((response) => {
             console.log("Naujas naudotojas sukurtas");
             console.log(this.state);
+            console.log(response);
             alert('Naujas naudotojas sėkmingai sukurtas!');
             this.resetState();
         })

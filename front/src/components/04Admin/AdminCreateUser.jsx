@@ -265,7 +265,7 @@ export default class AdminCreateUser extends Component {
             }
             else if(target.id==="txtIdentificationCode") {
                 if(target.validity.patternMismatch) {
-                    target.setCustomValidity("Asmens koda sudaro 11 skaičių, laukelyje įrašyta: " + target.value.length + " skaičiai.")
+                    target.setCustomValidity("Asmens koda sudaro 11 skaičių, įvesta skaičių: " + target.value.length)
                 }
                 else {
                     target.setCustomValidity("")
@@ -292,7 +292,7 @@ export default class AdminCreateUser extends Component {
             }
             else if(target.id==="txtTelNo") {
                 if(target.validity.patternMismatch) {
-                    target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, laukelyje įrašyta: " + target.value.length + " skaičiai.")
+                    target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, įvesta skaičių: " + target.value.length)
                 }
                 else {
                     target.setCustomValidity("");
@@ -319,6 +319,7 @@ export default class AdminCreateUser extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        console.log("Posting to " + apiEndpoint + "/api/users/admin/createuser")
         http.post(`${apiEndpoint}/api/users/admin/createuser`, {
             "address": this.state.address,
             "birthdate": this.state.birthdate,
@@ -326,7 +327,7 @@ export default class AdminCreateUser extends Component {
             "name": this.state.name,
             "password": this.state.email,
             "personalCode": this.state.identificationCode,
-            "phone": this.state.telno,
+            "phone": "+370" + this.state.telno,
             "role": this.state.role,
             "surname": this.state.surname,
             "username": this.state.email

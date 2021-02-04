@@ -1,5 +1,5 @@
 //prieš darant yarn build užkomentuoti localhost ir atkomentuoti šitą endpoint:
- const apiEndpoint = process.env.PUBLIC_URL;
+ //const apiEndpoint = process.env.PUBLIC_URL;
 
 //dirbant lokaliai per yarn start paleidus react app per localhost:3000
 //pakeisti localhost:8080 į vartus ant kurių paleidžiat aplikaciją:
@@ -8,5 +8,8 @@
  
  //Jurgitos endpoint :)
  //const apiEndpoint = "http://localhost:8089/darzelis";
+
+ //Vytenio endpoint
+ //const apiEndpoint = "http://localhost:8080"
 
 export default apiEndpoint;

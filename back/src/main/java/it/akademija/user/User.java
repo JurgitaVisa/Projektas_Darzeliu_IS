@@ -1,7 +1,5 @@
 package it.akademija.user;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,8 +12,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import it.akademija.role.Role;
 
@@ -47,9 +43,11 @@ public class User {
 	@Column
 	private String email;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Column
-	private LocalDate birthdate;
+	/*
+	 * @DateTimeFormat(pattern = "yyyy-MM-dd")
+	 * 
+	 * @Column private LocalDate birthdate;
+	 */
 
 	@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{11}$|")
 	@Column
@@ -83,13 +81,12 @@ public class User {
 		this.password = password;
 	}
 
-	public User(Role role, String name, String surname, String email, LocalDate birthdate, String personalCode,
-			String address, String phone, String username, String password) {
+	public User(Role role, String name, String surname, String email, String personalCode, String address, String phone,
+			String username, String password) {
 		super();
 		this.role = role;
 		this.name = name;
 		this.surname = surname;
-		this.birthdate = birthdate;
 		this.personalCode = personalCode;
 		this.address = address;
 		this.phone = phone;
@@ -128,14 +125,6 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public LocalDate getBirthdate() {
-		return birthdate;
-	}
-
-	public void setBirthdate(LocalDate birthdate) {
-		this.birthdate = birthdate;
 	}
 
 	public String getPersonalCode() {

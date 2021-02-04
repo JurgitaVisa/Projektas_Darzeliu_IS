@@ -1,14 +1,11 @@
 package it.akademija.user;
 
-import java.time.LocalDate;
-
 public class UserInfo {
 
 	private Long userId;
 	private String role;
 	private String name;
 	private String surname;
-	private LocalDate birthdate;
 	private String personalCode;
 	private String address;
 	private String phone;
@@ -27,13 +24,12 @@ public class UserInfo {
 		this.username = username;
 	}
 
-	public UserInfo(String role, String name, String surname, LocalDate birthdate, String personalCode, String address,
-			String phone, String email, String username) {
+	public UserInfo(String role, String name, String surname, String personalCode, String address, String phone,
+			String email, String username) {
 		super();
 		this.role = role;
 		this.name = name;
 		this.surname = surname;
-		this.birthdate = birthdate;
 		this.address = address;
 		this.personalCode = personalCode;
 		this.phone = phone;
@@ -63,14 +59,6 @@ public class UserInfo {
 
 	public void setSurname(String surname) {
 		this.surname = surname;
-	}
-
-	public LocalDate getBirthdate() {
-		return birthdate;
-	}
-
-	public void setBirthdate(LocalDate birthdate) {
-		this.birthdate = birthdate;
 	}
 
 	public String getPersonalCode() {

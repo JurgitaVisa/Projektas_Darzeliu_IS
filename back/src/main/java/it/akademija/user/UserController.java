@@ -49,14 +49,14 @@ public class UserController {
 
 		LOG.info("** Usercontroller: kuriamas naujas naudotojas **");
 
-		if (userService.findByUsername(userInfo.getUsername()) == null && (userInfo.getRole().equals("USER")
-				&& userService.findByPersonalCode(userInfo.getPersonalCode()) == null)) {
+		if (userService.findByUsername(userInfo.getUsername()) != null || (userInfo.getRole().equals("USER")
+				&& userService.findByPersonalCode(userInfo.getPersonalCode()) != null)) {
+			return new ResponseEntity<String>("Toks naudotojas jau egzistuoja!", HttpStatus.BAD_REQUEST);
+		} else {
 
 			userService.createUser(userInfo);
 			return new ResponseEntity<String>("Naudotojas sukurtas sėkmingai!", HttpStatus.CREATED);
 		}
-
-		return new ResponseEntity<String>("Toks naudotojas jau egzistuoja!", HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -65,6 +65,7 @@ public class UserController {
 	 * 
 	 * @param username
 	 */
+
 	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping(path = "/admin/delete/{username}")
 	@ApiOperation(value = "Delete user", notes = "Deletes user by username")

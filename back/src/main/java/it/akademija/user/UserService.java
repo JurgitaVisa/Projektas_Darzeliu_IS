@@ -50,8 +50,7 @@ public class UserService implements UserDetailsService {
 
 		if (userData.getRole().equals("USER") && ((userData.getPhone() == null || userData.getPhone().isEmpty())
 				|| (userData.getAddress() == null || userData.getAddress().isEmpty())
-				|| (userData.getPersonalCode() == null || userData.getPersonalCode().isEmpty())
-				|| (userData.getBirthdate() == null))) {
+				|| (userData.getPersonalCode() == null || userData.getPersonalCode().isEmpty()))) {
 
 			throw new Exception("Negali buti tuscia");
 		}
@@ -59,7 +58,6 @@ public class UserService implements UserDetailsService {
 		newUser.setRole(Role.valueOf(userData.getRole()));
 		newUser.setName(userData.getName());
 		newUser.setSurname(userData.getSurname());
-		newUser.setBirthdate(userData.getBirthdate());
 		newUser.setPersonalCode(userData.getPersonalCode());
 		newUser.setAddress(userData.getAddress());
 		newUser.setPhone(userData.getPhone());
@@ -114,8 +112,8 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public UserInfo getUserDetails(String username) {
 		User user = userDao.findByUsername(username);
-		return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(), user.getBirthdate(),
-				user.getAddress(), user.getPersonalCode(), user.getPhone(), user.getEmail(), user.getUsername());
+		return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(), user.getAddress(),
+				user.getPersonalCode(), user.getPhone(), user.getEmail(), user.getUsername());
 	}
 
 	/**
@@ -175,7 +173,6 @@ public class UserService implements UserDetailsService {
 		user.setName(userData.getName());
 		user.setSurname(userData.getSurname());
 		user.setAddress(userData.getAddress());
-		user.setBirthdate(userData.getBirthdate());
 		user.setPersonalCode(userData.getPersonalCode());
 		user.setPhone(userData.getPhone());
 		user.setEmail(userData.getEmail());

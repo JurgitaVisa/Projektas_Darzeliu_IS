@@ -24,10 +24,10 @@ public class Kindergarten {
 	private String address;
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
-	private int capacityAgeGroup2to3 = 0;
+	private int capacityAgeGroup2to3;
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
-	private int capacityAgeGroup3to6 = 0;
+	private int capacityAgeGroup3to6;
 
 	public Kindergarten() {
 

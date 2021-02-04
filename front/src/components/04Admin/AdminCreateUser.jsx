@@ -152,7 +152,7 @@ export default class AdminCreateUser extends Component {
                             onInvalid={(e) => this.validateText(e)}
                             placeholder="Vardas"
                             required
-                            pattern="[A-z]{1,32}"
+                            pattern="[A-zÀ-ž]{1,32}"
                         />
                     </div>
                     <div className="form-group col">
@@ -167,7 +167,7 @@ export default class AdminCreateUser extends Component {
                             onInvalid={(e) => this.validateText(e)}
                             placeholder="Pavardė" 
                             required
-                            pattern="[A-z]{1,32}"
+                            pattern="[A-zÀ-ž]{1,32}"
                         />
                     </div>
                 </div>

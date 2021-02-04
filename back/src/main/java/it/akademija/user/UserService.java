@@ -104,7 +104,8 @@ public class UserService implements UserDetailsService {
 
 	@Transactional(readOnly = true)
 	public List<UserInfo> getAllUsers() {
-		List<User> users = userDao.findAll();
+		List<User> users = userDao.findAllByOrderByUserIdDesc();
+		
 		return users.stream().map(user -> new UserInfo(user.getUserId(), user.getRole().name(), user.getName(),
 				user.getSurname(), user.getUsername())).collect(Collectors.toList());
 	}

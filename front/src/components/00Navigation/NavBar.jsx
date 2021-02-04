@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import logo from '../../images/logo.png';
-import '../../index.css';
+import '../../App.css';
 
 import LogoutContainer from './LogoutContainer';
 

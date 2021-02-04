@@ -66,10 +66,11 @@ public class KindergartenController {
 			return new ResponseEntity<String>("Darželis tokiu pavadinimu jau yra", HttpStatus.CONFLICT);
 
 		} else {
+			
 			kindergartenService.createNewKindergarten(kindergarten);
 			LOG.info("**KindergartenController: kuriamas darzelis pavadinimu [{}] **", kindergarten.getName());
 
-			return new ResponseEntity<String>("Darželis sukurtas sėkmingai", HttpStatus.OK);
+			return new ResponseEntity<String>("Darželis sukurtas sėkmingai", HttpStatus.OK);		
 		}
 
 	}

@@ -3,18 +3,7 @@ import React, { Component } from 'react'
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 
-/*
-    Todo:
-        Optional: Bootstrap validation
-*/
-
-const styleFieldRequired = {
-    color: "red",
-    textTransform: "uppercase",
-    fontSize: "12px",
-    fontWeight: "bold",
-    verticalAlign: "text-top"
-}
+var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
 
 function dateFormat(num) {
     if(num>=1 && num<=9) {
@@ -22,8 +11,6 @@ function dateFormat(num) {
     }
     else return num;
 }
-
-var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
 
 export default class AdminCreateUser extends Component {
     
@@ -37,7 +24,7 @@ export default class AdminCreateUser extends Component {
             identificationCode: "",
             address: "",
             telno: "",
-            email: "",
+            email: ""
         }
         this.roleDropdownOnChange = this.roleDropdownOnChange.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -56,8 +43,19 @@ export default class AdminCreateUser extends Component {
                         </select>
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtEmail">El. paštas <span style={styleFieldRequired}>*</span></label>
-                        <input type="email" className="form-control" id="txtEmail" name="email" value={this.state.email} onChange={this.handleChange} placeholder="El. paštas" required="required"></input>
+                        <label htmlFor="txtEmail">El. paštas <span className="fieldRequired">*</span></label>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            id="txtEmail" 
+                            name="email" 
+                            value={this.state.email} 
+                            placeholder="El. paštas" 
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
+                            required
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
+                        />
                     </div>
             </div>
         )
@@ -68,10 +66,30 @@ export default class AdminCreateUser extends Component {
             return (
                 <div className="form-row">
                     <div className="form-group col">
-                        <input type="text" className="form-control" id="txtName" name="name" value={this.state.name} onChange={this.handleChange} placeholder="Vardas"></input>
+                        <label htmlFor="txtName">Vardas</label>
+                        <input 
+                            type="text"
+                            className="form-control"
+                            id="txtName"
+                            name="name"
+                            value={this.state.name}
+                            onChange={this.handleChange}
+                            placeholder="Vardas"
+                            pattern="[A-z]{1,32}"
+                        />
                     </div>
                     <div className="form-group col">
-                        <input type="text" className="form-control" id="txtSurname" name="surname" value={this.state.surname} onChange={this.handleChange} placeholder="Pavardė"></input>
+                        <label htmlFor="txtSurname">Pavardė</label>
+                        <input 
+                            type="text"
+                            className="form-control"
+                            id="txtSurname"
+                            name="surname"
+                            value={this.state.surname}
+                            onChange={this.handleChange}
+                            placeholder="Pavardė"
+                            pattern="[A-z]{1,32}"
+                        />
                     </div>
                 </div>
             )
@@ -81,34 +99,121 @@ export default class AdminCreateUser extends Component {
             <div className="innerForm">
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txt">Gimimo data <span style={styleFieldRequired}>*</span></label>
-                        <input type="date" data-date-format="YYYY-MM-DD" min='1900-01-01' max={currentDate} className="form-control" id="txtBirthdate" name="birthdate" value={this.state.birthdate} onChange={this.handleChange} placeholder="MMMM-MM-DD" required="required"></input>
-                        
+                        <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
+                        <input 
+                            type="text"
+                            className="form-control"
+                            id="txtName"
+                            name="name"
+                            value={this.state.name}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="Vardas"
+                            required
+                            pattern="[A-zÀ-ž]{1,32}"
+                        />
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtIdentificationCode">Asmens kodas <span style={styleFieldRequired}>*</span></label>
-                        <input type="text" className="form-control" id="txtIdentificationCode" name="identificationCode" value={this.state.identificationCode} onChange={this.handleChange} placeholder="Asmens kodas" required="required" pattern="[0-9]{11}"></input>
+                        <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            id="txtSurname" 
+                            name="surname" 
+                            value={this.state.surname} 
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="Pavardė" 
+                            required
+                            pattern="[A-zÀ-ž]{1,32}"
+                        />
                     </div>
                 </div>
                 <div className="form-row">
+                    {/*<div className="form-group col">
+                        <label htmlFor="txt">Gimimo data <span className="fieldRequired">*</span></label>
+                        {<input 
+                            type="date"
+                            data-date-format="DD/MM/YYYY"
+                            min='1900-01-01'
+                            max={currentDate}
+                            className="form-control"
+                            id="txtBirthdate"
+                            name="birthdate"
+                            value={this.state.birthdate}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="MMMM-MM-DD"
+                            required
+                        />
+                        </div>*/}
                     <div className="form-group col">
-                        <label htmlFor="txtName">Vardas <span style={styleFieldRequired}>*</span></label>
-                        <input type="text" className="form-control" id="txtName" name="name" value={this.state.name} onChange={this.handleChange} placeholder="Vardas" required="required"></input>
+                        <label htmlFor="txtIdentificationCode">Asmens kodas <span className="fieldRequired">*</span></label>
+                        <input 
+                            type="text"
+                            className="form-control"
+                            id="txtIdentificationCode"
+                            name="identificationCode"
+                            value={this.state.identificationCode}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="Asmens kodas"
+                            required 
+                            pattern="[0-9]{11}"
+                        />
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtSurname">Pavardė <span style={styleFieldRequired}>*</span></label>
-                        <input type="text" className="form-control" id="txtSurname" name="surname" value={this.state.surname} onChange={this.handleChange} placeholder="Pavardė" required="required"></input>
+                        <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
+                        <div className="input-group">
+                        <div className="input-group-prepend">
+                            <div className="input-group-text">
+                                +370
+                            </div>
+                        </div>
+                        <input 
+                            type="tel" 
+                            className="form-control" 
+                            id="txtTelNo" 
+                            name="telno" 
+                            value={this.state.telno}
+                            onChange={this.handleChange} 
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="Telefono numeris" 
+                            required pattern="[0-9]{8}">
+                        </input>
+                        </div>
                     </div>
                 </div>
+                
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txtAddress">Adresas <span style={styleFieldRequired}>*</span></label>
-                        <input type="text" className="form-control" id="txtAddress" name="address" value={this.state.address} onChange={this.handleChange} placeholder="Adresas" required="required"></input>
+                        <label htmlFor="txtAddress">Adresas <span className="fieldRequired">*</span></label>
+                        <input 
+                            type="text"
+                            className="form-control"
+                            id="txtAddress"
+                            name="address"
+                            value={this.state.address}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="Adresas"
+                            required
+                        />
                     </div>
-                    <div className="form-group col">
-                        <label htmlFor="txtTelNo">Telefonas <span style={styleFieldRequired}>*</span></label>
-                        <input type="text" className="form-control" id="txtTelNo" name="telno" value={this.state.telno} onChange={this.handleChange} placeholder="+370xxxxxxxx" required="required" pattern="[+,0-9]{12}"></input>
-                    </div>
+                    {/*<div className="form-group col">
+                        <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
+                        <input 
+                            type="tel" 
+                            className="form-control" 
+                            id="txtTelNo" 
+                            name="telno" 
+                            value={this.state.telno}
+                            onChange={this.handleChange} 
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="+370xxxxxxxx" 
+                            required pattern="[+,0-9]{12}"
+                        />
+                    </div>*/}
                 </div>
             </div>
             )
@@ -127,6 +232,75 @@ export default class AdminCreateUser extends Component {
         })
     }
 
+    validateText(event) {
+        const target = event.target;
+        if(target.validity.valueMissing && target.id!="txtBirthdate") {
+            target.setCustomValidity(target.placeholder + " yra privalomas laukelis")
+        }
+        else {
+            if(target.id==="txtEmail") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Neteisingas el. pašto formatas")
+                }
+                else {
+                    target.setCustomValidity("")
+                }
+            }
+            else if(target.id==="txtBirthdate") {
+                if(target.validity.valueMissing) {
+                    target.setCustomValidity("Gimimo data yra privalomas laukelis")
+                }
+                else if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Neteisingas gimimo datos formatas")
+                }
+                else if(target.validity.rangeOverflow) {
+                    target.setCustomValidity("Gimimo data negali būti ateityje")
+                }
+                else if(target.validity.rangeUnderflow) {
+                    target.setCustomValidity("Gimimo data negali būti ankstesnė nei 01.01.1900")
+                }
+                else {
+                    target.setCustomValidity("")
+                }
+            }
+            else if(target.id==="txtIdentificationCode") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Asmens koda sudaro 11 skaičių, laukelyje įrašyta: " + target.value.length + " skaičiai.")
+                }
+                else {
+                    target.setCustomValidity("")
+                }
+            }
+            else if(target.id==="txtName") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Netinkamo formato vardas")
+                }
+                else {
+                    target.setCustomValidity("")
+                }
+            }
+            else if(target.id==="txtSurname") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Netinkamo formato pavardė")
+                }
+                else {
+                    target.setCustomValidity("")
+                }
+            }
+            else if(target.id==="txtAddress") {
+                target.setCustomValidity("");
+            }
+            else if(target.id==="txtTelNo") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, laukelyje įrašyta: " + target.value.length + " skaičiai.")
+                }
+                else {
+                    target.setCustomValidity("");
+                }
+            }
+        }
+    }
+
     roleDropdownOnChange(event) {
         event.preventDefault()
         this.setState({
@@ -136,8 +310,10 @@ export default class AdminCreateUser extends Component {
     }
 
     handleChange(event) {
+        const target = event.target;
+        this.validateText(event);
         this.setState({
-            [event.target.name]: event.target.value
+            [target.name]: target.value
         })
     }
 
@@ -158,6 +334,7 @@ export default class AdminCreateUser extends Component {
         .then((response) => {
             console.log("Naujas naudotojas sukurtas");
             console.log(this.state);
+            console.log(response);
             alert('Naujas naudotojas sėkmingai sukurtas!');
             this.resetState();
         })

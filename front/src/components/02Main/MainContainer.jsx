@@ -20,15 +20,11 @@ export const MainContainer = () => {
           <span className="text-primary">{currentUser.state.username} </span>
         </h6>
 
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorum
-          neque sed, sunt voluptatum tempore esse, corrupti alias iure tenetur
-          eum perferendis, eius non accusamus nemo sequi sit. Ab, enim eos?
-        </p>
+        
         <br />
         <br />
-        <FontAwesomeIcon icon={faFilePdf} size="5x" className="text-primary" />
-        <p>Atsisiųsti naudotojo instrukciją</p>
+        {/* <FontAwesomeIcon icon={faFilePdf} size="5x" className="text-primary" /> */}
+        {/* <p>Atsisiųsti naudotojo instrukciją</p> */}
       </div>
     </div>
   );

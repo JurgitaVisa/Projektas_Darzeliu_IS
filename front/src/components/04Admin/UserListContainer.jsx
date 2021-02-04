@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 
 import http from '../10Services/httpService';
@@ -45,7 +45,7 @@ export class UserListContainer extends Component {
         http
             .delete(`${apiEndpoint}/api/users/admin/delete/${username}`)
             .then((response) => {
-                alert(response.data);
+                swal(response.data);
                 http
                     .get(`${apiEndpoint}/api/users/admin/allusers`)
                     .then((response) => {
@@ -67,7 +67,7 @@ export class UserListContainer extends Component {
         http
             .put(`${apiEndpoint}/api/users/admin/password/${username}`)
             .then((response) => {
-                alert(response.data);
+                swal(response.data);
             }).catch(error => {
                 if (error && error.response.status > 400 && error.response.status < 500) swal("Veiksmas neleidžiamas");
             }

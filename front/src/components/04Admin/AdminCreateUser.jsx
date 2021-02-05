@@ -348,7 +348,16 @@ export default class AdminCreateUser extends Component {
                 console.log("Naujas naudotojas sukurtas");
                 console.log(this.state);
                 console.log(response);
-               // swal('Naujas naudotojas sėkmingai sukurtas!');
+                swal({
+                    title: 'Naujas naudotojas buvo sėkmingai sukurtas. ',
+                    showCancelButton: false,
+                    showConfirmButton: true,
+                    confirmButtonText: "Ok"
+                }).then(
+                    function refreshWindow() {
+                        window.location.reload();  
+                    }
+                )
                 this.resetState();    
                  
             })
@@ -356,7 +365,7 @@ export default class AdminCreateUser extends Component {
                 console.log(error);
                 swal('Įvyko klaida');
             })            
-            window.location.reload();   
+
     }
 
     render() {

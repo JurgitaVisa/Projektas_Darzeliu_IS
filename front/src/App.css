@@ -26,3 +26,7 @@
 .nav-img {
   max-width: 19rem;
 }
+
+.no-top-border th {
+  border: none;
+}

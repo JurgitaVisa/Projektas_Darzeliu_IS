@@ -35,7 +35,7 @@ export default class AdminCreateUser extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
+
     drawSelector() {
         return (
             <div className="form">
@@ -241,7 +241,7 @@ export default class AdminCreateUser extends Component {
             telno: "",
             email: ""
         })
-        
+
     }
 
     validateText(event) {
@@ -329,7 +329,7 @@ export default class AdminCreateUser extends Component {
         })
     }
 
-    handleSubmit=(event) =>{
+    handleSubmit = (event) => {
         event.preventDefault();
         console.log("Posting to " + apiEndpoint + "/api/users/admin/createuser")
         http.post(`${apiEndpoint}/api/users/admin/createuser`, {
@@ -355,7 +355,7 @@ export default class AdminCreateUser extends Component {
                     confirmButtonText: "Ok"
                 }).then(
                     function refreshWindow() {
-                        window.location.reload();  
+                        window.location.reload();
                     }
                 )
                 //this.resetState();    
@@ -363,41 +363,42 @@ export default class AdminCreateUser extends Component {
             .catch((error) => {
                 console.log(error);
                 swal('Įvyko klaida');
-            })            
+            })
 
     }
 
     render() {
         return (
             <div >
-                <h4><b>Naujo naudotojo sukūrimas</b></h4>
-                <div className="row">
-                    <form className="col-8" onSubmit={this.handleSubmit}>
-                        {this.drawSelector()}
-                        {this.drawForm(this.state.role)}
-                        <h4><b>Naudotojo prisijungimai</b></h4>
+                <h6 className="py-3"><b>Naujo naudotojo sukūrimas</b></h6>
 
-                        <div className="row">
-                            <div className="col-7">
-                                <p><b>Naudotojo vardas</b></p>
-                            </div>
-                            <div className="col-6">
-                                <p>{this.state.email}</p>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-7">
-                                <p><b>Slaptažodis</b></p>
-                            </div>
-                            <div className="col-6">
-                                <p>{this.state.email}</p>
-                            </div>
-                        </div>
+                <form onSubmit={this.handleSubmit}>
+                    {this.drawSelector()}
+                    {this.drawForm(this.state.role)}
+                    <h6 className="py-3"><b>Naudotojo prisijungimai</b></h6>
 
+                    <div className="row">
+                        <div className="col-7">
+                            <p><b>Naudotojo vardas</b></p>
+                        </div>
+                        <div className="col-6">
+                            <p>{this.state.email}</p>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-7">
+                            <p><b>Slaptažodis</b></p>
+                        </div>
+                        <div className="col-6">
+                            <p>{this.state.email}</p>
+                        </div>
+                    </div>
+                    <div className="mb-3">
                         <button className="btn btn-danger float-left" onClick={this.resetState}>Išvalyti</button>
                         <button type="submit" className="btn btn-primary float-right">Sukurti</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
+
             </div>
         )
     }

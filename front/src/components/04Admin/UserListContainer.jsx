@@ -6,7 +6,7 @@ import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import '../../App.css';
 
-import NavBar from '../00Navigation/NavBar';
+//import NavBar from '../00Navigation/NavBar';
 import UserListTable from './UserListTable';
 import Pagination from './../08CommonComponents/Pagination';
 import { paginate } from './../08CommonComponents/paginate';
@@ -108,7 +108,7 @@ export class UserListContainer extends Component {
                     </div> */}
 
                     {/* <Link to="/admin" className="btn btn-outline-primary my-2">Sukurti naują</Link> */}
-                    <br />
+                    
                     <UserListTable
                         naudotojai={naudotojai}
                         onDelete={this.handleDelete}

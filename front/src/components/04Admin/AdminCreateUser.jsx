@@ -220,7 +220,7 @@ export default class AdminCreateUser extends Component {
 
     validateText(event) {
         const target = event.target;
-        if(target.validity.valueMissing && target.id!="txtBirthdate") {
+        if(target.validity.valueMissing && target.id!=="txtBirthdate") {
             target.setCustomValidity(target.placeholder + " yra privalomas laukelis")
         }
         else {

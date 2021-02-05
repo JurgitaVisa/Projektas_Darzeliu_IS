@@ -16,8 +16,9 @@ export const MainContainer = () => {
       <div className="container">
         <h5 className="h5 pb-3">Sveiki prisijungę prie darželių IS</h5>
         <h6 className="h6 pb-3">
-          Prisijungęs naudotojas:{" "}
-          <span className="text-primary">{currentUser.state.username} </span>
+          Prisijungęs naudotojas: 
+          <span className="text-primary"> {currentUser.state.username} </span>
+          (<span className="text-primary">{currentUser.state.role}</span>)
         </h6>
 
         <p>

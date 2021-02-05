@@ -342,7 +342,6 @@ export default class AdminCreateUser extends Component {
         .then((response) => {
             console.log("Naujas naudotojas sukurtas");
             console.log(this.state);
-            console.log(response);
             swal('Naujas naudotojas sėkmingai sukurtas!');
             this.resetState();
         })

@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
+import swal from 'sweetalert';
 
-var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
+//var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
 
 function dateFormat(num) {
     if(num>=1 && num<=9) {
@@ -66,7 +67,7 @@ export default class AdminCreateUser extends Component {
             return (
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txtName">Vardas</label>
+                        <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
                             className="form-control"
@@ -75,11 +76,12 @@ export default class AdminCreateUser extends Component {
                             value={this.state.name}
                             onChange={this.handleChange}
                             placeholder="Vardas"
-                            pattern="[A-z]{1,32}"
+                            required
+                            pattern="[A-zÀ-ž]{1,32}"
                         />
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtSurname">Pavardė</label>
+                        <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
                             className="form-control"
@@ -88,7 +90,8 @@ export default class AdminCreateUser extends Component {
                             value={this.state.surname}
                             onChange={this.handleChange}
                             placeholder="Pavardė"
-                            pattern="[A-z]{1,32}"
+                            required
+                            pattern="[A-zÀ-ž]{1,32}"
                         />
                     </div>
                 </div>
@@ -96,7 +99,7 @@ export default class AdminCreateUser extends Component {
         }
         else if(role === "USER") {
             return (
-            <div className="innerForm">
+            <div className="form-group">
                 <div className="form-row">
                     <div className="form-group col">
                         <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
@@ -113,6 +116,8 @@ export default class AdminCreateUser extends Component {
                             pattern="[A-zÀ-ž]{1,32}"
                         />
                     </div>
+                </div>
+                <div className="form-row">
                     <div className="form-group col">
                         <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
                         <input 
@@ -162,6 +167,8 @@ export default class AdminCreateUser extends Component {
                             pattern="[0-9]{11}"
                         />
                     </div>
+                </div>
+                <div className="form-row">
                     <div className="form-group col">
                         <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
                         <div className="input-group">
@@ -234,7 +241,7 @@ export default class AdminCreateUser extends Component {
 
     validateText(event) {
         const target = event.target;
-        if(target.validity.valueMissing && target.id!="txtBirthdate") {
+        if(target.validity.valueMissing && target.id!=="txtBirthdate") {
             target.setCustomValidity(target.placeholder + " yra privalomas laukelis")
         }
         else {
@@ -265,7 +272,7 @@ export default class AdminCreateUser extends Component {
             }
             else if(target.id==="txtIdentificationCode") {
                 if(target.validity.patternMismatch) {
-                    target.setCustomValidity("Asmens koda sudaro 11 skaičių, laukelyje įrašyta: " + target.value.length + " skaičiai.")
+                    target.setCustomValidity("Asmens koda sudaro 11 skaičių, įvesta skaičių: " + target.value.length)
                 }
                 else {
                     target.setCustomValidity("")
@@ -292,7 +299,7 @@ export default class AdminCreateUser extends Component {
             }
             else if(target.id==="txtTelNo") {
                 if(target.validity.patternMismatch) {
-                    target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, laukelyje įrašyta: " + target.value.length + " skaičiai.")
+                    target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, įvesta skaičių: " + target.value.length)
                 }
                 else {
                     target.setCustomValidity("");
@@ -319,14 +326,15 @@ export default class AdminCreateUser extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        console.log("Posting to " + apiEndpoint + "/api/users/admin/createuser")
         http.post(`${apiEndpoint}/api/users/admin/createuser`, {
             "address": this.state.address,
-            "birthdate": this.state.birthdate,
+            //"birthdate": this.state.birthdate,
             "email": this.state.email,
             "name": this.state.name,
             "password": this.state.email,
             "personalCode": this.state.identificationCode,
-            "phone": this.state.telno,
+            "phone": "+370" + this.state.telno,
             "role": this.state.role,
             "surname": this.state.surname,
             "username": this.state.email
@@ -335,12 +343,12 @@ export default class AdminCreateUser extends Component {
             console.log("Naujas naudotojas sukurtas");
             console.log(this.state);
             console.log(response);
-            alert('Naujas naudotojas sėkmingai sukurtas!');
+            swal('Naujas naudotojas sėkmingai sukurtas!');
             this.resetState();
         })
         .catch((error) => {
             console.log(error);
-            alert('Įvyko klaida');
+            swal('Įvyko klaida');
         })
     }
     render() {

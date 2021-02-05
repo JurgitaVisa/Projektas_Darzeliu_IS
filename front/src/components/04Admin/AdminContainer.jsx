@@ -5,40 +5,32 @@ import React, { Component } from 'react';
 
 import NavBar from '../00Navigation/NavBar';
 import AdminCreateUser from '../04Admin/AdminCreateUser';
+import { UserListContainer } from './UserListContainer';
 
 export class AdminContainer extends Component {
 
-//pvz:
-
-// constructor(props) {
-//     super(props);
-//     this.state = {
-//         data: null
-//     }
-// }
-    // componentDidMount() {
-    //     const currentId = this.props.match.params.id;
-    //     this.setState({ currentId: currentId });
-
-    //     if (currentId === "new") return;
-
-    //     http.get(`${apiEndpoint}/api/congratulations/${currentId}`)
-    //         .then((response) => {
-    //             this.setState({ data: response.data });
-    //          }).catch(error => {
-    //             if(error.response && response.status === 404) alert("Kažkoks pranešimo tekstas susijęs su klaida; su get nelabai įmanoma tokia klaida")
-    //
-    //             return this.props.history.replace("/");
-    //         });
-
-    // }
 
     render() {
         return (
             <div>
-                {/*<NavBar/>*/}
-               
-                <AdminCreateUser/>
+                <NavBar />
+                <div className="container">
+
+                    <div className="row">
+                        <div className="col-5">
+                            <AdminCreateUser />
+                        </div>
+
+                        <div className="col-7 pt-2">
+                            <UserListContainer />
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
             </div>
         )
     }

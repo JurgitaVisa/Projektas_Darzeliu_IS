@@ -49,14 +49,14 @@ public class User {
 	 * @Column private LocalDate birthdate;
 	 */
 
-	@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{11}$|")
+	//@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{11}$|")
 	@Column
 	private String personalCode;
 
 	@Column
 	private String address;
 
-	@Pattern(regexp = "^\\+(?!\\s*$)[0-9\\s]{11}$|")
+	//@Pattern(regexp = "^\\+(?!\\s*$)[0-9\\s]{11}$|")
 	@Column
 	private String phone;
 

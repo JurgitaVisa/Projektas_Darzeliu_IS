@@ -98,8 +98,8 @@ export class UserListContainer extends Component {
        
         return (
             <div >
-                <NavBar />
-                <div className="container">
+                {/* <NavBar /> */}
+              
                     {/* <div className="row ">
                         <div className="col-12 pb-2">
                             <h5 className="h5">Sistemos naudotojų sąrašas </h5>
@@ -122,7 +122,7 @@ export class UserListContainer extends Component {
                         currentPage={this.state.currentPage}
                     />
 
-                </div>
+                
             </div>
         )
     }

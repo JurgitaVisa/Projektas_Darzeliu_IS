@@ -54,26 +54,35 @@ public class UserService implements UserDetailsService {
 
 			throw new Exception("Negali buti tuscia");
 		}
-
-		newUser.setRole(Role.valueOf(userData.getRole()));
-		newUser.setName(userData.getName());
-		newUser.setSurname(userData.getSurname());
-		newUser.setPersonalCode(userData.getPersonalCode());
-		newUser.setAddress(userData.getAddress());
-		newUser.setPhone(userData.getPhone());
-		newUser.setEmail(userData.getEmail());
-		newUser.setUsername(userData.getUsername());
-		newUser.setPassword(encoder.encode(userData.getUsername()));
-		userDao.saveAndFlush(newUser);
-
-		/*
-		 * if (userData.getRole().equals("ADMIN") &&
-		 * userDao.findByRole(Role.ADMIN).size() > 1 &&
-		 * userDao.findByUsername("admin@admin.lt") != null) {
-		 * userDao.deleteByUsername("admin@admin.lt"); }
-		 */
+		if (userData.getRole().equals("USER")) {
+			newUser.setRole(Role.valueOf(userData.getRole()));
+			newUser.setName(userData.getName());
+			newUser.setSurname(userData.getSurname());
+			newUser.setPersonalCode(userData.getPersonalCode());
+			newUser.setAddress(userData.getAddress());
+			newUser.setPhone("370" + userData.getPhone());
+			newUser.setEmail(userData.getEmail());
+			newUser.setUsername(userData.getUsername());
+			newUser.setPassword(encoder.encode(userData.getUsername()));
+			userDao.saveAndFlush(newUser);
+		} else {
+			newUser.setRole(Role.valueOf(userData.getRole()));
+			newUser.setName(userData.getName());
+			newUser.setSurname(userData.getSurname());
+			newUser.setEmail(userData.getEmail());
+			newUser.setUsername(userData.getUsername());
+			newUser.setPassword(encoder.encode(userData.getUsername()));
+			userDao.saveAndFlush(newUser);
+		}
 
 	}
+
+	/*
+	 * if (userData.getRole().equals("ADMIN") &&
+	 * userDao.findByRole(Role.ADMIN).size() > 1 &&
+	 * userDao.findByUsername("admin@admin.lt") != null) {
+	 * userDao.deleteByUsername("admin@admin.lt"); }
+	 */
 
 	/**
 	 * 
@@ -105,7 +114,7 @@ public class UserService implements UserDetailsService {
 	@Transactional(readOnly = true)
 	public List<UserInfo> getAllUsers() {
 		List<User> users = userDao.findAllByOrderByUserIdDesc();
-		
+
 		return users.stream().map(user -> new UserInfo(user.getUserId(), user.getRole().name(), user.getName(),
 				user.getSurname(), user.getUsername())).collect(Collectors.toList());
 	}

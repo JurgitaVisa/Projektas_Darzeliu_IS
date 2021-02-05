@@ -28,10 +28,10 @@ function Navigation() {
                             <li className="nav-item mr-2">
                                 <NavLink className="nav-link" to={"/admin"}>Naudotojų administravimas</NavLink>
                             </li>)}
-                            {currentUser.state.role==="ADMIN" && ( 
-                            <li className="nav-item nav-item mr-4">
+
+                            {/* <li className="nav-item nav-item mr-4">
                                 <NavLink className="nav-link" to={"/naudotojai"}>Naudotojų sąrašas</NavLink>
-                            </li>)}
+                            </li> */}
 
                             <li className="nav-item nav-item mr-2">
                                 <LogoutContainer />

@@ -10,8 +10,8 @@ import NotFound from "./components/03NotFound/NotFound";
 import Admin from "./components/04Admin/AdminContainer";
 import UserListContainer from "./components/04Admin/UserListContainer";
 import AuthContext from "./components/11Context/AuthContext";
-import http from "./components/10Services/httpService";
-import apiEndpoint from "./components/10Services/endpoint";
+// import http from "./components/10Services/httpService";
+// import apiEndpoint from "./components/10Services/endpoint";
 
 var initState = {
   isAuthenticated: false,
@@ -112,7 +112,8 @@ function App() {
           />
           <Route component={NotFound} />
         </Switch>
-      </div>
+        
+      </div>      
     </AuthContext.Provider>
   );
 }

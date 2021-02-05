@@ -27,9 +27,9 @@ function Navigation() {
                                 <NavLink className="nav-link" to={"/admin"}>Naudotojų administravimas</NavLink>
                             </li>
 
-                            <li className="nav-item nav-item mr-4">
+                            {/* <li className="nav-item nav-item mr-4">
                                 <NavLink className="nav-link" to={"/naudotojai"}>Naudotojų sąrašas</NavLink>
-                            </li>
+                            </li> */}
 
                             <li className="nav-item nav-item mr-2">
                                 <LogoutContainer />

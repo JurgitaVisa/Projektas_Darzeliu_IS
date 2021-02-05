@@ -56,7 +56,7 @@ public class User {
 	@Column
 	private String address;
 
-	@Pattern(regexp = "^\\+(?!\\s*$)[0-9\\s]{11}$|")
+	@Pattern(regexp = "^370(?!\\s*$)[0-9\\s]{8}$|")
 	@Column
 	private String phone;
 

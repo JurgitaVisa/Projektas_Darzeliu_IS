@@ -6,7 +6,7 @@ import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import '../../App.css';
 
-//import NavBar from '../00Navigation/NavBar';
+import NavBar from '../00Navigation/NavBar';
 import UserListTable from './UserListTable';
 import Pagination from './../08CommonComponents/Pagination';
 import { paginate } from './../08CommonComponents/paginate';
@@ -98,7 +98,7 @@ export class UserListContainer extends Component {
        
         return (
             <div >
-                {/* <NavBar /> */}
+                <NavBar />
                 <div className="container">
                     {/* <div className="row ">
                         <div className="col-12 pb-2">

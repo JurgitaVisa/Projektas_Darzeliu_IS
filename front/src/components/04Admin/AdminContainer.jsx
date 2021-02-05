@@ -36,7 +36,7 @@ export class AdminContainer extends Component {
     render() {
         return (
             <div>
-                {/*<NavBar/>*/}
+                <NavBar/>
                
                 <AdminCreateUser/>
             </div>

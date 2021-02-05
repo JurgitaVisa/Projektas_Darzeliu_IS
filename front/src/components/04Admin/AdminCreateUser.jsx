@@ -81,7 +81,7 @@ export default class AdminCreateUser extends Component {
                             onChange={this.handleChange}
                             placeholder="Vardas"
                             required
-                            pattern="[A-zÀ-ž]{1,32}"
+                            pattern="[A-zÀ-ž]{2,32}"
                         />
                     </div>
                     <div className="form-group">
@@ -95,7 +95,7 @@ export default class AdminCreateUser extends Component {
                             onChange={this.handleChange}
                             placeholder="Pavardė"
                             required
-                            pattern="[A-zÀ-ž]{1,32}"
+                            pattern="[A-zÀ-ž]{2,32}"
                         />
                     </div>
                 </div>
@@ -117,7 +117,7 @@ export default class AdminCreateUser extends Component {
                                 onInvalid={(e) => this.validateText(e)}
                                 placeholder="Vardas"
                                 required
-                                pattern="[A-zÀ-ž]{1,32}"
+                                pattern="[A-zÀ-ž]{2,32}"
                             />
                         </div>
                     </div>
@@ -134,7 +134,7 @@ export default class AdminCreateUser extends Component {
                                 onInvalid={(e) => this.validateText(e)}
                                 placeholder="Pavardė"
                                 required
-                                pattern="[A-zÀ-ž]{1,32}"
+                                pattern="[A-zÀ-ž]{2,32}"
                             />
                         </div>
                     </div>
@@ -358,8 +358,7 @@ export default class AdminCreateUser extends Component {
                         window.location.reload();  
                     }
                 )
-                this.resetState();    
-                 
+                //this.resetState();    
             })
             .catch((error) => {
                 console.log(error);

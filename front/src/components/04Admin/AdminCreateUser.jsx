@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, withRouter, BrowserRouter } from 'react-router-dom';
+//import { Route, withRouter, BrowserRouter } from 'react-router-dom';
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
@@ -9,12 +9,12 @@ import swal from 'sweetalert';
 
 //var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
 
-function dateFormat(num) {
-    if (num >= 1 && num <= 9) {
-        return "0" + num;
-    }
-    else return num;
-}
+// function dateFormat(num) {
+//     if (num >= 1 && num <= 9) {
+//         return "0" + num;
+//     }
+//     else return num;
+// }
 
 
 export default class AdminCreateUser extends Component {

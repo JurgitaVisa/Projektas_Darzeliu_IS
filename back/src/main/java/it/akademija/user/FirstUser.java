@@ -24,15 +24,19 @@ public class FirstUser {
 	 * Add first ADMIN user to the User repository if no ADMIN users are in the
 	 * database
 	 * 
+	 * @throws Exception
+	 * 
 	 */
 	@PostConstruct
-	public void addFirstUser() {
+	public void addFirstUser() throws Exception {
 
 		if (userDao.findByRole(Role.ADMIN).size() == 0) {
-			UserDTO firstUser = new UserDTO("ADMIN", "admin", "admin", "admin", "laikinas");
+			UserDTO firstUser = new UserDTO("ADMIN", "admin", "admin", "admin@admin.lt", "admin@admin.lt",
+					"admin@admin.lt");
 			userService.createUser(firstUser);
 			LOG.warn("Pirmas ADMIN naudotojas sukurtas");
-		}
-	}
 
+		}
+
+	}
 }

@@ -22,6 +22,7 @@ export const LoginContainer = () => {
   const [data, setData] = React.useState(initState);
 
   const handleChange = (event) => {
+    validateText(event);
     setData({
       ...data,
       loginError: false, // po nesėkmingo įvedimo pradėjus vesti duomenis iš naujo, paslepia klaidos pranešimą
@@ -68,14 +69,18 @@ export const LoginContainer = () => {
 
   const validateText = (event) => {
     const target = event.target;
-    if (target.validity.valueMissing) {
-      console.log(target.id);
-      if (target.id === "username") {
+
+    if (target.validity.valueMissing && target.id === "username") {
+        console.log("target.id=username? -> " + target.id)
         target.setCustomValidity("Būtina įvesti naudotojo prisijungimo vardą");
-      } else if (target.id === "password") {
+      } else if (target.validity.valueMissing && target.id === "password") {
+        console.log("target.id=password? -> " + target.id)
         target.setCustomValidity("Būtina įvesti slaptažodį");
       }
-    } else target.setCustomValidity("");
+    else {
+      target.setCustomValidity("");
+    }
+  
   };
 
   return (
@@ -99,7 +104,7 @@ export const LoginContainer = () => {
               id="username"
               value={data.username}
               onChange={handleChange}
-              onInvalid={(event) => validateText(event)}
+              onInvalid={validateText}
               required
               data-toggle="tooltip"
               data-placement="top"
@@ -118,7 +123,7 @@ export const LoginContainer = () => {
               id="password"
               value={data.password}
               onChange={handleChange}
-              onInvalid={(event) => validateText(event)}
+              onInvalid={validateText}
               required
               data-toggle="tooltip"
               data-placement="top"

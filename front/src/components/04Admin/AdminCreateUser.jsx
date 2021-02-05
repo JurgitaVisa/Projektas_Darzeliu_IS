@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
+import swal from 'sweetalert';
 
 var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
 
@@ -320,12 +321,12 @@ export default class AdminCreateUser extends Component {
         .then((response) => {
             console.log("Naujas naudotojas sukurtas");
             console.log(this.state);
-            alert('Naujas naudotojas sėkmingai sukurtas!');
+            swal('Naujas naudotojas sėkmingai sukurtas!');
             this.resetState();
         })
         .catch((error) => {
             console.log(error);
-            alert('Įvyko klaida');
+            swal('Įvyko klaida');
         })
     }
     render() {

@@ -15,5 +15,7 @@ public interface UserDAO extends JpaRepository<User, Long> {
 	List<User> findByRole(Role role);
 
 	void deleteByUsername(String username);
+	
+	List<User> findAllByOrderByUserIdDesc();
 
 }

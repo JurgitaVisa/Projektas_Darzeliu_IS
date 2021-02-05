@@ -2,16 +2,9 @@ import React, { Component } from 'react'
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
+import swal from 'sweetalert';
 
-var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
-
-const styleFieldRequired = {
-    color: "red",
-    textTransform: "uppercase",
-    fontSize: "12px",
-    fontWeight: "bold",
-    verticalAlign: "text-top"
-}
+//var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
 
 function dateFormat(num) {
     if(num>=1 && num<=9) {
@@ -51,7 +44,7 @@ export default class AdminCreateUser extends Component {
                         </select>
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtEmail">El. paštas <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtEmail">El. paštas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text" 
                             className="form-control" 
@@ -74,7 +67,7 @@ export default class AdminCreateUser extends Component {
             return (
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txtName">Vardas</label>
+                        <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
                             className="form-control"
@@ -83,11 +76,12 @@ export default class AdminCreateUser extends Component {
                             value={this.state.name}
                             onChange={this.handleChange}
                             placeholder="Vardas"
-                            pattern="[A-z]{1,32}"
+                            required
+                            pattern="[A-zÀ-ž]{1,32}"
                         />
                     </div>
                     <div className="form-group col">
-                        <label htmlFor="txtSurname">Pavardė</label>
+                        <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
                             className="form-control"
@@ -96,7 +90,8 @@ export default class AdminCreateUser extends Component {
                             value={this.state.surname}
                             onChange={this.handleChange}
                             placeholder="Pavardė"
-                            pattern="[A-z]{1,32}"
+                            required
+                            pattern="[A-zÀ-ž]{1,32}"
                         />
                     </div>
                 </div>
@@ -104,13 +99,47 @@ export default class AdminCreateUser extends Component {
         }
         else if(role === "USER") {
             return (
-            <div className="innerForm">
+            <div className="form-group">
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txt">Gimimo data <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
                         <input 
+                            type="text"
+                            className="form-control"
+                            id="txtName"
+                            name="name"
+                            value={this.state.name}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="Vardas"
+                            required
+                            pattern="[A-zÀ-ž]{1,32}"
+                        />
+                    </div>
+                </div>
+                <div className="form-row">
+                    <div className="form-group col">
+                        <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            id="txtSurname" 
+                            name="surname" 
+                            value={this.state.surname} 
+                            onChange={this.handleChange}
+                            onInvalid={(e) => this.validateText(e)}
+                            placeholder="Pavardė" 
+                            required
+                            pattern="[A-zÀ-ž]{1,32}"
+                        />
+                    </div>
+                </div>
+                <div className="form-row">
+                    {/*<div className="form-group col">
+                        <label htmlFor="txt">Gimimo data <span className="fieldRequired">*</span></label>
+                        {<input 
                             type="date"
-                            data-date-format="YYYY-MM-DD"
+                            data-date-format="DD/MM/YYYY"
                             min='1900-01-01'
                             max={currentDate}
                             className="form-control"
@@ -122,9 +151,9 @@ export default class AdminCreateUser extends Component {
                             placeholder="MMMM-MM-DD"
                             required
                         />
-                    </div>
+                        </div>*/}
                     <div className="form-group col">
-                        <label htmlFor="txtIdentificationCode">Asmens kodas <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtIdentificationCode">Asmens kodas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
                             className="form-control"
@@ -141,39 +170,31 @@ export default class AdminCreateUser extends Component {
                 </div>
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txtName">Vardas <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
+                        <div className="input-group">
+                        <div className="input-group-prepend">
+                            <div className="input-group-text">
+                                +370
+                            </div>
+                        </div>
                         <input 
-                            type="text"
-                            className="form-control"
-                            id="txtName"
-                            name="name"
-                            value={this.state.name}
-                            onChange={this.handleChange}
-                            onInvalid={(e) => this.validateText(e)}
-                            placeholder="Vardas"
-                            required
-                            pattern="[A-z]{1,32}"
-                        />
-                    </div>
-                    <div className="form-group col">
-                        <label htmlFor="txtSurname">Pavardė <span style={styleFieldRequired}>*</span></label>
-                        <input 
-                            type="text" 
+                            type="tel" 
                             className="form-control" 
-                            id="txtSurname" 
-                            name="surname" 
-                            value={this.state.surname} 
-                            onChange={this.handleChange}
+                            id="txtTelNo" 
+                            name="telno" 
+                            value={this.state.telno}
+                            onChange={this.handleChange} 
                             onInvalid={(e) => this.validateText(e)}
-                            placeholder="Pavardė" 
-                            required
-                            pattern="[A-z]{1,32}"
-                        />
+                            placeholder="Telefono numeris" 
+                            required pattern="[0-9]{8}">
+                        </input>
+                        </div>
                     </div>
                 </div>
+                
                 <div className="form-row">
                     <div className="form-group col">
-                        <label htmlFor="txtAddress">Adresas <span style={styleFieldRequired}>*</span></label>
+                        <label htmlFor="txtAddress">Adresas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
                             className="form-control"
@@ -186,8 +207,8 @@ export default class AdminCreateUser extends Component {
                             required
                         />
                     </div>
-                    <div className="form-group col">
-                        <label htmlFor="txtTelNo">Telefonas <span style={styleFieldRequired}>*</span></label>
+                    {/*<div className="form-group col">
+                        <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
                         <input 
                             type="tel" 
                             className="form-control" 
@@ -199,7 +220,7 @@ export default class AdminCreateUser extends Component {
                             placeholder="+370xxxxxxxx" 
                             required pattern="[+,0-9]{12}"
                         />
-                    </div>
+                    </div>*/}
                 </div>
             </div>
             )
@@ -220,7 +241,7 @@ export default class AdminCreateUser extends Component {
 
     validateText(event) {
         const target = event.target;
-        if(target.validity.valueMissing && target.id!="txtBirthdate") {
+        if(target.validity.valueMissing && target.id!=="txtBirthdate") {
             target.setCustomValidity(target.placeholder + " yra privalomas laukelis")
         }
         else {
@@ -251,7 +272,7 @@ export default class AdminCreateUser extends Component {
             }
             else if(target.id==="txtIdentificationCode") {
                 if(target.validity.patternMismatch) {
-                    target.setCustomValidity("Asmens koda sudaro 11 skaičių, laukelyje įrašyta: " + target.value.length + " skaičiai.")
+                    target.setCustomValidity("Asmens koda sudaro 11 skaičių, įvesta skaičių: " + target.value.length)
                 }
                 else {
                     target.setCustomValidity("")
@@ -278,7 +299,7 @@ export default class AdminCreateUser extends Component {
             }
             else if(target.id==="txtTelNo") {
                 if(target.validity.patternMismatch) {
-                    target.setCustomValidity("Neteisingas telefono numerio formatas(+370)")
+                    target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, įvesta skaičių: " + target.value.length)
                 }
                 else {
                     target.setCustomValidity("");
@@ -305,14 +326,15 @@ export default class AdminCreateUser extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        console.log("Posting to " + apiEndpoint + "/api/users/admin/createuser")
         http.post(`${apiEndpoint}/api/users/admin/createuser`, {
             "address": this.state.address,
-            "birthdate": this.state.birthdate,
+            //"birthdate": this.state.birthdate,
             "email": this.state.email,
             "name": this.state.name,
             "password": this.state.email,
             "personalCode": this.state.identificationCode,
-            "phone": this.state.telno,
+            "phone": "+370" + this.state.telno,
             "role": this.state.role,
             "surname": this.state.surname,
             "username": this.state.email
@@ -320,12 +342,13 @@ export default class AdminCreateUser extends Component {
         .then((response) => {
             console.log("Naujas naudotojas sukurtas");
             console.log(this.state);
-            alert('Naujas naudotojas sėkmingai sukurtas!');
+            console.log(response);
+            swal('Naujas naudotojas sėkmingai sukurtas!');
             this.resetState();
         })
         .catch((error) => {
             console.log(error);
-            alert('Įvyko klaida');
+            swal('Įvyko klaida');
         })
     }
     render() {

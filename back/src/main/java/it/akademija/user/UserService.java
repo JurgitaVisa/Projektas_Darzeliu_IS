@@ -50,8 +50,7 @@ public class UserService implements UserDetailsService {
 
 		if (userData.getRole().equals("USER") && ((userData.getPhone() == null || userData.getPhone().isEmpty())
 				|| (userData.getAddress() == null || userData.getAddress().isEmpty())
-				|| (userData.getPersonalCode() == null || userData.getPersonalCode().isEmpty())
-				|| (userData.getBirthdate() == null))) {
+				|| (userData.getPersonalCode() == null || userData.getPersonalCode().isEmpty()))) {
 
 			throw new Exception("Negali buti tuscia");
 		}
@@ -59,19 +58,20 @@ public class UserService implements UserDetailsService {
 		newUser.setRole(Role.valueOf(userData.getRole()));
 		newUser.setName(userData.getName());
 		newUser.setSurname(userData.getSurname());
-		newUser.setBirthdate(userData.getBirthdate());
 		newUser.setPersonalCode(userData.getPersonalCode());
 		newUser.setAddress(userData.getAddress());
 		newUser.setPhone(userData.getPhone());
 		newUser.setEmail(userData.getEmail());
 		newUser.setUsername(userData.getUsername());
 		newUser.setPassword(encoder.encode(userData.getUsername()));
-		userDao.save(newUser);
+		userDao.saveAndFlush(newUser);
 
-		if (userData.getRole().equals("ADMIN") && userDao.findByRole(Role.ADMIN).size() > 1
-				&& userDao.findByUsername("admin") != null) {
-			userDao.deleteByUsername("admin");
-		}
+		/*
+		 * if (userData.getRole().equals("ADMIN") &&
+		 * userDao.findByRole(Role.ADMIN).size() > 1 &&
+		 * userDao.findByUsername("admin@admin.lt") != null) {
+		 * userDao.deleteByUsername("admin@admin.lt"); }
+		 */
 
 	}
 
@@ -87,7 +87,8 @@ public class UserService implements UserDetailsService {
 	public void deleteUser(String username) {
 
 		if (findByUsername(username).getRole().equals(Role.ADMIN) && userDao.findByRole(Role.ADMIN).size() == 1) {
-			userDao.save(new User(Role.ADMIN, "admin", "admin", "admin", encoder.encode("laikinas")));
+			userDao.save(new User(Role.ADMIN, "admin", "admin", "admin@admin.lt", "admin@admin.lt",
+					encoder.encode("admin@admin.lt")));
 		}
 
 		userDao.deleteByUsername(username);
@@ -103,7 +104,8 @@ public class UserService implements UserDetailsService {
 
 	@Transactional(readOnly = true)
 	public List<UserInfo> getAllUsers() {
-		List<User> users = userDao.findAll();
+		List<User> users = userDao.findAllByOrderByUserIdDesc();
+		
 		return users.stream().map(user -> new UserInfo(user.getUserId(), user.getRole().name(), user.getName(),
 				user.getSurname(), user.getUsername())).collect(Collectors.toList());
 	}
@@ -111,8 +113,8 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public UserInfo getUserDetails(String username) {
 		User user = userDao.findByUsername(username);
-		return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(), user.getBirthdate(),
-				user.getAddress(), user.getPersonalCode(), user.getPhone(), user.getEmail(), user.getUsername());
+		return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(), user.getAddress(),
+				user.getPersonalCode(), user.getPhone(), user.getEmail(), user.getUsername());
 	}
 
 	/**
@@ -172,7 +174,6 @@ public class UserService implements UserDetailsService {
 		user.setName(userData.getName());
 		user.setSurname(userData.getSurname());
 		user.setAddress(userData.getAddress());
-		user.setBirthdate(userData.getBirthdate());
 		user.setPersonalCode(userData.getPersonalCode());
 		user.setPhone(userData.getPhone());
 		user.setEmail(userData.getEmail());

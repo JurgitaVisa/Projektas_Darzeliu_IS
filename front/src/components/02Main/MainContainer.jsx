@@ -1,7 +1,7 @@
 import React from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 
 import NavBar from "../00Navigation/NavBar";
 import AuthContext from "../11Context/AuthContext";
@@ -16,8 +16,9 @@ export const MainContainer = () => {
       <div className="container">
         <h5 className="h5 pb-3">Sveiki prisijungę prie darželių IS</h5>
         <h6 className="h6 pb-3">
-          Prisijungęs naudotojas:{" "}
-          <span className="text-primary">{currentUser.state.username} </span>
+          Prisijungęs naudotojas: 
+          <span className="text-primary"> {currentUser.state.username} </span>
+          (<span className="text-primary">{currentUser.state.role}</span>)
         </h6>
 
         

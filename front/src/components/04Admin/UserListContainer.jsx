@@ -99,7 +99,7 @@ export class UserListContainer extends Component {
         return (
             <div >
                 {/* <NavBar /> */}
-                <div className="container">
+              
                     {/* <div className="row ">
                         <div className="col-12 pb-2">
                             <h5 className="h5">Sistemos naudotojų sąrašas </h5>
@@ -108,7 +108,7 @@ export class UserListContainer extends Component {
                     </div> */}
 
                     {/* <Link to="/admin" className="btn btn-outline-primary my-2">Sukurti naują</Link> */}
-                    <br />
+                    
                     <UserListTable
                         naudotojai={naudotojai}
                         onDelete={this.handleDelete}
@@ -122,7 +122,7 @@ export class UserListContainer extends Component {
                         currentPage={this.state.currentPage}
                     />
 
-                </div>
+                
             </div>
         )
     }

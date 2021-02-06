@@ -27,8 +27,7 @@ public class KindergartenInit {
 		// pirmas darželis sąraše pavadinimu test dėl bug
 		if (gartenDao.findAll().size() == 0) {
 			Kindergarten obj = new Kindergarten();
-
-			StringBuilder out = new StringBuilder();
+			
 			InputStream inputStream = obj.getClass().getClassLoader().getResourceAsStream("darzeliu_adresai.csv");
 
 			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF8"))) {
@@ -36,8 +35,10 @@ public class KindergartenInit {
 				while ((line = reader.readLine()) != null) {
 					String[] data = line.split(";");
 					Kindergarten kindergarten = new Kindergarten();
+					kindergarten.setId(data[0]);
 					kindergarten.setName(data[1].trim());
 					kindergarten.setAddress(data[2]);
+					kindergarten.setElderate(data[3]);
 					kindergarten.setCapacityAgeGroup2to3(0);
 					kindergarten.setCapacityAgeGroup3to6(0);
 
@@ -45,37 +46,10 @@ public class KindergartenInit {
 				}
 				
 			// ištrinam pirmą darželį test -- apėjimas bug, kadangi pirmo įkelto darželio DB nenuskaito pagal pavadinimą
-				gartenDao.deleteById(1l);
+				//gartenDao.deleteById(1l);
 
 			}
-
-			// pirmas darželis sąraše pavadinimu test dėl bug
-//		Path path = Paths.get("classpath:"+"darzeliu_adresai.csv");
-//
-//		if (gartenDao.findAll().size() == 0) {
-//
-//			try {
-//
-//				List<String> list = Files.readAllLines(path, StandardCharsets.UTF_8);
-//
-//				for (String line : list) {
-//					String[] data = line.split(";");
-//					Kindergarten kindergarten = new Kindergarten();
-//					kindergarten.setName(data[0].trim());
-//					kindergarten.setAddress(data[1]);
-//
-//					gartenDao.save(kindergarten);
-//
-//				}
-//				
-//				// ištrinam pirmą darželį test -- apėjimas bug, kadangi pirmo įkelto darželio DB nenuskaito pagal pavadinimą
-//				gartenDao.deleteById(1l);
-
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-
-//		}
+		
 
 		}
 	}

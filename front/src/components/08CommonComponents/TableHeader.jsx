@@ -10,6 +10,7 @@ class TableHeader extends Component {
                     {this.props.columns.map(column =>
                         <th 
                             key={column.key}
+                            id={column.key}
                             scope="col">
                             {column.label}
                         </th>)}

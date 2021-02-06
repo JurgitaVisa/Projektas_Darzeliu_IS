@@ -26,7 +26,7 @@ export class UserListContainer extends Component {
         http
             .get(`${apiEndpoint}/api/users/admin/allusers`)
             .then((response) => {
-                this.setState({ naudotojai: response.data });
+                this.setState({ naudotojai: this.mapToViewModel(response.data) });
 
             }).catch(error => {
                 console.log("Naudotojai container error", error.response);
@@ -37,6 +37,14 @@ export class UserListContainer extends Component {
             );
 
     }
+    
+    mapToViewModel(data) {
+        return {
+            id: data.userId,
+            username: data.username,
+            role: data.role
+        }
+    };
 
     handleDelete = (item) => {
         const username = item.username;

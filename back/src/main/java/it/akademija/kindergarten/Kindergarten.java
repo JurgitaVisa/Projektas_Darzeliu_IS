@@ -11,9 +11,8 @@ import javax.validation.constraints.NotBlank;
 @Entity
 public class Kindergarten {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+	@Id	
+	private String id;
 	
 	@NotBlank(message = "Pavadinimas privalomas")
 	@Column(name="name", unique=true)
@@ -22,6 +21,11 @@ public class Kindergarten {
 	@Column
 	@NotBlank(message = "Adresas privalomas")
 	private String address;
+	
+	@Column
+	@NotBlank(message = "Seniūnija privaloma")
+	private String elderate;
+	
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
 	private int capacityAgeGroup2to3;
@@ -33,21 +37,26 @@ public class Kindergarten {
 
 	}
 
-	public Kindergarten(@NotBlank(message = "Pavadinimas privalomas") String name,
-			@NotBlank(message = "Adresas privalomas") String address) {		
-		this.name = name;
-		this.address = address;
-	}
-
-	public Kindergarten(@NotBlank(message = "Pavadinimas privalomas") String name,
+	public Kindergarten(String id, @NotBlank(message = "Pavadinimas privalomas") String name,
 			@NotBlank(message = "Adresas privalomas") String address,
+			@NotBlank(message = "Seniūnija privaloma") String elderate,
 			@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0") int capacityAgeGroup2to3,
 			@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0") int capacityAgeGroup3to6) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.address = address;
+		this.elderate = elderate;
 		this.capacityAgeGroup2to3 = capacityAgeGroup2to3;
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -66,6 +75,14 @@ public class Kindergarten {
 		this.address = address;
 	}
 
+	public String getElderate() {
+		return elderate;
+	}
+
+	public void setElderate(String elderate) {
+		this.elderate = elderate;
+	}
+
 	public int getCapacityAgeGroup2to3() {
 		return capacityAgeGroup2to3;
 	}
@@ -80,41 +97,6 @@ public class Kindergarten {
 
 	public void setCapacityAgeGroup3to6(int capacityAgeGroup3to6) {
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Kindergarten other = (Kindergarten) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
 	}
 
 	

@@ -51,6 +51,11 @@ public class KindergartenService {
 		gartenDao.deleteById(id);
 
 	}
+	
+	@Transactional
+	public void deleteByName(String name) {
+		gartenDao.deleteByName(name);
+	}
 
 	public KindergartenDAO getGartenDao() {
 		return gartenDao;

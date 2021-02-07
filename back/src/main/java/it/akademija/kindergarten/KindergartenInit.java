@@ -21,13 +21,16 @@ public class KindergartenInit {
 	@Autowired
 	KindergartenDAO gartenDao;
 
+	@Autowired
+	KindergartenService service;
+
 	@PostConstruct
 	public void uploadKindergartenData() throws IOException {
 
 		if (gartenDao.findAll().size() == 0) {
 			Kindergarten obj = new Kindergarten();
 
-			InputStream inputStream = obj.getClass().getClassLoader().getResourceAsStream("darzeliu_adresai.csv");
+			InputStream inputStream = obj.getClass().getClassLoader().getResourceAsStream("darzeliu_adresai.txt");
 
 			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF8"))) {
 				String line;
@@ -41,9 +44,12 @@ public class KindergartenInit {
 					kindergarten.setCapacityAgeGroup2to3(0);
 					kindergarten.setCapacityAgeGroup3to6(0);
 
-					gartenDao.save(kindergarten);
+					service.createNewKindergarten(kindergarten);
 				}
+				// apėjimas: pirmą įrašą ištrinam, nes kitaip meta validacijos klaidas
+				service.deleteByName("test");
 			}
+
 		}
 	}
 

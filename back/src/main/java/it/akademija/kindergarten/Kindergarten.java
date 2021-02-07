@@ -23,10 +23,11 @@ public class Kindergarten {
 	@Column
 	@NotBlank(message = "Adresas privalomas")
 	private String address;
-
+	
 	@Column
 	@NotBlank(message = "Seniūnija privaloma")
 	private String elderate;
+	
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
 	private int capacityAgeGroup2to3;
@@ -99,5 +100,6 @@ public class Kindergarten {
 	public void setCapacityAgeGroup3to6(int capacityAgeGroup3to6) {
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
 	}
+
 
 }

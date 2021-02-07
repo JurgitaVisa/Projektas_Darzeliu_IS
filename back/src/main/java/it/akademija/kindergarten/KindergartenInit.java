@@ -23,11 +23,10 @@ public class KindergartenInit {
 
 	@PostConstruct
 	public void uploadKindergartenData() throws IOException {
-		
-		// pirmas darželis sąraše pavadinimu test dėl bug
+
 		if (gartenDao.findAll().size() == 0) {
 			Kindergarten obj = new Kindergarten();
-			
+
 			InputStream inputStream = obj.getClass().getClassLoader().getResourceAsStream("darzeliu_adresai.csv");
 
 			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF8"))) {
@@ -44,13 +43,7 @@ public class KindergartenInit {
 
 					gartenDao.save(kindergarten);
 				}
-				
-			// ištrinam pirmą darželį test -- apėjimas bug, kadangi pirmo įkelto darželio DB nenuskaito pagal pavadinimą
-				//gartenDao.deleteById(1l);
-
 			}
-		
-
 		}
 	}
 

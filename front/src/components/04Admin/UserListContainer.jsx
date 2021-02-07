@@ -19,7 +19,7 @@ export class UserListContainer extends Component {
         this.state = {
             naudotojai: [],
             pageSize: 10,
-            currentPage: 1            
+            currentPage: 1
         }
     }
     componentDidMount() {
@@ -32,18 +32,22 @@ export class UserListContainer extends Component {
                 console.log("Naudotojai container error", error.response);
                 if (error && error.response.status === 401)
                     swal("Puslapis pasiekiamas tik administratoriaus teises turintiems naudotojams")
-                this.props.history.replace("/home");
+               // this.props.history.replace("/home");
             }
             );
 
     }
-    
+
     mapToViewModel(data) {
-        return {
-            id: data.userId,
-            username: data.username,
-            role: data.role
-        }
+       
+        const naudotojai = data.map(user=>({
+            id: user.userId,
+            username: user.username,
+            role: user.role
+
+        }));       
+       
+        return  naudotojai;        
     };
 
     handleDelete = (item) => {
@@ -87,13 +91,13 @@ export class UserListContainer extends Component {
         this.setState({ currentPage: page });
     };
 
-    
+
     getPageData = () => {
         const {
             pageSize,
-            currentPage,           
+            currentPage,
             naudotojai: allData
-        } = this.state;         
+        } = this.state;
 
         const naudotojai = paginate(allData, currentPage, pageSize);
 
@@ -103,34 +107,34 @@ export class UserListContainer extends Component {
     render() {
 
         const { totalCount, naudotojai } = this.getPageData();
-       
+
         return (
             <div >
                 {/* <NavBar /> */}
-              
-                    {/* <div className="row ">
+
+                {/* <div className="row ">
                         <div className="col-12 pb-2">
                             <h5 className="h5">Sistemos naudotojų sąrašas </h5>
 
                         </div>
                     </div> */}
 
-                    {/* <Link to="/admin" className="btn btn-outline-primary my-2">Sukurti naują</Link> */}
-                    
-                    <UserListTable
-                        naudotojai={naudotojai}
-                        onDelete={this.handleDelete}
-                        onRestorePassword={this.handleRestorePassword}
-                    />
+                {/* <Link to="/admin" className="btn btn-outline-primary my-2">Sukurti naują</Link> */}
 
-                    <Pagination
-                        itemsCount={totalCount}
-                        pageSize={this.state.pageSize}
-                        onPageChange={this.handlePageChange}
-                        currentPage={this.state.currentPage}
-                    />
+                <UserListTable
+                    naudotojai={naudotojai}
+                    onDelete={this.handleDelete}
+                    onRestorePassword={this.handleRestorePassword}
+                />
 
-                
+                <Pagination
+                    itemsCount={totalCount}
+                    pageSize={this.state.pageSize}
+                    onPageChange={this.handlePageChange}
+                    currentPage={this.state.currentPage}
+                />
+
+
             </div>
         )
     }

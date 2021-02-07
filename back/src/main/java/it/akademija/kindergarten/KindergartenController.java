@@ -110,7 +110,7 @@ public class KindergartenController {
 			return new ResponseEntity<String>("Darželis panaikintas sėkmingai", HttpStatus.OK);
 		}
 
-		return new ResponseEntity<String>("Darželis tokiu pavadinimu nerastas", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
 	}
 
 	public KindergartenService getGartenService() {

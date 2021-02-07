@@ -86,7 +86,7 @@ export class KindergartenListContainer extends Component {
         const { totalElements, pageSize, darzeliai } = this.state;
 
         return (
-            <div >
+            <div className="container">
 
                 <KindergartenListTable
                     darzeliai={darzeliai}

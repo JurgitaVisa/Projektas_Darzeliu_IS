@@ -7,25 +7,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Kindergarten {
 
-	@Id	
+	@Id
+	@Size(min = 7, max = 9, message = "Įstaigos kodas turi būti sudarytas iš 7-9 skaitmenų imtinai")
 	private String id;
-	
+
 	@NotBlank(message = "Pavadinimas privalomas")
-	@Column(name="name", unique=true)
+	@Column(name = "name", unique = true)
 	private String name;
 
 	@Column
 	@NotBlank(message = "Adresas privalomas")
 	private String address;
-	
+
 	@Column
 	@NotBlank(message = "Seniūnija privaloma")
 	private String elderate;
-	
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
 	private int capacityAgeGroup2to3;
@@ -98,9 +99,5 @@ public class Kindergarten {
 	public void setCapacityAgeGroup3to6(int capacityAgeGroup3to6) {
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
 	}
-
-	
-
-	
 
 }

@@ -18,7 +18,8 @@ export class KindergartenListContainer extends Component {
             pageSize: 10,
             currentPage: 1,
             totalPages: 0,
-            totalElements: 0
+            totalElements: 0,
+            numberOfElements: 0
         }
     }
     componentDidMount() {
@@ -31,42 +32,45 @@ export class KindergartenListContainer extends Component {
         const { pageSize } = this.state;
         currentPage -= 1;
         http
-            .get(`${apiEndpoint}/api/darzeliai/page?page%20data=${currentPage}&size=${pageSize}`)
-            .then((response) => {                
-                this.setState({ 
-                    darzeliai: response.data.content, 
+            .get(`${apiEndpoint}/api/darzeliai/page?page=${currentPage}&size=${pageSize}`)
+            .then((response) => {
+
+                this.setState({
+                    darzeliai: response.data.content,
                     totalPages: response.data.totalPages,
                     totalElements: response.data.totalElements,
-                    currentPage: response.data.number+1                
+                    numberOfElements: response.data.numberOfElements,
+                    currentPage: response.data.number + 1
                 });
 
             }).catch(error => {
                 console.log("Darzeliai container error", error.response);
                 if (error && error.response.status === 401)
                     swal("Puslapis pasiekiamas tik teises turintiems naudotojams")
-               // this.props.history.replace("/home");
+                // this.props.history.replace("/home");
             }
             );
     }
 
     handleDelete = (item) => {
         const id = item.id;
+        const { currentPage, numberOfElements } = this.state;
+        const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
         console.log("Trinti darzeli", id);
-//TODO kai trina paskutinį elementą tame lape, turėtų mesti į ankstesnį psl
+
         http
             .delete(`${apiEndpoint}/api/darzeliai/manager/delete/${id}`)
             .then((response) => {
                 swal(response.data);
-                this.getKindergartenInfo(this.state.currentPage);
+                this.getKindergartenInfo(page);
 
             }).catch(error => {
                 if (error && error.response.status > 400 && error.response.status < 500) swal("Veiksmas neleidžiamas");
 
             });
-
     }
 
-    handleEditKindergarten = (item) =>{
+    handleEditKindergarten = (item) => {
         const id = item.id;
         console.log("Taisyti darzeli", id);
     }
@@ -75,7 +79,7 @@ export class KindergartenListContainer extends Component {
     handlePageChange = (page) => {
         this.setState({ currentPage: page });
         this.getKindergartenInfo(page);
-    };    
+    };
 
     render() {
 

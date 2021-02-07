@@ -62,7 +62,8 @@ public class KindergartenController {
 	@GetMapping("/page")
 	@ApiOperation(value = "Get kindergarten information pages")
 	public ResponseEntity<Page<Kindergarten>> getKindergartenPage(
-			@RequestParam(required = true, value = "page data") int page, int size) {
+			@RequestParam("page") int page, 
+			  @RequestParam("size") int size) {
 
 		Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
 

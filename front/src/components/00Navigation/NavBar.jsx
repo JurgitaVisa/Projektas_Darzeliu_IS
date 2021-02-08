@@ -26,7 +26,7 @@ function Navigation() {
                         <ul className="navbar-nav ml-auto ">
                         {currentUser.state.role==="ADMIN" && ( 
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link" to={"/admin"}>Naudotojų administravimas</NavLink>
+                                <NavLink className="nav-link" id="navAdmin" to={"/admin"}>Naudotojų administravimas</NavLink>
                             </li>)}
 
                             {currentUser.state.role==="MANAGER" && ( 

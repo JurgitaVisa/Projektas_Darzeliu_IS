@@ -41,7 +41,7 @@ export default class AdminCreateUser extends Component {
             <div className="form">
                 <div className="form-group ">
                     <label htmlFor="role-selector">Naudotojo rolė:</label>
-                    <select name="role-selector" id="selectpicker" className="form-control" value={this.state.role} onChange={this.roleDropdownOnChange}>
+                    <select name="role-selector" id="selRole" className="form-control" value={this.state.role} onChange={this.roleDropdownOnChange}>
                         <option value="ADMIN">Administratorius</option>
                         <option value="MANAGER">Švietimo specialistas</option>
                         <option value="USER">Vaiko atstovas</option>
@@ -358,11 +358,10 @@ export default class AdminCreateUser extends Component {
                         window.location.reload();
                     }
                 )
-                //this.resetState();    
             })
             .catch((error) => {
                 console.log(error);
-                swal('Įvyko klaida');
+                swal('Įvyko klaida:' + error.response.data);
             })
 
     }
@@ -394,8 +393,8 @@ export default class AdminCreateUser extends Component {
                         </div>
                     </div>
                     <div className="mb-3">
-                        <button className="btn btn-danger float-left" onClick={this.resetState}>Išvalyti</button>
-                        <button type="submit" className="btn btn-primary float-right">Sukurti</button>
+                        <button className="btn btn-danger float-left" onClick={this.resetState} id="btnClean">Išvalyti</button>
+                        <button type="submit" className="btn btn-primary float-right" id="btnCreate">Sukurti</button>
                     </div>
                 </form>
 

@@ -10,6 +10,7 @@ import '../../App.css';
 import UserListTable from './UserListTable';
 import Pagination from './../08CommonComponents/Pagination';
 import { paginate } from './../08CommonComponents/paginate';
+import { Button } from 'bootstrap';
 
 
 export class UserListContainer extends Component {
@@ -57,7 +58,10 @@ export class UserListContainer extends Component {
         http
             .delete(`${apiEndpoint}/api/users/admin/delete/${username}`)
             .then((response) => {
-                swal(response.data);
+                swal({
+                    title: "Užklausa sėkmingai įvykdyta",
+                    text: response.data,
+                    button: "Gerai"});
                 http
                     .get(`${apiEndpoint}/api/users/admin/allusers`)
                     .then((response) => {

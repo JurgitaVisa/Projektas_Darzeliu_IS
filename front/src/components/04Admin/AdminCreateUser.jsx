@@ -358,11 +358,10 @@ export default class AdminCreateUser extends Component {
                         window.location.reload();
                     }
                 )
-                //this.resetState();    
             })
             .catch((error) => {
                 console.log(error);
-                swal('Įvyko klaida');
+                swal('Įvyko klaida:' + error.response.data);
             })
 
     }

@@ -29,6 +29,11 @@ function Navigation() {
                                 <NavLink className="nav-link" to={"/admin"}>Naudotojų administravimas</NavLink>
                             </li>)}
 
+                            {currentUser.state.role==="MANAGER" && ( 
+                            <li className="nav-item mr-2">
+                                <NavLink className="nav-link" to={"/darzeliai"}>Darželių sąrašas</NavLink>
+                            </li>)}
+
                             {/* <li className="nav-item nav-item mr-4">
                                 <NavLink className="nav-link" to={"/naudotojai"}>Naudotojų sąrašas</NavLink>
                             </li> */}

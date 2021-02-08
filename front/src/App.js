@@ -9,6 +9,8 @@ import Main from "./components/02Main/MainContainer";
 import NotFound from "./components/03NotFound/NotFound";
 import Admin from "./components/04Admin/AdminContainer";
 import UserListContainer from "./components/04Admin/UserListContainer";
+import KindergartenListContainer from './components/05Kindengarten/KindergartenListContainer';
+
 import AuthContext from "./components/11Context/AuthContext";
 // import http from "./components/10Services/httpService";
 // import apiEndpoint from "./components/10Services/endpoint";
@@ -104,6 +106,12 @@ function App() {
             path="/naudotojai"
             render={() => state.isAuthenticated ? (state.role === "ADMIN" ? <UserListContainer /> : <NotFound />) : <Redirect to="/" />}
           />
+
+          <Route
+            path="/darzeliai"
+            render={() => state.isAuthenticated ? (state.role === "MANAGER" ? <KindergartenListContainer /> : <NotFound />) : <Redirect to="/" />}
+          />
+
           <Route
             path="*"
             render={() =>
@@ -112,8 +120,8 @@ function App() {
           />
           <Route component={NotFound} />
         </Switch>
-        
-      </div>      
+
+      </div>
     </AuthContext.Provider>
   );
 }

@@ -7,6 +7,10 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,7 +40,7 @@ public class KindergartenController {
 	private KindergartenService kindergartenService;
 
 	/**
-	 * Get list of Kindergarten names and addresses
+	 * Get list of all Kindergarten names and addresses
 	 * 
 	 * @return list of kindergarten
 	 */
@@ -43,9 +48,26 @@ public class KindergartenController {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get all kindergarten names and addresses")
-	public List<KindergartenDTO> getAllKindergarten() {
+	public List<KindergartenDTO> getAllKindergartenNames() {
 
-		return kindergartenService.getAllKindergarten();
+		return kindergartenService.getAllKindergartenNames();
+	}
+
+	/**
+	 * Get specified Kindergarten information page
+	 * 
+	 * @return page of kindergarten information
+	 */
+	@Secured({ "ROLE_MANAGER" })
+	@GetMapping("/page")
+	@ApiOperation(value = "Get kindergarten information pages")
+	public ResponseEntity<Page<Kindergarten>> getKindergartenPage(
+			@RequestParam("page") int page, 
+			  @RequestParam("size") int size) {
+
+		Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+
+		return new ResponseEntity<>(kindergartenService.getKindergartenPage(pageable), HttpStatus.OK);
 	}
 
 	/**
@@ -60,26 +82,26 @@ public class KindergartenController {
 	public ResponseEntity<String> createNewKindergarten(
 			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody Kindergarten kindergarten) {
 
-		Kindergarten newKindengarten = kindergartenService.findByName(kindergarten.getName().trim());
+		Kindergarten newKindengarten = kindergartenService.findById(kindergarten.getId());
 
 		if (newKindengarten != null) {
-			return new ResponseEntity<String>("Darželis tokiu pavadinimu jau yra", HttpStatus.CONFLICT);
+			return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu jau yra", HttpStatus.CONFLICT);
 
 		} else {
-			
+
 			kindergartenService.createNewKindergarten(kindergarten);
 			LOG.info("**KindergartenController: kuriamas darzelis pavadinimu [{}] **", kindergarten.getName());
 
-			return new ResponseEntity<String>("Darželis sukurtas sėkmingai", HttpStatus.OK);		
+			return new ResponseEntity<String>("Darželis sukurtas sėkmingai", HttpStatus.OK);
 		}
 
 	}
-	
+
 	@Secured({ "ROLE_MANAGER" })
 	@DeleteMapping("/manager/delete/{id}")
 	@ApiOperation(value = "Delete kindergarten by ID")
 	public ResponseEntity<String> deleteKindergarten(
-			@ApiParam(value = "Kindergarten id", required = true) @PathVariable Long id) {
+			@ApiParam(value = "Kindergarten id", required = true) @PathVariable String id) {
 
 		if (kindergartenService.findById(id) != null) {
 
@@ -88,7 +110,7 @@ public class KindergartenController {
 			return new ResponseEntity<String>("Darželis panaikintas sėkmingai", HttpStatus.OK);
 		}
 
-		return new ResponseEntity<String>("Darželis tokiu pavadinimu nerastas", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
 	}
 
 	public KindergartenService getGartenService() {

@@ -6,7 +6,7 @@ import Table from '../08CommonComponents/Table';
 class UserListTable extends Component {
 
     columns = [
-        {                     
+        {                              
             key: 'username',
             path: 'username',
             label: 'Naudotojo vardas',

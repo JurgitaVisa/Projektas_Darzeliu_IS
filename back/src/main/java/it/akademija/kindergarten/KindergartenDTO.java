@@ -1,5 +1,10 @@
 package it.akademija.kindergarten;
 
+/**
+ * 
+ * Kindergarten data transfer class to return partial info from the database * 
+ *
+ */
 public class KindergartenDTO {
 
 	private String id;

@@ -19,7 +19,10 @@ export class KindergartenListContainer extends Component {
             currentPage: 1,
             totalPages: 0,
             totalElements: 0,
-            numberOfElements: 0
+            numberOfElements: 0,
+            inEditMode: false,
+            editRowId: "",
+            editedKindergarten: null
         }
     }
     componentDidMount() {
@@ -32,7 +35,7 @@ export class KindergartenListContainer extends Component {
         const { pageSize } = this.state;
         currentPage -= 1;
         http
-            .get(`${apiEndpoint}/api/darzeliai/page?page=${currentPage}&size=${pageSize}`)
+            .get(`${apiEndpoint}/api/darzeliai/manager/page?page=${currentPage}&size=${pageSize}`)
             .then((response) => {
 
                 this.setState({
@@ -71,8 +74,45 @@ export class KindergartenListContainer extends Component {
     }
 
     handleEditKindergarten = (item) => {
-        const id = item.id;
-        console.log("Taisyti darzeli", id);
+        console.log("Taisyti darzeli", item.id);
+
+        this.setState({
+            inEditMode: true,
+            editRowId: item.id,
+            editedKindergarten: item
+        });
+    }
+
+    onCancel = () => {
+        this.setState(
+            {
+                inEditMode: false,
+                editRowId: "",
+                editedKindergarten: null
+            }
+        )
+    }
+
+    handleChangeName = (e) => {
+        e.preventDefault();
+        const newName = e.target.value;
+        const kindergarten = this.state.editedKindergarten;
+        kindergarten.name = newName;
+        this.setState({ editedKindergarten: kindergarten });
+    }
+
+    handleSaveEdited = () => {
+        const {editedKindergarten, editRowId} = this.state;
+
+        console.log("Koreguoti axios.put", editRowId, editedKindergarten)
+
+        http.put(`${apiEndpoint}/api/darzeliai/manager/update/${editRowId}`, editedKindergarten)
+            .then(() => {
+                this.onCancel();
+                this.getKindergartenInfo(this.state.currentPage);
+            }).catch(error => {
+                console.log(error);
+            })
     }
 
 
@@ -83,15 +123,20 @@ export class KindergartenListContainer extends Component {
 
     render() {
 
-        const { totalElements, pageSize, darzeliai } = this.state;
+        const { totalElements, pageSize, darzeliai, inEditMode, editRowId } = this.state;
 
         return (
             <div className="container">
 
                 <KindergartenListTable
                     darzeliai={darzeliai}
+                    inEditMode={inEditMode}
+                    editRowId={editRowId}
                     onDelete={this.handleDelete}
                     onEditData={this.handleEditKindergarten}
+                    onCancel={this.onCancel}
+                    onChangeName={this.handleChangeName}
+                    onSave={this.handleSaveEdited}
                 />
 
                 <Pagination

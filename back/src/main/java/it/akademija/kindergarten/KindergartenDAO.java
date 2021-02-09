@@ -9,7 +9,7 @@ public interface KindergartenDAO extends JpaRepository<Kindergarten, String> {
 
 	void deleteByName(String name);
 	
-	Kindergarten findByNameIgnoreCase(String name);
+	Page <Kindergarten> findByNameContainingIgnoreCase(String name, Pageable pageable);
 	
 	Page <Kindergarten> findAll(Pageable pageable);
 	

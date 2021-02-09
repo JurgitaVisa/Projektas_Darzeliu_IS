@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import '../../App.css';
 
-//import NavBar from '../00Navigation/NavBar';
 import UserListTable from './UserListTable';
 import Pagination from './../08CommonComponents/Pagination';
 import { paginate } from './../08CommonComponents/paginate';
@@ -110,17 +108,7 @@ export class UserListContainer extends Component {
 
         return (
             <div >
-                {/* <NavBar /> */}
-
-                {/* <div className="row ">
-                        <div className="col-12 pb-2">
-                            <h5 className="h5">Sistemos naudotojų sąrašas </h5>
-
-                        </div>
-                    </div> */}
-
-                {/* <Link to="/admin" className="btn btn-outline-primary my-2">Sukurti naują</Link> */}
-
+                
                 <UserListTable
                     naudotojai={naudotojai}
                     onDelete={this.handleDelete}

@@ -66,7 +66,8 @@ public class KindergartenController {
 			@RequestParam("page") int page, 
 			  @RequestParam("size") int size) {
 
-		Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+		Sort.Order order = new Sort.Order(Sort.Direction.ASC, "name").ignoreCase();
+		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
 
 		return new ResponseEntity<>(kindergartenService.getKindergartenPage(pageable), HttpStatus.OK);
 	}

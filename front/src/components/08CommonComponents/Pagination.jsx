@@ -10,7 +10,7 @@ const Pagination = (props) => {
 
     const pages = _.range(1, pagesCount + 1);
     return (
-        <div >
+        <div className="d-flex justify-content-center">
             <nav>
                 <ul className="pagination">
                     {pages.map(page =>

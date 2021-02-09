@@ -49,8 +49,7 @@ public class UserController {
 
 		LOG.info("** Usercontroller: kuriamas naujas naudotojas **");
 
-		if (userService.findByUsername(userInfo.getUsername()) != null || (userInfo.getRole().equals("USER")
-				&& userService.findByPersonalCode(userInfo.getPersonalCode()) != null)) {
+		if (userService.findByUsername(userInfo.getUsername()) != null) {
 			return new ResponseEntity<String>("Toks naudotojas jau egzistuoja!", HttpStatus.BAD_REQUEST);
 		} else {
 
@@ -131,7 +130,7 @@ public class UserController {
 
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
 	@PutMapping(path = "/update/{username}")
-	@ApiOperation(value = "Update user datails")
+	@ApiOperation(value = "Update user details")
 	public ResponseEntity<String> updateUserData(@PathVariable final String username, @RequestBody UserDTO userData) {
 
 		if (userService.findByUsername(username) != null) {

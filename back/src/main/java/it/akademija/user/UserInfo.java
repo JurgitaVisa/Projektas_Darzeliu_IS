@@ -16,6 +16,13 @@ public class UserInfo {
 
 	}
 
+	public UserInfo(Long userId, String role, String username) {
+		this.userId = userId;
+		this.role = role;
+		this.username = username;
+
+	}
+
 	public UserInfo(Long userId, String role, String name, String surname, String username) {
 		this.userId = userId;
 		this.role = role;

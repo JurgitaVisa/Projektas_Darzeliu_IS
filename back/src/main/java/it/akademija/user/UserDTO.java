@@ -32,8 +32,8 @@ public class UserDTO {
 		this.role = role;
 		this.name = name;
 		this.surname = surname;
-		this.address = address;
 		this.personalCode = personalCode;
+		this.address = address;
 		this.phone = phone;
 		this.email = email;
 		this.username = username;
@@ -45,8 +45,8 @@ public class UserDTO {
 		super();
 		this.name = name;
 		this.surname = surname;
-		this.address = address;
 		this.personalCode = personalCode;
+		this.address = address;
 		this.phone = phone;
 		this.email = email;
 		this.username = username;

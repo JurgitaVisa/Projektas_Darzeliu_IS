@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import '../../App.css';
 
-//import NavBar from '../00Navigation/NavBar';
 import UserListTable from './UserListTable';
 import Pagination from './../08CommonComponents/Pagination';
 import { paginate } from './../08CommonComponents/paginate';
-import { Button } from 'bootstrap';
-
 
 export class UserListContainer extends Component {
 
@@ -31,8 +27,11 @@ export class UserListContainer extends Component {
 
             }).catch(error => {
                 console.log("Naudotojai container error", error.response);
-                if (error && error.response.status === 401)
-                    swal("Puslapis pasiekiamas tik administratoriaus teises turintiems naudotojams")
+                if (error && error.response.status === 401)  
+                    swal({
+                        title: "Puslapis pasiekiamas tik administratoriaus teises turintiems naudotojams",                        
+                        button: "Gerai"
+                    }); 
                // this.props.history.replace("/home");
             }
             );
@@ -58,10 +57,10 @@ export class UserListContainer extends Component {
         http
             .delete(`${apiEndpoint}/api/users/admin/delete/${username}`)
             .then((response) => {
-                swal({
-                    title: "Užklausa sėkmingai įvykdyta",
+                swal({                   
                     text: response.data,
-                    button: "Gerai"});
+                    button: "Gerai"
+                });
                 http
                     .get(`${apiEndpoint}/api/users/admin/allusers`)
                     .then((response) => {
@@ -69,11 +68,13 @@ export class UserListContainer extends Component {
 
                     });
             }).catch(error => {
-                if (error && error.response.status > 400 && error.response.status < 500) swal("Veiksmas neleidžiamas");
+                if (error && error.response.status > 400 && error.response.status < 500) 
+                swal({                   
+                    title: "Veiksmas neleidžiamas",   
+                    button: "Gerai"
+                });
 
-            }
-            );
-
+            });
     }
 
     handleRestorePassword = (item) => {
@@ -83,9 +84,17 @@ export class UserListContainer extends Component {
         http
             .put(`${apiEndpoint}/api/users/admin/password/${username}`)
             .then((response) => {
-                swal(response.data);
+                swal({                   
+                    text: response.data,
+                    button: "Gerai"
+                });
             }).catch(error => {
-                if (error && error.response.status > 400 && error.response.status < 500) swal("Veiksmas neleidžiamas");
+                if (error && error.response.status > 400 && error.response.status < 500) 
+                swal({                   
+                    title: "Veiksmas neleidžiamas",   
+                    button: "Gerai"
+                });
+
             }
             );
 
@@ -114,17 +123,7 @@ export class UserListContainer extends Component {
 
         return (
             <div >
-                {/* <NavBar /> */}
-
-                {/* <div className="row ">
-                        <div className="col-12 pb-2">
-                            <h5 className="h5">Sistemos naudotojų sąrašas </h5>
-
-                        </div>
-                    </div> */}
-
-                {/* <Link to="/admin" className="btn btn-outline-primary my-2">Sukurti naują</Link> */}
-
+                
                 <UserListTable
                     naudotojai={naudotojai}
                     onDelete={this.handleDelete}

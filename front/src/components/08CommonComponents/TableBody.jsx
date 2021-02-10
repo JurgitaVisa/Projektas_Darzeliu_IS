@@ -12,7 +12,7 @@ class TableBody extends Component {
                 {data.map(item =>
                     <tr key={item.id}>
                         {columns.map(column =>
-                            <td key={item.id + column.key}>{column.content(item)}</td>
+                            <td  key={item.id + column.key}>{column.content(item)}</td>
                         )}
                     </tr>
                 )}

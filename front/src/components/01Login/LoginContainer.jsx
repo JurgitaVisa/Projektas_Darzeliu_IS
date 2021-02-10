@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 
+import '../../App.css';
+
 import http from "../10Services/httpService";
 import apiEndpoint from "../10Services/endpoint";
 import AuthContext from "../11Context/AuthContext";

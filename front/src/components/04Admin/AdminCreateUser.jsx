@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 //import { Route, withRouter, BrowserRouter } from 'react-router-dom';
 
+import '../../App.css';
+
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import swal from 'sweetalert';
@@ -348,8 +350,7 @@ export default class AdminCreateUser extends Component {
                 console.log("Naujas naudotojas sukurtas");
                 console.log(this.state);
                 console.log(response);
-                swal({
-                    title: "Užklausa sėkmingai įvykdyta",
+                swal({                    
                     text: "Naujas naudotojas buvo sėkmingai sukurtas.",
                     button: "Gerai"
                 }).then(

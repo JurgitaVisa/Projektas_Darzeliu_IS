@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import '../../App.css';
+
 import Table from '../08CommonComponents/Table';
 //import Modal from '../08CommonComponents/Modal';
 

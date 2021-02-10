@@ -162,18 +162,22 @@ public class UserService implements UserDetailsService {
 	 */
 	@Transactional
 	public void updateUserData(UserDTO userData, String username) {
+
 		User user = findByUsername(username);
 		ParentDetails details = new ParentDetails();
-		details.setAddress(userData.getAddress());
-		details.setPersonalCode(userData.getPersonalCode());
-		details.setPhone("370" + userData.getPhone());
-		details.setEmail(userData.getEmail());
-		details.setName(userData.getName());
-		details.setSurname(userData.getSurname());
+
+		if (userData.getRole().equals("USER")) {
+			details.setAddress(userData.getAddress());
+			details.setPersonalCode(userData.getPersonalCode());
+			details.setPhone("370" + userData.getPhone());
+			details.setEmail(userData.getEmail());
+			details.setName(userData.getName());
+			details.setSurname(userData.getSurname());
+			user.setParentDetails(details);
+		}
 
 		user.setName(userData.getName());
 		user.setSurname(userData.getSurname());
-		user.setParentDetails(details);
 		user.setEmail(userData.getEmail());
 
 		userDao.save(user);

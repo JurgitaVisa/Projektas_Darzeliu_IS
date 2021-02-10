@@ -6,7 +6,7 @@ import '../../App.css';
 // import apiEndpoint from '../10Services/endpoint';
 
 import NavBar from '../00Navigation/NavBar';
-import AdminCreateUser from '../04Admin/AdminCreateUser';
+
 import { KindergartenListContainer } from './KindergartenListContainer';
 
 export class KindergartenContainer extends Component {

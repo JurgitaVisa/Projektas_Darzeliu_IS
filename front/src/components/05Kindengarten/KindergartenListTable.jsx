@@ -10,7 +10,7 @@ class KindergartenListTable extends Component {
             editRowId,
             onEditData,
             onSave,
-            onCancel,
+           // onCancel,
             onChangeName,
             onChangeAddress,
             onChangeElderate,

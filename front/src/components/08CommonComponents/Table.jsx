@@ -14,13 +14,11 @@ const Table = (props) => {
 
                 <TableHeader
                     columns={columns}
-
                 />
 
                 <TableBody
                     columns={columns}
-                    data={data}
-
+                    data={data} 
                 />
 
             </table>

@@ -60,7 +60,7 @@ class KindergartenControllerTest {
 				.andExpect(status().isOk()).andReturn();
 		assertEquals(200, getAll.getResponse().getStatus());
 
-		MvcResult getPage = mvc.perform(get("/api/darzeliai/page")
+		MvcResult getPage = mvc.perform(get("/api/darzeliai/manager/page")
 				.param("page", "1").param("size", "10"))
 				.andExpect(status().isOk()).andReturn();
 		assertEquals(200, getPage.getResponse().getStatus());

@@ -175,7 +175,6 @@ public class UserService implements UserDetailsService {
 		user.setSurname(userData.getSurname());
 		user.setParentDetails(details);
 		user.setEmail(userData.getEmail());
-		user.setPassword(encoder.encode(userData.getPassword()));
 
 		userDao.save(user);
 

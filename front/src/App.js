@@ -10,6 +10,7 @@ import NotFound from "./components/03NotFound/NotFound";
 import Admin from "./components/04Admin/AdminContainer";
 import UserListContainer from "./components/04Admin/UserListContainer";
 import KindergartenListContainer from './components/05Kindengarten/KindergartenListContainer';
+import UpdateProfileFormContainer from './components/06UpdateProfile/UpdateProfileFormContainer';
 
 import AuthContext from "./components/11Context/AuthContext";
 // import http from "./components/10Services/httpService";
@@ -110,6 +111,12 @@ function App() {
           <Route
             path="/darzeliai"
             render={() => state.isAuthenticated ? (state.role === "MANAGER" ? <KindergartenListContainer /> : <NotFound />) : <Redirect to="/" />}
+          />
+
+          {/**Mano paskyra */}
+          <Route
+            path="/profilis/atnaujinti"
+            render={() => state.isAuthenticated ? <UpdateProfileFormContainer /> : <Redirect to="/" />}
           />
 
           <Route

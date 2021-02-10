@@ -19,7 +19,10 @@ export class KindergartenListContainer extends Component {
             currentPage: 1,
             totalPages: 0,
             totalElements: 0,
-            numberOfElements: 0
+            numberOfElements: 0,
+            inEditMode: false,
+            editRowId: "",
+            editedKindergarten: null
         }
     }
     componentDidMount() {
@@ -32,7 +35,7 @@ export class KindergartenListContainer extends Component {
         const { pageSize } = this.state;
         currentPage -= 1;
         http
-            .get(`${apiEndpoint}/api/darzeliai/page?page=${currentPage}&size=${pageSize}`)
+            .get(`${apiEndpoint}/api/darzeliai/manager/page?page=${currentPage}&size=${pageSize}`)
             .then((response) => {
 
                 this.setState({
@@ -71,8 +74,67 @@ export class KindergartenListContainer extends Component {
     }
 
     handleEditKindergarten = (item) => {
-        const id = item.id;
-        console.log("Taisyti darzeli", id);
+        console.log("Taisyti darzeli", item.id);
+
+        this.setState({
+            inEditMode: true,
+            editRowId: item.id,
+            editedKindergarten: item
+        });
+    }
+
+    onCancel = () => {
+        this.setState(
+            {
+                inEditMode: false,
+                editRowId: "",
+                editedKindergarten: null
+            }
+        )
+    }
+
+    handleChangeName = (newName) => {
+        const kindergarten = this.state.editedKindergarten;
+        kindergarten.name = newName;
+        this.setState({ editedKindergarten: kindergarten });
+    }
+
+    handleChangeAddress = (newAddress) => {
+        const kindergarten = this.state.editedKindergarten;
+        kindergarten.address = newAddress;
+        this.setState({ editedKindergarten: kindergarten });
+    }
+
+    handleChangeElderate = (newElderate) => {
+        const kindergarten = this.state.editedKindergarten;
+        kindergarten.elderate = newElderate;
+        this.setState({ editedKindergarten: kindergarten });
+    }
+
+    handleChangeCapacity2to3 = (newCapacity2to3) => {
+        const kindergarten = this.state.editedKindergarten;
+        kindergarten.capacityAgeGroup2to3 = newCapacity2to3;
+        this.setState({ editedKindergarten: kindergarten });
+    }
+
+    handleChangeCapacity3to6 = (newCapacity3to6) => {
+        const kindergarten = this.state.editedKindergarten;
+        kindergarten.capacityAgeGroup3to6 = newCapacity3to6;
+        this.setState({ editedKindergarten: kindergarten });
+    }
+
+    handleSaveEdited = () => {
+        const { editedKindergarten, editRowId } = this.state;
+
+        console.log("Koreguoti axios.put", editRowId, editedKindergarten)
+
+        http.put(`${apiEndpoint}/api/darzeliai/manager/update/${editRowId}`, editedKindergarten)
+            .then(() => {
+                this.onCancel();
+                this.getKindergartenInfo(this.state.currentPage);
+            }).catch(error => {
+                console.log(error);
+            })
     }
 
 
@@ -83,15 +145,24 @@ export class KindergartenListContainer extends Component {
 
     render() {
 
-        const { totalElements, pageSize, darzeliai } = this.state;
+        const { totalElements, pageSize, darzeliai, inEditMode, editRowId } = this.state;
 
         return (
-            <div className="container">
+            <React.Fragment>
 
                 <KindergartenListTable
                     darzeliai={darzeliai}
+                    inEditMode={inEditMode}
+                    editRowId={editRowId}
                     onDelete={this.handleDelete}
                     onEditData={this.handleEditKindergarten}
+                    onCancel={this.onCancel}
+                    onChangeName={this.handleChangeName}
+                    onChangeAddress={this.handleChangeAddress}
+                    onChangeElderate={this.handleChangeElderate}
+                    onChangeCapacity2to3={this.handleChangeCapacity2to3}
+                    onChangeCapacity3to6={this.handleChangeCapacity3to6}
+                    onSave={this.handleSaveEdited}
                 />
 
                 <Pagination
@@ -102,7 +173,7 @@ export class KindergartenListContainer extends Component {
                 />
 
 
-            </div>
+            </React.Fragment>
         )
     }
 }

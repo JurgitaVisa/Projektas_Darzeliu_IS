@@ -24,6 +24,11 @@ public class KindergartenInit {
 	@Autowired
 	KindergartenService service;
 
+	/**
+	 * Initialise database if no records are available. Saves info from txt file.
+	 * 
+	 * @throws IOException
+	 */
 	@PostConstruct
 	public void uploadKindergartenData() throws IOException {
 

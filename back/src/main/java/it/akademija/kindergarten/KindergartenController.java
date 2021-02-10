@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,13 +60,14 @@ public class KindergartenController {
 	 * @return page of kindergarten information
 	 */
 	@Secured({ "ROLE_MANAGER" })
-	@GetMapping("/page")
+	@GetMapping("/manager/page")
 	@ApiOperation(value = "Get kindergarten information pages")
 	public ResponseEntity<Page<Kindergarten>> getKindergartenPage(
 			@RequestParam("page") int page, 
 			  @RequestParam("size") int size) {
 
-		Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+		Sort.Order order = new Sort.Order(Sort.Direction.ASC, "name").ignoreCase();
+		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
 
 		return new ResponseEntity<>(kindergartenService.getKindergartenPage(pageable), HttpStatus.OK);
 	}
@@ -80,7 +82,8 @@ public class KindergartenController {
 	@PostMapping("/manager/createKindergarten")
 	@ApiOperation(value = "Create new kindergarten")
 	public ResponseEntity<String> createNewKindergarten(
-			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody Kindergarten kindergarten) {
+			@ApiParam(value = "Kindergarten", required = true) 
+			@Valid @RequestBody Kindergarten kindergarten) {
 
 		Kindergarten newKindengarten = kindergartenService.findById(kindergarten.getId());
 
@@ -97,6 +100,13 @@ public class KindergartenController {
 
 	}
 
+	/**
+	 * 
+	 * Delete kindergarten entity with specified id
+	 * 
+	 * @param id
+	 * @return message if entity was deleted or if it does not exist in the database
+	 */
 	@Secured({ "ROLE_MANAGER" })
 	@DeleteMapping("/manager/delete/{id}")
 	@ApiOperation(value = "Delete kindergarten by ID")
@@ -106,12 +116,31 @@ public class KindergartenController {
 		if (kindergartenService.findById(id) != null) {
 
 			kindergartenService.deleteKindergarten(id);
-			LOG.info("** Usercontroller: trinamas darželis pavadinimu ID [{}] **", id);
+			LOG.info("** Usercontroller: trinamas darželis ID [{}] **", id);
 			return new ResponseEntity<String>("Darželis panaikintas sėkmingai", HttpStatus.OK);
 		}
 
 		return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
 	}
+	
+	@Secured({"ROLE_MANAGER"})
+	@PutMapping("/manager/update/{id}")
+	@ApiOperation(value="Update kindergarten by ID")
+	public ResponseEntity<String> updateKindergarten(
+			@ApiParam(value="Kindergarten", required=true)
+			@Valid @RequestBody Kindergarten updated,
+			@PathVariable String id){
+		
+		if (kindergartenService.findById(id) != null) {
+			kindergartenService.updateKindergarten(id, updated);
+			LOG.info("** Usercontroller: atnaujinamas darželis ID [{}] **", id);
+			return new ResponseEntity<String>("Darželio duomenys atnaujinti sėkmingai", HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
+	}
+
+	
 
 	public KindergartenService getGartenService() {
 		return kindergartenService;

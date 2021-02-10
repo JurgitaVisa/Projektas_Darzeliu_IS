@@ -115,7 +115,7 @@ public class UserService implements UserDetailsService {
 		User user = userDao.findByUsername(username);
 		if (user.getRole().equals(Role.USER)) {
 			return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(),
-					user.getParentDetails().getAddress(), user.getParentDetails().getPersonalCode(),
+					user.getParentDetails().getPersonalCode(), user.getParentDetails().getAddress(), 
 					user.getParentDetails().getPhone(), user.getEmail(), user.getUsername());
 
 		}

@@ -49,7 +49,11 @@ export class KindergartenListContainer extends Component {
             }).catch(error => {
                 console.log("Darzeliai container error", error.response);
                 if (error && error.response.status === 401)
-                    swal("Puslapis pasiekiamas tik teises turintiems naudotojams")
+                
+                swal({                   
+                    text: "Puslapis pasiekiamas tik teises turintiems naudotojams",
+                    button: "Gerai"
+                });                  
                 // this.props.history.replace("/home");
             }
             );
@@ -64,11 +68,18 @@ export class KindergartenListContainer extends Component {
         http
             .delete(`${apiEndpoint}/api/darzeliai/manager/delete/${id}`)
             .then((response) => {
-                swal(response.data);
+                swal({                   
+                    text: response.data,
+                    button: "Gerai"
+                });
                 this.getKindergartenInfo(page);
 
             }).catch(error => {
-                if (error && error.response.status > 400 && error.response.status < 500) swal("Veiksmas neleidžiamas");
+                if (error && error.response.status > 400 && error.response.status < 500) 
+                swal({                   
+                    text: "Veiksmas neleidžiamas",
+                    button: "Gerai"
+                });              
 
             });
     }
@@ -133,7 +144,7 @@ export class KindergartenListContainer extends Component {
                 this.onCancel();
                 this.getKindergartenInfo(this.state.currentPage);
             }).catch(error => {
-                console.log(error);
+                console.log("KindergartenListContainer", error);
             })
     }
 

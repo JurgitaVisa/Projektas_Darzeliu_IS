@@ -1,7 +1,6 @@
 package it.akademija.kindergarten;
 
 import java.util.List;
-
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -28,14 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import it.akademija.user.UserController;
 
 @RestController
 @Api(value = "kindergarten")
 @RequestMapping(path = "/api/darzeliai")
 public class KindergartenController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(KindergartenController.class);
 
 	@Autowired
 	private KindergartenService kindergartenService;
@@ -67,8 +65,9 @@ public class KindergartenController {
 			  @RequestParam("size") int size) {
 
 		Sort.Order order = new Sort.Order(Sort.Direction.ASC, "name").ignoreCase();
+						
 		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
-
+		
 		return new ResponseEntity<>(kindergartenService.getKindergartenPage(pageable), HttpStatus.OK);
 	}
 

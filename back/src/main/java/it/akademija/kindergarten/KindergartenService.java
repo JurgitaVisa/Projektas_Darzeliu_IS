@@ -3,8 +3,6 @@ package it.akademija.kindergarten;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,6 +48,9 @@ public class KindergartenService {
 	 */
 	@Transactional
 	public void createNewKindergarten(Kindergarten kindergarten) {
+//		String name= kindergarten.getName();
+//		name= name.substring(0, 1).toUpperCase() + name.substring(1);
+//		kindergarten.setName(name);
 		gartenDao.save(kindergarten);
 
 	}

@@ -48,33 +48,24 @@ public class UserService implements UserDetailsService {
 	public void createUser(UserDTO userData) throws Exception {
 		User newUser = new User();
 
-		if (userData.getRole().equals("USER") && ((userData.getPhone() == null || userData.getPhone().isEmpty())
-				|| (userData.getAddress() == null || userData.getAddress().isEmpty())
-				|| (userData.getPersonalCode() == null || userData.getPersonalCode().isEmpty()))) {
-
-			throw new Exception("Negali buti tuscia");
-		}
 		if (userData.getRole().equals("USER")) {
-			newUser.setRole(Role.valueOf(userData.getRole()));
-			newUser.setName(userData.getName());
-			newUser.setSurname(userData.getSurname());
-			newUser.setPersonalCode(userData.getPersonalCode());
-			newUser.setAddress(userData.getAddress());
-			newUser.setPhone("370" + userData.getPhone());
-			newUser.setEmail(userData.getEmail());
-			newUser.setUsername(userData.getUsername());
-			newUser.setPassword(encoder.encode(userData.getUsername()));
-			userDao.saveAndFlush(newUser);
-		} else {
-			newUser.setRole(Role.valueOf(userData.getRole()));
-			newUser.setName(userData.getName());
-			newUser.setSurname(userData.getSurname());
-			newUser.setEmail(userData.getEmail());
-			newUser.setUsername(userData.getUsername());
-			newUser.setPassword(encoder.encode(userData.getUsername()));
-			userDao.saveAndFlush(newUser);
+			ParentDetails details = new ParentDetails();
+			details.setAddress(userData.getAddress());
+			details.setEmail(userData.getEmail());
+			details.setName(userData.getName());
+			details.setPersonalCode(userData.getPersonalCode());
+			details.setPhone("370" + userData.getPhone());
+			details.setSurname(userData.getSurname());
+			newUser.setParentDetails(details);
 		}
 
+		newUser.setName(userData.getName());
+		newUser.setSurname(userData.getSurname());
+		newUser.setEmail(userData.getEmail());
+		newUser.setRole(Role.valueOf(userData.getRole()));
+		newUser.setUsername(userData.getUsername());
+		newUser.setPassword(encoder.encode(userData.getUsername()));
+		userDao.saveAndFlush(newUser);
 	}
 
 	/*
@@ -115,15 +106,22 @@ public class UserService implements UserDetailsService {
 	public List<UserInfo> getAllUsers() {
 		List<User> users = userDao.findAllByOrderByUserIdDesc();
 
-		return users.stream().map(user -> new UserInfo(user.getUserId(), user.getRole().name(), user.getName(),
-				user.getSurname(), user.getUsername())).collect(Collectors.toList());
+		return users.stream().map(user -> new UserInfo(user.getUserId(), user.getRole().name(), user.getUsername()))
+				.collect(Collectors.toList());
 	}
 
 	@Transactional
 	public UserInfo getUserDetails(String username) {
 		User user = userDao.findByUsername(username);
-		return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(), user.getAddress(),
-				user.getPersonalCode(), user.getPhone(), user.getEmail(), user.getUsername());
+		if (user.getRole().equals(Role.USER)) {
+			return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(),
+					user.getParentDetails().getAddress(), user.getParentDetails().getPersonalCode(),
+					user.getParentDetails().getPhone(), user.getEmail(), user.getUsername());
+
+		}
+		return new UserInfo(user.getUserId(), user.getRole().name(), user.getName(), user.getSurname(),
+				user.getUsername());
+
 	}
 
 	/**
@@ -137,20 +135,6 @@ public class UserService implements UserDetailsService {
 	public User findByUsername(String username) {
 
 		return userDao.findByUsername(username);
-	}
-
-	/**
-	 * 
-	 * Finds user with a specified personal code. Don't return User entity via REST.
-	 * 
-	 * @param personalCode
-	 * @return User entity (includes sensitive data)
-	 */
-
-	@Transactional(readOnly = true)
-	public User findByPersonalCode(String personalCode) {
-
-		return userDao.findByPersonalCode(personalCode);
 	}
 
 	/**
@@ -179,15 +163,18 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public void updateUserData(UserDTO userData, String username) {
 		User user = findByUsername(username);
+		ParentDetails details = new ParentDetails();
+		details.setAddress(userData.getAddress());
+		details.setPersonalCode(userData.getPersonalCode());
+		details.setPhone("370" + userData.getPhone());
+		details.setEmail(userData.getEmail());
+		details.setName(userData.getName());
+		details.setSurname(userData.getSurname());
 
 		user.setName(userData.getName());
 		user.setSurname(userData.getSurname());
-		user.setAddress(userData.getAddress());
-		user.setPersonalCode(userData.getPersonalCode());
-		user.setPhone(userData.getPhone());
+		user.setParentDetails(details);
 		user.setEmail(userData.getEmail());
-		user.setUsername(userData.getUsername());
-		user.setPassword(encoder.encode(userData.getPassword()));
 
 		userDao.save(user);
 

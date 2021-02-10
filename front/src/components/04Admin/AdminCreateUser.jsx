@@ -349,10 +349,9 @@ export default class AdminCreateUser extends Component {
                 console.log(this.state);
                 console.log(response);
                 swal({
-                    title: 'Naujas naudotojas buvo sėkmingai sukurtas. ',
-                    showCancelButton: false,
-                    showConfirmButton: true,
-                    confirmButtonText: "Ok"
+                    title: "Užklausa sėkmingai įvykdyta",
+                    text: "Naujas naudotojas buvo sėkmingai sukurtas.",
+                    button: "Gerai"
                 }).then(
                     function refreshWindow() {
                         window.location.reload();
@@ -361,7 +360,12 @@ export default class AdminCreateUser extends Component {
             })
             .catch((error) => {
                 console.log(error);
-                swal('Įvyko klaida:' + error.response.data);
+                swal({
+                    title: "Įvyko klaida",
+                    text: error.response.data,
+                    type: "warning",
+                    button: "Gerai"
+                })
             })
 
     }

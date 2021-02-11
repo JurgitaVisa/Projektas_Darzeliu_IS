@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import NavBar from '../00Navigation/NavBar';
-
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
+import inputValidator from '../08CommonComponents/InputValidator';
 
 export default class UpdateProfileFormContainer extends Component {
     constructor(props) {
@@ -18,7 +18,10 @@ export default class UpdateProfileFormContainer extends Component {
             username: "",
             passwordUpdate: false
         }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUpdatePasswordButton = this.handleUpdatePasswordButton.bind(this);
+
     }
     componentDidMount() {
         http.get(`${apiEndpoint}/api/users/admin@admin.lt`)
@@ -30,9 +33,10 @@ export default class UpdateProfileFormContainer extends Component {
                     personalCode: response.data.personalCode,
                     address: response.data.address,
                     phone: response.data.phone,
-                    email: response.data.email,
+                    email: response.data.username,
                     username: response.data.username
                 })
+                console.log(response);
             })
     }
     
@@ -41,16 +45,18 @@ export default class UpdateProfileFormContainer extends Component {
         /** Admin & Manager form */
         if(role !== "USER") {
             return (
-                <div className="form">
-                    <form>
+                    <div>
                         <div className="row form-group">
                             <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
                             <input 
                                 type="text"
                                 id="txtName"
                                 name="name"
+                                placeholder="Vardas"
                                 className="form-control"
                                 value={this.state.name}
+                                onChange={this.handleChange}
+                                onInvalid={(e) => inputValidator(e)}
                                 required
                                 pattern="[A-zÀ-ž]{2,32}"
                             />
@@ -61,8 +67,11 @@ export default class UpdateProfileFormContainer extends Component {
                                 type="text"
                                 id="txtSurname"
                                 name="surname"
+                                placeholder="Pavardė"
                                 className="form-control"
                                 value={this.state.surname}
+                                onChange={this.handleChange}
+                                onInvalid={(e) => inputValidator(e)}
                                 required
                                 pattern="[A-zÀ-ž]{2,32}"
                             />
@@ -73,29 +82,33 @@ export default class UpdateProfileFormContainer extends Component {
                                 type="text"
                                 id="txtEmail"
                                 name="email"
+                                placeholder="El. paštas"
                                 className="form-control"
                                 value={this.state.email}
+                                onChange={this.handleChange}
+                                onInvalid={(e) => inputValidator(e)}
                                 required
                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
                             />
                         </div>
-                    </form>
-                </div>
+                    </div>
             )
         }
         /** User form */
         else {
             return (
-                <div className="form">
-                    <form>
+                    <div>
                         <div className="row form-group">
                             <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
                             <input 
                                 type="text"
                                 id="txtName"
                                 name="name"
+                                placeholder="Vardas"
                                 className="form-control"
                                 value={this.state.name}
+                                onChange={this.handleChange}
+                                onInvalid={(e) => inputValidator(e)}
                                 required
                                 pattern="[A-zÀ-ž]{2,32}"
                             />
@@ -106,8 +119,11 @@ export default class UpdateProfileFormContainer extends Component {
                                 type="text"
                                 id="txtSurname"
                                 name="surname"
+                                placeholder="Pavardė"
                                 className="form-control"
                                 value={this.state.surname}
+                                onChange={this.handleChange}
+                                onInvalid={(e) => inputValidator(e)}
                                 required
                                 pattern="[A-zÀ-ž]{2,32}"
                             />
@@ -118,9 +134,11 @@ export default class UpdateProfileFormContainer extends Component {
                                 type="text"
                                 id="txtPersonalCode"
                                 name="personalCode"
+                                placeholder="Asmens kodas"
                                 className="form-control"
                                 value={this.state.personalCode}
-                                placeholder="Asmens kodas"
+                                onChange={this.handleChange}
+                                onInvalid={(e) => inputValidator(e)}
                                 required
                                 pattern="[0-9]{11}"
                             />
@@ -137,11 +155,11 @@ export default class UpdateProfileFormContainer extends Component {
                                     type="tel"
                                     id="txtTelNo"
                                     name="phone"
+                                    placeholder="Telefono numeris"
                                     className="form-control"
                                     value={this.state.telno}
                                     onChange={this.handleChange}
-                                    onInvalid={(e) => this.validateText(e)}
-                                    placeholder="Telefono numeris"
+                                    onInvalid={(e) => inputValidator(e)}
                                     required pattern="[0-9]{8}">
                                 </input>
                             </div>
@@ -152,8 +170,11 @@ export default class UpdateProfileFormContainer extends Component {
                                 type="text"
                                 id="txtEmail"
                                 name="email"
+                                placeholder="El. paštas"
                                 className="form-control"
                                 value={this.state.email}
+                                onChange={this.handleChange}
+                                onInvalid={(e) => inputValidator(e)}
                                 required
                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
                             />
@@ -165,15 +186,14 @@ export default class UpdateProfileFormContainer extends Component {
                                 className="form-control"
                                 id="txtAddress"
                                 name="address"
+                                placeholder="Adresas"
                                 value={this.state.address}
                                 onChange={this.handleChange}
-                                onInvalid={(e) => this.validateText(e)}
-                                placeholder="Adresas"
+                                onInvalid={(e) => inputValidator(e)}
                                 required
                             />
                         </div>
-                    </form>
-                </div>
+                    </div>
             )
         }
     }
@@ -181,13 +201,17 @@ export default class UpdateProfileFormContainer extends Component {
     /** Change handler */
 
     handleChange(e) {
-
+        inputValidator(e);
+        this.setState({
+            [e.target.name]: e.target.value
+        })
     }
 
     /** Submit handler */
 
     handleSubmit(e) {
-
+        e.preventDefault();
+        console.log(this.state);
     }
 
     /**Update password form */
@@ -257,12 +281,14 @@ export default class UpdateProfileFormContainer extends Component {
             <div>
                 <NavBar />
                 <div className="container">
-                    {
-                        this.drawUpdateForm(this.state.role)
-                    }
-                    <div className="row">
-                            <button type="submit" className="btn btn-primary">Išsaugoti</button>
-                        </div>
+                    <div className="form" >
+                        <form onSubmit={this.handleSubmit}>
+                            {this.drawUpdateForm(this.state.role)}
+                            <div className="row">
+                                <button type="submit" id="btnSubmit" className="btn btn-primary">Išsaugoti</button>
+                            </div>
+                        </form>
+                    </div>
                     <div className="row">
                         <h6 className="py-3"><b>Naudotojo prisijungimai</b></h6>
                     </div>

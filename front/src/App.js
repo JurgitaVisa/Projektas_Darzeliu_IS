@@ -9,12 +9,9 @@ import Main from "./components/02Main/MainContainer";
 import NotFound from "./components/03NotFound/NotFound";
 import Admin from "./components/04Admin/AdminContainer";
 import UserListContainer from "./components/04Admin/UserListContainer";
-<<<<<<< HEAD
-import KindergartenListContainer from './components/05Kindengarten/KindergartenListContainer';
-import UpdateProfileFormContainer from './components/06UpdateProfile/UpdateProfileFormContainer';
-=======
 import KindergartenContainer from './components/05Kindengarten/KindergartenContainer';
->>>>>>> master
+import UpdateProfileFormContainer from './components/06UpdateProfile/UpdateProfileFormContainer';
+
 
 import AuthContext from "./components/11Context/AuthContext";
 // import http from "./components/10Services/httpService";

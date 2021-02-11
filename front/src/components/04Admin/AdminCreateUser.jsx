@@ -7,6 +7,7 @@ import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import swal from 'sweetalert';
 
+import inputValidator from '../08CommonComponents/InputValidator';
 
 
 //var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
@@ -59,7 +60,7 @@ export default class AdminCreateUser extends Component {
                         value={this.state.email}
                         placeholder="El. paštas"
                         onChange={this.handleChange}
-                        onInvalid={(e) => this.validateText(e)}
+                        onInvalid={(e) => inputValidator(e)}
                         required
                         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
                     />
@@ -81,6 +82,7 @@ export default class AdminCreateUser extends Component {
                             name="name"
                             value={this.state.name}
                             onChange={this.handleChange}
+                            onInvalid={(e) => inputValidator(e)}
                             placeholder="Vardas"
                             required
                             pattern="[A-zÀ-ž]{2,32}"
@@ -95,6 +97,7 @@ export default class AdminCreateUser extends Component {
                             name="surname"
                             value={this.state.surname}
                             onChange={this.handleChange}
+                            onInvalid={(e) => inputValidator(e)}
                             placeholder="Pavardė"
                             required
                             pattern="[A-zÀ-ž]{2,32}"
@@ -116,7 +119,7 @@ export default class AdminCreateUser extends Component {
                                 name="name"
                                 value={this.state.name}
                                 onChange={this.handleChange}
-                                onInvalid={(e) => this.validateText(e)}
+                                onInvalid={(e) => inputValidator(e)}
                                 placeholder="Vardas"
                                 required
                                 pattern="[A-zÀ-ž]{2,32}"
@@ -133,7 +136,7 @@ export default class AdminCreateUser extends Component {
                                 name="surname"
                                 value={this.state.surname}
                                 onChange={this.handleChange}
-                                onInvalid={(e) => this.validateText(e)}
+                                onInvalid={(e) => inputValidator(e)}
                                 placeholder="Pavardė"
                                 required
                                 pattern="[A-zÀ-ž]{2,32}"
@@ -167,7 +170,7 @@ export default class AdminCreateUser extends Component {
                                 name="identificationCode"
                                 value={this.state.identificationCode}
                                 onChange={this.handleChange}
-                                onInvalid={(e) => this.validateText(e)}
+                                onInvalid={(e) => inputValidator(e)}
                                 placeholder="Asmens kodas"
                                 required
                                 pattern="[0-9]{11}"
@@ -181,7 +184,7 @@ export default class AdminCreateUser extends Component {
                                 <div className="input-group-prepend">
                                     <div className="input-group-text">
                                         +370
-                            </div>
+                                    </div>
                                 </div>
                                 <input
                                     type="tel"
@@ -190,7 +193,7 @@ export default class AdminCreateUser extends Component {
                                     name="telno"
                                     value={this.state.telno}
                                     onChange={this.handleChange}
-                                    onInvalid={(e) => this.validateText(e)}
+                                    onInvalid={(e) => inputValidator(e)}
                                     placeholder="Telefono numeris"
                                     required pattern="[0-9]{8}">
                                 </input>
@@ -208,25 +211,11 @@ export default class AdminCreateUser extends Component {
                                 name="address"
                                 value={this.state.address}
                                 onChange={this.handleChange}
-                                onInvalid={(e) => this.validateText(e)}
+                                onInvalid={(e) => inputValidator(e)}
                                 placeholder="Adresas"
                                 required
                             />
                         </div>
-                        {/*<div className="form-group col">
-                        <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
-                        <input 
-                            type="tel" 
-                            className="form-control" 
-                            id="txtTelNo" 
-                            name="telno" 
-                            value={this.state.telno}
-                            onChange={this.handleChange} 
-                            onInvalid={(e) => this.validateText(e)}
-                            placeholder="+370xxxxxxxx" 
-                            required pattern="[+,0-9]{12}"
-                        />
-                    </div>*/}
                     </div>
                 </div>
             )
@@ -246,75 +235,6 @@ export default class AdminCreateUser extends Component {
 
     }
 
-    validateText(event) {
-        const target = event.target;
-        if (target.validity.valueMissing && target.id !== "txtBirthdate") {
-            target.setCustomValidity(target.placeholder + " yra privalomas laukelis")
-        }
-        else {
-            if (target.id === "txtEmail") {
-                if (target.validity.patternMismatch) {
-                    target.setCustomValidity("Neteisingas el. pašto formatas")
-                }
-                else {
-                    target.setCustomValidity("")
-                }
-            }
-            // else if(target.id==="txtBirthdate") {
-            //     if(target.validity.valueMissing) {
-            //         target.setCustomValidity("Gimimo data yra privalomas laukelis")
-            //     }
-            //     else if(target.validity.patternMismatch) {
-            //         target.setCustomValidity("Neteisingas gimimo datos formatas")
-            //     }
-            //     else if(target.validity.rangeOverflow) {
-            //         target.setCustomValidity("Gimimo data negali būti ateityje")
-            //     }
-            //     else if(target.validity.rangeUnderflow) {
-            //         target.setCustomValidity("Gimimo data negali būti ankstesnė nei 01.01.1900")
-            //     }
-            //     else {
-            //         target.setCustomValidity("")
-            //     }
-            // }
-            else if (target.id === "txtIdentificationCode") {
-                if (target.validity.patternMismatch) {
-                    target.setCustomValidity("Asmens koda sudaro 11 skaičių, įvesta skaičių: " + target.value.length)
-                }
-                else {
-                    target.setCustomValidity("")
-                }
-            }
-            else if (target.id === "txtName") {
-                if (target.validity.patternMismatch) {
-                    target.setCustomValidity("Netinkamo formato vardas")
-                }
-                else {
-                    target.setCustomValidity("")
-                }
-            }
-            else if (target.id === "txtSurname") {
-                if (target.validity.patternMismatch) {
-                    target.setCustomValidity("Netinkamo formato pavardė")
-                }
-                else {
-                    target.setCustomValidity("")
-                }
-            }
-            else if (target.id === "txtAddress") {
-                target.setCustomValidity("");
-            }
-            else if (target.id === "txtTelNo") {
-                if (target.validity.patternMismatch) {
-                    target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, įvesta skaičių: " + target.value.length)
-                }
-                else {
-                    target.setCustomValidity("");
-                }
-            }
-        }
-    }
-
     roleDropdownOnChange(event) {
         event.preventDefault()
         this.setState({
@@ -325,7 +245,7 @@ export default class AdminCreateUser extends Component {
 
     handleChange(event) {
         const target = event.target;
-        this.validateText(event);
+        inputValidator(event);
         this.setState({
             [target.name]: target.value
         })
@@ -350,8 +270,9 @@ export default class AdminCreateUser extends Component {
                 console.log("Naujas naudotojas sukurtas");
                 console.log(this.state);
                 console.log(response);
-                swal({                    
+                swal({
                     text: "Naujas naudotojas buvo sėkmingai sukurtas.",
+                    icon: "success",
                     button: "Gerai"
                 }).then(
                     function refreshWindow() {
@@ -364,7 +285,7 @@ export default class AdminCreateUser extends Component {
                 swal({
                     title: "Įvyko klaida",
                     text: error.response.data,
-                    type: "warning",
+                    icon: "warning",
                     button: "Gerai"
                 })
             })
@@ -375,7 +296,6 @@ export default class AdminCreateUser extends Component {
         return (
             <div >
                 <h6 className="py-3"><b>Naujo naudotojo sukūrimas</b></h6>
-
                 <form onSubmit={this.handleSubmit}>
                     {this.drawSelector()}
                     {this.drawForm(this.state.role)}

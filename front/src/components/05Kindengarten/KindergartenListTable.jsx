@@ -3,14 +3,26 @@ import '../../App.css';
 
 class KindergartenListTable extends Component {
 
+    componentDidMount() {      
+        document.addEventListener("keydown", this.handler, false);       
+    }
+    componentWillUnmount() {       
+        document.removeEventListener("keydown", this.handler, false);
+    }
+
+    handler=(event)=>{
+        if(event.key === "Escape"){
+            this.props.onEscape(event);
+        }     
+    }
+
     render() {
         const {
             darzeliai,
             inEditMode,
             editRowId,
             onEditData,
-            onSave,
-           // onCancel,
+            onSave,           
             onChangeName,
             onChangeAddress,
             onChangeElderate,
@@ -23,7 +35,7 @@ class KindergartenListTable extends Component {
 
                 <div className="table-responsive-md">
 
-                    <table className="table">
+                    <table className="table" >
 
                         <thead className="no-top-border">
                             <tr>
@@ -36,7 +48,7 @@ class KindergartenListTable extends Component {
                                 <th>Ištrinti darželį</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
                             {
                                 darzeliai.map((darzelis) => (
                                     <tr key={darzelis.id}>
@@ -118,31 +130,12 @@ class KindergartenListTable extends Component {
                                                     </td>
                                                     <td>
                                                         {
-
                                                             <button
                                                                 className="btn btn-outline-primary btn-sm mr-1"
                                                                 id="btnSaveUpdatedKindergarten"
                                                                 onClick={() => onSave({ id: darzelis.id, item: darzelis })}>
                                                                 Saugoti
                                                             </button>
-                                                            // <div className="row">
-                                                            //     <div className="col-6">
-                                                            //         <button
-                                                            //             className="btn btn-outline-primary btn-sm mr-1"
-                                                            //             id="btnSaveUpdatedKindergarten"
-                                                            //             onClick={() => onSave({ id: darzelis.id, item: darzelis })}>
-                                                            //             Saugoti
-                                                            //     </button>
-                                                            //     </div>
-                                                            //     <div className="col-6">
-                                                            //         <button
-                                                            //             className="btn btn-outline-secondary btn-sm"
-                                                            //             id="btnCancelUpdateKindergarten"
-                                                            //             onClick={() => onCancel()}>
-                                                            //             Atšaukti
-                                                            //     </button>
-                                                            //     </div>
-                                                            // </div>
                                                         }
                                                     </td>
                                                 </React.Fragment>

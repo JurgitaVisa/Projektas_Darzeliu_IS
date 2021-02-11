@@ -46,3 +46,12 @@
 .swal-text {
   color: black;
 }
+
+.form-control {
+  font-size: 0.875rem;
+}
+
+.table {
+  font-size: 0.875rem;
+  
+}

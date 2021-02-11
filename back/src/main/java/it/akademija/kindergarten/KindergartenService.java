@@ -35,8 +35,10 @@ public class KindergartenService {
 	 * @return page from kindergarten database
 	 */
 	@Transactional(readOnly = true)
-	public Page<Kindergarten> getKindergartenPage(Pageable pageable) {
-		
+	public Page<Kindergarten> getKindergartenPage(String name, Pageable pageable) {
+		if(name!=null) {
+			return gartenDao.findByNameContainingIgnoreCase(name, pageable);
+		}
 		return gartenDao.findAll(pageable);
 	}
 

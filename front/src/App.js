@@ -99,6 +99,7 @@ function App() {
                   <Route path="/home" component={Admin} />
                   <Route path="/admin" component={Admin} />
                   <Route path="/naudotojai" component={UserListContainer} />
+                  <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />
                 </Switch>
               </AdminNavBar>
@@ -116,6 +117,7 @@ function App() {
                   <Route path="/home" component={Main} />{" "}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
                   <Route path="/darzeliai" component={KindergartenContainer} />
+                  <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />
                 </Switch>
               </ManagerNavBar>

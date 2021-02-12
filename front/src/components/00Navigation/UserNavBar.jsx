@@ -35,7 +35,7 @@ function Navigation(props) {
                             </li>
 
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link disabled" id="navUserMyAccount" to={"#"}>Mano paskyra</NavLink>
+                                <NavLink className="nav-link" id="navUserMyAccount" to={"/profilis/atnaujinti"}>Mano paskyra</NavLink>
                             </li>
 
                             <li className="nav-item nav-item mr-2">

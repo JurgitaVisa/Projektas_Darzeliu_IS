@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import NavBar from '../00Navigation/NavBar';
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import inputValidator from '../08CommonComponents/InputValidator';
@@ -279,7 +278,6 @@ export default class UpdateProfileFormContainer extends Component {
     render(props) {
         return (
             <div>
-                <NavBar />
                 <div className="container">
                     <div className="form" >
                         <form onSubmit={this.handleSubmit}>

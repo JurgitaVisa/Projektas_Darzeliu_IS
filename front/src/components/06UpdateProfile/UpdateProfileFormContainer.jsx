@@ -260,7 +260,6 @@ export default class UpdateProfileFormContainer extends Component {
                                 onChange={this.handleChange}
                                 onInvalid={(e) => inputValidator(e)}
                                 required
-                                pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
                             />
                         </div>
                         <div className="row">
@@ -334,9 +333,24 @@ export default class UpdateProfileFormContainer extends Component {
             console.log("Slaptazodziai nesutampa!");
         }
         else {
-            /**
-             * TODO:
-             * Send new password to server */
+            http.put(`${apiEndpoint}/api/users/updatepassword/${this.state.oldPassword}/${this.state.newPassword}`, {
+            }).then((response) => {
+                swal({
+                    title: "Užklausa atlikta sėkmingai",
+                    text: "Naudotojo slaptažodis atnaujintas sėkmingai",
+                    icon: "success",
+                    button: "Gerai"
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+                swal({
+                    title: "Įvyko klaida",
+                    text: error.response.data,
+                    icon: "warning",
+                    button: "Gerai"
+                })
+            })
         }
     }
 

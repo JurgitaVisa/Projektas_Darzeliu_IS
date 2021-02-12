@@ -2,10 +2,6 @@
   text-align: center;
 }
 
-.connected-user {
-  vertical-align: middle;
-}
-
 .fieldRequired {
   color: red;
   text-transform: uppercase;

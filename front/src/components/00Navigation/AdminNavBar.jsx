@@ -5,11 +5,8 @@ import logo from '../../images/logo.png';
 import '../../App.css';
 
 import LogoutContainer from './LogoutContainer';
-import AuthContext from "../11Context/AuthContext";
-
 
 function Navigation(props) {
-    const currentUser = React.useContext(AuthContext);
     return (
         <div className="pb-4" >
             <nav className="navbar navbar-expand-md py-4 navbar-light bg-light">
@@ -26,7 +23,11 @@ function Navigation(props) {
                         <ul className="navbar-nav ml-auto ">
 
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link" id="navAdminUserList" to={"/admin"}>Naudotojų administravimas</NavLink>
+                                <NavLink className="nav-link" id="navAdminUserList" to={"/admin"}>Naudotojų sąrašas</NavLink>
+                            </li>
+
+                            <li className="nav-item mr-2">
+                                <NavLink className="nav-link disabled" id="navAdminApplicationStats" to={"#"}>Prašymų statistika</NavLink>
                             </li>
 
                             <li className="nav-item mr-2">
@@ -34,10 +35,8 @@ function Navigation(props) {
                             </li>
 
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link disabled" id="navAdminApplicationQueue" to={"#"}>Prašymų eilė</NavLink>
+                                <NavLink className="nav-link disabled" id="navAdminMyAccount" to={"#"}>Mano paskyra</NavLink>
                             </li>
-
-                            <span className="connected-user navbar-text mr-2">[{currentUser.state.username} ({currentUser.state.role})] </span>
 
                             <li className="nav-item nav-item mr-2">
                                 <LogoutContainer />

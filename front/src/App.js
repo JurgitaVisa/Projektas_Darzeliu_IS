@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import "./index.css";
 import "./App.css";
@@ -12,6 +12,9 @@ import UserListContainer from "./components/04Admin/UserListContainer";
 import KindergartenContainer from './components/05Kindengarten/KindergartenContainer';
 import UpdateProfileFormContainer from './components/06UpdateProfile/UpdateProfileFormContainer';
 
+import AdminNavBar from "./components/00Navigation/AdminNavBar";
+import UserNavBar from "./components/00Navigation/UserNavBar";
+import ManagerNavBar from "./components/00Navigation/ManagerNavBar";
 
 import AuthContext from "./components/11Context/AuthContext";
 // import http from "./components/10Services/httpService";
@@ -23,13 +26,15 @@ var initState = {
   role: null,
 };
 
-const checkIfLoggedIn = () => {
+const checkLogin = () => {
+
   if (sessionStorage.length > 0) {
     initState = {
       isAuthenticated: true,
       username: sessionStorage.getItem("username"),
       role: sessionStorage.getItem("role"),
     };
+
   } else
     initState = {
       isAuthenticated: false,
@@ -79,59 +84,79 @@ const reducer = (state, action) => {
 };
 
 function App() {
-  checkIfLoggedIn();
+  checkLogin();
   const [state, dispatch] = React.useReducer(reducer, initState);
 
-  return (
+  if (state.isAuthenticated){
+    switch (state.role) {
+      case "ADMIN":
+        return (
+          <AuthContext.Provider value={{ state, dispatch }}>
+            <div className="container-fluid px-0">
+              <AdminNavBar>
+                <Switch>
+                  <Route exact path="/" component={Admin} />
+                  <Route path="/home" component={Admin} />
+                  <Route path="/admin" component={Admin} />
+                  <Route path="/naudotojai" component={UserListContainer} />
+                  <Route path="*" component={NotFound} />
+                </Switch>
+              </AdminNavBar>
+            </div>
+          </AuthContext.Provider>
+        );
+      case "MANAGER":
+        return (
+          <AuthContext.Provider value={{ state, dispatch }}>
+            <div className="container-fluid px-0">
+              <ManagerNavBar>
+                <Switch>
+                  <Route exact path="/" component={Main} />{" "}
+                  {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
+                  <Route path="/home" component={Main} />{" "}
+                  {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
+                  <Route path="/darzeliai" component={KindergartenContainer} />
+                  <Route path="*" component={NotFound} />
+                </Switch>
+              </ManagerNavBar>
+            </div>
+          </AuthContext.Provider>
+        );
+      case "USER":
+        return (
+          <AuthContext.Provider value={{ state, dispatch }}>
+            <div className="container-fluid px-0">
+              <UserNavBar>
+                <Switch>
+                  <Route exact path="/" component={Main} />{" "}
+                  {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
+                  <Route path="/home" component={Main} />{" "}
+                  {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
+                  <Route path="/prasymai" component={Main} />{" "}
+                  {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
+                  <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
+                  <Route path="*" component={NotFound} />
+                </Switch>
+              </UserNavBar>
+            </div>
+          </AuthContext.Provider>
+        );
+      default:
+        return (
+          <AuthContext.Provider value={{ state, dispatch }}>
+            <div className="container-fluid px-0">
+              <NotFound />
+            </div>
+          </AuthContext.Provider>
+        );
+    }
+  } else return (
+    <div>
     <AuthContext.Provider value={{ state, dispatch }}>
-      {/* TODO prieiga prie puslapių pagal roles. Subuildinus neveikia neprisijungusių vartotojų peradresavimas į login ("/") puslapį
-      TODO Atskiri NavBar'ai useriui, adminui ir švietimo specialistui*/}
-
-      <div className="container-fluid px-0">
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => state.isAuthenticated ? <Redirect to="/home" /> : <Login />
-            }
-          />
-          <Route
-            path="/home"
-            render={() => state.isAuthenticated ? <Main /> : <Redirect to="/" />
-            }
-          />
-          <Route
-            path="/admin"
-            render={() => state.isAuthenticated ? (state.role === "ADMIN" ? <Admin /> : <NotFound />) : <Redirect to="/" />}
-          />
-          <Route
-            path="/naudotojai"
-            render={() => state.isAuthenticated ? (state.role === "ADMIN" ? <UserListContainer /> : <NotFound />) : <Redirect to="/" />}
-          />
-
-          <Route
-            path="/darzeliai"
-            render={() => state.isAuthenticated ? (state.role === "MANAGER" ? <KindergartenContainer /> : <NotFound />) : <Redirect to="/" />}
-          />
-
-          {/**Mano paskyra */}
-          <Route
-            path="/profilis/atnaujinti"
-            render={() => state.isAuthenticated ? <UpdateProfileFormContainer /> : <Redirect to="/" />}
-          />
-
-          <Route
-            path="*"
-            render={() =>
-              state.isAuthenticated ? <NotFound /> : <Redirect to="/" />
-            }
-          />
-          <Route component={NotFound} />
-        </Switch>
-
-      </div>
+      <Login />
     </AuthContext.Provider>
-  );
+    </div>
+  )
 }
 
 export default App;

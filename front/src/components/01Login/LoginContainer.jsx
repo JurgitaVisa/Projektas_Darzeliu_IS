@@ -97,7 +97,7 @@ export const LoginContainer = () => {
           <h3>Prisijungti</h3>
           <div className="form-group">
             <label htmlFor="username">
-              Naudotojo vardas <span className="required">*</span>
+              Naudotojo vardas <span className="fieldRequired">*</span>
             </label>
             <input
               type="text"
@@ -116,7 +116,7 @@ export const LoginContainer = () => {
 
           <div className="form-group">
             <label htmlFor="password">
-              Slaptažodis <span className="required">*</span>
+              Slaptažodis <span className="fieldRequired">*</span>
             </label>
             <input
               type="password"

@@ -8,7 +8,7 @@ import LogoutContainer from './LogoutContainer';
 import AuthContext from "../11Context/AuthContext";
 
 
-function Navigation() {
+function Navigation(props) {
     const currentUser = React.useContext(AuthContext);
     return (
         <div className="pb-4" >
@@ -44,6 +44,7 @@ function Navigation() {
                     </div>
                 </div>
             </nav>
+            <div>{props.children}</div>
         </div >
 
     );

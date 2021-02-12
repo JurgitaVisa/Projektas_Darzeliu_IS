@@ -31,7 +31,7 @@ function InputValidator(event) {
             //         target.setCustomValidity("")
             //     }
             // }
-            else if (target.id === "txtIdentificationCode") {
+            else if (target.id === "txtPersonalCode") {
                 if (target.validity.patternMismatch) {
                     target.setCustomValidity("Asmens koda sudaro 11 skaičių, įvesta skaičių: " + target.value.length)
                 }
@@ -61,6 +61,14 @@ function InputValidator(event) {
             else if (target.id === "txtTelNo") {
                 if (target.validity.patternMismatch) {
                     target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, įvesta skaičių: " + target.value.length)
+                }
+                else {
+                    target.setCustomValidity("");
+                }
+            }
+            else if (target.id === "txtNewPassword" || target.id === "txtNewPasswordRepeat") {
+                if(target.validity.patternMismatch) {
+                    target.setCustomValidity("Slaptažodis turi būti ne mažiau 8 simbolių ilgio, turėti bent vieną didžiąją ir mažąją raides ir bent vieną skaičių")
                 }
                 else {
                     target.setCustomValidity("");

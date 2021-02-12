@@ -3,6 +3,7 @@ import NavBar from '../00Navigation/NavBar';
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import inputValidator from '../08CommonComponents/InputValidator';
+import swal from 'sweetalert';
 
 export default class UpdateProfileFormContainer extends Component {
     constructor(props) {
@@ -15,7 +16,6 @@ export default class UpdateProfileFormContainer extends Component {
             address: "", 
             phone: "", 
             email: "", 
-            username: "",
             passwordUpdate: false
         }
         this.handleChange = this.handleChange.bind(this);
@@ -24,7 +24,7 @@ export default class UpdateProfileFormContainer extends Component {
 
     }
     componentDidMount() {
-        http.get(`${apiEndpoint}/api/users/admin@admin.lt`)
+        http.get(`${apiEndpoint}/api/users/user`)
             .then((response) => {
                 this.setState({
                     role: response.data.role,
@@ -212,6 +212,33 @@ export default class UpdateProfileFormContainer extends Component {
     handleSubmit(e) {
         e.preventDefault();
         console.log(this.state);
+        http.put(`${apiEndpoint}/api/users/update`, {
+            "address": this.state.address,
+            "email": this.state.email,
+            "name": this.state.name,
+            "password": this.state.password,
+            "personalCode": this.state.personalCode,
+            "phone": this.state.phone,
+            "role": this.state.role,
+            "surname": this.state.surname,
+            "username": this.state.username
+        })
+        .then((response) => {
+            swal({
+                title: "Užklausa atlikta sėkmingai",
+                text: "Naudotojo duomenys buvo sėkmingai atnaujinti",
+                icon: "success",
+                button: "Gerai"
+            })
+        })
+        .catch((error) => {
+            swal({
+                title: "Įvyko klaida",
+                text: error.response.data,
+                icon: "warning",
+                button: "Gerai"
+            })
+        })
     }
 
     /**Update password form */
@@ -297,7 +324,7 @@ export default class UpdateProfileFormContainer extends Component {
                             <p>Naudotojo vardas</p>
                         </div>
                         <div className="col-10">
-                            <p>{this.state.email}</p>
+                            <p>{this.state.username}</p>
                         </div>
                     </div>
                     <div className="row">

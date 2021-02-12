@@ -145,6 +145,21 @@ public class UserController {
 
 	}
 
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
+	@PutMapping(path = "/updatepassword/{oldPassword}/{newPassword}")
+	@ApiOperation(value = "Update logged in user password")
+	public ResponseEntity<String> updateUserPassword(
+			@PathVariable(value = "oldPassword") final String oldPassword,
+			@PathVariable(value = "newPassword") final String newPassword) {
+		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		if(userService.changePassword(currentUsername, oldPassword, newPassword)) {
+			return new ResponseEntity<String>("Slaptažodis pakeistas sėkmingai", HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<String>("Neteisingas senas slaptažodis", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	public UserService getUserService() {
 		return userService;
 	}

@@ -19,13 +19,15 @@ var initState = {
   role: null,
 };
 
-const checkIfLoggedIn = () => {
+const checkLogin = () => {
+
   if (sessionStorage.length > 0) {
     initState = {
       isAuthenticated: true,
       username: sessionStorage.getItem("username"),
       role: sessionStorage.getItem("role"),
     };
+
   } else
     initState = {
       isAuthenticated: false,
@@ -75,7 +77,7 @@ const reducer = (state, action) => {
 };
 
 function App() {
-  checkIfLoggedIn();
+  checkLogin();
   const [state, dispatch] = React.useReducer(reducer, initState);
 
   return (
@@ -87,10 +89,13 @@ function App() {
         <Switch>
           <Route
             exact
-            path="/"
-            render={() => state.isAuthenticated ? <Redirect to="/home" /> : <Login />
-            }
+            path="/" // TODO čia turi atsirasti nuoroda į component={checkIfLoggedIn}, kurį reikia perrašyti, kad patikrintų ir ar prisiloginęs, ir atitinkamai nukreiptų į history.push
+            render={() => state.isAuthenticated ? <Redirect to="/home" /> : <Login /> }
+            // component={checkLogin}          
           />
+
+{/* *** Šitų žemiau nebereikia, nes {checkIfLoggedIn} atlieka tą darbą *** */}
+
           <Route
             path="/home"
             render={() => state.isAuthenticated ? <Main /> : <Redirect to="/" />
@@ -104,6 +109,9 @@ function App() {
             path="/naudotojai"
             render={() => state.isAuthenticated ? (state.role === "ADMIN" ? <UserListContainer /> : <NotFound />) : <Redirect to="/" />}
           />
+
+{/* *** toliau jau reikia klaidingos nuorodos apdorojimo - vienas iš tų dviejų Route turėtų likti */}
+
           <Route
             path="*"
             render={() =>

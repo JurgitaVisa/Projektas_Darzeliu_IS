@@ -37,19 +37,19 @@ public class KindergartenInit {
 
 			InputStream inputStream = obj.getClass().getClassLoader().getResourceAsStream("darzeliu_adresai.txt");
 
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF8"))) {
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
 				String line;
 				while ((line = reader.readLine()) != null) {
 					String[] data = line.split(";");
 					Kindergarten kindergarten = new Kindergarten();
 					kindergarten.setId(data[0]);
-					kindergarten.setName(data[1].trim());
+					kindergarten.setName(data[1]);
 					kindergarten.setAddress(data[2]);
 					kindergarten.setElderate(data[3]);
 					kindergarten.setCapacityAgeGroup2to3(0);
 					kindergarten.setCapacityAgeGroup3to6(0);
 
-					service.createNewKindergarten(kindergarten);
+					gartenDao.save(kindergarten);
 				}
 				// apėjimas: pirmą įrašą ištrinam, nes kitaip meta validacijos klaidas
 				service.deleteByName("test");

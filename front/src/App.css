@@ -44,5 +44,31 @@
 }
 
 .swal-text {
-  color: black;
+  font-size: 1em;
+  color: #000;
+}
+
+.form-control {
+  font-size: 0.875rem;
+}
+
+.form-group, .row {
+  font-size: 0.875rem;
+}
+
+.table {
+  font-size: 0.875rem;
+  
+}
+
+.pb-3, .py-3 {
+  font-size: 1rem;
+}
+
+p {
+  font-size: 0.875rem;
+}
+
+.navbar-light.navbar-nav.nav-link.active{
+  font-size:1rem;
 }

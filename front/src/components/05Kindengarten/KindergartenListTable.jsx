@@ -1,16 +1,29 @@
 import React, { Component } from 'react';
 import '../../App.css';
+import InputValidator from './../08CommonComponents/InputValidator';
 
 class KindergartenListTable extends Component {
+
+    componentDidMount() {      
+        document.addEventListener("keydown", this.handler, false);       
+    }
+    componentWillUnmount() {       
+        document.removeEventListener("keydown", this.handler, false);
+    }
+
+    handler=(event)=>{
+        if(event.key === "Escape"){
+            this.props.onEscape(event);
+        }     
+    }
 
     render() {
         const {
             darzeliai,
             inEditMode,
             editRowId,
-            onEditData,
-            onSave,
-           // onCancel,
+            onEditData,           
+            onSave,           
             onChangeName,
             onChangeAddress,
             onChangeElderate,
@@ -23,7 +36,7 @@ class KindergartenListTable extends Component {
 
                 <div className="table-responsive-md">
 
-                    <table className="table">
+                    <table className="table" >
 
                         <thead className="no-top-border">
                             <tr>
@@ -36,7 +49,7 @@ class KindergartenListTable extends Component {
                                 <th>Ištrinti darželį</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
                             {
                                 darzeliai.map((darzelis) => (
                                     <tr key={darzelis.id}>
@@ -44,18 +57,20 @@ class KindergartenListTable extends Component {
                                         {inEditMode && editRowId === darzelis.id ?
                                             (
                                                 <React.Fragment>
-                                                    <td>
-                                                        {
+                                                    <td >
+                                                        {                                                           
                                                             <input
                                                                 type="text"
-                                                                className="form-control"
+                                                                className="form form-control"
                                                                 id="txtKindergartenName"
                                                                 name="name"
                                                                 value={darzelis.name}
-                                                                onChange={(event) => onChangeName(event.target.value)}
-                                                                // onInvalid={(e) => validateText(e)}                                                   
+                                                                onChange={(event) => onChangeName(event)}
+                                                                placeholder="Pavadinimas"    
+                                                               // onInvalid={(e)=>InputValidator(e)}                                                                                                              
                                                                 required
                                                             />
+                                                            
                                                         }
                                                     </td>
                                                     <td>
@@ -118,31 +133,12 @@ class KindergartenListTable extends Component {
                                                     </td>
                                                     <td>
                                                         {
-
                                                             <button
-                                                                className="btn btn-outline-primary btn-sm mr-1"
+                                                                className="btn btn-primary btn-sm btn-block"
                                                                 id="btnSaveUpdatedKindergarten"
                                                                 onClick={() => onSave({ id: darzelis.id, item: darzelis })}>
                                                                 Saugoti
                                                             </button>
-                                                            // <div className="row">
-                                                            //     <div className="col-6">
-                                                            //         <button
-                                                            //             className="btn btn-outline-primary btn-sm mr-1"
-                                                            //             id="btnSaveUpdatedKindergarten"
-                                                            //             onClick={() => onSave({ id: darzelis.id, item: darzelis })}>
-                                                            //             Saugoti
-                                                            //     </button>
-                                                            //     </div>
-                                                            //     <div className="col-6">
-                                                            //         <button
-                                                            //             className="btn btn-outline-secondary btn-sm"
-                                                            //             id="btnCancelUpdateKindergarten"
-                                                            //             onClick={() => onCancel()}>
-                                                            //             Atšaukti
-                                                            //     </button>
-                                                            //     </div>
-                                                            // </div>
                                                         }
                                                     </td>
                                                 </React.Fragment>

@@ -24,21 +24,18 @@ function Navigation() {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ml-auto ">
-                        {currentUser.state.role==="ADMIN" && ( 
+                        
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link" id="navAdmin" to={"/admin"}>Naudotojų administravimas</NavLink>
-                            </li>)}
+                                <NavLink className="nav-link disabled" id="navManagerApplicationQueue" to={"#"}>Prašymų eilė</NavLink>
+                            </li>
 
-                            {currentUser.state.role==="MANAGER" && ( 
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link" to={"/darzeliai"}>Darželių sąrašas</NavLink>
-                            </li>)}
+                                <NavLink className="nav-link" id="navManagerKindergartenList" to={"/darzeliai"}>Darželių sąrašas</NavLink>
+                            </li>
 
-                            {/* <li className="nav-item nav-item mr-4">
-                                <NavLink className="nav-link" to={"/naudotojai"}>Naudotojų sąrašas</NavLink>
-                            </li> */}
+                            <span className="connected-user navbar-text mr-2">[{currentUser.state.username} ({currentUser.state.role})] </span>
 
-                            <li className="nav-item nav-item mr-2">
+                            <li className="nav-item nav-item mr-2" id="navManagerLogout">
                                 <LogoutContainer />
                             </li>
 

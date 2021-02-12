@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 
+import '../../App.css';
+
 import Table from '../08CommonComponents/Table';
-import Modal from '../08CommonComponents/Modal';
+//import Modal from '../08CommonComponents/Modal';
 
 class UserListTable extends Component {
 
     columns = [
-        {                     
+        {                              
             key: 'username',
             path: 'username',
             label: 'Naudotojo vardas',
@@ -16,26 +18,21 @@ class UserListTable extends Component {
         {            
             key: 'role',
             path: 'role',
-            label: 'Rolė',
-            content: naudotojas => <span>{naudotojas.role}</span>
+            label: 'Naudotojo rolė',
+            content: naudotojas => <span>{naudotojas.role === "ADMIN" ? "Administratorius" : (naudotojas.role === "USER" ? "Vaiko atstovas" : "Švietimo specialistas")}</span>
         },
 
-        {           
-            key: 'surname',
-            path: 'surname',
-            label: 'Vardas, pavardė',
-            content: naudotojas => <span>{naudotojas.name} {naudotojas.surname}</span>
-        },
+       
         {            
             key: 'update',
             label: 'Pirminis slaptažodis',
-            content: naudotojas => <button onClick={() => this.props.onRestorePassword(naudotojas)} className="btn btn-outline-secondary btn-sm btn-block">Atkurti</button>
+            content: naudotojas => <button onClick={() => this.props.onRestorePassword(naudotojas)} id="btnRestoreUserPassword" className="btn btn-outline-primary btn-sm btn-block">Atkurti</button>
         },
        
         {            
             key: 'delete',
             label: 'Ištrinti naudotoją',
-            content: naudotojas => <button onClick={() => this.props.onDelete(naudotojas)} className="btn btn-outline-danger btn-sm btn-block">Ištrinti</button>
+            content: naudotojas => <button onClick={() => this.props.onDelete(naudotojas)} id="btnDeleteUser" className="btn btn-outline-danger btn-sm btn-block">Ištrinti</button>
            
         }
         

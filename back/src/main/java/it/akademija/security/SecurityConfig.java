@@ -56,9 +56,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().authorizeRequests()
 				// be saugumo UI dalis ir swaggeris
-				.antMatchers("/", "/swagger-ui/", "/hello/**").permitAll()
+				.antMatchers("/", "/swagger-ui/").permitAll()
 				// visi /api/ saugus (dar galima .anyRequest() )
-				.antMatchers("/home/**", "/api/**", "/admin/**", "/naudotojai/**").authenticated()
+				.antMatchers("/home/**", "/api/**", "/admin/**", "/naudotojai/**", "/hello/**").authenticated()
 				.and().formLogin() // leidziam login
 				// prisijungus
 				.successHandler(new AuthenticationSuccessHandler() {

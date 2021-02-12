@@ -10,9 +10,9 @@ class TableBody extends Component {
 
             <tbody >
                 {data.map(item =>
-                    <tr key={item.name}>
+                    <tr key={item.id}>
                         {columns.map(column =>
-                            <td key={item.name + column.key}>{column.content(item)}</td>
+                            <td  key={item.id + column.key}>{column.content(item)}</td>
                         )}
                     </tr>
                 )}

@@ -48,32 +48,32 @@ public class UserService implements UserDetailsService {
 	public void createUser(UserDTO userData) throws Exception {
 		User newUser = new User();
 
-		if (userData.getRole().equals("USER") && ((userData.getPhone() == null || userData.getPhone().isEmpty())
-				|| (userData.getAddress() == null || userData.getAddress().isEmpty())
-				|| (userData.getPersonalCode() == null || userData.getPersonalCode().isEmpty())
-				|| (userData.getBirthdate() == null))) {
-
-			throw new Exception("Negali buti tuscia");
+		if (userData.getRole().equals("USER")) {
+			ParentDetails details = new ParentDetails();
+			details.setAddress(userData.getAddress());
+			details.setEmail(userData.getEmail());
+			details.setName(userData.getName());
+			details.setPersonalCode(userData.getPersonalCode());
+			details.setPhone("370" + userData.getPhone());
+			details.setSurname(userData.getSurname());
+			newUser.setParentDetails(details);
 		}
 
-		newUser.setRole(Role.valueOf(userData.getRole()));
 		newUser.setName(userData.getName());
 		newUser.setSurname(userData.getSurname());
-		newUser.setBirthdate(userData.getBirthdate());
-		newUser.setPersonalCode(userData.getPersonalCode());
-		newUser.setAddress(userData.getAddress());
-		newUser.setPhone(userData.getPhone());
 		newUser.setEmail(userData.getEmail());
+		newUser.setRole(Role.valueOf(userData.getRole()));
 		newUser.setUsername(userData.getUsername());
 		newUser.setPassword(encoder.encode(userData.getUsername()));
-		userDao.save(newUser);
-
-		if (userData.getRole().equals("ADMIN") && userDao.findByRole(Role.ADMIN).size() > 1
-				&& userDao.findByUsername("admin") != null) {
-			userDao.deleteByUsername("admin");
-		}
-
+		userDao.saveAndFlush(newUser);
 	}
+
+	/*
+	 * if (userData.getRole().equals("ADMIN") &&
+	 * userDao.findByRole(Role.ADMIN).size() > 1 &&
+	 * userDao.findByUsername("admin@admin.lt") != null) {
+	 * userDao.deleteByUsername("admin@admin.lt"); }
+	 */
 
 	/**
 	 * 
@@ -87,7 +87,8 @@ public class UserService implements UserDetailsService {
 	public void deleteUser(String username) {
 
 		if (findByUsername(username).getRole().equals(Role.ADMIN) && userDao.findByRole(Role.ADMIN).size() == 1) {
-			userDao.save(new User(Role.ADMIN, "admin", "admin", "admin", encoder.encode("laikinas")));
+			userDao.save(new User(Role.ADMIN, "admin", "admin", "admin@admin.lt", "admin@admin.lt",
+					encoder.encode("admin@admin.lt")));
 		}
 
 		userDao.deleteByUsername(username);
@@ -103,16 +104,24 @@ public class UserService implements UserDetailsService {
 
 	@Transactional(readOnly = true)
 	public List<UserInfo> getAllUsers() {
-		List<User> users = userDao.findAll();
-		return users.stream().map(user -> new UserInfo(user.getUserId(), user.getRole().name(), user.getName(),
-				user.getSurname(), user.getUsername())).collect(Collectors.toList());
+		List<User> users = userDao.findAllByOrderByUserIdDesc();
+
+		return users.stream().map(user -> new UserInfo(user.getUserId(), user.getRole().name(), user.getUsername()))
+				.collect(Collectors.toList());
 	}
 
 	@Transactional
 	public UserInfo getUserDetails(String username) {
 		User user = userDao.findByUsername(username);
-		return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(), user.getBirthdate(),
-				user.getAddress(), user.getPersonalCode(), user.getPhone(), user.getEmail(), user.getUsername());
+		if (user.getRole().equals(Role.USER)) {
+			return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(),
+					user.getParentDetails().getPersonalCode(), user.getParentDetails().getAddress(), 
+					user.getParentDetails().getPhone(), user.getEmail(), user.getUsername());
+
+		}
+		return new UserInfo(user.getUserId(), user.getRole().name(), user.getName(), user.getSurname(),
+				user.getUsername());
+
 	}
 
 	/**
@@ -126,20 +135,6 @@ public class UserService implements UserDetailsService {
 	public User findByUsername(String username) {
 
 		return userDao.findByUsername(username);
-	}
-
-	/**
-	 * 
-	 * Finds user with a specified personal code. Don't return User entity via REST.
-	 * 
-	 * @param personalCode
-	 * @return User entity (includes sensitive data)
-	 */
-
-	@Transactional(readOnly = true)
-	public User findByPersonalCode(String personalCode) {
-
-		return userDao.findByPersonalCode(personalCode);
 	}
 
 	/**
@@ -167,17 +162,23 @@ public class UserService implements UserDetailsService {
 	 */
 	@Transactional
 	public void updateUserData(UserDTO userData, String username) {
+
 		User user = findByUsername(username);
+		ParentDetails details = new ParentDetails();
+
+		if (userData.getRole().equals("USER")) {
+			details.setAddress(userData.getAddress());
+			details.setPersonalCode(userData.getPersonalCode());
+			details.setPhone("370" + userData.getPhone());
+			details.setEmail(userData.getEmail());
+			details.setName(userData.getName());
+			details.setSurname(userData.getSurname());
+			user.setParentDetails(details);
+		}
 
 		user.setName(userData.getName());
 		user.setSurname(userData.getSurname());
-		user.setAddress(userData.getAddress());
-		user.setBirthdate(userData.getBirthdate());
-		user.setPersonalCode(userData.getPersonalCode());
-		user.setPhone(userData.getPhone());
 		user.setEmail(userData.getEmail());
-		user.setUsername(userData.getUsername());
-		user.setPassword(encoder.encode(userData.getPassword()));
 
 		userDao.save(user);
 

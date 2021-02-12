@@ -5,11 +5,12 @@ class TableHeader extends Component {
 
     render() {
         return (
-            <thead>
-                <tr>
+            <thead className="no-top-border">
+                <tr >
                     {this.props.columns.map(column =>
-                        <th
+                        <th 
                             key={column.key}
+                            id={column.key}
                             scope="col">
                             {column.label}
                         </th>)}

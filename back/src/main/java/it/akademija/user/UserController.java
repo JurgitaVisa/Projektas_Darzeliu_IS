@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,23 +49,14 @@ public class UserController {
 			throws Exception {
 
 		LOG.info("** Usercontroller: kuriamas naujas naudotojas **");
-		if (result.hasErrors()) {
-			return new ResponseEntity<String>("Neteisingi duomenys!", HttpStatus.BAD_REQUEST);
-		}
 
-		if (userService.findByUsername(userInfo.getUsername()) == null) {
+		if (userService.findByUsername(userInfo.getUsername()) != null) {
+			return new ResponseEntity<String>("Toks naudotojas jau egzistuoja!", HttpStatus.BAD_REQUEST);
+		} else {
 
 			userService.createUser(userInfo);
 			return new ResponseEntity<String>("Naudotojas sukurtas sėkmingai!", HttpStatus.CREATED);
 		}
-
-		if (userInfo.getRole().equals("USER") && userService.findByPersonalCode(userInfo.getPersonalCode()) == null) {
-			userService.createUser(userInfo);
-			return new ResponseEntity<String>("Naudotojas sukurtas sėkmingai!", HttpStatus.CREATED);
-		}
-
-		return new ResponseEntity<String>("Toks naudotojas jau egzistuoja!", HttpStatus.BAD_REQUEST);
-
 	}
 
 	/**
@@ -73,6 +65,7 @@ public class UserController {
 	 * 
 	 * @param username
 	 */
+
 	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping(path = "/admin/delete/{username}")
 	@ApiOperation(value = "Delete user", notes = "Deletes user by username")
@@ -101,9 +94,12 @@ public class UserController {
 	}
 
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
-	@GetMapping(path = "/{username}")
-	@ApiOperation(value = "Get details for user with specified username")
-	public UserInfo getUserDetails(@ApiParam(value = "Username", required = true) @PathVariable final String username) {
+	@GetMapping(path = "/user")
+	@ApiOperation(value = "Get details for logged in user")
+	public UserInfo getOneUser() {
+
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
 		if (userService.findByUsername(username) != null) {
 
 			LOG.info("** Usercontroller: ieškomas naudotojas vardu [{}] **", username);
@@ -137,17 +133,16 @@ public class UserController {
 	}
 
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
-	@PutMapping(path = "/update/{username}")
-	@ApiOperation(value = "Update user datails")
-	public ResponseEntity<String> updateUserData(@PathVariable final String username, @RequestBody UserDTO userData) {
+	@PutMapping(path = "/update")
+	@ApiOperation(value = "Update logged in user details")
+	public ResponseEntity<String> updateUserData(@RequestBody UserDTO userData) {
 
-		if (userService.findByUsername(username) != null) {
-			userService.updateUserData(userData, username);
-			LOG.info("** Usercontroller: keiciami duomenys naudotojui vardu [{}] **", username);
-			return new ResponseEntity<String>("Duomenys pakeisti sėkmingai", HttpStatus.OK);
-		}
+		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+		userService.updateUserData(userData, currentUserName);
+		LOG.info("** Usercontroller: keiciami duomenys naudotojui vardu [{}] **", currentUserName);
 
-		return new ResponseEntity<String>("Naudotojas tokiu vardu nerastas", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("Duomenys pakeisti sėkmingai", HttpStatus.OK);
+
 	}
 
 	public UserService getUserService() {

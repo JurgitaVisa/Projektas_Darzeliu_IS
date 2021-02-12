@@ -9,9 +9,11 @@ import Main from "./components/02Main/MainContainer";
 import NotFound from "./components/03NotFound/NotFound";
 import Admin from "./components/04Admin/AdminContainer";
 import UserListContainer from "./components/04Admin/UserListContainer";
+import KindergartenContainer from './components/05Kindengarten/KindergartenContainer';
+
 import AuthContext from "./components/11Context/AuthContext";
-import http from "./components/10Services/httpService";
-import apiEndpoint from "./components/10Services/endpoint";
+// import http from "./components/10Services/httpService";
+// import apiEndpoint from "./components/10Services/endpoint";
 
 var initState = {
   isAuthenticated: false,
@@ -110,7 +112,10 @@ function App() {
             render={() => state.isAuthenticated ? (state.role === "ADMIN" ? <UserListContainer /> : <NotFound />) : <Redirect to="/" />}
           />
 
-{/* *** toliau jau reikia klaidingos nuorodos apdorojimo - vienas iš tų dviejų Route turėtų likti */}
+          <Route
+            path="/darzeliai"
+            render={() => state.isAuthenticated ? (state.role === "MANAGER" ? <KindergartenContainer /> : <NotFound />) : <Redirect to="/" />}
+          />
 
           <Route
             path="*"
@@ -120,6 +125,7 @@ function App() {
           />
           <Route component={NotFound} />
         </Switch>
+
       </div>
     </AuthContext.Provider>
   );

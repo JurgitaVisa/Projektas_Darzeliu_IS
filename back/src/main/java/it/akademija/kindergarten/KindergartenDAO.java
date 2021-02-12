@@ -1,10 +1,15 @@
 package it.akademija.kindergarten;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface KindergartenDAO extends JpaRepository<Kindergarten, Long> {
+public interface KindergartenDAO extends JpaRepository<Kindergarten, String> {
 
-	Kindergarten findByNameIgnoreCase(String name);
-	
-	
+	void deleteByName(String name);
+
+	Page<Kindergarten> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
+	Page<Kindergarten> findAll(Pageable pageable);
+
 }

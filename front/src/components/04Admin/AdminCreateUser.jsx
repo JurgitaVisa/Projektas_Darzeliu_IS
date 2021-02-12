@@ -166,7 +166,7 @@ export default class AdminCreateUser extends Component {
                             <input
                                 type="text"
                                 className="form-control"
-                                id="txtIdentificationCode"
+                                id="txtPersonalCode"
                                 name="identificationCode"
                                 value={this.state.identificationCode}
                                 onChange={this.handleChange}

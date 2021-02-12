@@ -9,18 +9,19 @@ export default class UpdateProfileFormContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            role: "", 
-            name: "", 
-            surname: "", 
-            personalCode: "", 
-            address: "", 
-            phone: "", 
-            email: "", 
+            role: "",
+            name: "",
+            surname: "",
+            personalCode: "",
+            address: "",
+            phone: "",
+            email: "",
             passwordUpdate: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUpdatePasswordButton = this.handleUpdatePasswordButton.bind(this);
+        this.handleUpdatePasswordSubmit = this.handleUpdatePasswordSubmit.bind(this);
 
     }
     componentDidMount() {
@@ -247,40 +248,56 @@ export default class UpdateProfileFormContainer extends Component {
         if(this.state.passwordUpdate) {
             return (
                 <div className="form">
-                    <div className="row form-group">
-                        <label htmlFor="txtOldPassword">Senas slaptažodis <span className="fieldRequired">*</span></label>
-                        <input
-                            type="password"
-                            id="txtOldPassword"
-                            className="form-control"
-                        />
-                    </div>
-                    <div className="row">
-                        <label htmlFor="txtNewPassword">Įveskite naują slaptažodį</label>
-                    </div>
-                    <div className="row form-group">
-                        <p className="fieldRequired">Slaptažodis turi būti ne mažiau 8 simbolių ilgio, turėti bent vieną didžiąją ir mažąją raides ir bent vieną skaičių.</p>
-                        <input
-                            type="password"
-                            id="txtNewPassword"
-                            className="form-control"
-                            required
-                            pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
-                        />
-                    </div>
-                    <div className="row form-group">
-                        <label htmlFor="txtRepeatNewPassword">Pakartokite naują slaptažodį</label>
-                        <input
-                            type="password"
-                            id="txtRepeatNewPassword"
-                            className="form-control"
-                            required
-                            pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
-                        />
-                    </div>
-                    <div className="row form-group">
-                        <button className="btn btn-primary">Išsaugoti</button>
-                    </div>
+                    <form onSubmit={this.handleUpdatePasswordSubmit}>
+                        <div className="row form-group">
+                            <label htmlFor="txtOldPassword">Senas slaptažodis <span className="fieldRequired">*</span></label>
+                            <input
+                                type="password"
+                                id="txtOldPassword"
+                                name="oldPassword"
+                                className="form-control"
+                                placeholder="Senas slaptažodis"
+                                onChange={this.handleChange}
+                                onInvalid={(e) => inputValidator(e)}
+                                required
+                                pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
+                            />
+                        </div>
+                        <div className="row">
+                            <label htmlFor="txtNewPassword">Įveskite naują slaptažodį</label>
+                        </div>
+                        <div className="row form-group">
+                            <p className="fieldRequired">Slaptažodis turi būti ne mažiau 8 simbolių ilgio, turėti bent vieną didžiąją ir mažąją raides ir bent vieną skaičių.</p>
+                            <input
+                                type="password"
+                                id="txtNewPassword"
+                                name="newPassword"
+                                className="form-control"
+                                placeholder="Naujas slaptažodis"
+                                onChange={this.handleChange}
+                                onInvalid={(e) => inputValidator(e)}
+                                required
+                                pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
+                            />
+                        </div>
+                        <div className="row form-group">
+                            <label htmlFor="txtRepeatNewPassword">Pakartokite naują slaptažodį</label>
+                            <input
+                                type="password"
+                                id="txtNewPasswordRepeat"
+                                name="newPasswordRepeat"
+                                className="form-control"
+                                placeholder="Pakartokite naują slaptažodį"
+                                onChange={this.handleChange}
+                                onInvalid={(e) => inputValidator(e)}
+                                required
+                                pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
+                            />
+                        </div>
+                        <div className="row form-group">
+                            <button type="submit" className="btn btn-primary">Išsaugoti</button>
+                        </div>
+                    </form>
                 </div>
             )
         }
@@ -301,6 +318,26 @@ export default class UpdateProfileFormContainer extends Component {
         this.setState({
             passwordUpdate: true
         })
+    }
+
+    /** Update password submit handler */
+    
+    handleUpdatePasswordSubmit(e) {
+        e.preventDefault();
+        if(this.state.newPassword!==this.state.newPasswordRepeat) {
+            swal({
+                title: "Įvyko klaida",
+                text: "Slaptažodžiai nesutampa.",
+                icon: "warning",
+                button: "Gerai"
+            })
+            console.log("Slaptazodziai nesutampa!");
+        }
+        else {
+            /**
+             * TODO:
+             * Send new password to server */
+        }
     }
 
     render(props) {

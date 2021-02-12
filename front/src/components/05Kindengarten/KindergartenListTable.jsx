@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../../App.css';
+import InputValidator from './../08CommonComponents/InputValidator';
 
 class KindergartenListTable extends Component {
 
@@ -21,7 +22,7 @@ class KindergartenListTable extends Component {
             darzeliai,
             inEditMode,
             editRowId,
-            onEditData,
+            onEditData,           
             onSave,           
             onChangeName,
             onChangeAddress,
@@ -56,18 +57,20 @@ class KindergartenListTable extends Component {
                                         {inEditMode && editRowId === darzelis.id ?
                                             (
                                                 <React.Fragment>
-                                                    <td>
-                                                        {
+                                                    <td >
+                                                        {                                                           
                                                             <input
                                                                 type="text"
-                                                                className="form-control"
+                                                                className="form form-control"
                                                                 id="txtKindergartenName"
                                                                 name="name"
                                                                 value={darzelis.name}
-                                                                onChange={(event) => onChangeName(event.target.value)}
-                                                                // onInvalid={(e) => validateText(e)}                                                   
+                                                                onChange={(event) => onChangeName(event)}
+                                                                placeholder="Pavadinimas"    
+                                                               // onInvalid={(e)=>InputValidator(e)}                                                                                                              
                                                                 required
                                                             />
+                                                            
                                                         }
                                                     </td>
                                                     <td>
@@ -131,7 +134,7 @@ class KindergartenListTable extends Component {
                                                     <td>
                                                         {
                                                             <button
-                                                                className="btn btn-outline-primary btn-sm mr-1"
+                                                                className="btn btn-primary btn-sm btn-block"
                                                                 id="btnSaveUpdatedKindergarten"
                                                                 onClick={() => onSave({ id: darzelis.id, item: darzelis })}>
                                                                 Saugoti

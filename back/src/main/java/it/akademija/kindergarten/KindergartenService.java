@@ -15,7 +15,7 @@ public class KindergartenService {
 
 	@Autowired
 	private KindergartenDAO gartenDao;
-	
+
 	/**
 	 * Get all kindergarten ID's, names and addresses
 	 * 
@@ -24,7 +24,8 @@ public class KindergartenService {
 	@Transactional(readOnly = true)
 	public List<KindergartenDTO> getAllKindergartenNames() {
 		List<Kindergarten> kindergartens = gartenDao.findAll(Sort.by("name").ascending());
-		return kindergartens.stream().map(garten->new KindergartenDTO(garten.getId(), garten.getName(), garten.getAddress(), garten.getElderate())).collect(Collectors.toList());
+		return kindergartens.stream().map(garten -> new KindergartenDTO(garten.getId(), garten.getName(),
+				garten.getAddress(), garten.getElderate())).collect(Collectors.toList());
 	}
 
 	/**
@@ -35,13 +36,24 @@ public class KindergartenService {
 	 * @return page from kindergarten database
 	 */
 	@Transactional(readOnly = true)
-	public Page<Kindergarten> getKindergartenPage(String name, Pageable pageable) {
-		if(name!=null) {
-			return gartenDao.findByNameContainingIgnoreCase(name, pageable);
-		}
+	public Page<Kindergarten> getKindergartenPage(Pageable pageable) {
+		
 		return gartenDao.findAll(pageable);
 	}
-
+	
+	/**
+	 * 
+	 * Returns a page of Kindergarten filtered by name containing text with specified page number and page size
+	 * 
+	 * @param pageable
+	 * @return filtered page from kindergarten database
+	 */
+	@Transactional(readOnly = true)
+	public Page<Kindergarten> getKindergartenPageFilteredByName(String name, Pageable pageable) {
+		
+			return gartenDao.findByNameContainingIgnoreCase(name, pageable);
+		
+	}
 
 	/**
 	 * Save new kindergarten to database
@@ -80,9 +92,9 @@ public class KindergartenService {
 		gartenDao.deleteById(id);
 
 	}
-	
+
 	/**
-	 * Update kindergarten 
+	 * Update kindergarten
 	 * 
 	 * @param currentInfo
 	 * @param kindergarten
@@ -90,16 +102,16 @@ public class KindergartenService {
 	@Transactional
 	public void updateKindergarten(String id, Kindergarten updatedInfo) {
 		Kindergarten current = gartenDao.findById(id).orElse(null);
-		
+
 		current.setName(updatedInfo.getName());
 		current.setAddress(updatedInfo.getAddress());
 		current.setElderate(updatedInfo.getElderate());
 		current.setCapacityAgeGroup2to3(updatedInfo.getCapacityAgeGroup2to3());
 		current.setCapacityAgeGroup3to6(updatedInfo.getCapacityAgeGroup3to6());
-		
-		gartenDao.save(current);		
+
+		gartenDao.save(current);
 	}
-	
+
 	/**
 	 * Delete kindergarten by name. Used during DB setup
 	 * 
@@ -110,7 +122,18 @@ public class KindergartenService {
 		gartenDao.deleteByName(name);
 	}
 
-	
+	/**
+	 * 
+	 * Get one by name
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public List<Kindergarten> getOneByName(String name) {
+
+		return gartenDao.findByNameContainingIgnoreCase(name);
+	}
+
 	public KindergartenDAO getGartenDao() {
 		return gartenDao;
 	}
@@ -118,6 +141,5 @@ public class KindergartenService {
 	public void setGartenDao(KindergartenDAO gartenDao) {
 		this.gartenDao = gartenDao;
 	}
-	
 
 }

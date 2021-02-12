@@ -8,6 +8,7 @@ import '../../App.css';
 import KindergartenListTable from './KindergartenListTable';
 import Pagination from './../08CommonComponents/Pagination';
 import SearchBox from './../08CommonComponents/SeachBox';
+import InputValidator from './../08CommonComponents/InputValidator';
 
 
 export class KindergartenListContainer extends Component {
@@ -20,8 +21,8 @@ export class KindergartenListContainer extends Component {
             currentPage: 1,
             totalPages: 0,
             totalElements: 0,
-            numberOfElements: 0,   
-            searchQuery:"",         
+            numberOfElements: 0,
+            searchQuery: "",
             inEditMode: false,
             editRowId: "",
             editedKindergarten: null
@@ -34,14 +35,14 @@ export class KindergartenListContainer extends Component {
     }
 
     getKindergartenInfo(currentPage, name) {
-        
+
         const { pageSize } = this.state;
         currentPage -= 1;
 
         var uri = `${apiEndpoint}/api/darzeliai/manager/page?page=${currentPage}&size=${pageSize}`;
-         
+
         if (name !== "") {
-            uri =  `${apiEndpoint}/api/darzeliai/manager/page?name=${name}&page=${currentPage}&size=${pageSize}`;
+            uri = `${apiEndpoint}/api/darzeliai/manager/page/${name}?page=${currentPage}&size=${pageSize}`;
 
         }
 
@@ -72,8 +73,8 @@ export class KindergartenListContainer extends Component {
 
     handleSearch = (e) => {
 
-        const name = e.currentTarget.value; 
-        this.setState({searchQuery: name});
+        const name = e.currentTarget.value;
+        this.setState({ searchQuery: name });
         this.getKindergartenInfo(1, name);
     }
 
@@ -129,9 +130,10 @@ export class KindergartenListContainer extends Component {
         }
     }
 
-    handleChangeName = (newName) => {
+    handleChangeName = (event) => {
         const kindergarten = this.state.editedKindergarten;
-        kindergarten.name = newName;
+       // InputValidator(event);
+        kindergarten.name = event.target.value;
         this.setState({ editedKindergarten: kindergarten });
     }
 
@@ -159,6 +161,10 @@ export class KindergartenListContainer extends Component {
         this.setState({ editedKindergarten: kindergarten });
     }
 
+    validate = (e) => {
+        InputValidator(e);
+    }
+
     handleSaveEdited = () => {
         const { editedKindergarten, editRowId } = this.state;
 
@@ -179,7 +185,7 @@ export class KindergartenListContainer extends Component {
         this.getKindergartenInfo(page, this.state.searchQuery);
     };
 
-    
+
 
     render() {
 

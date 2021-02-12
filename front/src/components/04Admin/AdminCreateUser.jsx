@@ -318,7 +318,7 @@ export default class AdminCreateUser extends Component {
                         </div>
                     </div>
                     <div className="mb-3">
-                        <button className="btn btn-danger float-left" onClick={this.resetState} id="btnClean">Išvalyti</button>
+                        <button className="btn btn-outline-danger float-left" onClick={this.resetState} id="btnClean">Išvalyti</button>
                         <button type="submit" className="btn btn-primary float-right" id="btnCreate">Sukurti</button>
                     </div>
                 </form>

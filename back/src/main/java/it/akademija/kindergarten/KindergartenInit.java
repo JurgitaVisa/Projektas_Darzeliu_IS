@@ -37,7 +37,7 @@ public class KindergartenInit {
 
 			InputStream inputStream = obj.getClass().getClassLoader().getResourceAsStream("darzeliu_adresai.txt");
 
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF8"))) {
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
 				String line;
 				while ((line = reader.readLine()) != null) {
 					String[] data = line.split(";");

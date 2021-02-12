@@ -53,7 +53,7 @@ public class KindergartenController {
 	}
 
 	/**
-	 * Get specified Kindergarten information page
+	 * Get specified Kindergarten information page 
 	 * 
 	 * @return page of kindergarten information
 	 */
@@ -61,7 +61,7 @@ public class KindergartenController {
 	@GetMapping("/manager/page")
 	@ApiOperation(value = "Get kindergarten information pages")
 	public ResponseEntity<Page<Kindergarten>> getKindergartenPage(
-			@RequestParam(required = false) String name,
+			
 			@RequestParam("page") int page, 
 			  @RequestParam("size") int size) {
 
@@ -69,7 +69,28 @@ public class KindergartenController {
 						
 		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
 		
-		return new ResponseEntity<>(kindergartenService.getKindergartenPage(name, pageable), HttpStatus.OK);
+		return new ResponseEntity<>(kindergartenService.getKindergartenPage(pageable), HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * Get specified Kindergarten information page filtered by name
+	 * 
+	 * @return page of kindergarten information
+	 */
+	@Secured({ "ROLE_MANAGER" })
+	@GetMapping("/manager/page/{name}")
+	@ApiOperation(value = "Get kindergarten information pages")
+	public ResponseEntity<Page<Kindergarten>> getKindergartenPageFilteredByName(
+			@PathVariable String name,
+			@RequestParam("page") int page, 
+			  @RequestParam("size") int size) {
+
+		Sort.Order order = new Sort.Order(Sort.Direction.ASC, "name").ignoreCase();
+						
+		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
+		
+		return new ResponseEntity<>(kindergartenService.getKindergartenPageFilteredByName(name, pageable), HttpStatus.OK);
 	}
 
 	/**

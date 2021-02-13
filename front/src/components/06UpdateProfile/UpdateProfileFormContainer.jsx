@@ -37,7 +37,14 @@ export default class UpdateProfileFormContainer extends Component {
                     email: response.data.username,
                     username: response.data.username
                 })
-                console.log(response);
+            })
+            .catch((error) => {
+                swal({
+                    title: "Įvyko klaida",
+                    text: "Įvyko klaida perduodant duomenis iš serverio.",
+                    icon: "error",
+                    button: "Gerai"
+                })
             })
     }
     
@@ -212,7 +219,6 @@ export default class UpdateProfileFormContainer extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state);
         http.put(`${apiEndpoint}/api/users/update`, {
             "address": this.state.address,
             "email": this.state.email,
@@ -257,6 +263,7 @@ export default class UpdateProfileFormContainer extends Component {
                                 name="oldPassword"
                                 className="form-control"
                                 placeholder="Senas slaptažodis"
+                                value={this.state.oldPassword}
                                 onChange={this.handleChange}
                                 onInvalid={(e) => inputValidator(e)}
                                 required
@@ -273,6 +280,7 @@ export default class UpdateProfileFormContainer extends Component {
                                 name="newPassword"
                                 className="form-control"
                                 placeholder="Naujas slaptažodis"
+                                value={this.state.newPassword}
                                 onChange={this.handleChange}
                                 onInvalid={(e) => inputValidator(e)}
                                 required
@@ -287,6 +295,7 @@ export default class UpdateProfileFormContainer extends Component {
                                 name="newPasswordRepeat"
                                 className="form-control"
                                 placeholder="Pakartokite naują slaptažodį"
+                                value={this.state.newPasswordRepeat}
                                 onChange={this.handleChange}
                                 onInvalid={(e) => inputValidator(e)}
                                 required
@@ -330,7 +339,6 @@ export default class UpdateProfileFormContainer extends Component {
                 icon: "warning",
                 button: "Gerai"
             })
-            console.log("Slaptazodziai nesutampa!");
         }
         else {
             http.put(`${apiEndpoint}/api/users/updatepassword/${this.state.oldPassword}/${this.state.newPassword}`, {
@@ -340,6 +348,12 @@ export default class UpdateProfileFormContainer extends Component {
                     text: "Naudotojo slaptažodis atnaujintas sėkmingai",
                     icon: "success",
                     button: "Gerai"
+                }).then(() => {
+                    this.setState({
+                        oldPassword: "",
+                        newPassword: "",
+                        newPasswordRepeat: ""
+                    })
                 })
             })
             .catch((error) => {

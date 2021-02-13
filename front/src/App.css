@@ -43,8 +43,10 @@
   background-color:#007bff;
 }
 
+
+/* Neveikia font-size: em */
 .swal-text {
-  font-size: 1em;
+  font-size: 16px;
   color: #000;
 }
 

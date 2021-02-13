@@ -153,6 +153,26 @@ public class UserService implements UserDetailsService {
 	}
 
 	/**
+	 * Changes users password
+	 * @param username
+	 * @param oldPassword
+	 * @param newPassword
+	 * @return
+	 */
+	@Transactional
+	public boolean changePassword(String username, String oldPassword, String newPassword) {
+		User user = findByUsername(username);
+		String currentPassword = user.getPassword();
+		if(encoder.matches(oldPassword, currentPassword)) {
+			user.setPassword(encoder.encode(newPassword));
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	/**
 	 * 
 	 * Updates fields for user with specified username. Field for setting user role
 	 * can not be updated. Any user can update their own data.

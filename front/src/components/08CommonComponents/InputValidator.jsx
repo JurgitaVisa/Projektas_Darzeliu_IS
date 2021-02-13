@@ -74,6 +74,9 @@ function InputValidator(event) {
                     target.setCustomValidity("");
                 }
             }
+            else if(target.id === "txtOldPassword") {
+                target.setCustomValidity("");
+            }
         }
 }
 

@@ -271,6 +271,7 @@ export default class AdminCreateUser extends Component {
                 console.log(this.state);
                 console.log(response);
                 swal({
+                    title: "Užklausa atlikta sėkmingai",
                     text: "Naujas naudotojas buvo sėkmingai sukurtas.",
                     icon: "success",
                     button: "Gerai"

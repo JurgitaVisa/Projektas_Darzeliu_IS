@@ -8,9 +8,6 @@ import '../../App.css';
 import KindergartenListTable from './KindergartenListTable';
 import Pagination from './../08CommonComponents/Pagination';
 import SearchBox from './../08CommonComponents/SeachBox';
-import InputValidator from './../08CommonComponents/InputValidator';
-
-
 export class KindergartenListContainer extends Component {
 
     constructor(props) {
@@ -25,14 +22,29 @@ export class KindergartenListContainer extends Component {
             searchQuery: "",
             inEditMode: false,
             editRowId: "",
-            editedKindergarten: null
+            editedKindergarten: null,
+            errorMessages: {}
         }
     }
     componentDidMount() {
-
         this.getKindergartenInfo(this.state.currentPage, "");
-
+        document.addEventListener("keydown", this.handleEscape, false);
     }
+    
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleEscape, false);
+    }
+
+    handleEscape = (e) => {       
+        if (e.key === 'Escape') {
+            this.onCancel(); 
+           //this.props.history.push("/darzeliai");  
+           setTimeout(function(){
+            window.location.reload();
+        },10);                               
+        }
+    }
+
 
     getKindergartenInfo(currentPage, name) {
 
@@ -104,8 +116,7 @@ export class KindergartenListContainer extends Component {
     }
 
     handleEditKindergarten = (item) => {
-        console.log("Taisyti darzeli", item.id);
-
+        
         this.setState({
             inEditMode: true,
             editRowId: item.id,
@@ -123,60 +134,38 @@ export class KindergartenListContainer extends Component {
         )
     }
 
-    handleEscape = (e) => {
-        console.log("klaviatūra paspausta");
-        if (e.key === 'Escape') {
-            this.onCancel();
+    handleChange = ({ target: input }) => {
+
+        const errorMessages = this.state.errorMessages;
+        console.log(input.title);
+
+        if (input.validity.valueMissing) {
+            errorMessages[input.name] = `*${input.title}`;
+        } else {
+            delete errorMessages[input.name];
         }
-    }
-
-    handleChangeName = (event) => {
         const kindergarten = this.state.editedKindergarten;
-       // InputValidator(event);
-        kindergarten.name = event.target.value;
-        this.setState({ editedKindergarten: kindergarten });
-    }
-
-    handleChangeAddress = (newAddress) => {
-        const kindergarten = this.state.editedKindergarten;
-        kindergarten.address = newAddress;
-        this.setState({ editedKindergarten: kindergarten });
-    }
-
-    handleChangeElderate = (newElderate) => {
-        const kindergarten = this.state.editedKindergarten;
-        kindergarten.elderate = newElderate;
-        this.setState({ editedKindergarten: kindergarten });
-    }
-
-    handleChangeCapacity2to3 = (newCapacity2to3) => {
-        const kindergarten = this.state.editedKindergarten;
-        kindergarten.capacityAgeGroup2to3 = newCapacity2to3;
-        this.setState({ editedKindergarten: kindergarten });
-    }
-
-    handleChangeCapacity3to6 = (newCapacity3to6) => {
-        const kindergarten = this.state.editedKindergarten;
-        kindergarten.capacityAgeGroup3to6 = newCapacity3to6;
-        this.setState({ editedKindergarten: kindergarten });
-    }
-
-    validate = (e) => {
-        InputValidator(e);
-    }
+        kindergarten[input.name] = input.value;
+        this.setState({
+            editedKindergarten: kindergarten,
+            errorMessages: errorMessages
+        });
+    }    
 
     handleSaveEdited = () => {
-        const { editedKindergarten, editRowId } = this.state;
+        const { editedKindergarten, editRowId, errorMessages } = this.state;
 
         console.log("Koreguoti axios.put", editRowId, editedKindergarten)
 
-        http.put(`${apiEndpoint}/api/darzeliai/manager/update/${editRowId}`, editedKindergarten)
-            .then(() => {
-                this.onCancel();
-                this.getKindergartenInfo(this.state.currentPage, this.state.searchQuery);
-            }).catch(error => {
-                console.log("KindergartenListContainer", error);
-            })
+        if (Object.keys(errorMessages).length === 0) {
+            http.put(`${apiEndpoint}/api/darzeliai/manager/update/${editRowId}`, editedKindergarten)
+                .then(() => {
+                    this.onCancel();
+                    this.getKindergartenInfo(this.state.currentPage, this.state.searchQuery);
+                }).catch(error => {
+                    console.log("KindergartenListContainer", error);
+                })
+        }
     }
 
 
@@ -189,7 +178,9 @@ export class KindergartenListContainer extends Component {
 
     render() {
 
-        const { darzeliai, totalElements, pageSize, searchQuery, inEditMode, editRowId } = this.state;
+        const { darzeliai, totalElements, pageSize, searchQuery, inEditMode, editRowId, errorMessages } = this.state;
+
+        const hasErrors = Object.keys(errorMessages).length === 0 ? false : true;
 
         return (
             <React.Fragment>
@@ -203,14 +194,12 @@ export class KindergartenListContainer extends Component {
                     darzeliai={darzeliai}
                     inEditMode={inEditMode}
                     editRowId={editRowId}
+                    errorMessages={errorMessages}
+                    hasErrors={hasErrors}
                     onDelete={this.handleDelete}
                     onEditData={this.handleEditKindergarten}
                     onEscape={this.handleEscape}
-                    onChangeName={this.handleChangeName}
-                    onChangeAddress={this.handleChangeAddress}
-                    onChangeElderate={this.handleChangeElderate}
-                    onChangeCapacity2to3={this.handleChangeCapacity2to3}
-                    onChangeCapacity3to6={this.handleChangeCapacity3to6}
+                    onChange={this.handleChange}                    
                     onSave={this.handleSaveEdited}
                 />
 
@@ -227,4 +216,4 @@ export class KindergartenListContainer extends Component {
     }
 }
 
-export default KindergartenListContainer
+export default KindergartenListContainer;

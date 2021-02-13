@@ -1,7 +1,6 @@
 function InputValidator(event) {
     const target = event.target;
-
-    console.log("validacija",event);
+    
         if (target.validity.valueMissing && target.id !== "txtBirthdate") {
             target.setCustomValidity(target.placeholder + " yra privalomas laukelis")
         }

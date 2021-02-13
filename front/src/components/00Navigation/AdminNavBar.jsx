@@ -5,11 +5,8 @@ import logo from '../../images/logo.png';
 import '../../App.css';
 
 import LogoutContainer from './LogoutContainer';
-import AuthContext from "../11Context/AuthContext";
 
-
-function Navigation() {
-    const currentUser = React.useContext(AuthContext);
+function Navigation(props) {
     return (
         <div className="pb-4" >
             <nav className="navbar navbar-expand-md py-4 navbar-light bg-light">
@@ -24,19 +21,22 @@ function Navigation() {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ml-auto ">
-                        {currentUser.state.role==="ADMIN" && ( 
-                            <li className="nav-item mr-2">
-                                <NavLink className="nav-link" id="navAdmin" to={"/admin"}>Naudotojų administravimas</NavLink>
-                            </li>)}
 
-                            {currentUser.state.role==="MANAGER" && ( 
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link" to={"/darzeliai"}>Darželių sąrašas</NavLink>
-                            </li>)}
+                                <NavLink className="nav-link" id="navAdminUserList" to={"/admin"}>Naudotojų sąrašas</NavLink>
+                            </li>
 
-                            {/* <li className="nav-item nav-item mr-4">
-                                <NavLink className="nav-link" to={"/naudotojai"}>Naudotojų sąrašas</NavLink>
-                            </li> */}
+                            <li className="nav-item mr-2">
+                                <NavLink className="nav-link disabled" id="navAdminApplicationStats" to={"#"}>Prašymų statistika</NavLink>
+                            </li>
+
+                            <li className="nav-item mr-2">
+                                <NavLink className="nav-link disabled" id="navAdminEventLog" to={"#"}>Įvykių žurnalas</NavLink>
+                            </li>
+
+                            <li className="nav-item mr-2">
+                                <NavLink className="nav-link" id="navAdminMyAccount" to={"/profilis/atnaujinti"}>Mano paskyra</NavLink>
+                            </li>
 
                             <li className="nav-item nav-item mr-2">
                                 <LogoutContainer />
@@ -47,6 +47,7 @@ function Navigation() {
                     </div>
                 </div>
             </nav>
+            <div>{props.children}</div>
         </div >
 
     );

@@ -5,8 +5,6 @@ import '../../App.css';
 // import http from '../10Services/httpService';
 // import apiEndpoint from '../10Services/endpoint';
 
-import NavBar from '../00Navigation/NavBar';
-
 import { KindergartenListContainer } from './KindergartenListContainer';
 
 export class KindergartenContainer extends Component {
@@ -15,7 +13,6 @@ export class KindergartenContainer extends Component {
     render() {
         return (
             <div>
-                <NavBar />
                 <div className="container">
 
                     <div className="row ">

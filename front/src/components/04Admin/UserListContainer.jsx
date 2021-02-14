@@ -7,7 +7,6 @@ import '../../App.css';
 
 import UserListTable from './UserListTable';
 import Pagination from './../08CommonComponents/Pagination';
-import { paginate } from './../08CommonComponents/paginate';
 
 export class UserListContainer extends Component {
 
@@ -16,27 +15,50 @@ export class UserListContainer extends Component {
         this.state = {
             naudotojai: [],
             pageSize: 10,
-            currentPage: 1
+            currentPage: 1,
+            totalPages: 0,
+            totalElements: 0,
+            numberOfElements: 0
         }
     }
     componentDidMount() {
+
+        this.getUserInfo(this.state.currentPage);        
+    }
+
+    getUserInfo(currentPage) {
+
+        const { pageSize } = this.state;
+        currentPage -= 1;
+
+        var uri = `${apiEndpoint}/api/users/admin/allusers?page=${currentPage}&size=${pageSize}`;
+        
         http
-            .get(`${apiEndpoint}/api/users/admin/allusers`)
+            .get(uri)
             .then((response) => {
-                this.setState({ naudotojai: this.mapToViewModel(response.data) });
+
+                this.setState({
+                    naudotojai: this.mapToViewModel(response.data.content),
+                    totalPages: response.data.totalPages,
+                    totalElements: response.data.totalElements,
+                    numberOfElements: response.data.numberOfElements,
+                    currentPage: response.data.number + 1
+                });
 
             }).catch(error => {
-                console.log("Naudotojai container error", error.response);
-                if (error && error.response.status === 401)  
+                console.log("User container error", error.response);
+                if (error && error.response.status === 401)
+
                     swal({
-                        title: "Puslapis pasiekiamas tik administratoriaus teises turintiems naudotojams",                        
+                        text: "Puslapis pasiekiamas tik teises turintiems naudotojams",
                         button: "Gerai"
-                    }); 
-               // this.props.history.replace("/home");
+                    });
+                // this.props.history.replace("/home");
             }
             );
-
     }
+
+
 
     mapToViewModel(data) {
        
@@ -54,6 +76,9 @@ export class UserListContainer extends Component {
         const username = item.username;
         console.log("Trinti naudotoja", username);
 
+        const { currentPage, numberOfElements } = this.state;
+        const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
+
         http
             .delete(`${apiEndpoint}/api/users/admin/delete/${username}`)
             .then((response) => {
@@ -61,12 +86,9 @@ export class UserListContainer extends Component {
                     text: response.data,
                     button: "Gerai"
                 });
-                http
-                    .get(`${apiEndpoint}/api/users/admin/allusers`)
-                    .then((response) => {
-                        this.setState({ naudotojai: response.data });
 
-                    });
+                 this.getUserInfo(page);
+
             }).catch(error => {
                 if (error && error.response.status > 400 && error.response.status < 500) 
                 swal({                   
@@ -102,27 +124,15 @@ export class UserListContainer extends Component {
 
     handlePageChange = (page) => {
         this.setState({ currentPage: page });
-    };
-
-
-    getPageData = () => {
-        const {
-            pageSize,
-            currentPage,
-            naudotojai: allData
-        } = this.state;
-
-        const naudotojai = paginate(allData, currentPage, pageSize);
-
-        return { totalCount: allData.length, naudotojai: naudotojai }
-    }
+        this.getUserInfo(page);
+    };    
 
     render() {
 
-        const { totalCount, naudotojai } = this.getPageData();
+        const { naudotojai, totalElements, pageSize } = this.state;
 
         return (
-            <div >
+            <React.Fragment >
                 
                 <UserListTable
                     naudotojai={naudotojai}
@@ -131,14 +141,14 @@ export class UserListContainer extends Component {
                 />
 
                 <Pagination
-                    itemsCount={totalCount}
-                    pageSize={this.state.pageSize}
+                    itemsCount={totalElements}
+                    pageSize={pageSize}
                     onPageChange={this.handlePageChange}
                     currentPage={this.state.currentPage}
                 />
 
 
-            </div>
+            </React.Fragment>
         )
     }
 }

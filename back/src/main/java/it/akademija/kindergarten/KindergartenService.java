@@ -1,6 +1,7 @@
 package it.akademija.kindergarten;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,16 @@ public class KindergartenService {
 		List<Kindergarten> kindergartens = gartenDao.findAll(Sort.by("name").ascending());
 		return kindergartens.stream().map(garten -> new KindergartenDTO(garten.getId(), garten.getName(),
 				garten.getAddress(), garten.getElderate())).collect(Collectors.toList());
+	}
+	
+	/**
+	 * Gel all elderates
+	 * 
+	 * @return list of elderates
+	 */
+	public Set<String> getAllElderates() {
+		
+		return gartenDao.findDistinctElderates();
 	}
 
 	/**
@@ -141,5 +152,7 @@ public class KindergartenService {
 	public void setGartenDao(KindergartenDAO gartenDao) {
 		this.gartenDao = gartenDao;
 	}
+
+	
 
 }

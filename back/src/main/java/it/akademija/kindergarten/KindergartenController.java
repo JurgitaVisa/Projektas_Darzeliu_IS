@@ -1,6 +1,8 @@
 package it.akademija.kindergarten;
 
 import java.util.List;
+import java.util.Set;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -50,6 +52,20 @@ public class KindergartenController {
 	public List<KindergartenDTO> getAllKindergartenNames() {
 
 		return kindergartenService.getAllKindergartenNames();
+	}
+	
+	/**
+	 * Get list of all elderates
+	 * 
+	 * @return list of kindergarten
+	 */
+	@Secured({ "ROLE_MANAGER" })
+	@GetMapping("/manager/elderates")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Get all elderates")
+	public Set<String> getAllElderates() {
+
+		return kindergartenService.getAllElderates();
 	}
 
 	/**

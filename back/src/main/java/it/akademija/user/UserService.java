@@ -1,9 +1,13 @@
 package it.akademija.user;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,7 +47,6 @@ public class UserService implements UserDetailsService {
 	 * @param userData data for new user
 	 * @throws Exception
 	 */
-
 	@Transactional
 	public void createUser(UserDTO userData) throws Exception {
 		User newUser = new User();
@@ -95,19 +98,23 @@ public class UserService implements UserDetailsService {
 	}
 
 	/**
-	 * Siulau aprasyti savo metodus, kad butu aisku, ka jie turetu daryti Sitas
-	 * metodas neturetu grazinti pilno User i front, nes ten yra per daug info, tame
-	 * tarpe psw ir asmens kodas
+	 * Returns a page of registered Users info with specified page number and page
+	 * size
 	 * 
 	 * @return list of user details for ADMIN
 	 */
-
 	@Transactional(readOnly = true)
-	public List<UserInfo> getAllUsers() {
-		List<User> users = userDao.findAllByOrderByUserIdDesc();
+	public Page<UserInfo> getAllUsers(Pageable pageable) {
+		Page<User> users = userDao.findAll(pageable);
+		Page<UserInfo> dtoPage = users.map(new Function<User, UserInfo>() {
+			@Override
+			public UserInfo apply(User user) {
+				UserInfo dto = new UserInfo(user.getUserId(), user.getRole().name(), user.getUsername());
+				return dto;
+			}
 
-		return users.stream().map(user -> new UserInfo(user.getUserId(), user.getRole().name(), user.getUsername()))
-				.collect(Collectors.toList());
+		});
+		return dtoPage;
 	}
 
 	@Transactional
@@ -115,7 +122,7 @@ public class UserService implements UserDetailsService {
 		User user = userDao.findByUsername(username);
 		if (user.getRole().equals(Role.USER)) {
 			return new UserInfo(user.getRole().name(), user.getName(), user.getSurname(),
-					user.getParentDetails().getPersonalCode(), user.getParentDetails().getAddress(), 
+					user.getParentDetails().getPersonalCode(), user.getParentDetails().getAddress(),
 					user.getParentDetails().getPhone(), user.getEmail(), user.getUsername());
 
 		}
@@ -154,6 +161,7 @@ public class UserService implements UserDetailsService {
 
 	/**
 	 * Changes users password
+	 * 
 	 * @param username
 	 * @param oldPassword
 	 * @param newPassword
@@ -163,15 +171,14 @@ public class UserService implements UserDetailsService {
 	public boolean changePassword(String username, String oldPassword, String newPassword) {
 		User user = findByUsername(username);
 		String currentPassword = user.getPassword();
-		if(encoder.matches(oldPassword, currentPassword)) {
+		if (encoder.matches(oldPassword, currentPassword)) {
 			user.setPassword(encoder.encode(newPassword));
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Updates fields for user with specified username. Field for setting user role

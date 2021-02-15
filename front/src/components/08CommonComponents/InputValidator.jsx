@@ -1,11 +1,11 @@
 function InputValidator(event) {
     const target = event.target;
     
-        if (target.validity.valueMissing && target.id !== "txtBirthdate") {
+        if (target.validity.valueMissing && target.name !== "birthdate") {
             target.setCustomValidity(target.placeholder + " yra privalomas laukelis")
         }
         else {
-            if (target.id === "txtEmail") {
+            if (target.name === "email") {
                 if (target.validity.patternMismatch) {
                     target.setCustomValidity("Neteisingas el. pašto formatas")
                 }
@@ -30,7 +30,7 @@ function InputValidator(event) {
             //         target.setCustomValidity("")
             //     }
             // }
-            else if (target.id === "txtPersonalCode") {
+            else if (target.name === "personalCode") {
                 if (target.validity.patternMismatch) {
                     target.setCustomValidity("Asmens koda sudaro 11 skaičių, įvesta skaičių: " + target.value.length)
                 }
@@ -38,7 +38,7 @@ function InputValidator(event) {
                     target.setCustomValidity("")
                 }
             }
-            else if (target.id === "txtName") {
+            else if (target.name === "name") {
                 if (target.validity.patternMismatch) {
                     target.setCustomValidity("Netinkamo formato vardas")
                 }
@@ -46,7 +46,7 @@ function InputValidator(event) {
                     target.setCustomValidity("")
                 }
             }
-            else if (target.id === "txtSurname") {
+            else if (target.name === "surname") {
                 if (target.validity.patternMismatch) {
                     target.setCustomValidity("Netinkamo formato pavardė")
                 }
@@ -54,10 +54,10 @@ function InputValidator(event) {
                     target.setCustomValidity("")
                 }
             }
-            else if (target.id === "txtAddress") {
+            else if (target.name === "address") {
                 target.setCustomValidity("");
             }
-            else if (target.id === "txtTelNo") {
+            else if (target.name === "phone") {
                 if (target.validity.patternMismatch) {
                     target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, įvesta skaičių: " + target.value.length)
                 }

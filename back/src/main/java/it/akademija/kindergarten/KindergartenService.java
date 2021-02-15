@@ -28,16 +28,29 @@ public class KindergartenService {
 		return kindergartens.stream().map(garten -> new KindergartenDTO(garten.getId(), garten.getName(),
 				garten.getAddress(), garten.getElderate())).collect(Collectors.toList());
 	}
+<<<<<<< Updated upstream
 	
+=======
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 	/**
 	 * Gel all elderates
 	 * 
 	 * @return list of elderates
 	 */
 	public Set<String> getAllElderates() {
+<<<<<<< Updated upstream
 		
 		return gartenDao.findDistinctElderates();
 	}
+=======
+
+		return gartenDao.findDistinctElderates();
+	}
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
 	/**
 	 * 
@@ -48,22 +61,23 @@ public class KindergartenService {
 	 */
 	@Transactional(readOnly = true)
 	public Page<Kindergarten> getKindergartenPage(Pageable pageable) {
-		
+
 		return gartenDao.findAll(pageable);
 	}
-	
+
 	/**
 	 * 
-	 * Returns a page of Kindergarten filtered by name containing text with specified page number and page size
+	 * Returns a page of Kindergarten filtered by name containing text with
+	 * specified page number and page size
 	 * 
 	 * @param pageable
 	 * @return filtered page from kindergarten database
 	 */
 	@Transactional(readOnly = true)
 	public Page<Kindergarten> getKindergartenPageFilteredByName(String name, Pageable pageable) {
-		
-			return gartenDao.findByNameContainingIgnoreCase(name, pageable);
-		
+
+		return gartenDao.findByNameContainingIgnoreCase(name, pageable);
+
 	}
 
 	/**
@@ -81,7 +95,7 @@ public class KindergartenService {
 	}
 
 	/**
-	 * Find kindergarten by name. Read only
+	 * Find kindergarten by id. Read only
 	 * 
 	 * @param id
 	 * @return kindergarten or null if not found
@@ -90,6 +104,22 @@ public class KindergartenService {
 	public Kindergarten findById(String id) {
 
 		return gartenDao.findById(id).orElse(null);
+	}
+
+	/**
+	 * Find kindergarten by name. Read only
+	 * 
+	 * @param name
+	 * @return kindergarten or null if not found
+	 */
+	@Transactional(readOnly = true)
+	public boolean nameAlreadyExists(String name, String id) {
+		Kindergarten kindergarten = gartenDao.findByName(name);
+		
+		if (kindergarten!=null && kindergarten.getId()!=id) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

@@ -53,6 +53,7 @@ public class KindergartenController {
 
 		return kindergartenService.getAllKindergartenNames();
 	}
+<<<<<<< Updated upstream
 	
 	/**
 	 * Get list of all elderates
@@ -67,9 +68,28 @@ public class KindergartenController {
 
 		return kindergartenService.getAllElderates();
 	}
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
 
 	/**
-	 * Get specified Kindergarten information page 
+	 * Get list of all elderates
+	 * 
+	 * @return list of kindergarten
+	 */
+	@Secured({ "ROLE_MANAGER" })
+	@GetMapping("/manager/elderates")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Get all elderates")
+	public Set<String> getAllElderates() {
+
+		return kindergartenService.getAllElderates();
+	}
+>>>>>>> Stashed changes
+
+	/**
+	 * Get specified Kindergarten information page
 	 * 
 	 * @return page of kindergarten information
 	 */
@@ -77,18 +97,16 @@ public class KindergartenController {
 	@GetMapping("/manager/page")
 	@ApiOperation(value = "Get kindergarten information pages")
 	public ResponseEntity<Page<Kindergarten>> getKindergartenPage(
-			
-			@RequestParam("page") int page, 
-			  @RequestParam("size") int size) {
+
+			@RequestParam("page") int page, @RequestParam("size") int size) {
 
 		Sort.Order order = new Sort.Order(Sort.Direction.ASC, "name").ignoreCase();
-						
+
 		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
-		
+
 		return new ResponseEntity<>(kindergartenService.getKindergartenPage(pageable), HttpStatus.OK);
 	}
-	
-	
+
 	/**
 	 * Get specified Kindergarten information page filtered by name
 	 * 
@@ -97,16 +115,15 @@ public class KindergartenController {
 	@Secured({ "ROLE_MANAGER" })
 	@GetMapping("/manager/page/{name}")
 	@ApiOperation(value = "Get kindergarten information pages")
-	public ResponseEntity<Page<Kindergarten>> getKindergartenPageFilteredByName(
-			@PathVariable String name,
-			@RequestParam("page") int page, 
-			  @RequestParam("size") int size) {
+	public ResponseEntity<Page<Kindergarten>> getKindergartenPageFilteredByName(@PathVariable String name,
+			@RequestParam("page") int page, @RequestParam("size") int size) {
 
 		Sort.Order order = new Sort.Order(Sort.Direction.ASC, "name").ignoreCase();
-						
+
 		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
-		
-		return new ResponseEntity<>(kindergartenService.getKindergartenPageFilteredByName(name, pageable), HttpStatus.OK);
+
+		return new ResponseEntity<>(kindergartenService.getKindergartenPageFilteredByName(name, pageable),
+				HttpStatus.OK);
 	}
 
 	/**
@@ -119,8 +136,7 @@ public class KindergartenController {
 	@PostMapping("/manager/createKindergarten")
 	@ApiOperation(value = "Create new kindergarten")
 	public ResponseEntity<String> createNewKindergarten(
-			@ApiParam(value = "Kindergarten", required = true) 
-			@Valid @RequestBody Kindergarten kindergarten) {
+			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody Kindergarten kindergarten) {
 
 		Kindergarten newKindengarten = kindergartenService.findById(kindergarten.getId());
 
@@ -159,25 +175,27 @@ public class KindergartenController {
 
 		return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
 	}
-	
-	@Secured({"ROLE_MANAGER"})
+
+	@Secured({ "ROLE_MANAGER" })
 	@PutMapping("/manager/update/{id}")
-	@ApiOperation(value="Update kindergarten by ID")
+	@ApiOperation(value = "Update kindergarten by ID")
 	public ResponseEntity<String> updateKindergarten(
-			@ApiParam(value="Kindergarten", required=true)
-			@Valid @RequestBody Kindergarten updated,
-			@PathVariable String id){
-		
-		if (kindergartenService.findById(id) != null) {
+			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody Kindergarten updated,
+			@PathVariable String id) {
+
+		if (kindergartenService.findById(id) == null) {
+			return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
+
+		} else if (kindergartenService.nameAlreadyExists(updated.getName().trim(), id)) {
+			return new ResponseEntity<String>("Darželis su tokiu įstaigos pavadinimu jau yra", HttpStatus.CONFLICT);
+
+		} else {
 			kindergartenService.updateKindergarten(id, updated);
 			LOG.info("** Usercontroller: atnaujinamas darželis ID [{}] **", id);
 			return new ResponseEntity<String>("Darželio duomenys atnaujinti sėkmingai", HttpStatus.OK);
 		}
-		
-		return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
-	}
 
-	
+	}
 
 	public KindergartenService getGartenService() {
 		return kindergartenService;

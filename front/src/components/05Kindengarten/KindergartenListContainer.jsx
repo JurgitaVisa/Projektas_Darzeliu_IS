@@ -30,18 +30,18 @@ export class KindergartenListContainer extends Component {
         this.getKindergartenInfo(this.state.currentPage, "");
         document.addEventListener("keydown", this.handleEscape, false);
     }
-    
+
     componentWillUnmount() {
         document.removeEventListener("keydown", this.handleEscape, false);
     }
 
-    handleEscape = (e) => {       
+    handleEscape = (e) => {
         if (e.key === 'Escape') {
-            this.onCancel(); 
-           //this.props.history.push("/darzeliai");  
-           setTimeout(function(){
-            window.location.reload();
-        },10);                               
+            this.onCancel();
+            //this.props.history.push("/darzeliai");  
+            setTimeout(function () {
+                window.location.reload();
+            }, 10);
         }
     }
 
@@ -116,7 +116,7 @@ export class KindergartenListContainer extends Component {
     }
 
     handleEditKindergarten = (item) => {
-        
+
         this.setState({
             inEditMode: true,
             editRowId: item.id,
@@ -137,8 +137,7 @@ export class KindergartenListContainer extends Component {
     handleChange = ({ target: input }) => {
 
         const errorMessages = this.state.errorMessages;
-        console.log(input.title);
-
+       
         if (input.validity.valueMissing) {
             errorMessages[input.name] = `*${input.title}`;
         } else {
@@ -150,7 +149,7 @@ export class KindergartenListContainer extends Component {
             editedKindergarten: kindergarten,
             errorMessages: errorMessages
         });
-    }    
+    }
 
     handleSaveEdited = () => {
         const { editedKindergarten, editRowId, errorMessages } = this.state;
@@ -162,8 +161,18 @@ export class KindergartenListContainer extends Component {
                 .then(() => {
                     this.onCancel();
                     this.getKindergartenInfo(this.state.currentPage, this.state.searchQuery);
-                }).catch(error => {
-                    console.log("KindergartenListContainer", error);
+                }).catch(error => {                    
+                    if (error && error.response.status === 409) {                        
+                        swal({
+                            text: error.response.data,
+                            button: "Gerai"
+                        });
+                    }
+                    else if (error && error.response.status > 400 && error.response.status < 500)
+                    swal({
+                        text: "Veiksmas neleidžiamas",
+                        button: "Gerai"
+                    });
                 })
         }
     }
@@ -199,7 +208,7 @@ export class KindergartenListContainer extends Component {
                     onDelete={this.handleDelete}
                     onEditData={this.handleEditKindergarten}
                     onEscape={this.handleEscape}
-                    onChange={this.handleChange}                    
+                    onChange={this.handleChange}
                     onSave={this.handleSaveEdited}
                 />
 

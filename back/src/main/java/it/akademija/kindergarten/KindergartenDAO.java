@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface KindergartenDAO extends JpaRepository<Kindergarten, String> {
 
 	void deleteByName(String name);
+	
+	Kindergarten findByName(String name);
 
 	Page<Kindergarten> findByNameContainingIgnoreCase(String name, Pageable pageable);
 

@@ -120,13 +120,15 @@ public class KindergartenController {
 	public ResponseEntity<String> createNewKindergarten(
 			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody Kindergarten kindergarten) {
 
-		Kindergarten newKindengarten = kindergartenService.findById(kindergarten.getId());
-
-		if (newKindengarten != null) {
+		String id = kindergarten.getId();
+		
+		if (kindergartenService.findById(id) != null) {
 			return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu jau yra", HttpStatus.CONFLICT);
 
-		} else {
+		} else if (kindergartenService.nameAlreadyExists(kindergarten.getName().trim(), id)) {
+			return new ResponseEntity<String>("Darželis su tokiu įstaigos pavadinimu jau yra", HttpStatus.CONFLICT);
 
+		} else {
 			kindergartenService.createNewKindergarten(kindergarten);
 			LOG.info("**KindergartenController: kuriamas darzelis pavadinimu [{}] **", kindergarten.getName());
 

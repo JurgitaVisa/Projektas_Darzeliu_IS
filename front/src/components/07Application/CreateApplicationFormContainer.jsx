@@ -54,7 +54,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
-                            id="txtName"
+                            id="txtMainName"
                             name="name"
                             placeholder="Vardas"
                             className="form-control"
@@ -69,7 +69,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
                         <input
                             type="text"
-                            id="txtSurname"
+                            id="txtMainSurname"
                             name="surname"
                             placeholder="Pavardė"
                             className="form-control"
@@ -84,7 +84,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <label htmlFor="txtPersonalCode">Asmens kodas <span className="fieldRequired">*</span></label>
                         <input
                             type="text"
-                            id="txtPersonalCode"
+                            id="txtMainPersonalCode"
                             name="personalCode"
                             placeholder="Asmens kodas"
                             className="form-control"
@@ -105,7 +105,7 @@ export default class CreateApplicationFormContainer extends Component {
                             </div>
                             <input
                                 type="tel"
-                                id="txtTelNo"
+                                id="txtMainPhone"
                                 name="phone"
                                 placeholder="Telefono numeris"
                                 className="form-control"
@@ -120,7 +120,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <label htmlFor="txtEmail">El. paštas <span className="fieldRequired">*</span></label>
                         <input
                             type="text"
-                            id="txtEmail"
+                            id="txtMainEmail"
                             name="email"
                             placeholder="El. paštas"
                             className="form-control"
@@ -136,7 +136,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            id="txtAddress"
+                            id="txtMainAddress"
                             name="address"
                             placeholder="Adresas"
                             value={this.state.address}
@@ -155,7 +155,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <label htmlFor="txtName">Vardas</label>
                         <input 
                             type="text"
-                            id="txtName"
+                            id="txtAdditionalName"
                             name="name"
                             placeholder="Vardas"
                             className="form-control"
@@ -169,7 +169,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <label htmlFor="txtSurname">Pavardė</label>
                         <input
                             type="text"
-                            id="txtSurname"
+                            id="txtAdditionalSurname"
                             name="surname"
                             placeholder="Pavardė"
                             className="form-control"
@@ -183,7 +183,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <label htmlFor="txtPersonalCode">Asmens kodas</label>
                         <input
                             type="text"
-                            id="txtPersonalCode"
+                            id="txtAdditionalPersonalCode"
                             name="personalCode"
                             placeholder="Asmens kodas"
                             className="form-control"
@@ -203,7 +203,7 @@ export default class CreateApplicationFormContainer extends Component {
                             </div>
                             <input
                                 type="tel"
-                                id="txtTelNo"
+                                id="txtAdditionalPhone"
                                 name="phone"
                                 placeholder="Telefono numeris"
                                 className="form-control"
@@ -218,7 +218,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <label htmlFor="txtEmail">El. paštas</label>
                         <input
                             type="text"
-                            id="txtEmail"
+                            id="txtAdditionalEmail"
                             name="email"
                             placeholder="El. paštas"
                             className="form-control"
@@ -233,7 +233,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            id="txtAddress"
+                            id="txtAdditionalAddress"
                             name="address"
                             placeholder="Adresas"
                             value={this.state.address}
@@ -253,7 +253,7 @@ export default class CreateApplicationFormContainer extends Component {
                     <label htmlFor="txtName">Vaiko vardas <span className="fieldRequired">*</span></label>
                     <input 
                         type="text"
-                        id="txtName"
+                        id="txtChildName"
                         name="name"
                         placeholder="Vaiko vardas"
                         className="form-control"
@@ -268,7 +268,7 @@ export default class CreateApplicationFormContainer extends Component {
                     <label htmlFor="txtSurname">Vaiko pavardė <span className="fieldRequired">*</span></label>
                     <input
                         type="text"
-                        id="txtSurname"
+                        id="txtChildSurname"
                         name="surname"
                         placeholder="Vaiko pavardė"
                         className="form-control"
@@ -283,7 +283,7 @@ export default class CreateApplicationFormContainer extends Component {
                     <label htmlFor="txtPersonalCode">Asmens kodas <span className="fieldRequired">*</span></label>
                     <input
                         type="text"
-                        id="txtPersonalCode"
+                        id="txtChildPersonalCode"
                         name="personalCode"
                         placeholder="Asmens kodas"
                         className="form-control"
@@ -299,7 +299,7 @@ export default class CreateApplicationFormContainer extends Component {
                     <label htmlFor="txtBirthdate">Gimimo data</label>
                     <input
                         type="text"
-                        id="txtBirthdate"
+                        id="txtChildBirthdate"
                         name="birthdate"
                         placeholder="Gimimo data"
                         className="form-control datepicker"

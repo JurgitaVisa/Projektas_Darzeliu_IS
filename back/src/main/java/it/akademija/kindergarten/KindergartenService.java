@@ -28,29 +28,16 @@ public class KindergartenService {
 		return kindergartens.stream().map(garten -> new KindergartenDTO(garten.getId(), garten.getName(),
 				garten.getAddress(), garten.getElderate())).collect(Collectors.toList());
 	}
-<<<<<<< Updated upstream
-	
-=======
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 	/**
 	 * Gel all elderates
 	 * 
 	 * @return list of elderates
 	 */
 	public Set<String> getAllElderates() {
-<<<<<<< Updated upstream
-		
-		return gartenDao.findDistinctElderates();
-	}
-=======
 
 		return gartenDao.findDistinctElderates();
 	}
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
 	/**
 	 * 

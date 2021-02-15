@@ -53,7 +53,7 @@ public class KindergartenController {
 
 		return kindergartenService.getAllKindergartenNames();
 	}
-<<<<<<< Updated upstream
+
 	
 	/**
 	 * Get list of all elderates
@@ -68,25 +68,7 @@ public class KindergartenController {
 
 		return kindergartenService.getAllElderates();
 	}
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
 
-	/**
-	 * Get list of all elderates
-	 * 
-	 * @return list of kindergarten
-	 */
-	@Secured({ "ROLE_MANAGER" })
-	@GetMapping("/manager/elderates")
-	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation(value = "Get all elderates")
-	public Set<String> getAllElderates() {
-
-		return kindergartenService.getAllElderates();
-	}
->>>>>>> Stashed changes
 
 	/**
 	 * Get specified Kindergarten information page

@@ -7,7 +7,6 @@ import KindergartenInputForm from './KindergartenInputForm';
 
 export class KindergartenContainer extends Component {
 
-
     render() {
         return (
             <div>

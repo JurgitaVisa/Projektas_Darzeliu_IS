@@ -5,14 +5,13 @@ import apiEndpoint from "../10Services/endpoint";
 import swal from "sweetalert";
 
 function KindergartenInputForm() {
-
   const initKindergartenData = {
     address: "",
     capacityAgeGroup2to3: 0,
     capacityAgeGroup3to6: 0,
     elderate: "",
     id: "",
-    name: ""    
+    name: "",
   };
 
   var savingStatus = false;
@@ -22,14 +21,17 @@ function KindergartenInputForm() {
 
   useEffect(() => {
     http
-    .get(`${apiEndpoint}/api/darzeliai/manager/elderates`)
-    .then((response) => {
-      setElderate(response.data);
-    })
-    .catch((error) => {
-      swal("Įvyko klaida nuskaitant seniūnijas", error.response.status)
-    });
-  },[setElderate]);
+      .get(`${apiEndpoint}/api/darzeliai/manager/elderates`)
+      .then((response) => {
+        setElderate(response.data);
+      })
+      .catch((error) => {
+        swal({
+          text: "Įvyko klaida nuskaitant seniūnijas. " + error.response.data,
+          button: "Gerai"
+        });
+      });
+  }, [setElderate]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -37,26 +39,38 @@ function KindergartenInputForm() {
     console.log(data);
     savingStatus = true;
     http
-    .post(`${apiEndpoint}/api/darzeliai/manager/createKindergarten`, data)
-    .then((response) => {
-      console.log("įrašyta: " + response.data);
-      swal("Naujas darželis „" + data.name + "“ pridėtas sėkmingai!")
-      savingStatus = false;
-      resetForm();
-    })
-    .catch((error) => {
-      console.log("Error saving new kindergarten" + error)
-      // swal("Įvyko klaida įrašant naują darželį", error)
-    })
-
+      .post(`${apiEndpoint}/api/darzeliai/manager/createKindergarten`, data)
+      .then((response) => {
+        console.log("įrašyta: " + response.data);
+        swal({
+          text: "Naujas darželis „" + data.name + "“ pridėtas sėkmingai!",
+          button: "Gerai"
+        });
+        savingStatus = false;
+        resetForm(event);
+      })
+      .catch((error) => {
+        if (error.response.status === 409) {
+          swal({
+            text: "Įvyko klaida įrašant naują darželį. " + error.response.data + "\n\nPatikrinkite duomenis ir bandykite dar kartą",
+            button: "Gerai"
+          });
+        }
+        savingStatus = false;
+      });
   };
 
   const validateField = (event) => {
     const target = event.target;
+
     if (target.validity.valueMissing) {
-      target.setCustomValidity("Būtina užpildyti šį laukelį");
-    } 
-    else {
+      if (target.id === "elderate") {
+        target.setCustomValidity("Reikia pasirinkti seniūniją");
+      } else target.setCustomValidity("Būtina užpildyti šį laukelį");
+    } else if (target.validity.patternMismatch) {
+      if (target.id === "id")
+        target.setCustomValidity("Įstaigos kodą turi sudaryti 9 skaitmenys");
+    } else {
       target.setCustomValidity("");
     }
   };
@@ -66,13 +80,15 @@ function KindergartenInputForm() {
     if (event.target.name === "capacityAgeGroup2to3") {
       setData({
         ...data,
-        capacityAgeGroup2to3: event.target.value >= 0 ? Number(event.target.value) : 0,
+        capacityAgeGroup2to3:
+          event.target.value >= 0 ? Number(event.target.value) : 0,
       });
     } else if (event.target.name === "capacityAgeGroup3to6") {
       setData({
         ...data,
         savingError: false,
-        capacityAgeGroup3to6: event.target.value >= 0 ? Number(event.target.value) : 0,
+        capacityAgeGroup3to6:
+          event.target.value >= 0 ? Number(event.target.value) : 0,
       });
     } else {
       setData({
@@ -106,6 +122,7 @@ function KindergartenInputForm() {
             onChange={handleChange}
             onInvalid={validateField}
             required
+            pattern="^\d{9}"
             data-toggle="tooltip"
             data-placement="top"
             title="Įveskite įstaigos (darželio) kodą"
@@ -165,10 +182,11 @@ function KindergartenInputForm() {
             required
             data-toggle="tooltip"
             data-placement="top"
-            title="Pasirinkite seniūniją, kuriai priskiriamas darželis">
-            <option value="" disabled hidden label="Pasirinkite"/>
+            title="Pasirinkite seniūniją, kuriai priskiriamas darželis"
+          >
+            <option value="" disabled hidden label="Pasirinkite" />
             {elderates.map((option) => (
-              <option value={option} label={option} key={option}/>
+              <option value={option} label={option} key={option} />
             ))}
           </select>
         </div>

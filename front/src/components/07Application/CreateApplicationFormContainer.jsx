@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
-import inputValidator from '../08CommonComponents/InputValidator';
+import Select from 'react-select'
+
+import http from '../10Services/httpService';
+import apiEndpoint from '../10Services/endpoint';
+import swal from 'sweetalert';
+
+import inputValidator from '../08CommonComponents/InputValidator'
 
 export default class CreateApplicationFormContainer extends Component {
     constructor(props) {
@@ -40,12 +46,42 @@ export default class CreateApplicationFormContainer extends Component {
                     4: "",
                     5: ""
                 }
+            },
+            kindergartens: {
+
             }
         }
         this.mainGuardianOnChange = this.mainGuardianOnChange.bind(this);
         this.additionalGuardianOnChange = this.additionalGuardianOnChange.bind(this);
         this.childOnChange = this.childOnChange.bind(this);
         this.checkboxOnChange = this.checkboxOnChange.bind(this);
+    }
+
+    componentDidMount() {
+        /** get logged in user data */
+        http.get(`${apiEndpoint}/api/users/user`)
+            .then((response) => {
+                this.setState({
+                    mainGuardian: {
+                        ...this.state.mainGuardian,
+                        name: response.data.name,
+                        surname: response.data.surname,
+                        personalCode: response.data.personalCode,
+                        phone: response.data.phone.slice(4),
+                        email: response.data.username,
+                        address: response.data.address
+                    }
+                })
+                /** get kindergarten list */
+            })
+            .catch((error) => {
+                swal({
+                    title: "Įvyko klaida",
+                    text: "Įvyko klaida perduodant duomenis iš serverio.",
+                    icon: "error",
+                    button: "Gerai"
+                })
+            })
     }
 
     /** FORMOS */
@@ -310,7 +346,7 @@ export default class CreateApplicationFormContainer extends Component {
                 </div>
                 {/** Gimimo data */}
                 <div className="row form-group">
-                    <label htmlFor="txtBirthdate">Gimimo data</label>
+                    <label htmlFor="txtBirthdate">Gimimo data <span className="fieldRequired">*</span></label>
                     <input
                         type="text"
                         id="txtChildBirthdate"
@@ -328,61 +364,89 @@ export default class CreateApplicationFormContainer extends Component {
     /** Checkbox forma prioritetams */
     checkboxPriorityForm() {
         return (
-            <div className="form">
-                <div className="row">
-                    <div className="form-check">
+            <div className="row">
+                <div className="col">
+                    <div className="form">
                         <div className="row">
-                            <h6>Vaiko priėmimo tvarkos prioritetai</h6>
+                            <div className="form-check">
+                                <div className="row">
+                                    <h6>Vaiko priėmimo tvarkos prioritetai</h6>
+                                </div>
+                                <div className="row">
+                                    <p>Pažymėkite tinkamus prioritetus</p>
+                                </div>
+                            </div>
                         </div>
-                        <div className="row">
-                            <p>Pažymėkite tinkamus prioritetus</p>
+                        <div className="form-check">
+                            <input type="checkbox" 
+                            className="form-check-input"
+                            name="livesInVilnius"
+                            id="chkLivesInVilnius"
+                            checked={this.state.child.acceptancePriorities.livesInVilnius}
+                            onChange={this.checkboxOnChange}/>
+                            <label className="form-check-label" htmlFor="livesInVilnius">Vaiko deklaruojama gyvenamoji vieta yra Vilniaus miesto savivaldybė</label>
+                        </div>
+                        <div className="form-check">
+                            <input type="checkbox" 
+                            className="form-check-input" 
+                            name="childIsAdopted" 
+                            id="chkChildIsAdopted"
+                            checked={this.state.child.acceptancePriorities.childIsAdopted}
+                            onChange={this.checkboxOnChange}/>
+                            <label className="form-check-label" htmlFor="childIsAdopted">Vaikas yra įvaikintas</label>
+                        </div>
+                        <div className="form-check">
+                            <input type="checkbox" 
+                            className="form-check-input"
+                            name="familyHasThreeOrMoreChildrenInSchools"
+                            id="chkFamilyHasThreeOrMoreChildrenInSchools"
+                            checked={this.state.child.acceptancePriorities.familyHasThreeOrMoreChildrenInSchools}
+                            onChange={this.checkboxOnChange}/>
+                            <label className="form-check-label" htmlFor="familyHasThreeOrMoreChildrenInSchools">Šeima augina (globoja) tris ir daugiau vaikų, kurie mokosi pagal bendrojo ugdymo programas</label>
+                        </div>
+                        <div className="form-check">
+                            <input type="checkbox"
+                            className="form-check-input"
+                            name="guardianInSchool"
+                            id="chkGuardianInSchool"
+                            checked={this.state.child.acceptancePriorities.guardianInSchool}
+                            onChange={this.checkboxOnChange}/>
+                            <label className="form-check-label" htmlFor="guardianInSchool">Vienas iš tėvų (globėjų) mokosi bendrojo ugdymo mokykloje</label>
+                        </div>
+                        <div className="form-check">
+                            <input type="checkbox" 
+                            className="form-check-input"
+                            name="guardianDisability"
+                            id="chkGuardianDisability"
+                            checked={this.state.child.acceptancePriorities.guardianDisability}
+                            onChange={this.checkboxOnChange}/>
+                            <label className="form-check-label" htmlFor="guardianDisability">Vienas iš tėvų (globėjų) turi ne daugiau kaip 40 procentų darbingumo lygio</label>
                         </div>
                     </div>
                 </div>
-                <div className="form-check">
-                    <input type="checkbox" 
-                    className="form-check-input"
-                    name="livesInVilnius"
-                    id="chkLivesInVilnius"
-                    checked={this.state.child.acceptancePriorities.livesInVilnius}
-                    onChange={this.checkboxOnChange}/>
-                    <label className="form-check-label" htmlFor="livesInVilnius">Vaiko deklaruojama gyvenamoji vieta yra Vilniaus miesto savivaldybė</label>
-                </div>
-                <div className="form-check">
-                    <input type="checkbox" 
-                    className="form-check-input" 
-                    name="childIsAdopted" 
-                    id="chkChildIsAdopted"
-                    checked={this.state.child.acceptancePriorities.childIsAdopted}
-                    onChange={this.checkboxOnChange}/>
-                    <label className="form-check-label" htmlFor="childIsAdopted">Vaikas yra įvaikintas</label>
-                </div>
-                <div className="form-check">
-                    <input type="checkbox" 
-                    className="form-check-input"
-                    name="familyHasThreeOrMoreChildrenInSchools"
-                    id="chkFamilyHasThreeOrMoreChildrenInSchools"
-                    checked={this.state.child.acceptancePriorities.familyHasThreeOrMoreChildrenInSchools}
-                    onChange={this.checkboxOnChange}/>
-                    <label className="form-check-label" htmlFor="familyHasThreeOrMoreChildrenInSchools">Šeima augina (globoja) tris ir daugiau vaikų, kurie mokosi pagal bendrojo ugdymo programas</label>
-                </div>
-                <div className="form-check">
-                    <input type="checkbox"
-                    className="form-check-input"
-                    name="guardianInSchool"
-                    id="chkGuardianInSchool"
-                    checked={this.state.child.acceptancePriorities.guardianInSchool}
-                    onChange={this.checkboxOnChange}/>
-                    <label className="form-check-label" htmlFor="guardianInSchool">Vienas iš tėvų (globėjų) mokosi bendrojo ugdymo mokykloje</label>
-                </div>
-                <div className="form-check">
-                    <input type="checkbox" 
-                    className="form-check-input"
-                    name="guardianDisability"
-                    id="chkGuardianDisability"
-                    checked={this.state.child.acceptancePriorities.guardianDisability}
-                    onChange={this.checkboxOnChange}/>
-                    <label className="form-check-label" htmlFor="guardianDisability">Vienas iš tėvų (globėjų) turi ne daugiau kaip 40 procentų darbingumo lygio</label>
+            </div>
+        )
+    }
+
+    /** Darzeliu prioritetu forma */
+    kindergartenPriorityForm() {
+        return (
+            <div className="row">
+                <div className="col">
+                    <div className="form">
+                        <div className="row">
+                            <h6>Darželių prioritetas</h6>
+                        </div>
+                        <div className="row">
+                            <p>Pasirinkite darželių prioritetą, daugiausiai leidžiamos 5 įstaigos.</p>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="1">1 prioritetas <span className="fieldRequired">*</span></label>
+                            <Select
+                                name="1"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         )
@@ -467,6 +531,9 @@ export default class CreateApplicationFormContainer extends Component {
                 {/**Vaiko priemimo tvarkos prioritetai */}
                 {
                     this.checkboxPriorityForm()
+                }
+                {
+                    this.kindergartenPriorityForm()
                 }
             </div>
         )

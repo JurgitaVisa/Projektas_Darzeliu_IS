@@ -27,11 +27,11 @@ export default class CreateApplicationFormContainer extends Component {
                 personalCode: "",
                 birthdate: "",
                 acceptancePriorities: {
-                    livesInVilnius: "",
-                    childIsAdopted: "",
-                    familyHasThreeOrMoreChildrenInSchools: "",
-                    guardianInSchool: "",
-                    guardianDisability: "",
+                    livesInVilnius: false,
+                    childIsAdopted: false,
+                    familyHasThreeOrMoreChildrenInSchools: false,
+                    guardianInSchool: false,
+                    guardianDisability: false,
                 },
                 kindergartenPriorities: {
                     1: "",
@@ -344,7 +344,7 @@ export default class CreateApplicationFormContainer extends Component {
                     className="form-check-input"
                     name="livesInVilnius"
                     id="chkLivesInVilnius"
-                    value={this.state.child.acceptancePriorities.livesInVilnius}
+                    checked={this.state.child.acceptancePriorities.livesInVilnius}
                     onChange={this.checkboxOnChange}/>
                     <label className="form-check-label" htmlFor="livesInVilnius">Vaiko deklaruojama gyvenamoji vieta yra Vilniaus miesto savivaldybė</label>
                 </div>
@@ -353,7 +353,7 @@ export default class CreateApplicationFormContainer extends Component {
                     className="form-check-input" 
                     name="childIsAdopted" 
                     id="chkChildIsAdopted"
-                    value={this.state.child.acceptancePriorities.childIsAdopted}
+                    checked={this.state.child.acceptancePriorities.childIsAdopted}
                     onChange={this.checkboxOnChange}/>
                     <label className="form-check-label" htmlFor="childIsAdopted">Vaikas yra įvaikintas</label>
                 </div>
@@ -362,7 +362,7 @@ export default class CreateApplicationFormContainer extends Component {
                     className="form-check-input"
                     name="familyHasThreeOrMoreChildrenInSchools"
                     id="chkFamilyHasThreeOrMoreChildrenInSchools"
-                    value={this.state.child.acceptancePriorities.familyHasThreeOrMoreChildrenInSchools}
+                    checked={this.state.child.acceptancePriorities.familyHasThreeOrMoreChildrenInSchools}
                     onChange={this.checkboxOnChange}/>
                     <label className="form-check-label" htmlFor="familyHasThreeOrMoreChildrenInSchools">Šeima augina (globoja) tris ir daugiau vaikų, kurie mokosi pagal bendrojo ugdymo programas</label>
                 </div>
@@ -371,7 +371,7 @@ export default class CreateApplicationFormContainer extends Component {
                     className="form-check-input"
                     name="guardianInSchool"
                     id="chkGuardianInSchool"
-                    value={this.state.child.acceptancePriorities.guardianInSchool}
+                    checked={this.state.child.acceptancePriorities.guardianInSchool}
                     onChange={this.checkboxOnChange}/>
                     <label className="form-check-label" htmlFor="guardianInSchool">Vienas iš tėvų (globėjų) mokosi bendrojo ugdymo mokykloje</label>
                 </div>
@@ -380,7 +380,7 @@ export default class CreateApplicationFormContainer extends Component {
                     className="form-check-input"
                     name="guardianDisability"
                     id="chkGuardianDisability"
-                    value={this.state.child.acceptancePriorities.guardianDisability}
+                    checked={this.state.child.acceptancePriorities.guardianDisability}
                     onChange={this.checkboxOnChange}/>
                     <label className="form-check-label" htmlFor="guardianDisability">Vienas iš tėvų (globėjų) turi ne daugiau kaip 40 procentų darbingumo lygio</label>
                 </div>
@@ -430,6 +430,7 @@ export default class CreateApplicationFormContainer extends Component {
                 }
             }
         })
+        console.log(this.state.child.acceptancePriorities);
     }
 
     render() {

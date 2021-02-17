@@ -1,6 +1,7 @@
 package it.akademija.kindergarten;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,16 @@ public class KindergartenService {
 	}
 
 	/**
+	 * Gel all elderates
+	 * 
+	 * @return list of elderates
+	 */
+	public Set<String> getAllElderates() {
+
+		return gartenDao.findDistinctElderates();
+	}
+
+	/**
 	 * 
 	 * Returns a page of Kindergarten with specified page number and page size
 	 * 
@@ -37,22 +48,23 @@ public class KindergartenService {
 	 */
 	@Transactional(readOnly = true)
 	public Page<Kindergarten> getKindergartenPage(Pageable pageable) {
-		
+
 		return gartenDao.findAll(pageable);
 	}
-	
+
 	/**
 	 * 
-	 * Returns a page of Kindergarten filtered by name containing text with specified page number and page size
+	 * Returns a page of Kindergarten filtered by name containing text with
+	 * specified page number and page size
 	 * 
 	 * @param pageable
 	 * @return filtered page from kindergarten database
 	 */
 	@Transactional(readOnly = true)
 	public Page<Kindergarten> getKindergartenPageFilteredByName(String name, Pageable pageable) {
-		
-			return gartenDao.findByNameContainingIgnoreCase(name, pageable);
-		
+
+		return gartenDao.findByNameContainingIgnoreCase(name, pageable);
+
 	}
 
 	/**
@@ -70,7 +82,7 @@ public class KindergartenService {
 	}
 
 	/**
-	 * Find kindergarten by name. Read only
+	 * Find kindergarten by id. Read only
 	 * 
 	 * @param id
 	 * @return kindergarten or null if not found
@@ -79,6 +91,22 @@ public class KindergartenService {
 	public Kindergarten findById(String id) {
 
 		return gartenDao.findById(id).orElse(null);
+	}
+
+	/**
+	 * Find kindergarten by name. Read only
+	 * 
+	 * @param name
+	 * @return kindergarten or null if not found
+	 */
+	@Transactional(readOnly = true)
+	public boolean nameAlreadyExists(String name, String id) {
+		Kindergarten kindergarten = gartenDao.findByName(name);
+		
+		if (kindergarten!=null && kindergarten.getId()!=id) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -141,5 +169,7 @@ public class KindergartenService {
 	public void setGartenDao(KindergartenDAO gartenDao) {
 		this.gartenDao = gartenDao;
 	}
+
+	
 
 }

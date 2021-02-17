@@ -1,7 +1,6 @@
 function InputValidator(event) {
     const target = event.target;
-
-    console.log("validacija",event);
+    
         if (target.validity.valueMissing && target.id !== "txtBirthdate") {
             target.setCustomValidity(target.placeholder + " yra privalomas laukelis")
         }
@@ -73,6 +72,9 @@ function InputValidator(event) {
                 else {
                     target.setCustomValidity("");
                 }
+            }
+            else if(target.id === "txtOldPassword") {
+                target.setCustomValidity("");
             }
         }
 }

@@ -95,7 +95,7 @@ function App() {
             <div className="container-fluid px-0">
               <AdminNavBar>
                 <Switch>
-                  <Route exact path="/" component={Admin} />
+                  {/* <Route exact path="/" component={Admin} /> */}
                   <Route path="/home" component={Admin} />
                   <Route path="/admin" component={Admin} />
                   <Route path="/naudotojai" component={UserListContainer} />
@@ -112,16 +112,16 @@ function App() {
             <div className="container-fluid px-0">
               <ManagerNavBar>
                 <Switch>
-                  <Route exact path="/" component={Main} />{" "}
+                  {/* <Route exact path="/" component={KindergartenContainer} />{" "} */}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
-                  <Route path="/home" component={Main} />{" "}
+                  <Route path="/home" component={KindergartenContainer} />{" "}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
                   <Route path="/darzeliai" component={KindergartenContainer} />
                   <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
-                  <Route path="*" component={NotFound} />
-                </Switch>
-              </ManagerNavBar>
-            </div>
+                  <Route path="*" component={NotFound} />                  
+                </Switch>               
+              </ManagerNavBar >
+            </div>            
           </AuthContext.Provider>
         );
       case "USER":
@@ -130,7 +130,7 @@ function App() {
             <div className="container-fluid px-0">
               <UserNavBar>
                 <Switch>
-                  <Route exact path="/" component={Main} />{" "}
+                  {/* <Route exact path="/" component={Main} />{" "} */}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
                   <Route path="/home" component={Main} />{" "}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
@@ -159,6 +159,7 @@ function App() {
     </AuthContext.Provider>
     </div>
   )
+  
 }
 
 export default App;

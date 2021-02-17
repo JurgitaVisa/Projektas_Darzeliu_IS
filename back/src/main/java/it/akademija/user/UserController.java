@@ -1,12 +1,14 @@
 package it.akademija.user;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -65,7 +68,6 @@ public class UserController {
 	 * 
 	 * @param username
 	 */
-
 	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping(path = "/admin/delete/{username}")
 	@ApiOperation(value = "Delete user", notes = "Deletes user by username")
@@ -88,11 +90,22 @@ public class UserController {
 	@Secured({ "ROLE_ADMIN" })
 	@GetMapping(path = "/admin/allusers")
 	@ApiOperation(value = "Show all users", notes = "Showing all users")
-	public List<UserInfo> getAllUsers() {
+	public Page<UserInfo> getAllUsers(
+			@RequestParam("page") int page, 
+			  @RequestParam("size") int size) {	
+		
+		Sort.Order order = new Sort.Order(Sort.Direction.DESC, "userId").ignoreCase();
+						
+		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
 
-		return userService.getAllUsers();
+		return userService.getAllUsers(pageable);
 	}
 
+	/**
+	 * Get detail for logged in user 
+	 * 
+	 * @return user details
+	 */
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
 	@GetMapping(path = "/user")
 	@ApiOperation(value = "Get details for logged in user")
@@ -132,6 +145,13 @@ public class UserController {
 		return new ResponseEntity<String>("Naudotojas tokiu vardu nerastas", HttpStatus.NOT_FOUND);
 	}
 
+	/**
+	 * 
+	 * Updata user data
+	 * 
+	 * @param userData
+	 * @return message
+	 */
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
 	@PutMapping(path = "/update")
 	@ApiOperation(value = "Update logged in user details")
@@ -145,6 +165,28 @@ public class UserController {
 
 	}
 
+	/**
+	 * Change user password for logged in user
+	 * 
+	 * @param oldPassword
+	 * @param newPassword
+	 * @return message
+	 */
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
+	@PutMapping(path = "/updatepassword/{oldPassword}/{newPassword}")
+	@ApiOperation(value = "Update logged in user password")
+	public ResponseEntity<String> updateUserPassword(
+			@PathVariable(value = "oldPassword") final String oldPassword,
+			@PathVariable(value = "newPassword") final String newPassword) {
+		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		if(userService.changePassword(currentUsername, oldPassword, newPassword)) {
+			return new ResponseEntity<String>("Slaptažodis pakeistas sėkmingai", HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<String>("Neteisingas senas slaptažodis", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	public UserService getUserService() {
 		return userService;
 	}

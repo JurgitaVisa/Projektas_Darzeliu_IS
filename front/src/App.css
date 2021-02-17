@@ -38,8 +38,10 @@
   background-color:#007bff;
 }
 
+
+/* Neveikia font-size: em */
 .swal-text {
-  font-size: 1em;
+  font-size: 16px;
   color: #000;
 }
 
@@ -66,4 +68,8 @@ p {
 
 .navbar-light.navbar-nav.nav-link.active{
   font-size:1rem;
+}
+
+.deleteColumn {
+  width: 11%;
 }

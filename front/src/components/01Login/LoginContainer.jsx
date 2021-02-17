@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { useHistory } from 'react-router';
 
 import '../../App.css';
 
@@ -12,6 +13,9 @@ import swal from "sweetalert";
 axios.defaults.withCredentials = true;
 
 export const LoginContainer = () => {
+
+  const history=useHistory();
+
   const { dispatch } = React.useContext(AuthContext);
 
   const initState = {
@@ -53,7 +57,7 @@ export const LoginContainer = () => {
           type: "LOGIN",
           payload: resp.data,
         });
-        // this.props.history.push("/home");
+        history.push("/home");
       })
       .catch((error) => {
         console.log("Error log from Login submit", error);

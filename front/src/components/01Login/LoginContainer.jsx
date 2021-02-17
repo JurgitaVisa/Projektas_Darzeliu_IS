@@ -147,7 +147,7 @@ export const LoginContainer = () => {
           </button>
         </form>
         {data.loginError && (
-          <span className="alert alert-danger mt-3" role="alert">
+          <span className="alert alert-danger mt-3" role="alert" id="incorrectLoginData">
             Neteisingas prisijungimo vardas ir/arba slaptažodis!
           </span>
         )}

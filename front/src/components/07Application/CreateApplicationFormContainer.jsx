@@ -436,6 +436,12 @@ export default class CreateApplicationFormContainer extends Component {
         )
     }
 
+    /** Darzeliu sarasas i options formata */
+    kindergartenListToSelect(kList) {
+        var optionsList = kList.map((k) => ({value: k.id, label: k.name + " (" + k.address + ")"}));
+        return optionsList;
+    }
+
     /** Darzeliu prioritetu forma */
     kindergartenPriorityForm() {
         return (
@@ -452,6 +458,7 @@ export default class CreateApplicationFormContainer extends Component {
                             <label htmlFor="1">1 prioritetas <span className="fieldRequired">*</span></label>
                             <Select
                                 name="1"
+                                options={this.kindergartenListToSelect(this.state.kindergartenList)}
                             />
                         </div>
                     </div>

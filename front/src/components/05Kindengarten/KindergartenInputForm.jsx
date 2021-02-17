@@ -1,69 +1,100 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../App.css";
 
-const data = {
-  kindergartenID: "",
-  kindergartenName: "",
-  kindergartenAddress: "",
-  kindergartenRegion: "",
-  kindergartenResource: {
-    upTo3yrs: 0,
-    upTo6yrs: 0,
-  },
-  savingStatus: false,
-  savingError: false,
-};
-
-const handleSubmit = (event) => {
-  event.preventDefault();
-};
-
-const validateText = (event) => {
-  const target = event.target;
-};
-
-const handleChange = (event) => {
-  validateText(event);
-};
-
-const resetForm = (event) => {};
-
 function KindergartenInputForm() {
+
+  const initKindergartenData = {
+    address: "",
+    capacityAgeGroup2to3: 0,
+    capacityAgeGroup3to6: 0,
+    elderate: "",
+    id: "",
+    name: ""    
+  };
+
+  var savingStatus = false;
+
+  const [data, setData] = useState(initKindergartenData);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    savingStatus = true;
+    console.log("saugoma į serverį");
+    console.log(data);
+  };
+
+  const validateField = (event) => {
+    const target = event.target;
+    if (target.validity.valueMissing) {
+      target.setCustomValidity("Būtina užpildyti šį laukelį");
+    } 
+    else {
+      target.setCustomValidity("");
+    }
+  };
+
+  const handleChange = (event) => {
+    validateField(event);
+    if (event.target.name === "capacityAgeGroup2to3") {
+      setData({
+        ...data,
+        capacityAgeGroup2to3: event.target.value >= 0 ? Number(event.target.value) : 0,
+      });
+    } else if (event.target.name === "capacityAgeGroup3to6") {
+      setData({
+        ...data,
+        savingError: false,
+        capacityAgeGroup3to6: event.target.value >= 0 ? Number(event.target.value) : 0,
+      });
+    } else {
+      setData({
+        ...data,
+        [event.target.name]: event.target.value,
+      });
+    }
+  };
+
+  const resetForm = () => {
+    setData(initKindergartenData);
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h6 className="py-3"><b>Pridėti naują darželį </b></h6>
+        <h6 className="py-3">
+          <b>Pridėti naują darželį </b>
+        </h6>
         <div className="form-group">
-          <label htmlFor="kindergartenID">
+          <label htmlFor="id">
             Įstaigos kodas <span className="fieldRequired">*</span>
           </label>
           <input
             type="text"
             className="form-control"
-            name="kindergartenID"
-            id="kindergartenID"
-            value={data.kindergartenID}
+            name="id"
+            id="id"
+            value={data.id}
             onChange={handleChange}
-            onInvalid={validateText}
+            onInvalid={validateField}
             required
             data-toggle="tooltip"
             data-placement="top"
             title="Įveskite įstaigos (darželio) kodą"
           />
         </div>
-        
+
         <div className="form-group">
-          <label htmlFor="kindergartenName">
+          <label htmlFor="name">
             Pavadinimas <span className="fieldRequired">*</span>
           </label>
           <input
             type="text"
             className="form-control "
-            name="kindergartenName"
-            id="kindergartenName"
-            value={data.kindergartenName}
+            name="name"
+            id="name"
+            value={data.name}
             onChange={handleChange}
-            onInvalid={validateText}
+            onInvalid={validateField}
             required
             data-toggle="tooltip"
             data-placement="top"
@@ -72,17 +103,17 @@ function KindergartenInputForm() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="kindergartenAddress">
+          <label htmlFor="address">
             Adresas <span className="fieldRequired">*</span>
           </label>
           <input
             type="text"
             className="form-control"
-            name="kindergartenAddress"
-            id="kindergartenAddress"
-            value={data.kindergartenAddress}
+            name="address"
+            id="address"
+            value={data.address}
             onChange={handleChange}
-            onInvalid={validateText}
+            onInvalid={validateField}
             required
             data-toggle="tooltip"
             data-placement="top"
@@ -91,72 +122,78 @@ function KindergartenInputForm() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="kindergartenRegion">
+          <label htmlFor="elderate">
             Seniūnija <span className="fieldRequired">*</span>
           </label>
           <select
             type="text"
             className="form-control"
-            name="kindergartenRegion"
-            id="kindergartenRegion"
-            value={data.kindergartenRegion}
+            name="elderate"
+            id="elderate"
+            value={data.elderate}
             onChange={handleChange}
-            onInvalid={validateText}
+            onInvalid={validateField}
             required
             data-toggle="tooltip"
             data-placement="top"
-            title="Įveskite seniūniją, kuriai priskirtas darželis"
-          />
+            title="Pasirinkite seniūniją, kuriai priskiriamas darželis">
+            <option defaultValue="" disabled hidden label="Pasirinkite"/>
+            <option value="testas" label="testas" />
+          </select>
         </div>
-        <h6 className="py-3"><b>Vietų skaičius </b><span className="fieldRequired">*</span></h6>
+        <h6 className="py-3">
+          <b>Vietų skaičius </b>
+          <span className="fieldRequired">*</span>
+        </h6>
         <div className="form-group">
-          <label htmlFor="kindergartenAddress">
-            2-3 metų grupėse
-          </label>
+          <label htmlFor="capacityAgeGroup2to3">2-3 metų grupėse</label>
           <input
             type="number"
             className="form-control"
-            name="kindergartenAddress"
-            id="kindergartenAddress"
-            value={data.kindergartenAddress}
+            name="capacityAgeGroup2to3"
+            id="capacityAgeGroup2to3"
+            value={data.capacityAgeGroup2to3}
             onChange={handleChange}
-            onInvalid={validateText}
+            onInvalid={validateField}
             required
             data-toggle="tooltip"
             data-placement="top"
-            title="Įveskite darželio adresą"
+            title="Įveskite 2-3 metų amžiaus grupėse esančių vietų skaičių"
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="kindergartenAddress">
-            3-6 metų grupėse
-          </label>
+          <label htmlFor="capacityAgeGroup3to6">3-6 metų grupėse</label>
           <input
             type="number"
             className="form-control"
-            name="kindergartenAddress"
-            id="kindergartenAddress"
-            value={data.kindergartenAddress}
+            name="capacityAgeGroup3to6"
+            id="capacityAgeGroup3to6"
+            value={data.capacityAgeGroup3to6}
             onChange={handleChange}
-            onInvalid={validateText}
+            onInvalid={validateField}
             required
             data-toggle="tooltip"
             data-placement="top"
-            title="Įveskite darželio adresą"
+            title="Įveskite 2-3 metų amžiaus grupėse esančių vietų skaičių"
           />
         </div>
 
-        <button type="reset" className="btn btn-outline-danger mr-2 form-group">
+        <button
+          type="reset"
+          className="btn btn-outline-danger mr-2 form-group"
+          id="btnClearKindergartenForm"
+          onClick={resetForm}
+        >
           Išvalyti
         </button>
         <button
           type="submit"
           className="btn btn-primary form-group"
           id="btnSaveKindergarten"
-          disabled={data.savingStatus}
+          disabled={savingStatus}
         >
-          {data.savingStatus ? "Pridedama..." : "Pridėti"}
+          {savingStatus ? "Pridedama..." : "Pridėti"}
         </button>
       </form>
     </div>

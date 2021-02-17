@@ -47,9 +47,7 @@ export default class CreateApplicationFormContainer extends Component {
                     5: ""
                 }
             },
-            kindergartens: {
-
-            }
+            kindergartenList: []
         }
         this.mainGuardianOnChange = this.mainGuardianOnChange.bind(this);
         this.additionalGuardianOnChange = this.additionalGuardianOnChange.bind(this);
@@ -73,6 +71,16 @@ export default class CreateApplicationFormContainer extends Component {
                     }
                 })
                 /** get kindergarten list */
+                var kindergartenList = [];
+                http.get(`${apiEndpoint}/api/darzeliai`)
+                    .then((response) => {
+                        kindergartenList = response.data;
+                        this.setState({
+                            kindergartenList
+                        })
+                        console.log(kindergartenList);
+                        console.log(this.state.kindergartenList[0]);
+                    })
             })
             .catch((error) => {
                 swal({

@@ -20,11 +20,11 @@ export default function LogoutContainer() {
       .post(`${apiEndpoint}/logout`)
       .then(response => {
         console.log("atsijungimas")
-        dispatch({
+        dispatch({        // svarbu eiliškumas - pirma dispatch: išvalo kontekstą, ištrina sessionStorage, isAutthenticated -> false
           type: "LOGOUT",
           payload: null
         })
-        history.push("/");
+        history.push("/");  // tada tik history.push("/") ir kraunamas pradinis puslapis jau atsijungus naudotojui
       })
       .catch(error => {
         console.log("Error on logout", error);

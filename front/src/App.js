@@ -123,9 +123,7 @@ function App() {
               <ManagerNavBar>
                 <Switch>
                   <Route exact path="/" component={KindergartenContainer} />{" "}
-                  {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
                   <Route path="/home" component={KindergartenContainer} />{" "}
-                  {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
                   <Route path="/darzeliai" component={KindergartenContainer} />
                   <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />                  

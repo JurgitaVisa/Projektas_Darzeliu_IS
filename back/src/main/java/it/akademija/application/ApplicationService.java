@@ -104,11 +104,11 @@ public class ApplicationService {
 
 		KindergartenChoiseDTO choisesDto = data.getKindergartenChoises();
 
-		Kindergarten first = gartenService.findById(choisesDto.getKindegartenId1());
-		Kindergarten second = gartenService.findById(choisesDto.getKindegartenId2());
-		Kindergarten third = gartenService.findById(choisesDto.getKindegartenId3());
-		Kindergarten fouth = gartenService.findById(choisesDto.getKindegartenId4());
-		Kindergarten fith = gartenService.findById(choisesDto.getKindegartenId5());
+		Kindergarten first = gartenService.findById(choisesDto.getKindergartenId1());
+		Kindergarten second = gartenService.findById(choisesDto.getKindergartenId2());
+		Kindergarten third = gartenService.findById(choisesDto.getKindergartenId3());
+		Kindergarten fouth = gartenService.findById(choisesDto.getKindergartenId4());
+		Kindergarten fith = gartenService.findById(choisesDto.getKindergartenId5());
 
 		List<KindergartenChoise> choises = new ArrayList<>();
 		

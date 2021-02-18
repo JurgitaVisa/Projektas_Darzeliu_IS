@@ -104,11 +104,11 @@ public class ApplicationService {
 
 		KindergartenChoiseDTO choisesDto = data.getKindergartenChoises();
 
-		Kindergarten first = gartenService.findById(choisesDto.getKindegartenId1());
-		Kindergarten second = gartenService.findById(choisesDto.getKindegartenId2());
-		Kindergarten third = gartenService.findById(choisesDto.getKindegartenId3());
-		Kindergarten fouth = gartenService.findById(choisesDto.getKindegartenId4());
-		Kindergarten fith = gartenService.findById(choisesDto.getKindegartenId5());
+		Kindergarten first = gartenService.findById(choisesDto.getKindergartenId1());
+		Kindergarten second = gartenService.findById(choisesDto.getKindergartenId2());
+		Kindergarten third = gartenService.findById(choisesDto.getKindergartenId3());
+		Kindergarten fouth = gartenService.findById(choisesDto.getKindergartenId4());
+		Kindergarten fith = gartenService.findById(choisesDto.getKindergartenId5());
 
 		List<KindergartenChoise> choises = new ArrayList<>();
 		
@@ -162,5 +162,39 @@ public class ApplicationService {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+
+	public KindergartenService getGartenService() {
+		return gartenService;
+	}
+
+	public void setGartenService(KindergartenService gartenService) {
+		this.gartenService = gartenService;
+	}
+
+	public ParentDetailsDAO getParentDetailsDao() {
+		return parentDetailsDao;
+	}
+
+	public void setParentDetailsDao(ParentDetailsDAO parentDetailsDao) {
+		this.parentDetailsDao = parentDetailsDao;
+	}
+
+	public PrioritiesDAO getPrioritiesDao() {
+		return prioritiesDao;
+	}
+
+	public void setPrioritiesDao(PrioritiesDAO prioritiesDao) {
+		this.prioritiesDao = prioritiesDao;
+	}
+
+	public KindergartenChoiseDAO getChoiseDao() {
+		return choiseDao;
+	}
+
+	public void setChoiseDao(KindergartenChoiseDAO choiseDao) {
+		this.choiseDao = choiseDao;
+	}
+	
+	
 
 }

@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import '../../App.css';
 
 import { KindergartenListContainer } from './KindergartenListContainer';
-export class KindergartenContainer extends Component {
+import KindergartenInputForm from './KindergartenInputForm';
 
+export class KindergartenContainer extends Component {
 
     render() {
         return (
@@ -12,8 +13,8 @@ export class KindergartenContainer extends Component {
                 <div className="container pt-4">
 
                     <div className="row ">
-                        <div className="bg-light pb-3 col-12 col-sm-12 col-md-12 col-lg-3">
-                            <h6 className="py-3"><b>Pridėti naują darželį </b></h6>
+                        <div className="bg-light pb-3 col-12 col-sm-12 col-md-12 col-lg-3 pt-1">
+                            <KindergartenInputForm />
                         </div>
 
                         <div className="col-12 col-sm-12 col-md-12 col-lg-9 pt-1">

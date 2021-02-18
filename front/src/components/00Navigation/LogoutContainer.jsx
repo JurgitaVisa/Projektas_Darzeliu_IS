@@ -19,12 +19,12 @@ export default function LogoutContainer() {
         http
       .post(`${apiEndpoint}/logout`)
       .then(response => {
-        history.push("/");
         console.log("atsijungimas")
         dispatch({
           type: "LOGOUT",
           payload: null
         })
+        history.push("/");
       })
       .catch(error => {
         console.log("Error on logout", error);

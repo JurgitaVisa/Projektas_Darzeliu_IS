@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.akademija.application.priorities.Priorities;
 import it.akademija.application.priorities.PrioritiesDAO;
+import it.akademija.application.priorities.PrioritiesDTO;
 import it.akademija.kindergarten.Kindergarten;
 import it.akademija.kindergarten.KindergartenService;
 import it.akademija.kindergartenchoise.KindergartenChoise;
@@ -85,9 +86,12 @@ public class ApplicationService {
 
 			application.setAdditionalGuardian(secondParent);
 		}
+		
+		PrioritiesDTO prioritiesDto= data.getPriorities();
 
-		Priorities priorities = prioritiesDao.save(data.getPriorities());		
-
+		Priorities priorities = prioritiesDao.save(new Priorities(prioritiesDto.isLivesInVilnius(), prioritiesDto.isChildIsAdopted(), prioritiesDto.isFamilyHasThreeOrMoreChildrenInSchools(),
+				prioritiesDto.isGuardianInSchool(), prioritiesDto.isGuardianDisability()));	
+		
 		application.setSubmitedAt();
 		application.setStatus(ApplicationStatus.Pateiktas);
 		application.setChildName(data.getChildName());

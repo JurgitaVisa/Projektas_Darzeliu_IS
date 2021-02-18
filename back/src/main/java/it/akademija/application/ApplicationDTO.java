@@ -3,6 +3,7 @@ package it.akademija.application;
 import java.time.LocalDate;
 
 import it.akademija.application.priorities.Priorities;
+import it.akademija.application.priorities.PrioritiesDTO;
 import it.akademija.kindergartenchoise.KindergartenChoiseDTO;
 import it.akademija.user.ParentDetails;
 import it.akademija.user.ParentDetailsDTO;
@@ -18,7 +19,7 @@ public class ApplicationDTO {
 	
 	private LocalDate birthdate;	
 	
-	private Priorities priorities;
+	private PrioritiesDTO priorities;
 	
 	private UserDTO mainGuardian;		
 	
@@ -31,7 +32,7 @@ public class ApplicationDTO {
 	}	
 
 	public ApplicationDTO(String childName, String childSurname, String childPersonalCode, LocalDate birthdate,
-			Priorities priorities, UserDTO mainGuardian, ParentDetailsDTO additionalGuardian,
+			PrioritiesDTO priorities, UserDTO mainGuardian, ParentDetailsDTO additionalGuardian,
 			KindergartenChoiseDTO kindergartenChoises) {
 		super();
 		this.childName = childName;
@@ -102,11 +103,11 @@ public class ApplicationDTO {
 		this.kindergartenChoises = kindergartenChoises;
 	}
 
-	public Priorities getPriorities() {
+	public PrioritiesDTO getPriorities() {
 		return priorities;
 	}
 
-	public void setPriorities(Priorities priorities) {
+	public void setPriorities(PrioritiesDTO priorities) {
 		this.priorities = priorities;
 	}
 	

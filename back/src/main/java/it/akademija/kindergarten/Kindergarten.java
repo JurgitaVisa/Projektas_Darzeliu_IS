@@ -5,8 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 
 @Entity
 public class Kindergarten {
@@ -16,17 +16,18 @@ public class Kindergarten {
 	private String id;
 
 	@NotBlank(message = "Pavadinimas privalomas")
+	@Pattern(regexp = "^[\\p{L}0-9\\s]{3,50}$")
 	@Column(name = "name", unique = true)
 	private String name;
 
 	@Column
 	@NotBlank(message = "Adresas privalomas")
 	private String address;
-	
+
 	@Column
+	@Pattern(regexp = "^[\\p{L}\\s]{3,20}$")
 	@NotBlank(message = "Seniūnija privaloma")
 	private String elderate;
-	
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
 	private int capacityAgeGroup2to3;
@@ -38,9 +39,10 @@ public class Kindergarten {
 
 	}
 
-	public Kindergarten(String id, @NotBlank(message = "Pavadinimas privalomas") String name,
+	public Kindergarten(String id,
+			@NotBlank(message = "Pavadinimas privalomas") @Pattern(regexp = "^[\\p{L}0-9\\s]{3,50}$") String name,
 			@NotBlank(message = "Adresas privalomas") String address,
-			@NotBlank(message = "Seniūnija privaloma") String elderate,
+			@Pattern(regexp = "^[\\p{L}\\s]{3,20}$") @NotBlank(message = "Seniūnija privaloma") String elderate,
 			@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0") int capacityAgeGroup2to3,
 			@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0") int capacityAgeGroup3to6) {
 		super();
@@ -99,6 +101,5 @@ public class Kindergarten {
 	public void setCapacityAgeGroup3to6(int capacityAgeGroup3to6) {
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
 	}
-
 
 }

@@ -163,4 +163,38 @@ public class ApplicationService {
 		this.userService = userService;
 	}
 
+	public KindergartenService getGartenService() {
+		return gartenService;
+	}
+
+	public void setGartenService(KindergartenService gartenService) {
+		this.gartenService = gartenService;
+	}
+
+	public ParentDetailsDAO getParentDetailsDao() {
+		return parentDetailsDao;
+	}
+
+	public void setParentDetailsDao(ParentDetailsDAO parentDetailsDao) {
+		this.parentDetailsDao = parentDetailsDao;
+	}
+
+	public PrioritiesDAO getPrioritiesDao() {
+		return prioritiesDao;
+	}
+
+	public void setPrioritiesDao(PrioritiesDAO prioritiesDao) {
+		this.prioritiesDao = prioritiesDao;
+	}
+
+	public KindergartenChoiseDAO getChoiseDao() {
+		return choiseDao;
+	}
+
+	public void setChoiseDao(KindergartenChoiseDAO choiseDao) {
+		this.choiseDao = choiseDao;
+	}
+	
+	
+
 }

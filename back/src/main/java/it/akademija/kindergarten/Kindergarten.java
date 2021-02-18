@@ -12,11 +12,11 @@ import javax.validation.constraints.Size;
 public class Kindergarten {
 
 	@Id
-	@Size(min = 7, max = 9, message = "Įstaigos kodas turi būti sudarytas iš 7-9 skaitmenų imtinai")
+	@Size(min = 9, max = 9, message = "Įstaigos kodas turi būti sudarytas iš 9 skaitmenų")
 	private String id;
 
 	@NotBlank(message = "Pavadinimas privalomas")
-	@Pattern(regexp = "^[\\p{L}0-9\\s]{3,50}$")
+	@Pattern(regexp = "\\S[\\s\\S]{2,49}")
 	@Column(name = "name", unique = true)
 	private String name;
 
@@ -40,7 +40,7 @@ public class Kindergarten {
 	}
 
 	public Kindergarten(String id,
-			@NotBlank(message = "Pavadinimas privalomas") @Pattern(regexp = "^[\\p{L}0-9\\s]{3,50}$") String name,
+			@NotBlank(message = "Pavadinimas privalomas") @Pattern(regexp = "\\S[\\s\\S]{2,49}") String name,
 			@NotBlank(message = "Adresas privalomas") String address,
 			@Pattern(regexp = "^[\\p{L}\\s]{3,20}$") @NotBlank(message = "Seniūnija privaloma") String elderate,
 			@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0") int capacityAgeGroup2to3,

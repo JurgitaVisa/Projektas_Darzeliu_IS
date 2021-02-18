@@ -50,7 +50,7 @@ public class User {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "users_parentDetails", joinColumns = {
 			@JoinColumn(name = "users_id", referencedColumnName = "userId") }, inverseJoinColumns = {
-					@JoinColumn(name = "parentDetails_id", referencedColumnName = "id") })
+					@JoinColumn(name = "parentDetails_id", referencedColumnName = "parentDetailsId") })
 	private ParentDetails parentDetails;
 
 	@NotEmpty

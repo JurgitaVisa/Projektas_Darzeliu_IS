@@ -191,7 +191,7 @@ public class UserService implements UserDetailsService {
 	public void updateUserData(UserDTO userData, String username) {
 
 		User user = findByUsername(username);
-		ParentDetails details = new ParentDetails();
+		ParentDetails details = user.getParentDetails();
 
 		if (userData.getRole().equals("USER")) {
 			details.setAddress(userData.getAddress());
@@ -200,7 +200,6 @@ public class UserService implements UserDetailsService {
 			details.setEmail(userData.getEmail());
 			details.setName(userData.getName());
 			details.setSurname(userData.getSurname());
-			user.setParentDetails(details);
 		}
 
 		user.setName(userData.getName());

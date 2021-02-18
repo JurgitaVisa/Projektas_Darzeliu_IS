@@ -509,6 +509,7 @@ export default class CreateApplicationFormContainer extends Component {
 
     /** Pagrindinio atstovo formos onChange */
     mainGuardianOnChange(e) {
+        inputValidator(e);
         this.setState({
             mainGuardian: {
                 ...this.state.mainGuardian,
@@ -519,6 +520,7 @@ export default class CreateApplicationFormContainer extends Component {
 
     /** Antro atstovo formos onChange */
     additionalGuardianOnChange(e) {
+        inputValidator(e);
         this.setState({
             additionalGuardian: {
                 ...this.state.additionalGuardian,
@@ -529,6 +531,7 @@ export default class CreateApplicationFormContainer extends Component {
 
     /** Vaiko formos onChange */
     childOnChange(e) {
+        inputValidator(e);
         this.setState({
             child: {
                 ...this.state.child,
@@ -549,7 +552,6 @@ export default class CreateApplicationFormContainer extends Component {
                 }
             }
         })
-        console.log(this.state.child.acceptancePriorities);
     }
 
     /** Select onChange */
@@ -564,11 +566,21 @@ export default class CreateApplicationFormContainer extends Component {
                 }
             }
         })
-        console.log(this.state.child);
     }
 
     /** Handle submit */
-    submitHandle() {
+    submitHandle(e) {
+        e.preventDefault();
+        if(!this.state.child.kindergartenPriorities.firstPriority) {
+            swal({
+                title: "Įvyko klaida",
+                text: "1 Prioritetas yra privalomas"
+            })
+            
+        }
+        else {
+            /** Todo: POST */
+        }
         console.log(this.state);
     }
 
@@ -578,21 +590,21 @@ export default class CreateApplicationFormContainer extends Component {
                 <div className="form">
                     <form onSubmit={this.submitHandle}>
                         <div className="row">
-                            <div className="col">
+                            <div className="col-3">
                                 {
                                     /** Atstovas 1 */
                                     this.userForm(true)
                                 }
                             </div>
                             <div className="col" />
-                            <div className="col">
+                            <div className="col-3">
                                 {
                                     /** Atstovas 2 */
                                     this.userForm(false)
                                 }
                             </div>
                             <div className="col" />
-                            <div className="col">
+                            <div className="col-3">
                                 {
                                     /** Vaiko forma */
                                     this.childForm()
@@ -607,7 +619,7 @@ export default class CreateApplicationFormContainer extends Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col">
+                            <div className="col-6">
                                 {
                                     this.kindergartenPriorityForm()
                                 }
@@ -621,8 +633,6 @@ export default class CreateApplicationFormContainer extends Component {
                         </div>
                     </form>
                 </div>
-                
-                
             </div>
         )
     }

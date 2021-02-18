@@ -54,8 +54,8 @@ public class User {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "users_parentDetails", joinColumns = {
 			@JoinColumn(name = "users_id", referencedColumnName = "userId") }, inverseJoinColumns = {
-					@JoinColumn(name = "parentDetails_id", referencedColumnName = "id") })
-	private ParentDetails parentDetails;	
+					@JoinColumn(name = "parentDetails_id", referencedColumnName = "parentDetailsId") })
+	private ParentDetails parentDetails;
 
 	@NotEmpty
 	@Email
@@ -65,8 +65,8 @@ public class User {
 	@NotEmpty
 	@Column
 	private String password;
-	
-	@OneToMany(mappedBy="mainGuardian", cascade = {CascadeType.ALL})
+
+	@OneToMany(mappedBy = "mainGuardian", cascade = { CascadeType.ALL })
 	private Set<Application> userApplications;
 
 	public User() {
@@ -91,8 +91,7 @@ public class User {
 		this.email = email;
 		this.username = username;
 		this.password = password;
-	}		
-	
+	}
 
 	public void setUserApplications(Set<Application> userApplications) {
 		this.userApplications = userApplications;

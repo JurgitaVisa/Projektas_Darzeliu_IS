@@ -1,8 +1,9 @@
 package it.akademija.user;
 
-import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+
+import java.security.SecureRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.akademija.application.Application;
-import it.akademija.application.ApplicationInfo;
 import it.akademija.role.Role;
 
 @Service
@@ -25,7 +25,9 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private UserDAO userDao;
 
-	private PasswordEncoder encoder = new BCryptPasswordEncoder();
+	int strength = 14;
+
+	private PasswordEncoder encoder = new BCryptPasswordEncoder(strength, new SecureRandom());
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -191,7 +193,7 @@ public class UserService implements UserDetailsService {
 	public User updateUserData(UserDTO userData, String username) {
 
 		User user = findByUsername(username);
-		ParentDetails details = new ParentDetails();
+		ParentDetails details = user.getParentDetails();
 
 		if (user.getRole().equals(Role.USER)) {
 			details.setAddress(userData.getAddress());
@@ -200,7 +202,6 @@ public class UserService implements UserDetailsService {
 			details.setEmail(userData.getEmail());
 			details.setName(userData.getName());
 			details.setSurname(userData.getSurname());
-			user.setParentDetails(details);
 		}
 
 		user.setName(userData.getName());

@@ -2,9 +2,10 @@ package it.akademija.user;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -21,8 +22,11 @@ import it.akademija.application.Application;
 public class ParentDetails {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long parentDetailsId;
+
 	@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{11}$|")
-	@Column(name = "id")
+	@Column
 	private String personalCode;
 
 	@OneToOne(mappedBy = "parentDetails")
@@ -59,19 +63,19 @@ public class ParentDetails {
 
 	}
 
-	public ParentDetails(@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{11}$|") String personalCode, 
+	public ParentDetails(@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{11}$|") String personalCode,
 			@NotEmpty(message = "Vardas privalomas!") @Size(min = 2, max = 70) @Pattern(regexp = "^\\p{L}+(?: \\p{L}+)*$") String name,
 			@NotEmpty(message = "Pavardė privaloma!") @Size(min = 2, max = 70) @Pattern(regexp = "^\\p{L}+(?: \\p{L}+)*$") String surname,
 			@Email @NotEmpty(message = "El. paštas privalomas!") String email, String address,
 			@Pattern(regexp = "^370(?!\\s*$)[0-9\\s]{8}$|") String phone) {
 		super();
-		this.personalCode = personalCode;		
+		this.personalCode = personalCode;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
 		this.address = address;
 		this.phone = phone;
-	}		
+	}
 
 	public void setParentApplications(Set<Application> parentApplications) {
 		this.parentApplications = parentApplications;
@@ -79,6 +83,10 @@ public class ParentDetails {
 
 	public Set<Application> getParentApplications() {
 		return parentApplications;
+	}
+
+	public Long getParentDetailsId() {
+		return parentDetailsId;
 	}
 
 	public String getPersonalCode() {

@@ -43,10 +43,20 @@ const checkLogin = () => {
       role: null,
     };
 
-  /* galima naudoti useEffect ir jame kviesti /api/loggedUser */
+  /* galima naudoti useEffect 
 
-  // problema su kreipimusi į serverį yra ta, kad užklausa yra asincroninė ir kol grąžinami rezultatai, tolimesnis kodas dirba su isAuthenticated === false, nors realiai yra prisijungęs useris
-  // http
+      useEffect(() => {
+      -> /api/loggedUser 
+      return () => {
+        if prisijungęs {}
+        else {Login}
+      }
+    }, [input])
+  */
+
+  // problema su kreipimusi į serverį yra ta, kad užklausa yra asincroninė ir kol grąžinami rezultatai, 
+  // tolimesnis kodas dirba su isAuthenticated === false, nors realiai yra prisijungęs useris
+    // http
   //   .get(`${apiEndpoint}/api/loggedUser`)
   //   .then((resp) => {
   //     console.log("user " + resp.data + " is logged in <- message from checkIfLoggedIn");
@@ -96,7 +106,7 @@ function App() {
             <div className="container-fluid px-0">
               <AdminNavBar>
                 <Switch>
-                  {/* <Route exact path="/" component={Admin} /> */}
+                  <Route exact path="/" component={Admin} />
                   <Route path="/home" component={Admin} />
                   <Route path="/admin" component={Admin} />
                   <Route path="/naudotojai" component={UserListContainer} />
@@ -113,7 +123,7 @@ function App() {
             <div className="container-fluid px-0">
               <ManagerNavBar>
                 <Switch>
-                  {/* <Route exact path="/" component={KindergartenContainer} />{" "} */}
+                  <Route exact path="/" component={KindergartenContainer} />{" "}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
                   <Route path="/home" component={KindergartenContainer} />{" "}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
@@ -131,7 +141,7 @@ function App() {
             <div className="container-fluid px-0">
               <UserNavBar>
                 <Switch>
-                  {/* <Route exact path="/" component={Main} />{" "} */}
+                  <Route exact path="/" component={Main} />{" "}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
                   <Route path="/home" component={UserHomeContainer} />{" "}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}

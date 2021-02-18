@@ -18,6 +18,7 @@ export default class CreateApplicationFormContainer extends Component {
                 phone: "",
                 email: "",
                 address: "",
+                username: ""
             },
             additionalGuardian: {
                 name: "",
@@ -25,7 +26,7 @@ export default class CreateApplicationFormContainer extends Component {
                 personalCode: "",
                 phone: "",
                 email: "",
-                address: "",
+                address: ""
             },
             birthdate: "2020-01-01",
             childName: "",
@@ -87,7 +88,9 @@ export default class CreateApplicationFormContainer extends Component {
                         personalCode: response.data.personalCode,
                         phone: response.data.phone.slice(3),
                         email: response.data.username,
-                        address: response.data.address
+                        address: response.data.address,
+                        username: response.data.username,
+                        role: response.data.role
                     }
                 })
                 /** get kindergarten list */
@@ -592,26 +595,93 @@ export default class CreateApplicationFormContainer extends Component {
         }
         else {
             /** Todo: POST */
+            const data = {
+                "additionalGuardian": {
+                    "address": this.state.additionalGuardian.address,
+                    "email": this.state.additionalGuardian.email,
+                    "name": this.state.additionalGuardian.name,
+                    "personalCode": this.state.additionalGuardian.personalCode,
+                    "phone": this.state.additionalGuardian.phone,
+                    "surname": this.state.additionalGuardian.surname
+                },
+                "birthdate": this.state.birthdate,
+                "childName": this.state.childName,
+                "childPersonalCode": this.state.childPersonalCode,
+                "childSurname": this.state.childSurname,
+                "kindergartenChoises": {
+                    "kindergartenId1": this.state.kindergartenChoises.kindergartenId1,
+                    "kindergartenId2": this.state.kindergartenChoises.kindergartenId2,
+                    "kindergartenId3": this.state.kindergartenChoises.kindergartenId3,
+                    "kindergartenId4": this.state.kindergartenChoises.kindergartenId4,
+                    "kindergartenId5": this.state.kindergartenChoises.kindergartenId5,
+                },
+                "mainGuardian": {
+                    "address": this.state.mainGuardian.address,
+                    "email": this.state.mainGuardian.email,
+                    "name": this.state.mainGuardian.name,
+                    "personalCode": this.state.mainGuardian.personalCode,
+                    "phone": this.state.mainGuardian.phone,
+                    "role": this.state.mainGuardian.role,
+                    "surname": this.state.mainGuardian.surname,
+                    "username": this.state.mainGuardian.username
+                },
+                "priorities": {
+                    "childIsAdopted": this.state.priorities.childIsAdopted,
+                    "familyHasThreeOrMoreChildrenInSchools": this.state.priorities.familyHasThreeOrMoreChildrenInSchools,
+                    "guardianDisability": this.state.priorities.guardianDisability,
+                    "guardianInSchool": this.state.priorities.guardianInSchool,
+                    "livesInVilnius": this.state.priorities.livesInVilnius
+                  }
+            }
+            console.log("POST DATA:")
+            console.log(data);
             http.post(`${apiEndpoint}/api/prasymai`, 
                 {
-                    "additionalGuardian": this.state.additionalGuardian,
-                    "mainGuardian": this.state.mainGuardian,
-                    "priorities": this.state.priorities,
-                    "kindergartenChoises": this.state.kindergartenChoises,
-                    "childName": this.state.childName,
-                    "childSurname": this.state.childSurname,
-                    "childPersonalCode": this.state.childPersonalCode,
+                    "additionalGuardian": {
+                        "address": this.state.additionalGuardian.address,
+                        "email": this.state.additionalGuardian.email,
+                        "name": this.state.additionalGuardian.name,
+                        "personalCode": this.state.additionalGuardian.personalCode,
+                        "phone": this.state.additionalGuardian.phone,
+                        "surname": this.state.additionalGuardian.surname
+                    },
                     "birthdate": this.state.birthdate,
+                    "childName": this.state.childName,
+                    "childPersonalCode": this.state.childPersonalCode,
+                    "childSurname": this.state.childSurname,
+                    "kindergartenChoises": {
+                        "kindergartenId1": this.state.kindergartenChoises.kindergartenId1,
+                        "kindergartenId2": this.state.kindergartenChoises.kindergartenId2,
+                        "kindergartenId3": this.state.kindergartenChoises.kindergartenId3,
+                        "kindergartenId4": this.state.kindergartenChoises.kindergartenId4,
+                        "kindergartenId5": this.state.kindergartenChoises.kindergartenId5,
+                    },
+                    "mainGuardian": {
+                        "address": this.state.mainGuardian.address,
+                        "email": this.state.mainGuardian.email,
+                        "name": this.state.mainGuardian.name,
+                        "personalCode": this.state.mainGuardian.personalCode,
+                        "phone": this.state.mainGuardian.phone,
+                        "role": this.state.mainGuardian.role,
+                        "surname": this.state.mainGuardian.surname,
+                        "username": this.state.mainGuardian.username
+                    },
+                    "priorities": {
+                        "childIsAdopted": this.state.priorities.childIsAdopted,
+                        "familyHasThreeOrMoreChildrenInSchools": this.state.priorities.familyHasThreeOrMoreChildrenInSchools,
+                        "guardianDisability": this.state.priorities.guardianDisability,
+                        "guardianInSchool": this.state.priorities.guardianInSchool,
+                        "livesInVilnius": this.state.priorities.livesInVilnius
+                      }
                 }
                 )
                 .then((response) => {
                     console.log(response);
                 })
                 .catch((error) => {
-                    swal(error);
+                    console.log(error)
                 })
         }
-        console.log(this.state);
     }
 
     render() {

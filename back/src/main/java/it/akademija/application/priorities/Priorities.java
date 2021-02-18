@@ -1,10 +1,16 @@
-package it.akademija.application;
+package it.akademija.application.priorities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import it.akademija.application.Application;
 
 @Entity
 public class Priorities {
@@ -27,10 +33,25 @@ public class Priorities {
 
 	@Column
 	private boolean guardianDisability;
+	
+	@OneToOne(mappedBy = "priorities", fetch = FetchType.EAGER)
+	private Application application;
 
 	public Priorities() {
-		super();
+		
+	}		
+
+	public Priorities(Long priorityId, boolean livesInVilnius, boolean childIsAdopted,
+			boolean familyHasThreeOrMoreChildrenInSchools, boolean guardianInSchool, boolean guardianDisability) {
+		
+		this.priorityId = priorityId;
+		this.livesInVilnius = livesInVilnius;
+		this.childIsAdopted = childIsAdopted;
+		this.familyHasThreeOrMoreChildrenInSchools = familyHasThreeOrMoreChildrenInSchools;
+		this.guardianInSchool = guardianInSchool;
+		this.guardianDisability = guardianDisability;
 	}
+
 
 	public Integer getScore() {
 		Integer score = 0;
@@ -55,16 +76,21 @@ public class Priorities {
 			score += 1;
 		}
 		return score;
+	}	
+	
+	public Application getApplication() {
+		return application;
+	}
+
+	public void setApplication(Application application) {		
+		this.application = application;		
 	}
 
 	public Long getPriorityId() {
 		return priorityId;
 	}
 
-	public void setPriorityId(Long priorityId) {
-		this.priorityId = priorityId;
-	}
-
+	
 	public boolean isLivesInVilnius() {
 		return livesInVilnius;
 	}

@@ -71,7 +71,7 @@ class KindergartenControllerTest {
 	@Test
 	public void testPostNewKindergartenMethod() throws Exception {
 		
-		Kindergarten newKindergarten= new Kindergarten("1111111", "Test", "Test", "Test",  10,10);
+		Kindergarten newKindergarten= new Kindergarten("111111111", "Test", "Test", "Test",  10,10);
 		
 		String jsonRequest = mapper.writeValueAsString(newKindergarten);
 		
@@ -87,7 +87,7 @@ class KindergartenControllerTest {
 	@Test
 	public void testDeleteKindergartenMethod() throws Exception {
 
-		MvcResult deleteOne = mvc.perform(delete("/api/darzeliai/manager/delete/{id}", "1111111"))
+		MvcResult deleteOne = mvc.perform(delete("/api/darzeliai/manager/delete/{id}", "111111111"))
 				.andExpect(status().isOk()).andReturn();
 		assertEquals(200, deleteOne.getResponse().getStatus());
 

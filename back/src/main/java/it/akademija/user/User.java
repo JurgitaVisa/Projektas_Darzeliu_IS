@@ -1,5 +1,7 @@
 package it.akademija.user;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -17,6 +20,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import it.akademija.application.Application;
 import it.akademija.role.Role;
 
 @Entity
@@ -51,7 +55,7 @@ public class User {
 	@JoinTable(name = "users_parentDetails", joinColumns = {
 			@JoinColumn(name = "users_id", referencedColumnName = "userId") }, inverseJoinColumns = {
 					@JoinColumn(name = "parentDetails_id", referencedColumnName = "id") })
-	private ParentDetails parentDetails;
+	private ParentDetails parentDetails;	
 
 	@NotEmpty
 	@Email
@@ -61,6 +65,9 @@ public class User {
 	@NotEmpty
 	@Column
 	private String password;
+	
+	@OneToMany(mappedBy="mainGuardian", cascade = {CascadeType.ALL})
+	private Set<Application> userApplications;
 
 	public User() {
 	}
@@ -84,6 +91,15 @@ public class User {
 		this.email = email;
 		this.username = username;
 		this.password = password;
+	}		
+	
+
+	public void setUserApplications(Set<Application> userApplications) {
+		this.userApplications = userApplications;
+	}
+
+	public Set<Application> getUserApplications() {
+		return userApplications;
 	}
 
 	public Long getUserId() {

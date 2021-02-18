@@ -19,7 +19,7 @@ export default function LogoutContainer() {
         http
       .post(`${apiEndpoint}/logout`)
       .then(response => {
-        console.log("atsijungimas")
+        // console.log("atsijungimas")
         dispatch({        // svarbu eiliškumas - pirma dispatch: išvalo kontekstą, ištrina sessionStorage, isAutthenticated -> false
           type: "LOGOUT",
           payload: null

@@ -1,18 +1,27 @@
 package it.akademija.kindergarten;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import it.akademija.application.Application;
+import it.akademija.kindergartenchoise.KindergartenChoise;
 
 
 @Entity
 public class Kindergarten {
 
 	@Id
-	@Size(min = 7, max = 9, message = "Įstaigos kodas turi būti sudarytas iš 7-9 skaitmenų imtinai")
+	@Column(name="kindergarten_id")
+	@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{9}$|", message ="Įstaigos kodas turi būti sudarytas iš 9 skaitmenų")
 	private String id;
 
 	@NotBlank(message = "Pavadinimas privalomas")
@@ -33,7 +42,11 @@ public class Kindergarten {
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
 	private int capacityAgeGroup3to6;
-
+	
+	@OneToMany(mappedBy = "kindergarten")
+	private List<KindergartenChoise> kindergartenChoises;
+	
+	
 	public Kindergarten() {
 
 	}
@@ -100,5 +113,15 @@ public class Kindergarten {
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
 	}
 
+	public List<KindergartenChoise> getKindergartenChoises() {
+		return kindergartenChoises;
+	}
+
+	public void setKindergartenChoises(List<KindergartenChoise> kindergartenChoises) {
+		this.kindergartenChoises = kindergartenChoises;
+	}
+
+	
+	
 
 }

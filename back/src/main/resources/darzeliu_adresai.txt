@@ -1,4 +1,4 @@
-﻿11111111;test;test;test
+﻿111111111;test;test;test
 190032931;Aitvaras;Pašilaičių g. 10;Pašilaičių
 190019122;Atžalėlės;Antakalnio g. 74;Antakalnio
 190020391;Aušrelė;Gerosios Vilties g. 28;Vilkpėdės

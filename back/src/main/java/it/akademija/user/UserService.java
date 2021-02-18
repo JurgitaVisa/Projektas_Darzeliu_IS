@@ -1,11 +1,9 @@
 package it.akademija.user;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -17,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.akademija.application.Application;
+import it.akademija.application.ApplicationInfo;
 import it.akademija.role.Role;
 
 @Service
@@ -188,12 +188,12 @@ public class UserService implements UserDetailsService {
 	 * @param username
 	 */
 	@Transactional
-	public void updateUserData(UserDTO userData, String username) {
+	public User updateUserData(UserDTO userData, String username) {
 
 		User user = findByUsername(username);
 		ParentDetails details = new ParentDetails();
 
-		if (userData.getRole().equals("USER")) {
+		if (user.getRole().equals(Role.USER)) {
 			details.setAddress(userData.getAddress());
 			details.setPersonalCode(userData.getPersonalCode());
 			details.setPhone("370" + userData.getPhone());
@@ -207,9 +207,16 @@ public class UserService implements UserDetailsService {
 		user.setSurname(userData.getSurname());
 		user.setEmail(userData.getEmail());
 
-		userDao.save(user);
+		return userDao.save(user);
 
 	}
+	
+	@Transactional(readOnly = true)
+	public Set<Application> getUserApplications(String currentUsername) {
+		
+		return userDao.findByUsername(currentUsername).getUserApplications();
+	}
+
 
 	public UserDAO getUserDao() {
 		return userDao;
@@ -219,4 +226,5 @@ public class UserService implements UserDetailsService {
 		this.userDao = userDao;
 	}
 
+	
 }

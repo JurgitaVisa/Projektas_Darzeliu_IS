@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 
 import '../../App.css';
-class KindergartenListTable extends Component {   
+class KindergartenListTable extends Component {
 
     render() {
         const {
             darzeliai,
+            elderates,
             inEditMode,
             editRowId,
             errorMessages,
@@ -48,8 +49,9 @@ class KindergartenListTable extends Component {
                                                         value={darzelis.name}
                                                         onChange={(event) => onChange(event)}
                                                         placeholder="Pavadinimas"
-                                                        title="Pavadinimas privalomas"
+                                                        title="Pavadinimas turi būti 3-50 simbolių ir negali prasidėti tarpu"
                                                         required
+                                                        pattern="\S[\s\S]{2,49}"
                                                     />
                                                     {errorMessages.name && <div className="text-danger">{errorMessages.name}</div>}
 
@@ -69,17 +71,21 @@ class KindergartenListTable extends Component {
                                                     {errorMessages.address && <div className="text-danger">{errorMessages.address}</div>}
                                                 </td>
                                                 <td>
-                                                    <input
-                                                        type="text"
+                                                    <select type="text"
                                                         className="form-control"
                                                         id="txtKindergartenElderate"
                                                         name="elderate"
-                                                        value={darzelis.elderate}
                                                         onChange={(event) => onChange(event)}
                                                         placeholder="Seniūnija"
                                                         title="Seniūnija privaloma"
-                                                        required
-                                                    />
+                                                        required>
+                                                        <option value={darzelis.elderate}>{darzelis.elderate}</option>
+                                                        {elderates.map(option => (
+                                                            <option key={option} value={option}>
+                                                                {option}
+                                                            </option>
+                                                        ))}
+                                                    </select>
                                                     {errorMessages.elderate && <div className="text-danger">{errorMessages.elderate}</div>}
                                                 </td>
                                                 <td>

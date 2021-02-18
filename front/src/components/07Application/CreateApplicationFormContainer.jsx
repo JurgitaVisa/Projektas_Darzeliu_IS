@@ -54,6 +54,7 @@ export default class CreateApplicationFormContainer extends Component {
         this.childOnChange = this.childOnChange.bind(this);
         this.checkboxOnChange = this.checkboxOnChange.bind(this);
         this.selectOnChange = this.selectOnChange.bind(this);
+        this.submitHandle = this.submitHandle.bind(this);
     }
 
     componentDidMount() {
@@ -66,7 +67,7 @@ export default class CreateApplicationFormContainer extends Component {
                         name: response.data.name,
                         surname: response.data.surname,
                         personalCode: response.data.personalCode,
-                        phone: response.data.phone.slice(4),
+                        phone: response.data.phone.slice(3),
                         email: response.data.username,
                         address: response.data.address
                     }
@@ -566,44 +567,62 @@ export default class CreateApplicationFormContainer extends Component {
         console.log(this.state.child);
     }
 
+    /** Handle submit */
+    submitHandle() {
+        console.log(this.state);
+    }
+
     render() {
         return (
             <div className="container">
-                <div className="row">
-                    <div className="col">
-                        {/**Atstovas 1 */}
-                        <form>
-                            {
-                                this.userForm(true)
-                            }
-                        </form>
-                    </div>
-                    <div className="col-1" />
-                    <div className="col">
-                        {/**Atstovas 2 */}
-                        <form>
-                            {
-                                this.userForm(false)
-                            }
-                        </form>
-                    </div>
-                    <div className="col-1" />
-                    <div className="col">
-                        {/**Vaiko duomenys */}
-                        <form>
-                            {
-                                this.childForm()
-                            }
-                        </form>
-                    </div>
+                <div className="form">
+                    <form onSubmit={this.submitHandle}>
+                        <div className="row">
+                            <div className="col">
+                                {
+                                    /** Atstovas 1 */
+                                    this.userForm(true)
+                                }
+                            </div>
+                            <div className="col" />
+                            <div className="col">
+                                {
+                                    /** Atstovas 2 */
+                                    this.userForm(false)
+                                }
+                            </div>
+                            <div className="col" />
+                            <div className="col">
+                                {
+                                    /** Vaiko forma */
+                                    this.childForm()
+                                }
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col">
+                                {
+                                    this.checkboxPriorityForm()
+                                }
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col">
+                                {
+                                    this.kindergartenPriorityForm()
+                                }
+                            </div>
+                        </div>
+                        <div className="row">
+                            <p>Dėmesio! Naujas prašymas anuliuoja prieš tai esantį aktyvų prašymą. Jei pirmu numeriu nurodytoje įstaigoje nėra laisvų vietų, vieta skiriama antru numeriu pažymėtoje įstaigoje, jei joje yra laisvų vietų ir t. t. Jeigu visuose prašyme pažymėtose įstaigose nėra laisvų vietų, prašymas lieka laukiančiųjų eilėje.</p>
+                        </div>
+                        <div className="row">
+                            <button type="submit" className="btn btn-primary">Sukurti prašymą</button> 
+                        </div>
+                    </form>
                 </div>
-                {/**Vaiko priemimo tvarkos prioritetai */}
-                {
-                    this.checkboxPriorityForm()
-                }
-                {
-                    this.kindergartenPriorityForm()
-                }
+                
+                
             </div>
         )
     }

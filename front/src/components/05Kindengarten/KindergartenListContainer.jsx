@@ -14,6 +14,7 @@ export class KindergartenListContainer extends Component {
         super(props);
         this.state = {
             darzeliai: [],
+            elderates: [],
             pageSize: 10,
             currentPage: 1,
             totalPages: 0,
@@ -28,6 +29,7 @@ export class KindergartenListContainer extends Component {
     }
     componentDidMount() {
         this.getKindergartenInfo(this.state.currentPage, "");
+        this.getElderates();
         document.addEventListener("keydown", this.handleEscape, false);
     }
 
@@ -81,6 +83,23 @@ export class KindergartenListContainer extends Component {
                 // this.props.history.replace("/home");
             }
             );
+    }
+
+    getElderates() {
+        http
+            .get(`${apiEndpoint}/api/darzeliai/manager/elderates`)
+            .then((response) => {
+                this.setState({ elderates: response.data });
+            })
+            .catch((error) => {
+                console.log("Darzeliai container error", error.response);
+                if (error && error.response.status === 401)
+
+                    swal({
+                        text: "Puslapis pasiekiamas tik teises turintiems naudotojams",
+                        button: "Gerai"
+                    });
+            });
     }
 
     handleSearch = (e) => {
@@ -137,8 +156,8 @@ export class KindergartenListContainer extends Component {
     handleChange = ({ target: input }) => {
 
         const errorMessages = this.state.errorMessages;
-       
-        if (input.validity.valueMissing) {
+
+        if (input.validity.valueMissing || input.validity.patternMismatch) {
             errorMessages[input.name] = `*${input.title}`;
         } else {
             delete errorMessages[input.name];
@@ -161,18 +180,18 @@ export class KindergartenListContainer extends Component {
                 .then(() => {
                     this.onCancel();
                     this.getKindergartenInfo(this.state.currentPage, this.state.searchQuery);
-                }).catch(error => {                    
-                    if (error && error.response.status === 409) {                        
+                }).catch(error => {
+                    if (error && error.response.status === 409) {
                         swal({
                             text: error.response.data,
                             button: "Gerai"
                         });
                     }
                     else if (error && error.response.status > 400 && error.response.status < 500)
-                    swal({
-                        text: "Veiksmas neleidžiamas",
-                        button: "Gerai"
-                    });
+                        swal({
+                            text: "Veiksmas neleidžiamas",
+                            button: "Gerai"
+                        });
                 })
         }
     }
@@ -187,7 +206,7 @@ export class KindergartenListContainer extends Component {
 
     render() {
 
-        const { darzeliai, totalElements, pageSize, searchQuery, inEditMode, editRowId, errorMessages } = this.state;
+        const { darzeliai, elderates, totalElements, pageSize, searchQuery, inEditMode, editRowId, errorMessages } = this.state;
 
         const hasErrors = Object.keys(errorMessages).length === 0 ? false : true;
 
@@ -201,6 +220,7 @@ export class KindergartenListContainer extends Component {
 
                 <KindergartenListTable
                     darzeliai={darzeliai}
+                    elderates={elderates}
                     inEditMode={inEditMode}
                     editRowId={editRowId}
                     errorMessages={errorMessages}

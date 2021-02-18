@@ -40,11 +40,11 @@ export default class CreateApplicationFormContainer extends Component {
                     guardianDisability: false,
                 },
                 kindergartenPriorities: {
-                    1: "",
-                    2: "",
-                    3: "",
-                    4: "",
-                    5: ""
+                    firstPriority: "",
+                    secondPriority: "",
+                    thirdPriority: "",
+                    fourthPriority: "",
+                    fifthPriority: ""
                 }
             },
             kindergartenList: []
@@ -53,6 +53,7 @@ export default class CreateApplicationFormContainer extends Component {
         this.additionalGuardianOnChange = this.additionalGuardianOnChange.bind(this);
         this.childOnChange = this.childOnChange.bind(this);
         this.checkboxOnChange = this.checkboxOnChange.bind(this);
+        this.selectOnChange = this.selectOnChange.bind(this);
     }
 
     componentDidMount() {
@@ -437,8 +438,8 @@ export default class CreateApplicationFormContainer extends Component {
     }
 
     /** Darzeliu sarasas i options formata */
-    kindergartenListToSelect(kList) {
-        var optionsList = kList.map((k) => ({value: k.id, label: k.name + " (" + k.address + ")"}));
+    kindergartenListToSelect(kList, priorityFieldName) {
+        var optionsList = kList.map((k) => ({value: k.id, label: k.name + " (" + k.address + ")", name: priorityFieldName}));
         return optionsList;
     }
 
@@ -455,10 +456,48 @@ export default class CreateApplicationFormContainer extends Component {
                             <p>Pasirinkite darželių prioritetą, daugiausiai leidžiamos 5 įstaigos.</p>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="1">1 prioritetas <span className="fieldRequired">*</span></label>
+                            <label htmlFor="firstPriority">1 prioritetas <span className="fieldRequired">*</span></label>
                             <Select
-                                name="1"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList)}
+                                name="firstPriority"
+                                placeholder="Pasirinkite darželį iš sąrašo"
+                                options={this.kindergartenListToSelect(this.state.kindergartenList, "firstPriority")}
+                                onChange={this.selectOnChange}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="secondPriority">2 prioritetas</label>
+                            <Select
+                                name="secondPriority"
+                                placeholder="Pasirinkite darželį iš sąrašo"
+                                options={this.kindergartenListToSelect(this.state.kindergartenList, "secondPriority")}
+                                onChange={this.selectOnChange}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="thirdPriority">3 prioritetas</label>
+                            <Select
+                                name="thirdPriority"
+                                placeholder="Pasirinkite darželį iš sąrašo"
+                                options={this.kindergartenListToSelect(this.state.kindergartenList, "thirdPriority")}
+                                onChange={this.selectOnChange}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="fourthPriority">4 prioritetas</label>
+                            <Select
+                                name="fourthPriority"
+                                placeholder="Pasirinkite darželį iš sąrašo"
+                                options={this.kindergartenListToSelect(this.state.kindergartenList, "fourthPriority")}
+                                onChange={this.selectOnChange}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="fifthPriority">5 prioritetas</label>
+                            <Select
+                                name="fifthPriority"
+                                placeholder="Pasirinkite darželį iš sąrašo"
+                                options={this.kindergartenListToSelect(this.state.kindergartenList, "fifthPriority")}
+                                onChange={this.selectOnChange}
                             />
                         </div>
                     </div>
@@ -510,6 +549,21 @@ export default class CreateApplicationFormContainer extends Component {
             }
         })
         console.log(this.state.child.acceptancePriorities);
+    }
+
+    /** Select onChange */
+    selectOnChange(e) {
+        this.setState({
+            ...this.state,
+            child: {
+                ...this.state.child,
+                kindergartenPriorities: {
+                    ...this.state.child.kindergartenPriorities,
+                    [e.name]: e.value
+                }
+            }
+        })
+        console.log(this.state.child);
     }
 
     render() {

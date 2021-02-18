@@ -1,11 +1,9 @@
 package it.akademija.user;
 
-import java.util.List;
+import java.security.SecureRandom;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -25,7 +23,9 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private UserDAO userDao;
 
-	private PasswordEncoder encoder = new BCryptPasswordEncoder();
+	int strength = 14;
+
+	private PasswordEncoder encoder = new BCryptPasswordEncoder(strength, new SecureRandom());
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

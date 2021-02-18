@@ -27,11 +27,29 @@ export default class CreateApplicationFormContainer extends Component {
                 email: "",
                 address: "",
             },
-            child: {
-                name: "",
-                surname: "",
-                personalCode: "",
-                birthdate: "",
+            birthdate: "2020-01-01",
+            childName: "",
+            childPersonalCode: "",
+            childSurname: "",
+            kindergartenChoises: {
+                kindergartenId1: "",
+                kindergartenId2: "",
+                kindergartenId3: "",
+                kindergartenId4: "",
+                kindergartenId5: ""
+            },
+            priorities: {
+                childIsAdopted: true,
+                familyHasThreeOrMoreChildrenInSchools: true,
+                guardianDisability: true,
+                guardianInSchool: true,
+                livesInVilnius: true
+            },
+            /**child: {
+                name: "mock",
+                surname: "mock",
+                personalCode: "12345678989",
+                birthdate: "2016-01-01",
                 acceptancePriorities: {
                     livesInVilnius: false,
                     childIsAdopted: false,
@@ -46,7 +64,7 @@ export default class CreateApplicationFormContainer extends Component {
                     fourthPriority: "",
                     fifthPriority: ""
                 }
-            },
+            },*/
             kindergartenList: []
         }
         this.mainGuardianOnChange = this.mainGuardianOnChange.bind(this);
@@ -314,10 +332,10 @@ export default class CreateApplicationFormContainer extends Component {
                     <input 
                         type="text"
                         id="txtChildName"
-                        name="name"
+                        name="childName"
                         placeholder="Vaiko vardas"
                         className="form-control"
-                        value={this.state.child.name}
+                        value={this.state.childName}
                         onChange={this.childOnChange}
                         onInvalid={(e) => inputValidator(e)}
                         required
@@ -329,10 +347,10 @@ export default class CreateApplicationFormContainer extends Component {
                     <input
                         type="text"
                         id="txtChildSurname"
-                        name="surname"
+                        name="childSurname"
                         placeholder="Vaiko pavardė"
                         className="form-control"
-                        value={this.state.child.surname}
+                        value={this.state.childSurname}
                         onChange={this.childOnChange}
                         onInvalid={(e) => inputValidator(e)}
                         required
@@ -344,10 +362,10 @@ export default class CreateApplicationFormContainer extends Component {
                     <input
                         type="text"
                         id="txtChildPersonalCode"
-                        name="personalCode"
+                        name="childPersonalCode"
                         placeholder="Asmens kodas"
                         className="form-control"
-                        value={this.state.child.personalCode}
+                        value={this.state.childPersonalCode}
                         onChange={this.childOnChange}
                         onInvalid={(e) => inputValidator(e)}
                         required
@@ -363,7 +381,7 @@ export default class CreateApplicationFormContainer extends Component {
                         name="birthdate"
                         placeholder="Gimimo data"
                         className="form-control datepicker"
-                        value={this.state.child.birthdate}
+                        value={this.state.birthdate}
                         onChange={this.childOnChange}
                     />
                 </div>
@@ -392,7 +410,7 @@ export default class CreateApplicationFormContainer extends Component {
                             className="form-check-input"
                             name="livesInVilnius"
                             id="chkLivesInVilnius"
-                            checked={this.state.child.acceptancePriorities.livesInVilnius}
+                            checked={this.state.priorities.childIsAdopted}
                             onChange={this.checkboxOnChange}/>
                             <label className="form-check-label" htmlFor="livesInVilnius">Vaiko deklaruojama gyvenamoji vieta yra Vilniaus miesto savivaldybė</label>
                         </div>
@@ -401,7 +419,7 @@ export default class CreateApplicationFormContainer extends Component {
                             className="form-check-input" 
                             name="childIsAdopted" 
                             id="chkChildIsAdopted"
-                            checked={this.state.child.acceptancePriorities.childIsAdopted}
+                            checked={this.state.priorities.childIsAdopted}
                             onChange={this.checkboxOnChange}/>
                             <label className="form-check-label" htmlFor="childIsAdopted">Vaikas yra įvaikintas</label>
                         </div>
@@ -410,7 +428,7 @@ export default class CreateApplicationFormContainer extends Component {
                             className="form-check-input"
                             name="familyHasThreeOrMoreChildrenInSchools"
                             id="chkFamilyHasThreeOrMoreChildrenInSchools"
-                            checked={this.state.child.acceptancePriorities.familyHasThreeOrMoreChildrenInSchools}
+                            checked={this.state.priorities.familyHasThreeOrMoreChildrenInSchools}
                             onChange={this.checkboxOnChange}/>
                             <label className="form-check-label" htmlFor="familyHasThreeOrMoreChildrenInSchools">Šeima augina (globoja) tris ir daugiau vaikų, kurie mokosi pagal bendrojo ugdymo programas</label>
                         </div>
@@ -419,7 +437,7 @@ export default class CreateApplicationFormContainer extends Component {
                             className="form-check-input"
                             name="guardianInSchool"
                             id="chkGuardianInSchool"
-                            checked={this.state.child.acceptancePriorities.guardianInSchool}
+                            checked={this.state.priorities.guardianInSchool}
                             onChange={this.checkboxOnChange}/>
                             <label className="form-check-label" htmlFor="guardianInSchool">Vienas iš tėvų (globėjų) mokosi bendrojo ugdymo mokykloje</label>
                         </div>
@@ -428,7 +446,7 @@ export default class CreateApplicationFormContainer extends Component {
                             className="form-check-input"
                             name="guardianDisability"
                             id="chkGuardianDisability"
-                            checked={this.state.child.acceptancePriorities.guardianDisability}
+                            checked={this.state.priorities.guardianDisability}
                             onChange={this.checkboxOnChange}/>
                             <label className="form-check-label" htmlFor="guardianDisability">Vienas iš tėvų (globėjų) turi ne daugiau kaip 40 procentų darbingumo lygio</label>
                         </div>
@@ -457,47 +475,47 @@ export default class CreateApplicationFormContainer extends Component {
                             <p>Pasirinkite darželių prioritetą, daugiausiai leidžiamos 5 įstaigos.</p>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="firstPriority">1 prioritetas <span className="fieldRequired">*</span></label>
+                            <label htmlFor="kindergartenId1">1 prioritetas <span className="fieldRequired">*</span></label>
                             <Select
-                                name="firstPriority"
+                                name="kindergartenId1"
                                 placeholder="Pasirinkite darželį iš sąrašo"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList, "firstPriority")}
+                                options={this.kindergartenListToSelect(this.state.kindergartenList, "kindergartenId1")}
                                 onChange={this.selectOnChange}
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="secondPriority">2 prioritetas</label>
+                            <label htmlFor="kindergartenId2">2 prioritetas</label>
                             <Select
-                                name="secondPriority"
+                                name="kindergartenId2"
                                 placeholder="Pasirinkite darželį iš sąrašo"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList, "secondPriority")}
+                                options={this.kindergartenListToSelect(this.state.kindergartenList, "kindergartenId2")}
                                 onChange={this.selectOnChange}
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="thirdPriority">3 prioritetas</label>
+                            <label htmlFor="kindergartenId3">3 prioritetas</label>
                             <Select
-                                name="thirdPriority"
+                                name="kindergartenId3"
                                 placeholder="Pasirinkite darželį iš sąrašo"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList, "thirdPriority")}
+                                options={this.kindergartenListToSelect(this.state.kindergartenList, "kindergartenId3")}
                                 onChange={this.selectOnChange}
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="fourthPriority">4 prioritetas</label>
+                            <label htmlFor="kindergartenId4">4 prioritetas</label>
                             <Select
-                                name="fourthPriority"
+                                name="kindergartenId4"
                                 placeholder="Pasirinkite darželį iš sąrašo"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList, "fourthPriority")}
+                                options={this.kindergartenListToSelect(this.state.kindergartenList, "kindergartenId4")}
                                 onChange={this.selectOnChange}
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="fifthPriority">5 prioritetas</label>
+                            <label htmlFor="kindergartenId5">5 prioritetas</label>
                             <Select
-                                name="fifthPriority"
+                                name="kindergartenId5"
                                 placeholder="Pasirinkite darželį iš sąrašo"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList, "fifthPriority")}
+                                options={this.kindergartenListToSelect(this.state.kindergartenList, "kindergartenId5")}
                                 onChange={this.selectOnChange}
                             />
                         </div>
@@ -516,6 +534,7 @@ export default class CreateApplicationFormContainer extends Component {
                 [e.target.name]: e.target.value
             }
         })
+        console.log(this.state);
     }
 
     /** Antro atstovo formos onChange */
@@ -527,51 +546,44 @@ export default class CreateApplicationFormContainer extends Component {
                 [e.target.name]: e.target.value
             }
         })
+        console.log(this.state);
     }
 
     /** Vaiko formos onChange */
     childOnChange(e) {
         inputValidator(e);
         this.setState({
-            child: {
-                ...this.state.child,
-                [e.target.name]: e.target.value
-            }
+            [e.target.name]: e.target.value
         })
+        console.log(this.state);
     }
 
     /** Checkbox onChange */
     checkboxOnChange(e) {
         this.setState({
-            ...this.state,
-            child: {
-                ...this.state.child,
-                acceptancePriorities: {
-                    ...this.state.child.acceptancePriorities,
-                    [e.target.name]: e.target.checked
-                }
+            priorities: {
+                ...this.state.priorities,
+                [e.target.name]: e.target.checked
             }
         })
+        console.log(this.state);
     }
 
     /** Select onChange */
     selectOnChange(e) {
         this.setState({
-            ...this.state,
-            child: {
-                ...this.state.child,
-                kindergartenPriorities: {
-                    ...this.state.child.kindergartenPriorities,
-                    [e.name]: e.value
-                }
+            kindergartenChoises: {
+                ...this.state.kindergartenChoises,
+                [e.name]: e.value
             }
         })
+        console.log(this.state.kindergartenChoises);
     }
 
     /** Handle submit */
     submitHandle(e) {
         e.preventDefault();
-        if(!this.state.child.kindergartenPriorities.firstPriority) {
+        if(!this.state.kindergartenChoises.kindergartenId1) {
             swal({
                 title: "Įvyko klaida",
                 text: "1 Prioritetas yra privalomas"
@@ -580,6 +592,24 @@ export default class CreateApplicationFormContainer extends Component {
         }
         else {
             /** Todo: POST */
+            http.post(`${apiEndpoint}/api/prasymai`, 
+                {
+                    "additionalGuardian": this.state.additionalGuardian,
+                    "mainGuardian": this.state.mainGuardian,
+                    "priorities": this.state.priorities,
+                    "kindergartenChoises": this.state.kindergartenChoises,
+                    "childName": this.state.childName,
+                    "childSurname": this.state.childSurname,
+                    "childPersonalCode": this.state.childPersonalCode,
+                    "birthdate": this.state.birthdate,
+                }
+                )
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    swal(error);
+                })
         }
         console.log(this.state);
     }

@@ -30,7 +30,7 @@ function InputValidator(event) {
             //         target.setCustomValidity("")
             //     }
             // }
-            else if (target.name === "personalCode") {
+            else if (target.name === "personalCode" || target.name === "childPersonalCode") {
                 if (target.validity.patternMismatch) {
                     target.setCustomValidity("Asmens koda sudaro 11 skaičių, įvesta skaičių: " + target.value.length)
                 }
@@ -38,7 +38,7 @@ function InputValidator(event) {
                     target.setCustomValidity("")
                 }
             }
-            else if (target.name === "name") {
+            else if (target.name === "name" || target.name === "childName") {
                 if (target.validity.patternMismatch) {
                     target.setCustomValidity("Netinkamo formato vardas")
                 }
@@ -46,7 +46,7 @@ function InputValidator(event) {
                     target.setCustomValidity("")
                 }
             }
-            else if (target.name === "surname") {
+            else if (target.name === "surname" || target.name === "childSurname") {
                 if (target.validity.patternMismatch) {
                     target.setCustomValidity("Netinkamo formato pavardė")
                 }

@@ -23,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+
 import it.akademija.user.UserDAO;
 
 @Configuration
@@ -43,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder(14);
 	}
 
 	@Autowired
@@ -58,8 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// be saugumo UI dalis ir swaggeris
 				.antMatchers("/", "/swagger-ui/").permitAll()
 				// visi /api/ saugus (dar galima .anyRequest() )
-				.antMatchers("/home/**", "/api/**", "/admin/**", "/naudotojai/**", "/hello/**").authenticated()
-				.and().formLogin() // leidziam login
+				.antMatchers("/home/**", "/api/**", "/admin/**", "/naudotojai/**", "/hello/**").authenticated().and()
+				.formLogin() // leidziam login
 				// prisijungus
 				.successHandler(new AuthenticationSuccessHandler() {
 
@@ -87,13 +88,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 				})
 				// esant blogiems user/pass
-				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
-				.loginPage("/login").permitAll() // jis jau egzistuoja				
-				//atsijungimas nuo sistemos
+				.failureHandler(new SimpleUrlAuthenticationFailureHandler()).loginPage("/login").permitAll() // jis jau
+																												// egzistuoja
+				// atsijungimas nuo sistemos
 				.and().logout().logoutUrl("/logout")
 				// ištrina sausainėlius ir uždaro sesiją
-				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID")	
-				
+				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID")
+
 //				.logoutSuccessHandler(new LogoutSuccessHandler() {
 //
 //					@Override
@@ -104,9 +105,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //
 //					}
 //				})
-				.logoutSuccessUrl("/")
-				.permitAll() // leidziam logout
-																							
+				.logoutSuccessUrl("/").permitAll() // leidziam logout
+
 				.and().csrf().disable() // nenaudojam tokenu
 				// toliau forbidden klaidai
 				.exceptionHandling().authenticationEntryPoint(securityEntryPoint).and().headers().frameOptions()

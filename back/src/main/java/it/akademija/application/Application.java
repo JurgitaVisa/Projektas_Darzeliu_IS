@@ -36,7 +36,7 @@ public class Application {
 	private Long id;
 
 	@Column(name = "date_of_submition")
-	LocalDateTime submitedAt;
+	LocalDate submitedAt;
 
 	private ApplicationStatus status;
 
@@ -158,12 +158,12 @@ public class Application {
 		this.additionalGuardian = additionalGuardian;
 	}
 
-	public LocalDateTime getSubmitedAt() {
+	public LocalDate getSubmitedAt() {
 		return submitedAt;
 	}
 
 	public void setSubmitedAt() {
-		this.submitedAt = LocalDateTime.now();
+		this.submitedAt = LocalDate.now();
 	}
 
 	public Priorities getPriorities() {

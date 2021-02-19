@@ -1,68 +1,29 @@
-package it.akademija.application;
+package it.akademija.application.priorities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class Priorities {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long priorityId;
-
-	@Column
+public class PrioritiesDTO {	
+	
 	private boolean livesInVilnius;
 
-	@Column
 	private boolean childIsAdopted;
 
-	@Column
 	private boolean familyHasThreeOrMoreChildrenInSchools;
 
-	@Column
 	private boolean guardianInSchool;
 
-	@Column
 	private boolean guardianDisability;
 
-	public Priorities() {
+	public PrioritiesDTO() {
+		
+	}
+
+	public PrioritiesDTO(boolean livesInVilnius, boolean childIsAdopted, boolean familyHasThreeOrMoreChildrenInSchools,
+			boolean guardianInSchool, boolean guardianDisability) {
 		super();
-	}
-
-	public Integer getScore() {
-		Integer score = 0;
-
-		if (this.livesInVilnius) {
-			score += 10;
-		}
-
-		if (this.childIsAdopted) {
-			score += 1;
-		}
-
-		if (this.familyHasThreeOrMoreChildrenInSchools) {
-			score += 1;
-		}
-
-		if (this.guardianInSchool) {
-			score += 1;
-		}
-
-		if (this.guardianDisability) {
-			score += 1;
-		}
-		return score;
-	}
-
-	public Long getPriorityId() {
-		return priorityId;
-	}
-
-	public void setPriorityId(Long priorityId) {
-		this.priorityId = priorityId;
+		this.livesInVilnius = livesInVilnius;
+		this.childIsAdopted = childIsAdopted;
+		this.familyHasThreeOrMoreChildrenInSchools = familyHasThreeOrMoreChildrenInSchools;
+		this.guardianInSchool = guardianInSchool;
+		this.guardianDisability = guardianDisability;
 	}
 
 	public boolean isLivesInVilnius() {
@@ -104,5 +65,9 @@ public class Priorities {
 	public void setGuardianDisability(boolean guardianDisability) {
 		this.guardianDisability = guardianDisability;
 	}
+	
+	
+	
+	
 
 }

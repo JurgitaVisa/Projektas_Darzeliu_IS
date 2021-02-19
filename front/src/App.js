@@ -11,6 +11,7 @@ import Admin from "./components/04Admin/AdminContainer";
 import UserListContainer from "./components/04Admin/UserListContainer";
 import KindergartenContainer from './components/05Kindengarten/KindergartenContainer';
 import UpdateProfileFormContainer from './components/06UpdateProfile/UpdateProfileFormContainer';
+import CreateApplicationFormContainer from './components/07Application/CreateApplicationFormContainer';
 
 import AdminNavBar from "./components/00Navigation/AdminNavBar";
 import UserNavBar from "./components/00Navigation/UserNavBar";
@@ -19,6 +20,7 @@ import ManagerNavBar from "./components/00Navigation/ManagerNavBar";
 import AuthContext from "./components/11Context/AuthContext";
 // import http from "./components/10Services/httpService";
 // import apiEndpoint from "./components/10Services/endpoint";
+import { UserHomeContainer } from './components/02Main/UserHomeContainer';
 
 var initState = {
   isAuthenticated: false,
@@ -140,9 +142,10 @@ function App() {
                 <Switch>
                   <Route exact path="/" component={Main} />{" "}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
-                  <Route path="/home" component={Main} />{" "}
+                  <Route path="/home" component={UserHomeContainer} />{" "}
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
-                  <Route path="/prasymai" component={Main} />{" "}
+                  <Route exact path="/prasymai" component={Main} />{" "}
+                  <Route path="/prasymai/naujas" component={CreateApplicationFormContainer} />
                   {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
                   <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />

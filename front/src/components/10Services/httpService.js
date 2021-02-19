@@ -1,7 +1,8 @@
 
 import axios from 'axios';
 import swal from 'sweetalert';
-// import { toast } from 'react-toastify';
+
+import '../../App.css';
 
 //default response when an unexpected error occurs
 //hadle expected client errors separately

@@ -42,7 +42,7 @@ public class KindergartenInit {
 				while ((line = reader.readLine()) != null) {
 					String[] data = line.split(";");
 					Kindergarten kindergarten = new Kindergarten();
-					kindergarten.setId(data[0]);
+					kindergarten.setId(data[0].replaceFirst("[^\\d.]", ""));
 					kindergarten.setName(data[1]);
 					kindergarten.setAddress(data[2]);
 					kindergarten.setElderate(data[3]);

@@ -595,46 +595,6 @@ export default class CreateApplicationFormContainer extends Component {
         }
         else {
             /** Todo: POST */
-            const data = {
-                "additionalGuardian": {
-                    "address": this.state.additionalGuardian.address,
-                    "email": this.state.additionalGuardian.email,
-                    "name": this.state.additionalGuardian.name,
-                    "personalCode": this.state.additionalGuardian.personalCode,
-                    "phone": this.state.additionalGuardian.phone,
-                    "surname": this.state.additionalGuardian.surname
-                },
-                "birthdate": this.state.birthdate,
-                "childName": this.state.childName,
-                "childPersonalCode": this.state.childPersonalCode,
-                "childSurname": this.state.childSurname,
-                "kindergartenChoises": {
-                    "kindergartenId1": this.state.kindergartenChoises.kindergartenId1,
-                    "kindergartenId2": this.state.kindergartenChoises.kindergartenId2,
-                    "kindergartenId3": this.state.kindergartenChoises.kindergartenId3,
-                    "kindergartenId4": this.state.kindergartenChoises.kindergartenId4,
-                    "kindergartenId5": this.state.kindergartenChoises.kindergartenId5,
-                },
-                "mainGuardian": {
-                    "address": this.state.mainGuardian.address,
-                    "email": this.state.mainGuardian.email,
-                    "name": this.state.mainGuardian.name,
-                    "personalCode": this.state.mainGuardian.personalCode,
-                    "phone": this.state.mainGuardian.phone,
-                    "role": this.state.mainGuardian.role,
-                    "surname": this.state.mainGuardian.surname,
-                    "username": this.state.mainGuardian.username
-                },
-                "priorities": {
-                    "childIsAdopted": this.state.priorities.childIsAdopted,
-                    "familyHasThreeOrMoreChildrenInSchools": this.state.priorities.familyHasThreeOrMoreChildrenInSchools,
-                    "guardianDisability": this.state.priorities.guardianDisability,
-                    "guardianInSchool": this.state.priorities.guardianInSchool,
-                    "livesInVilnius": this.state.priorities.livesInVilnius
-                  }
-            }
-            console.log("POST DATA:")
-            console.log(data);
             http.post(`${apiEndpoint}/api/prasymai`, 
                 {
                     "additionalGuardian": {
@@ -676,10 +636,22 @@ export default class CreateApplicationFormContainer extends Component {
                 }
                 )
                 .then((response) => {
+                    swal({
+                        title: "Užklausa atlikta sėkmingai",
+                        text: response.text,
+                        icon: "success",
+                        button: "Gerai"
+                    })
                     console.log(response);
                 })
                 .catch((error) => {
                     console.log(error)
+                    swal({
+                        title: "Įvyko klaida",
+                        text: error.response.data,
+                        icon: "warning",
+                        button: "Gerai"
+                    })
                 })
         }
     }

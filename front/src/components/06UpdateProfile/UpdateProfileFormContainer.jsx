@@ -32,7 +32,7 @@ export default class UpdateProfileFormContainer extends Component {
                     surname: response.data.surname,
                     personalCode: response.data.personalCode,
                     address: response.data.address,
-                    phone: response.data.phone,
+                    phone: response.data.phone.slice(3),
                     email: response.data.username,
                     username: response.data.username
                 })
@@ -164,7 +164,7 @@ export default class UpdateProfileFormContainer extends Component {
                                     name="phone"
                                     placeholder="Telefono numeris"
                                     className="form-control"
-                                    value={this.state.telno}
+                                    value={this.state.phone}
                                     onChange={this.handleChange}
                                     onInvalid={(e) => inputValidator(e)}
                                     required pattern="[0-9]{8}">

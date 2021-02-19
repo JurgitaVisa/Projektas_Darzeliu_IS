@@ -1,11 +1,20 @@
-import React, { Component } from 'react'
-import Select from 'react-select'
+import React, { Component } from 'react';
+import Select from 'react-select';
+
+import DatePicker from "react-datepicker";
+import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import lt from 'date-fns/locale/lt';
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import swal from 'sweetalert';
 
-import inputValidator from '../08CommonComponents/InputValidator'
+import inputValidator from '../08CommonComponents/InputValidator';
+
+import '../08CommonComponents/datePickerStyle.css';
+
+registerLocale('lt', lt)
 
 export default class CreateApplicationFormContainer extends Component {
     constructor(props) {
@@ -28,7 +37,7 @@ export default class CreateApplicationFormContainer extends Component {
                 email: "",
                 address: ""
             },
-            birthdate: "2020-01-01",
+            birthdate: new Date(),
             childName: "",
             childPersonalCode: "",
             childSurname: "",
@@ -51,6 +60,7 @@ export default class CreateApplicationFormContainer extends Component {
         this.mainGuardianOnChange = this.mainGuardianOnChange.bind(this);
         this.additionalGuardianOnChange = this.additionalGuardianOnChange.bind(this);
         this.childOnChange = this.childOnChange.bind(this);
+        this.transformBirthdate = this.transformBirthdate.bind(this);
         this.checkboxOnChange = this.checkboxOnChange.bind(this);
         this.selectOnChange = this.selectOnChange.bind(this);
         this.submitHandle = this.submitHandle.bind(this);
@@ -358,18 +368,28 @@ export default class CreateApplicationFormContainer extends Component {
                 {/** Gimimo data */}
                 <div className="row form-group">
                     <label htmlFor="txtBirthdate">Gimimo data <span className="fieldRequired">*</span></label>
-                    <input
-                        type="text"
-                        id="txtChildBirthdate"
-                        name="birthdate"
-                        placeholder="Gimimo data"
-                        className="form-control datepicker"
-                        value={this.state.birthdate}
-                        onChange={this.childOnChange}
-                    />
+                    <div className="datePicker">
+                        <DatePicker
+                            className="form-control"
+                            locale="lt"
+                            dateFormat="yyyy/MM/dd"
+                            selected={this.state.birthdate}
+                            onChange={(e) => {
+                                this.setState({birthdate: e})
+                                }
+                            }
+                            required
+                        />
+                    </div>
                 </div>
             </div>
         )
+    }
+
+    /** birthdate i YYYY-MM-DD */
+    transformBirthdate(date) {
+        console.log(date.toLocaleDateString('en-CA'))
+        return date.toLocaleDateString('en-CA');
     }
 
     /** Checkbox forma prioritetams */
@@ -585,7 +605,7 @@ export default class CreateApplicationFormContainer extends Component {
                         "phone": this.state.additionalGuardian.phone,
                         "surname": this.state.additionalGuardian.surname
                     },
-                    "birthdate": this.state.birthdate,
+                    "birthdate": this.transformBirthdate(this.state.birthdate),
                     "childName": this.state.childName,
                     "childPersonalCode": this.state.childPersonalCode,
                     "childSurname": this.state.childSurname,

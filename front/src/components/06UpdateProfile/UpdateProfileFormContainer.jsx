@@ -26,7 +26,6 @@ export default class UpdateProfileFormContainer extends Component {
     componentDidMount() {
         http.get(`${apiEndpoint}/api/users/user`)
             .then((response) => {
-                console.log(response.data);
                 if(response.data.role==="USER"){
                     this.setState({
                         role: response.data.role,
@@ -386,7 +385,7 @@ export default class UpdateProfileFormContainer extends Component {
     render(props) {
         return (
             <div>
-                <div className="container">
+                <div className="container pt-4">
                     <div className="form" >
                         <form onSubmit={this.handleSubmit}>
                             {this.drawUpdateForm(this.state.role)}

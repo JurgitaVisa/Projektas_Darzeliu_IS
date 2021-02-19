@@ -638,7 +638,7 @@ export default class CreateApplicationFormContainer extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="container pt-4">
                 <div className="form">
                     <form onSubmit={this.submitHandle}>
                         <div className="row">

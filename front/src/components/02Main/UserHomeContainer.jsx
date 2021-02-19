@@ -46,7 +46,7 @@ export class UserHomeContainer extends Component {
 
         return (
 
-            <div className="container pt-5" >
+            <div className="container pt-4" >
 
                 <h6 className="pl-2 pt-3">Mano prašymai</h6>
 

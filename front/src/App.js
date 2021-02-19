@@ -5,7 +5,7 @@ import "./index.css";
 import "./App.css";
 
 import Login from "./components/01Login/LoginContainer";
-import Main from "./components/02Main/MainContainer";
+// import Main from "./components/02Main/MainContainer";
 import NotFound from "./components/03NotFound/NotFound";
 import Admin from "./components/04Admin/AdminContainer";
 import UserListContainer from "./components/04Admin/UserListContainer";
@@ -140,13 +140,10 @@ function App() {
             <div className="container-fluid px-0">
               <UserNavBar>
                 <Switch>
-                  <Route exact path="/" component={Main} />{" "}
-                  {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
+                  <Route exact path="/" component={UserHomeContainer} />{" "}
                   <Route path="/home" component={UserHomeContainer} />{" "}
-                  {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
-                  <Route exact path="/prasymai" component={Main} />{" "}
-                  <Route path="/prasymai/naujas" component={CreateApplicationFormContainer} />
-                  {/* TODO MainContainer yra laikinai. Vėliau, kai bus visi komponentai, jo nereikės*/}
+                  <Route exact path="/prasymai" component={UserHomeContainer} />{" "}
+                  <Route exact path="/prasymai/naujas" component={CreateApplicationFormContainer} />
                   <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />
                 </Switch>

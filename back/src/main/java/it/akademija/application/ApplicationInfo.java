@@ -1,5 +1,6 @@
 package it.akademija.application;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ApplicationInfo {
@@ -10,12 +11,12 @@ public class ApplicationInfo {
 
 	private String childSurname;
 
-	private LocalDateTime submitedAt;
+	private LocalDate submitedAt;
 
 	private ApplicationStatus status;
 
 	
-	public ApplicationInfo(Long id, String childName, String childSurname, LocalDateTime submitedAt,
+	public ApplicationInfo(Long id, String childName, String childSurname, LocalDate submitedAt,
 			ApplicationStatus status) {		
 		this.id = id;
 		this.childName = childName;
@@ -48,11 +49,11 @@ public class ApplicationInfo {
 		this.childSurname = childSurname;
 	}
 
-	public LocalDateTime getSubmitedAt() {
+	public LocalDate getSubmitedAt() {
 		return submitedAt;
 	}
 
-	public void setSubmitedAt(LocalDateTime submitedAt) {
+	public void setSubmitedAt(LocalDate submitedAt) {
 		this.submitedAt = submitedAt;
 	}
 

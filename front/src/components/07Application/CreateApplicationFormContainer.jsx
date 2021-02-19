@@ -40,32 +40,12 @@ export default class CreateApplicationFormContainer extends Component {
                 kindergartenId5: ""
             },
             priorities: {
-                childIsAdopted: true,
-                familyHasThreeOrMoreChildrenInSchools: true,
-                guardianDisability: true,
-                guardianInSchool: true,
-                livesInVilnius: true
+                childIsAdopted: false,
+                familyHasThreeOrMoreChildrenInSchools: false,
+                guardianDisability: false,
+                guardianInSchool: false,
+                livesInVilnius: false
             },
-            /**child: {
-                name: "mock",
-                surname: "mock",
-                personalCode: "12345678989",
-                birthdate: "2016-01-01",
-                acceptancePriorities: {
-                    livesInVilnius: false,
-                    childIsAdopted: false,
-                    familyHasThreeOrMoreChildrenInSchools: false,
-                    guardianInSchool: false,
-                    guardianDisability: false,
-                },
-                kindergartenPriorities: {
-                    firstPriority: "",
-                    secondPriority: "",
-                    thirdPriority: "",
-                    fourthPriority: "",
-                    fifthPriority: ""
-                }
-            },*/
             kindergartenList: []
         }
         this.mainGuardianOnChange = this.mainGuardianOnChange.bind(this);
@@ -413,7 +393,7 @@ export default class CreateApplicationFormContainer extends Component {
                             className="form-check-input"
                             name="livesInVilnius"
                             id="chkLivesInVilnius"
-                            checked={this.state.priorities.childIsAdopted}
+                            checked={this.state.priorities.livesInVilnius}
                             onChange={this.checkboxOnChange}/>
                             <label className="form-check-label" htmlFor="livesInVilnius">Vaiko deklaruojama gyvenamoji vieta yra Vilniaus miesto savivaldybė</label>
                         </div>

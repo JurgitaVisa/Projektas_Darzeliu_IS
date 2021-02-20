@@ -41,7 +41,7 @@ public class KindergartenController {
 	private KindergartenService kindergartenService;
 
 	/**
-	 * Get list of all Kindergarten names and addresses
+	 * Get list of all Kindergarten names and addresses with capacity of more than zero
 	 * 
 	 * @return list of kindergarten
 	 */
@@ -49,9 +49,9 @@ public class KindergartenController {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get all kindergarten names and addresses")
-	public List<KindergartenDTO> getAllKindergartenNames() {
+	public List<KindergartenInfo> getAllWithNonZeroCapacity() {
 
-		return kindergartenService.getAllKindergartenNames();
+		return kindergartenService.getAllWithNonZeroCapacity();
 	}
 
 	
@@ -118,7 +118,7 @@ public class KindergartenController {
 	@PostMapping("/manager/createKindergarten")
 	@ApiOperation(value = "Create new kindergarten")
 	public ResponseEntity<String> createNewKindergarten(
-			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody Kindergarten kindergarten) {
+			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody KindergartenDTO kindergarten) {
 
 		String id = kindergarten.getId();
 		
@@ -164,7 +164,7 @@ public class KindergartenController {
 	@PutMapping("/manager/update/{id}")
 	@ApiOperation(value = "Update kindergarten by ID")
 	public ResponseEntity<String> updateKindergarten(
-			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody Kindergarten updated,
+			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody KindergartenDTO updated,
 			@PathVariable String id) {
 
 		if (kindergartenService.findById(id) == null) {

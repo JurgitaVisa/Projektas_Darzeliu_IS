@@ -22,11 +22,11 @@ public class KindergartenChoise {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long choiseId;
 	
-	@ManyToOne(cascade = {CascadeType.ALL})
+	@ManyToOne
 	@JoinColumn(name = "kindergarten_id")
 	private Kindergarten kindergarten;
 
-	@ManyToOne(cascade = {CascadeType.ALL})
+	@ManyToOne
 	@JoinColumn(name = "application_id")
 	private Application application;
 	

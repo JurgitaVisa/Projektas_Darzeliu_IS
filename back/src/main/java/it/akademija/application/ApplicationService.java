@@ -1,6 +1,7 @@
 package it.akademija.application;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -110,7 +111,7 @@ public class ApplicationService {
 		Kindergarten fouth = gartenService.findById(choisesDto.getKindergartenId4());
 		Kindergarten fith = gartenService.findById(choisesDto.getKindergartenId5());
 
-		List<KindergartenChoise> choises = new ArrayList<>();
+		Set<KindergartenChoise> choises = new HashSet<>();
 		
 		KindergartenChoise choise1 = choiseDao.save(new KindergartenChoise(first, application, 1));
 		choises.add(choise1);

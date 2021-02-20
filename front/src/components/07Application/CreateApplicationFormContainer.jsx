@@ -701,9 +701,10 @@ export default class CreateApplicationFormContainer extends Component {
                 }
                 )
                 .then((response) => {
+                    console.log(response);
                     swal({
                         title: "Užklausa atlikta sėkmingai",
-                        text: response.text,
+                        text: response.data,
                         icon: "success",
                         button: "Gerai"
                     }).then(()=>{return window.location.href="/"})

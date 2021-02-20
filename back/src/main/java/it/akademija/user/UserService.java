@@ -129,7 +129,7 @@ public class UserService implements UserDetailsService {
 
 		}
 		return new UserInfo(user.getUserId(), user.getRole().name(), user.getName(), user.getSurname(),
-				user.getUsername());
+				user.getUsername(), user.getEmail());
 
 	}
 

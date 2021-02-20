@@ -23,11 +23,11 @@ function Navigation(props) {
                         <ul className="navbar-nav ml-auto ">
 
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link disabled" id="navUserNewApplication" to={"#"}>Sukurti prašymą</NavLink>
+                                <NavLink className="nav-link" id="navUserNewApplication" to={"/prasymai/naujas"}>Sukurti prašymą</NavLink>
                             </li>                        
 
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link disabled" id="navUserMyApplications" to={"#"}>Mano prašymai</NavLink>
+                                <NavLink className="nav-link" id="navUserMyApplications" to={"/prasymai"}>Mano prašymai</NavLink>
                             </li>
 
                             <li className="nav-item mr-2">

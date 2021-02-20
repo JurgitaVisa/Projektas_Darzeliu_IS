@@ -34,7 +34,7 @@ export default class UpdateProfileFormContainer extends Component {
                         personalCode: response.data.personalCode,
                         address: response.data.address,
                         phone: response.data.phone.slice(3),
-                        email: response.data.username,
+                        email: response.data.email,
                         username: response.data.username
                     })
                 } else {
@@ -45,7 +45,7 @@ export default class UpdateProfileFormContainer extends Component {
                     personalCode: response.data.personalCode,
                     address: response.data.address,
                     phone: response.data.phone,
-                    email: response.data.username,
+                    email: response.data.email,
                     username: response.data.username
                 })
                 }

@@ -39,8 +39,8 @@ public class Kindergarten {
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
 	private int capacityAgeGroup3to6;
 	
-	@OneToMany(mappedBy = "kindergarten")
-	private List<KindergartenChoise> kindergartenChoises;
+//	@OneToMany(mappedBy = "kindergarten")
+//	private List<KindergartenChoise> kindergartenChoises;
 	
 	
 	public Kindergarten() {
@@ -110,12 +110,12 @@ public class Kindergarten {
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
 	}
 
-	public List<KindergartenChoise> getKindergartenChoises() {
-		return kindergartenChoises;
-	}
-
-	public void setKindergartenChoises(List<KindergartenChoise> kindergartenChoises) {
-		this.kindergartenChoises = kindergartenChoises;
-	}
+//	public List<KindergartenChoise> getKindergartenChoises() {
+//		return kindergartenChoises;
+//	}
+//
+//	public void setKindergartenChoises(List<KindergartenChoise> kindergartenChoises) {
+//		this.kindergartenChoises = kindergartenChoises;
+//	}
 
 }

@@ -28,7 +28,7 @@ function KindergartenInputForm() {
       .catch((error) => {
         swal({
           text: "Įvyko klaida nuskaitant seniūnijas. " + error.response.data,
-          button: "Gerai"
+          button: "Gerai",
         });
       });
   }, [setElderate]);
@@ -44,7 +44,7 @@ function KindergartenInputForm() {
         console.log("įrašyta: " + response.data);
         swal({
           text: "Naujas darželis „" + data.name + "“ pridėtas sėkmingai!",
-          button: "Gerai"
+          button: "Gerai",
         });
         savingStatus = false;
         resetForm(event);
@@ -52,8 +52,11 @@ function KindergartenInputForm() {
       .catch((error) => {
         if (error.response.status === 409) {
           swal({
-            text: "Įvyko klaida įrašant naują darželį. " + error.response.data + "\n\nPatikrinkite duomenis ir bandykite dar kartą",
-            button: "Gerai"
+            text:
+              "Įvyko klaida įrašant naują darželį. " +
+              error.response.data +
+              "\n\nPatikrinkite duomenis ir bandykite dar kartą",
+            button: "Gerai",
           });
         }
         savingStatus = false;
@@ -70,6 +73,8 @@ function KindergartenInputForm() {
     } else if (target.validity.patternMismatch) {
       if (target.id === "id")
         target.setCustomValidity("Įstaigos kodą turi sudaryti 9 skaitmenys");
+      if (target.id === "name")
+        target.setCustomValidity("Pavadinimas turi būti 3-50 simbolių ir negali prasidėti tarpu");
     } else {
       target.setCustomValidity("");
     }
@@ -122,10 +127,11 @@ function KindergartenInputForm() {
             onChange={handleChange}
             onInvalid={validateField}
             required
-            pattern="^\d{9}"
+            pattern="\d{9}"
+            placeholder="123456789"
             data-toggle="tooltip"
             data-placement="top"
-            title="Įveskite įstaigos (darželio) kodą"
+            title="Įveskite įstaigos (darželio) kodą (9 skaitmenys)"
           />
         </div>
 
@@ -142,9 +148,11 @@ function KindergartenInputForm() {
             onChange={handleChange}
             onInvalid={validateField}
             required
+            pattern="\S[\s\S]{2,49}"
+            placeholder="3-50 simbolių"
             data-toggle="tooltip"
             data-placement="top"
-            title="Įveskite darželio pavadinimą"
+            title="Įveskite darželio pavadinimą (nuo 3 iki 50 simbolių)"
           />
         </div>
 

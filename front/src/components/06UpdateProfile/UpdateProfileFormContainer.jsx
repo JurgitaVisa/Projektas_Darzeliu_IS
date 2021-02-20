@@ -26,7 +26,19 @@ export default class UpdateProfileFormContainer extends Component {
     componentDidMount() {
         http.get(`${apiEndpoint}/api/users/user`)
             .then((response) => {
-                this.setState({
+                if(response.data.role==="USER"){
+                    this.setState({
+                        role: response.data.role,
+                        name: response.data.name,
+                        surname: response.data.surname,
+                        personalCode: response.data.personalCode,
+                        address: response.data.address,
+                        phone: response.data.phone.slice(3),
+                        email: response.data.username,
+                        username: response.data.username
+                    })
+                } else {
+                    this.setState({
                     role: response.data.role,
                     name: response.data.name,
                     surname: response.data.surname,
@@ -36,8 +48,11 @@ export default class UpdateProfileFormContainer extends Component {
                     email: response.data.username,
                     username: response.data.username
                 })
+                }
+                
             })
             .catch((error) => {
+                console.log(error);
                 swal({
                     title: "Įvyko klaida",
                     text: "Įvyko klaida perduodant duomenis iš serverio.",
@@ -164,7 +179,7 @@ export default class UpdateProfileFormContainer extends Component {
                                     name="phone"
                                     placeholder="Telefono numeris"
                                     className="form-control"
-                                    value={this.state.telno}
+                                    value={this.state.phone}
                                     onChange={this.handleChange}
                                     onInvalid={(e) => inputValidator(e)}
                                     required pattern="[0-9]{8}">
@@ -370,7 +385,7 @@ export default class UpdateProfileFormContainer extends Component {
     render(props) {
         return (
             <div>
-                <div className="container">
+                <div className="container pt-4">
                     <div className="form" >
                         <form onSubmit={this.handleSubmit}>
                             {this.drawUpdateForm(this.state.role)}

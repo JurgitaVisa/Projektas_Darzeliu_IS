@@ -51,8 +51,8 @@ export const LoginContainer = () => {
         headers: { "Content-type": "application/x-www-form-urlencoded" },
       })
       .then((resp) => {
-        console.log("user " + resp.data.username + " logged in");
-        console.log(resp);
+        // console.log("user " + resp.data.username + " logged in");
+        // console.log(resp);
         dispatch({
           type: "LOGIN",
           payload: resp.data,

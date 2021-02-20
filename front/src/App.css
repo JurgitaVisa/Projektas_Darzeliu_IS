@@ -73,3 +73,7 @@ p {
 .deleteColumn {
   width: 11%;
 }
+
+.formHeader {
+  padding-top: 4%;
+}

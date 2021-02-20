@@ -1,11 +1,22 @@
-import React, { Component } from 'react'
-import Select from 'react-select'
+import React, { Component } from 'react';
+import Select from 'react-select';
+
+import DatePicker from "react-datepicker";
+import { registerLocale } from  "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import lt from 'date-fns/locale/lt';
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import swal from 'sweetalert';
 
-import inputValidator from '../08CommonComponents/InputValidator'
+import inputValidator from '../08CommonComponents/InputValidator';
+
+import '../../App.css';
+import '../08CommonComponents/datePickerStyle.css';
+import { subYears } from 'date-fns';
+
+registerLocale('lt', lt)
 
 export default class CreateApplicationFormContainer extends Component {
     constructor(props) {
@@ -28,7 +39,7 @@ export default class CreateApplicationFormContainer extends Component {
                 email: "",
                 address: ""
             },
-            birthdate: "2020-01-01",
+            birthdate: subYears(new Date(),1),
             childName: "",
             childPersonalCode: "",
             childSurname: "",
@@ -52,7 +63,6 @@ export default class CreateApplicationFormContainer extends Component {
         this.additionalGuardianOnChange = this.additionalGuardianOnChange.bind(this);
         this.childOnChange = this.childOnChange.bind(this);
         this.checkboxOnChange = this.checkboxOnChange.bind(this);
-        this.selectOnChange = this.selectOnChange.bind(this);
         this.submitHandle = this.submitHandle.bind(this);
     }
 
@@ -77,12 +87,10 @@ export default class CreateApplicationFormContainer extends Component {
                 var kindergartenList = [];
                 http.get(`${apiEndpoint}/api/darzeliai`)
                     .then((response) => {
-                        kindergartenList = response.data;
+                        kindergartenList = response.data.map((k) => ({value: k.id, label: k.name + " (" + k.address + ")", disabled: "no"}));
                         this.setState({
                             kindergartenList
                         })
-                        console.log(kindergartenList);
-                        console.log(this.state.kindergartenList[0]);
                     })
             })
             .catch((error) => {
@@ -102,7 +110,7 @@ export default class CreateApplicationFormContainer extends Component {
             return (
                 <div className="form">
                     <div className="row">
-                        <h6>Atstovas 1</h6>
+                        <h6 className="formHeader">Atstovas 1</h6>
                     </div>
                     <div className="row form-group">
                         <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
@@ -206,7 +214,7 @@ export default class CreateApplicationFormContainer extends Component {
             return (
                 <div className="form">
                     <div className="row">
-                        <h6>Atstovas 2</h6>
+                        <h6 className="formHeader">Atstovas 2</h6>
                     </div>
                     <div className="row form-group">
                         <label htmlFor="txtName">Vardas</label>
@@ -308,7 +316,7 @@ export default class CreateApplicationFormContainer extends Component {
         return (
             <div className="form">
                 <div className="row">
-                        <h6>Vaiko duomenys</h6>
+                        <h6 className="formHeader">Vaiko duomenys</h6>
                     </div>
                 <div className="row form-group">
                     <label htmlFor="txtName">Vaiko vardas <span className="fieldRequired">*</span></label>
@@ -358,20 +366,23 @@ export default class CreateApplicationFormContainer extends Component {
                 {/** Gimimo data */}
                 <div className="row form-group">
                     <label htmlFor="txtBirthdate">Gimimo data <span className="fieldRequired">*</span></label>
-                    <input
-                        type="text"
-                        id="txtChildBirthdate"
-                        name="birthdate"
-                        placeholder="Gimimo data"
-                        className="form-control datepicker"
-                        value={this.state.birthdate}
-                        onChange={this.childOnChange}
+                    <DatePicker
+                        className="form-control"
+                        locale="lt"
+                        dateFormat="yyyy/MM/dd"
+                        selected={this.state.birthdate}
+                        onChange={(e) => {
+                            this.setState({birthdate: e})
+                            }
+                        }
+                        minDate={subYears(new Date(), 6)}
+                        maxDate={subYears(new Date(), 1)}
                     />
                 </div>
             </div>
         )
     }
-
+    
     /** Checkbox forma prioritetams */
     checkboxPriorityForm() {
         return (
@@ -381,7 +392,7 @@ export default class CreateApplicationFormContainer extends Component {
                         <div className="row">
                             <div className="form-check">
                                 <div className="row">
-                                    <h6>Vaiko priėmimo tvarkos prioritetai</h6>
+                                    <h6 className="formHeader">Vaiko priėmimo tvarkos prioritetai</h6>
                                 </div>
                                 <div className="row">
                                     <p>Pažymėkite tinkamus prioritetus</p>
@@ -452,7 +463,7 @@ export default class CreateApplicationFormContainer extends Component {
                 <div className="col">
                     <div className="form">
                         <div className="row">
-                            <h6>Darželių prioritetas</h6>
+                            <h6 className="formHeader">Darželių prioritetas</h6>
                         </div>
                         <div className="row">
                             <p>Pasirinkite darželių prioritetą, daugiausiai leidžiamos 5 įstaigos.</p>
@@ -462,8 +473,26 @@ export default class CreateApplicationFormContainer extends Component {
                             <Select
                                 name="kindergartenId1"
                                 placeholder="Pasirinkite darželį iš sąrašo"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList, "kindergartenId1")}
-                                onChange={this.selectOnChange}
+                                options={this.state.kindergartenList}
+                                onChange={(e) => {
+                                            if(e.value !== this.state.kindergartenChoises.kindergartenId1) {
+                                                const lastIdValue = this.state.kindergartenChoises.kindergartenId1;
+                                                this.setState({...this.state, kindergartenChoises: {...this.state.kindergartenChoises, "kindergartenId1": e.value}})
+                                                this.state.kindergartenList.forEach(element => {
+                                                    if(element.value===lastIdValue) {
+                                                        element.disabled = "no"
+                                                    }
+                                                })
+                                            }
+                                            this.setState({...this.state, kindergartenChoises: {...this.state.kindergartenChoises, "kindergartenId1": e.value}})
+                                            this.state.kindergartenList.forEach(element => {
+                                                if(element.value===e.value) {
+                                                     element.disabled = "yes"
+                                                }
+                                            })
+                                        }
+                                }
+                                isOptionDisabled={(option) => option.disabled === "yes"}
                             />
                         </div>
                         <div className="form-group">
@@ -471,8 +500,26 @@ export default class CreateApplicationFormContainer extends Component {
                             <Select
                                 name="kindergartenId2"
                                 placeholder="Pasirinkite darželį iš sąrašo"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList, "kindergartenId2")}
-                                onChange={this.selectOnChange}
+                                options={this.state.kindergartenList}
+                                onChange={(e) => {
+                                            if(e.value !== this.state.kindergartenChoises.kindergartenId2) {
+                                                const lastIdValue = this.state.kindergartenChoises.kindergartenId2;
+                                                this.setState({...this.state, kindergartenChoises: {...this.state.kindergartenChoises, "kindergartenId2": e.value}})
+                                                this.state.kindergartenList.forEach(element => {
+                                                    if(element.value===lastIdValue) {
+                                                        element.disabled = "no"
+                                                    }
+                                                })
+                                            }
+                                            this.setState({...this.state, kindergartenChoises: {...this.state.kindergartenChoises, "kindergartenId2": e.value}})
+                                            this.state.kindergartenList.forEach(element => {
+                                                if(element.value===e.value) {
+                                                     element.disabled = "yes"
+                                                }
+                                            })
+                                        }
+                                }
+                                isOptionDisabled={(option) => option.disabled === "yes"}
                             />
                         </div>
                         <div className="form-group">
@@ -480,8 +527,26 @@ export default class CreateApplicationFormContainer extends Component {
                             <Select
                                 name="kindergartenId3"
                                 placeholder="Pasirinkite darželį iš sąrašo"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList, "kindergartenId3")}
-                                onChange={this.selectOnChange}
+                                options={this.state.kindergartenList}
+                                onChange={(e) => {
+                                            if(e.value !== this.state.kindergartenChoises.kindergartenId3) {
+                                                const lastIdValue = this.state.kindergartenChoises.kindergartenId3;
+                                                this.setState({...this.state, kindergartenChoises: {...this.state.kindergartenChoises, "kindergartenId3": e.value}})
+                                                this.state.kindergartenList.forEach(element => {
+                                                    if(element.value===lastIdValue) {
+                                                        element.disabled = "no"
+                                                    }
+                                                })
+                                            }
+                                            this.setState({...this.state, kindergartenChoises: {...this.state.kindergartenChoises, "kindergartenId3": e.value}})
+                                            this.state.kindergartenList.forEach(element => {
+                                                if(element.value===e.value) {
+                                                     element.disabled = "yes"
+                                                }
+                                            })
+                                        }
+                                }
+                                isOptionDisabled={(option) => option.disabled === "yes"}
                             />
                         </div>
                         <div className="form-group">
@@ -489,8 +554,26 @@ export default class CreateApplicationFormContainer extends Component {
                             <Select
                                 name="kindergartenId4"
                                 placeholder="Pasirinkite darželį iš sąrašo"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList, "kindergartenId4")}
-                                onChange={this.selectOnChange}
+                                options={this.state.kindergartenList}
+                                onChange={(e) => {
+                                            if(e.value !== this.state.kindergartenChoises.kindergartenId4) {
+                                                const lastIdValue = this.state.kindergartenChoises.kindergartenId4;
+                                                this.setState({...this.state, kindergartenChoises: {...this.state.kindergartenChoises, "kindergartenId4": e.value}})
+                                                this.state.kindergartenList.forEach(element => {
+                                                    if(element.value===lastIdValue) {
+                                                        element.disabled = "no"
+                                                    }
+                                                })
+                                            }
+                                            this.setState({...this.state, kindergartenChoises: {...this.state.kindergartenChoises, "kindergartenId4": e.value}})
+                                            this.state.kindergartenList.forEach(element => {
+                                                if(element.value===e.value) {
+                                                     element.disabled = "yes"
+                                                }
+                                            })
+                                        }
+                                }
+                                isOptionDisabled={(option) => option.disabled === "yes"}
                             />
                         </div>
                         <div className="form-group">
@@ -498,8 +581,26 @@ export default class CreateApplicationFormContainer extends Component {
                             <Select
                                 name="kindergartenId5"
                                 placeholder="Pasirinkite darželį iš sąrašo"
-                                options={this.kindergartenListToSelect(this.state.kindergartenList, "kindergartenId5")}
-                                onChange={this.selectOnChange}
+                                options={this.state.kindergartenList}
+                                onChange={(e) => {
+                                            if(e.value !== this.state.kindergartenChoises.kindergartenId5) {
+                                                const lastIdValue = this.state.kindergartenChoises.kindergartenId5;
+                                                this.setState({...this.state, kindergartenChoises: {...this.state.kindergartenChoises, "kindergartenId5": e.value}})
+                                                this.state.kindergartenList.forEach(element => {
+                                                    if(element.value===lastIdValue) {
+                                                        element.disabled = "no"
+                                                    }
+                                                })
+                                            }
+                                            this.setState({...this.state, kindergartenChoises: {...this.state.kindergartenChoises, "kindergartenId5": e.value}})
+                                            this.state.kindergartenList.forEach(element => {
+                                                if(element.value===e.value) {
+                                                     element.disabled = "yes"
+                                                }
+                                            })
+                                        }
+                                }
+                                isOptionDisabled={(option) => option.disabled === "yes"}
                             />
                         </div>
                     </div>
@@ -517,7 +618,6 @@ export default class CreateApplicationFormContainer extends Component {
                 [e.target.name]: e.target.value
             }
         })
-        console.log(this.state);
     }
 
     /** Antro atstovo formos onChange */
@@ -529,7 +629,6 @@ export default class CreateApplicationFormContainer extends Component {
                 [e.target.name]: e.target.value
             }
         })
-        console.log(this.state);
     }
 
     /** Vaiko formos onChange */
@@ -538,7 +637,6 @@ export default class CreateApplicationFormContainer extends Component {
         this.setState({
             [e.target.name]: e.target.value
         })
-        console.log(this.state);
     }
 
     /** Checkbox onChange */
@@ -549,18 +647,6 @@ export default class CreateApplicationFormContainer extends Component {
                 [e.target.name]: e.target.checked
             }
         })
-        console.log(this.state);
-    }
-
-    /** Select onChange */
-    selectOnChange(e) {
-        this.setState({
-            kindergartenChoises: {
-                ...this.state.kindergartenChoises,
-                [e.name]: e.value
-            }
-        })
-        console.log(this.state.kindergartenChoises);
     }
 
     /** Handle submit */
@@ -574,7 +660,6 @@ export default class CreateApplicationFormContainer extends Component {
             
         }
         else {
-            /** Todo: POST */
             http.post(`${apiEndpoint}/api/prasymai`, 
                 {
                     "additionalGuardian": {
@@ -585,7 +670,7 @@ export default class CreateApplicationFormContainer extends Component {
                         "phone": this.state.additionalGuardian.phone,
                         "surname": this.state.additionalGuardian.surname
                     },
-                    "birthdate": this.state.birthdate,
+                    "birthdate": this.state.birthdate.toLocaleDateString('en-CA'),
                     "childName": this.state.childName,
                     "childPersonalCode": this.state.childPersonalCode,
                     "childSurname": this.state.childSurname,
@@ -621,8 +706,7 @@ export default class CreateApplicationFormContainer extends Component {
                         text: response.text,
                         icon: "success",
                         button: "Gerai"
-                    })
-                    console.log(response);
+                    }).then(()=>{return window.location.href="/"})
                 })
                 .catch((error) => {
                     console.log(error)

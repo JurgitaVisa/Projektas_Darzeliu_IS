@@ -41,20 +41,20 @@ public class KindergartenController {
 	private KindergartenService kindergartenService;
 
 	/**
-	 * Get list of all Kindergarten names and addresses with capacity of more than zero
+	 * Get list of all Kindergarten names and addresses with capacity of more than
+	 * zero
 	 * 
 	 * @return list of kindergarten
 	 */
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation(value = "Get all kindergarten names and addresses")
+	@ApiOperation(value = "Get all kindergarten names and addresses with available places > 0")
 	public List<KindergartenInfo> getAllWithNonZeroCapacity() {
 
 		return kindergartenService.getAllWithNonZeroCapacity();
 	}
 
-	
 	/**
 	 * Get list of all elderates
 	 * 
@@ -68,7 +68,6 @@ public class KindergartenController {
 
 		return kindergartenService.getAllElderates();
 	}
-
 
 	/**
 	 * Get specified Kindergarten information page
@@ -121,7 +120,7 @@ public class KindergartenController {
 			@ApiParam(value = "Kindergarten", required = true) @Valid @RequestBody KindergartenDTO kindergarten) {
 
 		String id = kindergarten.getId();
-		
+
 		if (kindergartenService.findById(id) != null) {
 			return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu jau yra", HttpStatus.CONFLICT);
 
@@ -154,7 +153,7 @@ public class KindergartenController {
 
 			kindergartenService.deleteKindergarten(id);
 			LOG.info("** Usercontroller: trinamas darželis ID [{}] **", id);
-			return new ResponseEntity<String>("Darželis panaikintas sėkmingai", HttpStatus.OK);
+			return new ResponseEntity<String>("Darželis ištrintas sėkmingai", HttpStatus.OK);
 		}
 
 		return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
@@ -179,6 +178,25 @@ public class KindergartenController {
 			return new ResponseEntity<String>("Darželio duomenys atnaujinti sėkmingai", HttpStatus.OK);
 		}
 
+	}
+
+	/**
+	 * Get Kindergarten statistics
+	 * 
+	 * @return kindergarten statistics
+	 */
+	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
+	@GetMapping("/statistics")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Get kindergarten statistics")
+	public Page<KindergartenStatistics> getKindergartenStatistics(@RequestParam("page") int page,
+			@RequestParam("size") int size) {
+
+		Sort.Order order = new Sort.Order(Sort.Direction.ASC, "name").ignoreCase();
+
+		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
+
+		return kindergartenService.getKindergartenStatistics(pageable);
 	}
 
 	public KindergartenService getGartenService() {

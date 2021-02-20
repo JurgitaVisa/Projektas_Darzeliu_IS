@@ -73,6 +73,7 @@ export class KindergartenListContainer extends Component {
                 });
 
             }).catch(error => {
+                console.log(error);
                 console.log("Darzeliai container error", error.response);
                 if (error && error.response.status === 401)
 
@@ -110,28 +111,36 @@ export class KindergartenListContainer extends Component {
     }
 
     handleDelete = (item) => {
-        const id = item.id;
-        const { currentPage, numberOfElements } = this.state;
-        const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
-        console.log("Trinti darzeli", id);
 
-        http
-            .delete(`${apiEndpoint}/api/darzeliai/manager/delete/${id}`)
-            .then((response) => {
-                swal({
-                    text: response.data,
-                    button: "Gerai"
-                });
-                this.getKindergartenInfo(page, "");
+        swal({
+            text: "Ar tikrai norite ištrinti darželį?",
+            buttons: ["Ne", "Taip"],
+            dangerMode: true,
+        }).then((actionConfirmed) => {
+            if (actionConfirmed) {
+                const id = item.id;
+                const { currentPage, numberOfElements } = this.state;
+                const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
+                console.log("Trinti darzeli", id);
 
-            }).catch(error => {
-                if (error && error.response.status > 400 && error.response.status < 500)
-                    swal({
-                        text: "Veiksmas neleidžiamas",
-                        button: "Gerai"
+                http
+                    .delete(`${apiEndpoint}/api/darzeliai/manager/delete/${id}`)
+                    .then((response) => {
+                        swal({
+                            text: response.data,
+                            button: "Gerai"
+                        });
+                        this.getKindergartenInfo(page, "");
+
+                    }).catch(error => {
+                        if (error && error.response.status > 400 && error.response.status < 500)
+                            swal({
+                                text: "Veiksmas neleidžiamas",
+                                button: "Gerai"
+                            });
                     });
-
-            });
+            }
+        });
     }
 
     handleEditKindergarten = (item) => {

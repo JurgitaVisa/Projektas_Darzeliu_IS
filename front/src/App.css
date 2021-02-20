@@ -34,7 +34,7 @@
   text-align: center;
 } */
 
-.swal-button {
+.swal-button--confirm {
   background-color:#007bff;
 }
 

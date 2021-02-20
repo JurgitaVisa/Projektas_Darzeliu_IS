@@ -28,5 +28,8 @@ public interface KindergartenDAO extends JpaRepository<Kindergarten, String> {
 
 	@Query("SELECT k FROM Kindergarten k WHERE k.capacityAgeGroup2to3>0 OR k.capacityAgeGroup3to6>0")
 	List<Kindergarten> findAllWithNonZeroCapacity(Sort ascending);
+	
+	@Query("SELECT new it.akademija.kindergarten.KindergartenStatistics(k.id, k.name , (k.capacityAgeGroup2to3 + k.capacityAgeGroup3to6) as availablePlaces, COUNT(c.choiseId) as numberOfApplications) FROM Kindergarten k LEFT JOIN KindergartenChoise c ON c.kindergarten.id=k.id GROUP BY k.id")
+	Page<KindergartenStatistics> findAllChoises(Pageable pageable);
 
 }

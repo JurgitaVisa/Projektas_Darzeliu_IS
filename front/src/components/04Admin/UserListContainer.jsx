@@ -23,7 +23,7 @@ export class UserListContainer extends Component {
     }
     componentDidMount() {
 
-        this.getUserInfo(this.state.currentPage);        
+        this.getUserInfo(this.state.currentPage);
     }
 
     getUserInfo(currentPage) {
@@ -32,7 +32,7 @@ export class UserListContainer extends Component {
         currentPage -= 1;
 
         var uri = `${apiEndpoint}/api/users/admin/allusers?page=${currentPage}&size=${pageSize}`;
-        
+
         http
             .get(uri)
             .then((response) => {
@@ -61,71 +61,84 @@ export class UserListContainer extends Component {
 
 
     mapToViewModel(data) {
-       
-        const naudotojai = data.map(user=>({
+
+        const naudotojai = data.map(user => ({
             id: user.userId,
             username: user.username,
             role: user.role
 
-        }));       
-       
-        return  naudotojai;        
+        }));
+
+        return naudotojai;
     };
 
     handleDelete = (item) => {
         const username = item.username;
         console.log("Trinti naudotoja", username);
 
-        const { currentPage, numberOfElements } = this.state;
-        const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
+        swal({
+            text: "Ar tikrai norite ištrinti naudotoją?",
+            buttons: ["Ne", "Taip"],
+            dangerMode: true,
+        }).then((actionConfirmed) => {
+            if (actionConfirmed) {
+                const { currentPage, numberOfElements } = this.state;
+                const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
 
-        http
-            .delete(`${apiEndpoint}/api/users/admin/delete/${username}`)
-            .then((response) => {
-                swal({                   
-                    text: response.data,
-                    button: "Gerai"
-                });
+                http
+                    .delete(`${apiEndpoint}/api/users/admin/delete/${username}`)
+                    .then((response) => {
+                        swal({
+                            text: response.data,
+                            button: "Gerai"
+                        });
 
-                 this.getUserInfo(page);
+                        this.getUserInfo(page);
 
-            }).catch(error => {
-                if (error && error.response.status > 400 && error.response.status < 500) 
-                swal({                   
-                    title: "Veiksmas neleidžiamas",   
-                    button: "Gerai"
-                });
-
-            });
+                    }).catch(error => {
+                        if (error && error.response.status > 400 && error.response.status < 500)
+                            swal({
+                                title: "Veiksmas neleidžiamas",
+                                button: "Gerai"
+                            });
+                    });
+            }
+        });
     }
 
     handleRestorePassword = (item) => {
         const username = item.username;
         console.log("Atstatyti slaptazodi naudotojui", username);
 
-        http
-            .put(`${apiEndpoint}/api/users/admin/password/${username}`)
-            .then((response) => {
-                swal({                   
-                    text: response.data,
-                    button: "Gerai"
-                });
-            }).catch(error => {
-                if (error && error.response.status > 400 && error.response.status < 500) 
-                swal({                   
-                    title: "Veiksmas neleidžiamas",   
-                    button: "Gerai"
-                });
+        swal({
+            text: "Ar tikrai norite atkurti pirminį slaptažodį?",
+            buttons: ["Ne", "Taip"],
+            dangerMode: true,
+        }).then((actionConfirmed) => {
+            if (actionConfirmed) {
+                http
+                    .put(`${apiEndpoint}/api/users/admin/password/${username}`)
+                    .then((response) => {
+                        swal({
+                            text: response.data,
+                            button: "Gerai"
+                        });
+                    }).catch(error => {
+                        if (error && error.response.status > 400 && error.response.status < 500)
+                            swal({
+                                text: "Veiksmas neleidžiamas",
+                                button: "Gerai"
+                            });
 
+                    });
             }
-            );
-
+        })
     }
 
     handlePageChange = (page) => {
         this.setState({ currentPage: page });
         this.getUserInfo(page);
-    };    
+    };
 
     render() {
 
@@ -133,7 +146,7 @@ export class UserListContainer extends Component {
 
         return (
             <React.Fragment >
-                
+
                 <UserListTable
                     naudotojai={naudotojai}
                     onDelete={this.handleDelete}

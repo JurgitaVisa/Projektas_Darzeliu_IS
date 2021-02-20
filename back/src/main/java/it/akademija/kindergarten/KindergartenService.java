@@ -11,8 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.akademija.kindergartenchoise.KindergartenChoiseDAO;
-
 @Service
 public class KindergartenService {
 
@@ -114,8 +112,8 @@ public class KindergartenService {
 
 	/**
 	 * 
-	 * Delete kindergarten with specified id
-	 * Also deletes all related kindergarten choises
+	 * Delete kindergarten with specified id. Also deletes all related kindergarten
+	 * choises
 	 * 
 	 * @param id
 	 */
@@ -143,6 +141,18 @@ public class KindergartenService {
 		current.setCapacityAgeGroup3to6(updatedInfo.getCapacityAgeGroup3to6());
 
 		gartenDao.save(current);
+	}
+
+	/**
+	 * 
+	 * Kindergarten prioritize statistics
+	 * @param pageable 
+	 * 
+	 * @return statistics
+	 */
+	public Page<KindergartenStatistics> getKindergartenStatistics(Pageable pageable) {
+		
+		return gartenDao.findAllChoises(pageable);
 	}
 
 	/**

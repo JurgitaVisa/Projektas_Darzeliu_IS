@@ -52,7 +52,7 @@ public class ApplicationService {
 
 	/**
 	 * 
-	 * Get information on submitted applications for logged in user
+	 * Get information about submitted applications for logged in user
 	 * 
 	 * @param currentUsername
 	 * @return list of user applications

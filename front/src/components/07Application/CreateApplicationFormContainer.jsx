@@ -707,7 +707,11 @@ export default class CreateApplicationFormContainer extends Component {
                         text: response.data,
                         icon: "success",
                         button: "Gerai"
-                    }).then(()=>{return window.location.href="/"})
+                    })
+                    /**
+                     * TODO:
+                     * redirect
+                     * .then(()=>{return window.location.href="/"}) */
                 })
                 .catch((error) => {
                     console.log(error)

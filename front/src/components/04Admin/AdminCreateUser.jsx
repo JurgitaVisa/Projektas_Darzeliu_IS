@@ -31,7 +31,7 @@ export default class AdminCreateUser extends Component {
             birthdate: "",
             identificationCode: "",
             address: "",
-            telno: "",
+            phone: "",
             email: ""
         }
         this.roleDropdownOnChange = this.roleDropdownOnChange.bind(this);
@@ -190,8 +190,8 @@ export default class AdminCreateUser extends Component {
                                     type="tel"
                                     className="form-control"
                                     id="txtTelNo"
-                                    name="telno"
-                                    value={this.state.telno}
+                                    name="phone"
+                                    value={this.state.phone}
                                     onChange={this.handleChange}
                                     onInvalid={(e) => inputValidator(e)}
                                     placeholder="Telefono numeris"
@@ -229,7 +229,7 @@ export default class AdminCreateUser extends Component {
             birthdate: "",
             identificationCode: "",
             address: "",
-            telno: "",
+            phone: "",
             email: ""
         })
 
@@ -261,7 +261,7 @@ export default class AdminCreateUser extends Component {
             "name": this.state.name,
             "password": this.state.email,
             "personalCode": this.state.identificationCode,
-            "phone": this.state.telno,
+            "phone": this.state.phone,
             "role": this.state.role,
             "surname": this.state.surname,
             "username": this.state.email

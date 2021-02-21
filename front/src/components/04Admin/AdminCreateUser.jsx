@@ -29,9 +29,9 @@ export default class AdminCreateUser extends Component {
             name: "",
             surname: "",
             birthdate: "",
-            identificationCode: "",
+            personalCode: "",
             address: "",
-            telno: "",
+            phone: "",
             email: ""
         }
         this.roleDropdownOnChange = this.roleDropdownOnChange.bind(this);
@@ -167,8 +167,8 @@ export default class AdminCreateUser extends Component {
                                 type="text"
                                 className="form-control"
                                 id="txtPersonalCode"
-                                name="identificationCode"
-                                value={this.state.identificationCode}
+                                name="personalCode"
+                                value={this.state.personalCode}
                                 onChange={this.handleChange}
                                 onInvalid={(e) => inputValidator(e)}
                                 placeholder="Asmens kodas"
@@ -190,8 +190,8 @@ export default class AdminCreateUser extends Component {
                                     type="tel"
                                     className="form-control"
                                     id="txtTelNo"
-                                    name="telno"
-                                    value={this.state.telno}
+                                    name="phone"
+                                    value={this.state.phone}
                                     onChange={this.handleChange}
                                     onInvalid={(e) => inputValidator(e)}
                                     placeholder="Telefono numeris"
@@ -227,9 +227,9 @@ export default class AdminCreateUser extends Component {
             name: "",
             surname: "",
             birthdate: "",
-            identificationCode: "",
+            personalCode: "",
             address: "",
-            telno: "",
+            phone: "",
             email: ""
         })
 
@@ -260,8 +260,8 @@ export default class AdminCreateUser extends Component {
             "email": this.state.email,
             "name": this.state.name,
             "password": this.state.email,
-            "personalCode": this.state.identificationCode,
-            "phone": this.state.telno,
+            "personalCode": this.state.personalCode,
+            "phone": this.state.phone,
             "role": this.state.role,
             "surname": this.state.surname,
             "username": this.state.email

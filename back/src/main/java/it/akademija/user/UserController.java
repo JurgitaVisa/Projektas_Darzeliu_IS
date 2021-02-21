@@ -76,7 +76,7 @@ public class UserController {
 		if (userService.findByUsername(username) != null) {
 			userService.deleteUser(username);
 			LOG.info("** Usercontroller: trinamas naudotojas vardu [{}] **", username);
-			return new ResponseEntity<String>("Naudotojas panaikintas sėkmingai", HttpStatus.OK);
+			return new ResponseEntity<String>("Naudotojas ištrintas sėkmingai", HttpStatus.OK);
 		}
 
 		return new ResponseEntity<String>("Naudotojas tokiu vardu nerastas", HttpStatus.NOT_FOUND);
@@ -139,7 +139,7 @@ public class UserController {
 		if (userService.findByUsername(username) != null) {
 			userService.restorePassword(username);
 			LOG.info("** Usercontroller: keiciamas slaptazodis naudotojui vardu [{}] **", username);
-			return new ResponseEntity<String>("Slaptažodis atstatytas sėkmingai", HttpStatus.OK);
+			return new ResponseEntity<String>("Slaptažodis atkurtas sėkmingai", HttpStatus.OK);
 		}
 
 		return new ResponseEntity<String>("Naudotojas tokiu vardu nerastas", HttpStatus.NOT_FOUND);

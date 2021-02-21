@@ -660,7 +660,7 @@ export default class CreateApplicationFormContainer extends Component {
             
         }
         else {
-            http.post(`${apiEndpoint}/api/prasymai`, 
+            http.post(`${apiEndpoint}/api/prasymai/user/new`, 
                 {
                     "additionalGuardian": {
                         "address": this.state.additionalGuardian.address,

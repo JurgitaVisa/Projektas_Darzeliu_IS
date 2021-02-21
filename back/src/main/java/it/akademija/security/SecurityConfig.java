@@ -68,21 +68,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 							Authentication authentication) throws IOException, ServletException {
 
-						LOG.info("** SecurityConfig: Naudotojas [{}] prisijunge prie sistemos **",
-								SecurityContextHolder.getContext().getAuthentication().getName());
+						Authentication user = SecurityContextHolder.getContext().getAuthentication();
+
+						String username = user.getName();
+						Object[] roles = user.getAuthorities().toArray();
+						String role = roles[0].toString().substring(5);
+
+						LOG.info("** SecurityConfig: Naudotojas [{}] prisijunge prie sistemos **", username);
 
 						response.setHeader("Access-Control-Allow-Credentials", "true");
 						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
 						response.setHeader("Content-Type", "application/json;charset=UTF-8");
-						response.getWriter()
-								.print("{\"username\": \""
-										+ SecurityContextHolder.getContext().getAuthentication().getName()
-										+ "\", \"role\":\""
-										+ userDao.findByUsername(
-												SecurityContextHolder.getContext().getAuthentication().getName())
-												.getRole()
-
-										+ "\"}");
+						response.getWriter().print("{\"username\": \"" + username + "\", \"role\":\"" + role + "\"}");
 
 					}
 

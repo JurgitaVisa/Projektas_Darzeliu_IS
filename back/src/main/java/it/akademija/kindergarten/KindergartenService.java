@@ -18,19 +18,20 @@ public class KindergartenService {
 	private KindergartenDAO gartenDao;
 
 	/**
-	 * Get all kindergarten ID's, names and addresses
+	 * Get all kindergarten ID's, names and addresses where capacity in any age
+	 * group is more than zero
 	 * 
 	 * @return a list of kindergarten ID, names and addresses sorted by name ASC
 	 */
 	@Transactional(readOnly = true)
-	public List<KindergartenDTO> getAllKindergartenNames() {
-		List<Kindergarten> kindergartens = gartenDao.findAll(Sort.by("name").ascending());
-		return kindergartens.stream().map(garten -> new KindergartenDTO(garten.getId(), garten.getName(),
+	public List<KindergartenInfo> getAllWithNonZeroCapacity() {
+		List<Kindergarten> kindergartens = gartenDao.findAllWithNonZeroCapacity(Sort.by("name").ascending());
+		return kindergartens.stream().map(garten -> new KindergartenInfo(garten.getId(), garten.getName(),
 				garten.getAddress(), garten.getElderate())).collect(Collectors.toList());
 	}
 
 	/**
-	 * Gel all elderates
+	 * Gel all elderate names
 	 * 
 	 * @return list of elderates
 	 */
@@ -49,7 +50,7 @@ public class KindergartenService {
 	@Transactional(readOnly = true)
 	public Page<Kindergarten> getKindergartenPage(Pageable pageable) {
 
-		return gartenDao.findAll(pageable);
+		return gartenDao.findAllKindergarten(pageable);
 	}
 
 	/**
@@ -73,11 +74,11 @@ public class KindergartenService {
 	 * @param kindergarten
 	 */
 	@Transactional
-	public void createNewKindergarten(Kindergarten kindergarten) {
-//		String name= kindergarten.getName();
-//		name= name.substring(0, 1).toUpperCase() + name.substring(1);
-//		kindergarten.setName(name);
-		gartenDao.save(kindergarten);
+	public void createNewKindergarten(KindergartenDTO kindergarten) {
+
+		gartenDao.save(new Kindergarten(kindergarten.getId(), kindergarten.getName(), kindergarten.getAddress(),
+				kindergarten.getElderate(), kindergarten.getCapacityAgeGroup2to3(),
+				kindergarten.getCapacityAgeGroup3to6()));
 
 	}
 
@@ -102,8 +103,8 @@ public class KindergartenService {
 	@Transactional(readOnly = true)
 	public boolean nameAlreadyExists(String name, String id) {
 		Kindergarten kindergarten = gartenDao.findByName(name);
-		
-		if (kindergarten!=null && kindergarten.getId()!=id) {
+
+		if (kindergarten != null && kindergarten.getId() != id) {
 			return true;
 		}
 		return false;
@@ -111,12 +112,14 @@ public class KindergartenService {
 
 	/**
 	 * 
-	 * Delete kindergarten with specified id
+	 * Delete kindergarten with specified id. Also deletes all related kindergarten
+	 * choises
 	 * 
 	 * @param id
 	 */
 	@Transactional
 	public void deleteKindergarten(String id) {
+
 		gartenDao.deleteById(id);
 
 	}
@@ -128,7 +131,7 @@ public class KindergartenService {
 	 * @param kindergarten
 	 */
 	@Transactional
-	public void updateKindergarten(String id, Kindergarten updatedInfo) {
+	public void updateKindergarten(String id, KindergartenDTO updatedInfo) {
 		Kindergarten current = gartenDao.findById(id).orElse(null);
 
 		current.setName(updatedInfo.getName());
@@ -141,6 +144,18 @@ public class KindergartenService {
 	}
 
 	/**
+	 * 
+	 * Kindergarten prioritize statistics
+	 * @param pageable 
+	 * 
+	 * @return statistics
+	 */
+	public Page<KindergartenStatistics> getKindergartenStatistics(Pageable pageable) {
+		
+		return gartenDao.findAllChoises(pageable);
+	}
+
+	/**
 	 * Delete kindergarten by name. Used during DB setup
 	 * 
 	 * @param name
@@ -150,17 +165,17 @@ public class KindergartenService {
 		gartenDao.deleteByName(name);
 	}
 
-	/**
-	 * 
-	 * Get one by name
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public List<Kindergarten> getOneByName(String name) {
-
-		return gartenDao.findByNameContainingIgnoreCase(name);
-	}
+//	/**
+//	 * 
+//	 * Get one by name
+//	 * 
+//	 * @param name
+//	 * @return
+//	 */
+//	public List<Kindergarten> getOneByName(String name) {
+//
+//		return gartenDao.findByNameContainingIgnoreCase(name);
+//	}
 
 	public KindergartenDAO getGartenDao() {
 		return gartenDao;
@@ -169,7 +184,5 @@ public class KindergartenService {
 	public void setGartenDao(KindergartenDAO gartenDao) {
 		this.gartenDao = gartenDao;
 	}
-
-	
 
 }

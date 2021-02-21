@@ -1,7 +1,10 @@
 package it.akademija.kindergarten;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,8 +18,8 @@ import it.akademija.kindergartenchoise.KindergartenChoise;
 public class Kindergarten {
 
 	@Id
-	@Column(name="kindergarten_id")
-	@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{9}$|", message ="Įstaigos kodas turi būti sudarytas iš 9 skaitmenų")
+	@Column(name = "kindergarten_id")
+	@Pattern(regexp = "^(?!\\s*$)[0-9\\s]{9}$|", message = "Įstaigos kodas turi būti sudarytas iš 9 skaitmenų")
 	private String id;
 
 	@NotBlank(message = "Pavadinimas privalomas")
@@ -38,21 +41,16 @@ public class Kindergarten {
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
 	private int capacityAgeGroup3to6;
-	
-//	@OneToMany(mappedBy = "kindergarten")
-//	private List<KindergartenChoise> kindergartenChoises;
-	
-	
+
+	@OneToMany(mappedBy = "kindergarten", cascade = CascadeType.ALL)
+	private Set<KindergartenChoise> kindergartenChoises;
+
 	public Kindergarten() {
 
 	}
 
-	public Kindergarten(String id,
-			@NotBlank(message = "Pavadinimas privalomas") @Pattern(regexp = "\\S[\\s\\S]{2,49}") String name,
-			@NotBlank(message = "Adresas privalomas") String address,
-			@Pattern(regexp = "^[\\p{L}\\s]{3,20}$") @NotBlank(message = "Seniūnija privaloma") String elderate,
-			@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0") int capacityAgeGroup2to3,
-			@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0") int capacityAgeGroup3to6) {
+	public Kindergarten(String id, String name, String address, String elderate, int capacityAgeGroup2to3,
+			int capacityAgeGroup3to6) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -110,12 +108,37 @@ public class Kindergarten {
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
 	}
 
-//	public List<KindergartenChoise> getKindergartenChoises() {
-//		return kindergartenChoises;
-//	}
-//
-//	public void setKindergartenChoises(List<KindergartenChoise> kindergartenChoises) {
-//		this.kindergartenChoises = kindergartenChoises;
-//	}
+	public Set<KindergartenChoise> getKindergartenChoises() {
+		return kindergartenChoises;
+	}
+
+	public void setKindergartenChoises(Set<KindergartenChoise> kindergartenChoises) {
+		this.kindergartenChoises = kindergartenChoises;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Kindergarten other = (Kindergarten) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 
 }

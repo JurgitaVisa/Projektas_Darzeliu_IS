@@ -142,6 +142,10 @@ export class UserListContainer extends Component {
 
     render() {
 
+        const { length: count } = this.state.naudotojai;
+
+        if (count === 0) return <div className="container pt-5"><h6 className="pt-5">Naudotojų sąrašas tuščias.</h6></div>
+
         const { naudotojai, totalElements, pageSize } = this.state;
 
         return (

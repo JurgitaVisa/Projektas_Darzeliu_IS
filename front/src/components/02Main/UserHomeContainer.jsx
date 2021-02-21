@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 
 import '../../App.css';
-import { swal } from 'sweetalert';
+import swal  from 'sweetalert';
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 
 import UserApplicationsTable from './UserApplicationsTable';
-
 export class UserHomeContainer extends Component {
 
     constructor(props) {
@@ -17,9 +16,15 @@ export class UserHomeContainer extends Component {
         }
     }
     componentDidMount() {
+
+        this.getUserApplications();
+    }
+
+    getUserApplications() {
         http
-            .get(`${apiEndpoint}/api/prasymai`)
+            .get(`${apiEndpoint}/api/prasymai/user`)
             .then((response) => {
+                
                 this.setState({ applications: response.data });
 
             }).catch(error => {
@@ -29,14 +34,34 @@ export class UserHomeContainer extends Component {
                         text: "Veiksmas neleidžiamas",
                         button: "Gerai"
                     });
-            }
-            );
-
+            });
     }
 
     handleDelete = (item) => {
-
         console.log("Trinti prašymą", item);
+        swal({
+            text: "Ar tikrai norite ištrinti prašymą?",
+            buttons: ["Ne", "Taip"],
+            dangerMode: true,
+        }).then((actionConfirmed) => {
+            if (actionConfirmed) {
+                http.delete(`${apiEndpoint}/api/prasymai/user/delete/${item.id}`)
+                    .then((response) => {
+                        console.log(response);
+                        swal({
+                            text: response.data,
+                            button: "Gerai"
+                        })
+                        this.getUserApplications();
+                    }).catch((error) => {
+                        if (error && error.response.status > 400 && error.response.status < 500)
+                            swal({
+                                text: "Veiksmas neleidžiamas",
+                                button: "Gerai"
+                            });
+                    });
+            }
+        });
     }
 
     render() {

@@ -215,6 +215,10 @@ export class KindergartenListContainer extends Component {
 
     render() {
 
+        const { length: count } = this.state.darzeliai;
+
+        if (count === 0) return <div className="container pt-5"><h6 className="pt-5">Darželių sąrašas tuščias.</h6></div>
+
         const { darzeliai, elderates, totalElements, pageSize, searchQuery, inEditMode, editRowId, errorMessages } = this.state;
 
         const hasErrors = Object.keys(errorMessages).length === 0 ? false : true;

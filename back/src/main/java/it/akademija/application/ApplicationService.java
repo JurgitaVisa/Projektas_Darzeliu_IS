@@ -12,6 +12,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +48,7 @@ public class ApplicationService {
 
 	@Autowired
 	private PrioritiesDAO prioritiesDao;
-	
+
 	@Autowired
 	private KindergartenChoiseDAO choiseDao;
 
@@ -66,8 +68,20 @@ public class ApplicationService {
 				appl.getChildSurname(), appl.getSubmitedAt(), appl.getStatus())).collect(Collectors.toList());
 	}
 
+	/**
+	 * Create an application for logged in user's child with specified child data.
+	 * Receives and updates user data, receives saves additional child's guardian if
+	 * person with such personal code is not already in the database. Sets received
+	 * main guardian, additional guardian, priorities and chosen kindergartens to
+	 * application.
+	 * 
+	 * @param currentUsername
+	 * @param data            child data, gurdians' data, priorities data,
+	 *                        kindergarten choises
+	 * @return application or null if no kindergarten are chosen
+	 */
 	@Transactional
-	public void createNewApplication(String currentUsername, ApplicationDTO data) {
+	public ResponseEntity<String> createNewApplication(String currentUsername, ApplicationDTO data) {
 
 		Application application = new Application();
 
@@ -79,20 +93,20 @@ public class ApplicationService {
 			ParentDetails secondParent = parentDetailsDao.findByPersonalCode(detailsDto.getPersonalCode());
 
 			if (secondParent == null) {
-				secondParent = parentDetailsDao.save(new ParentDetails(detailsDto.getPersonalCode(), detailsDto.getName(),
-						detailsDto.getSurname(), detailsDto.getEmail(), detailsDto.getAddress(),
-						("370" + detailsDto.getPhone())));
-				//parentDetailsDao.saveAndFlush(secondParent);
+				secondParent = parentDetailsDao.save(
+						new ParentDetails(detailsDto.getPersonalCode(), detailsDto.getName(), detailsDto.getSurname(),
+								detailsDto.getEmail(), detailsDto.getAddress(), ("370" + detailsDto.getPhone())));
 			}
 
 			application.setAdditionalGuardian(secondParent);
 		}
-		
-		PrioritiesDTO prioritiesDto= data.getPriorities();
 
-		Priorities priorities = prioritiesDao.save(new Priorities(prioritiesDto.isLivesInVilnius(), prioritiesDto.isChildIsAdopted(), prioritiesDto.isFamilyHasThreeOrMoreChildrenInSchools(),
-				prioritiesDto.isGuardianInSchool(), prioritiesDto.isGuardianDisability()));	
-		
+		PrioritiesDTO prioritiesDto = data.getPriorities();
+
+		Priorities priorities = prioritiesDao.save(new Priorities(prioritiesDto.isLivesInVilnius(),
+				prioritiesDto.isChildIsAdopted(), prioritiesDto.isFamilyHasThreeOrMoreChildrenInSchools(),
+				prioritiesDto.isGuardianInSchool(), prioritiesDto.isGuardianDisability()));
+
 		application.setSubmitedAt();
 		application.setStatus(ApplicationStatus.Pateiktas);
 		application.setChildName(data.getChildName());
@@ -104,30 +118,55 @@ public class ApplicationService {
 		application.setMainGuardian(firstParent);
 
 		KindergartenChoiseDTO choisesDto = data.getKindergartenChoises();
-
-		Kindergarten first = gartenService.findById(choisesDto.getKindergartenId1());
-		Kindergarten second = gartenService.findById(choisesDto.getKindergartenId2());
-		Kindergarten third = gartenService.findById(choisesDto.getKindergartenId3());
-		Kindergarten fouth = gartenService.findById(choisesDto.getKindergartenId4());
-		Kindergarten fith = gartenService.findById(choisesDto.getKindergartenId5());
-
 		Set<KindergartenChoise> choises = new HashSet<>();
-		
-		KindergartenChoise choise1 = choiseDao.save(new KindergartenChoise(first, application, 1));
-		choises.add(choise1);
-		KindergartenChoise choise2 = choiseDao.save(new KindergartenChoise(second, application, 2));
-		choises.add(choise2);
-		KindergartenChoise choise3 = choiseDao.save(new KindergartenChoise(third, application, 3));
-		choises.add(choise3);
-		KindergartenChoise choise4 = choiseDao.save(new KindergartenChoise(fouth, application, 4));
-		choises.add(choise4);
-		KindergartenChoise choise5 = choiseDao.save(new KindergartenChoise(fith, application, 5));
-		choises.add(choise5);
 
-		application.setKindergartenChoises(choises);
+		for (int i = 1; i <= 5; i++) {
+			Kindergarten garten = gartenService.findById(choisesDto.getKindergartenId(i));
+			if (garten != null) {
+				KindergartenChoise choise = choiseDao.save(new KindergartenChoise(garten, application, i));
+				choises.add(choise);
+			}
+		}
 
-		applicationDao.saveAndFlush(application);
+		if (choises.isEmpty()) {
 
+			return new ResponseEntity<String>("Prašymo sukurti nepavyko", HttpStatus.BAD_REQUEST);
+
+		} else {
+			application.setKindergartenChoises(choises);
+			applicationDao.saveAndFlush(application);
+
+			return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
+		}
+
+	}
+
+	/**
+	 * Delete application by id. Also deletes connected priorities, kindergarten
+	 * choises, and additional guardian who has no other applications.
+	 * 
+	 * @param id
+	 */
+	@Transactional
+	public ResponseEntity<String> deleteApplication(Long id) {
+		Application application = applicationDao.getOne(id);
+		if (application != null) {
+
+			ParentDetails additionalGuardian = application.getAdditionalGuardian();
+			if (additionalGuardian != null) {
+				int numberOfAdditionalGuardianApplications = additionalGuardian.removeApplication(application);
+
+				if (numberOfAdditionalGuardianApplications == 0) {
+					parentDetailsDao.delete(additionalGuardian);
+				}
+
+			}
+
+			applicationDao.deleteById(id);
+			return new ResponseEntity<String>("Ištrinta sėkmingai", HttpStatus.OK);
+		}
+
+		return new ResponseEntity<String>("Prašymas nerastas", HttpStatus.NOT_FOUND);
 	}
 
 //	PERKELTI i prasymu eiles formavima
@@ -195,7 +234,5 @@ public class ApplicationService {
 	public void setChoiseDao(KindergartenChoiseDAO choiseDao) {
 		this.choiseDao = choiseDao;
 	}
-	
-	
 
 }

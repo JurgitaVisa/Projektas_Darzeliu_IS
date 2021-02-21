@@ -660,7 +660,7 @@ export default class CreateApplicationFormContainer extends Component {
             
         }
         else {
-            http.post(`${apiEndpoint}/api/prasymai`, 
+            http.post(`${apiEndpoint}/api/prasymai/user/new`, 
                 {
                     "additionalGuardian": {
                         "address": this.state.additionalGuardian.address,
@@ -701,9 +701,10 @@ export default class CreateApplicationFormContainer extends Component {
                 }
                 )
                 .then((response) => {
+                    console.log(response);
                     swal({
                         title: "Užklausa atlikta sėkmingai",
-                        text: response.text,
+                        text: response.data,
                         icon: "success",
                         button: "Gerai"
                     }).then(()=>{return window.location.href="/"})

@@ -84,6 +84,11 @@ public class ParentDetails {
 	public Set<Application> getParentApplications() {
 		return parentApplications;
 	}
+	
+	public int removeApplication(Application application) {
+		parentApplications.remove(application);	
+		return parentApplications.size();
+	}
 
 	public Long getParentDetailsId() {
 		return parentDetailsId;
@@ -144,5 +149,7 @@ public class ParentDetails {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
+	
 
 }

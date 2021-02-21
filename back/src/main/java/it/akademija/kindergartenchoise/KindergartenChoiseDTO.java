@@ -25,6 +25,30 @@ public class KindergartenChoiseDTO {
 		this.kindergartenId4 = kindergartenId4;
 		this.kindergartenId5 = kindergartenId5;
 	}
+	
+	public String getKindergartenId(int id) {
+		String kindergartenId="";
+		
+		switch (id) {
+		case 1:
+			kindergartenId= kindergartenId1;
+			break;
+		case 2:
+			kindergartenId= kindergartenId2;
+			break;
+		case 3:
+			kindergartenId= kindergartenId3;
+			break;
+		case 4:
+			kindergartenId= kindergartenId4;
+			break;
+		case 5:
+			kindergartenId= kindergartenId5;
+			break;
+		}
+		return kindergartenId;
+		
+	}
 
 	public String getKindergartenId1() {
 		return kindergartenId1;
@@ -65,7 +89,8 @@ public class KindergartenChoiseDTO {
 	public void setKindergartenId5(String kindergartenId5) {
 		this.kindergartenId5 = kindergartenId5;
 	}
-
+	
+	
 	
 	
 }

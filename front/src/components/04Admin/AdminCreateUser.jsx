@@ -29,7 +29,7 @@ export default class AdminCreateUser extends Component {
             name: "",
             surname: "",
             birthdate: "",
-            identificationCode: "",
+            personalCode: "",
             address: "",
             phone: "",
             email: ""
@@ -167,8 +167,8 @@ export default class AdminCreateUser extends Component {
                                 type="text"
                                 className="form-control"
                                 id="txtPersonalCode"
-                                name="identificationCode"
-                                value={this.state.identificationCode}
+                                name="personalCode"
+                                value={this.state.personalCode}
                                 onChange={this.handleChange}
                                 onInvalid={(e) => inputValidator(e)}
                                 placeholder="Asmens kodas"
@@ -227,7 +227,7 @@ export default class AdminCreateUser extends Component {
             name: "",
             surname: "",
             birthdate: "",
-            identificationCode: "",
+            personalCode: "",
             address: "",
             phone: "",
             email: ""
@@ -260,7 +260,7 @@ export default class AdminCreateUser extends Component {
             "email": this.state.email,
             "name": this.state.name,
             "password": this.state.email,
-            "personalCode": this.state.identificationCode,
+            "personalCode": this.state.personalCode,
             "phone": this.state.phone,
             "role": this.state.role,
             "surname": this.state.surname,

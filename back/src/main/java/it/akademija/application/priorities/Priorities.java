@@ -34,7 +34,7 @@ public class Priorities {
 	@Column
 	private boolean guardianDisability;
 
-	@OneToOne(mappedBy = "priorities", fetch = FetchType.EAGER)
+	@OneToOne(mappedBy = "priorities")
 	private Application application;
 
 	public Priorities() {

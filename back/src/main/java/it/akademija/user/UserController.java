@@ -94,7 +94,7 @@ public class UserController {
 			@RequestParam("page") int page, 
 			  @RequestParam("size") int size) {	
 		
-		Sort.Order order = new Sort.Order(Sort.Direction.DESC, "userId").ignoreCase();
+		Sort.Order order = new Sort.Order(Sort.Direction.DESC, "userId");
 						
 		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
 

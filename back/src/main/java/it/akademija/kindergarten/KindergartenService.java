@@ -2,6 +2,7 @@ package it.akademija.kindergarten;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import it.akademija.application.Application;
+import it.akademija.user.User;
+import it.akademija.user.UserInfo;
 
 @Service
 public class KindergartenService {
@@ -119,6 +124,25 @@ public class KindergartenService {
 	 */
 	@Transactional
 	public void deleteKindergarten(String id) {
+		Kindergarten garten= gartenDao.findById(id).orElse(null);
+		if (garten!=null){
+			for (Application a: garten.getKindergartenChoise1()) {
+				a.setChoise1(null);
+			}
+			for (Application a: garten.getKindergartenChoise2()) {
+				a.setChoise2(null);
+			}
+			for (Application a: garten.getKindergartenChoise3()) {
+				a.setChoise3(null);
+			}
+			for (Application a: garten.getKindergartenChoise4()) {
+				a.setChoise4(null);
+			}
+			for (Application a: garten.getKindergartenChoise5()) {
+				a.setChoise5(null);
+			}
+			
+		}
 
 		gartenDao.deleteById(id);
 
@@ -146,11 +170,25 @@ public class KindergartenService {
 	/**
 	 * 
 	 * Kindergarten prioritize statistics
-	 * @param pageable 
+	 * 
+	 * @param pageable
 	 * 
 	 * @return statistics
 	 */
+	@Transactional
 	public Page<KindergartenStatistics> getKindergartenStatistics(Pageable pageable) {
+//		Page<Kindergarten> gartens = gartenDao.findAllKindergarten(pageable);
+//		
+//		Page<KindergartenStatistics> dtoPage = gartens.map(new Function<Kindergarten, KindergartenStatistics>() {
+//			@Override
+//			public KindergartenStatistics apply(Kindergarten garten) {
+//				KindergartenStatistics dto = new KindergartenStatistics(garten.getId(), garten.getName(), (garten.getCapacityAgeGroup2to3()+garten.getCapacityAgeGroup3to6()), garten.getKindergartenChoise1().size());
+//				return dto;
+//			}
+//
+//		});
+//		
+//		return dtoPage;	
 		
 		return gartenDao.findAllChoises(pageable);
 	}

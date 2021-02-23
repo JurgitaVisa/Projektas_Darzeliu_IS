@@ -2,29 +2,23 @@
 package it.akademija.application;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 import it.akademija.application.priorities.Priorities;
-import it.akademija.kindergartenchoise.KindergartenChoise;
+import it.akademija.kindergarten.Kindergarten;
 import it.akademija.user.ParentDetails;
 import it.akademija.user.User;
 
@@ -58,7 +52,7 @@ public class Application {
 	private LocalDate birthdate;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="priorities_id")
+	@JoinColumn(name = "priorities_id")
 	private Priorities priorities;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
@@ -73,8 +67,20 @@ public class Application {
 	// kaip jeigu jau yra toks antras tėvas? jei yra-- pridėti, jei ne-- sukurti ir
 	// pridėti
 
-	@OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
-	private Set<KindergartenChoise> kindergartenChoises;
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	private Kindergarten choise1;
+
+	@ManyToOne(cascade = {  CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	private Kindergarten choise2;
+	
+	@ManyToOne(cascade = {  CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	private Kindergarten choise3;
+	
+	@ManyToOne(cascade = {  CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	private Kindergarten choise4;
+	
+	@ManyToOne(cascade = {  CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	private Kindergarten choise5;
 
 	public Application() {
 
@@ -130,13 +136,46 @@ public class Application {
 	public void setBirthdate(LocalDate birthdate) {
 		this.birthdate = birthdate;
 	}
+	
 
-	public Set<KindergartenChoise> getKindergartenChoises() {
-		return kindergartenChoises;
+	public Kindergarten getChoise1() {
+		return choise1;
 	}
 
-	public void setKindergartenChoises(Set<KindergartenChoise> kindergartenChoises) {
-		this.kindergartenChoises = kindergartenChoises;
+	public void setChoise1(Kindergarten choise1) {
+		this.choise1 = choise1;
+	}
+
+	public Kindergarten getChoise2() {
+		return choise2;
+	}
+
+	public void setChoise2(Kindergarten choise2) {
+		this.choise2 = choise2;
+	}	
+
+	public Kindergarten getChoise3() {
+		return choise3;
+	}
+
+	public void setChoise3(Kindergarten choise3) {
+		this.choise3 = choise3;
+	}
+
+	public Kindergarten getChoise4() {
+		return choise4;
+	}
+
+	public void setChoise4(Kindergarten choise4) {
+		this.choise4 = choise4;
+	}
+
+	public Kindergarten getChoise5() {
+		return choise5;
+	}
+
+	public void setChoise5(Kindergarten choise5) {
+		this.choise5 = choise5;
 	}
 
 	public Long getId() {
@@ -173,7 +212,7 @@ public class Application {
 
 	public void setPriorities(Priorities priorities) {
 		this.priorities = priorities;
-		priorities.setApplication(this);		
+		priorities.setApplication(this);
 	}
 
 }

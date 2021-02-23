@@ -1,7 +1,5 @@
 package it.akademija.kindergarten;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,7 +10,9 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import it.akademija.kindergartenchoise.KindergartenChoise;
+
+import it.akademija.application.Application;
+
 
 @Entity
 public class Kindergarten {
@@ -42,8 +42,20 @@ public class Kindergarten {
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
 	private int capacityAgeGroup3to6;
 
-	@OneToMany(mappedBy = "kindergarten", cascade = CascadeType.ALL)
-	private Set<KindergartenChoise> kindergartenChoises;
+	@OneToMany(mappedBy = "choise1", cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	private Set<Application> kindergartenChoise1;
+	
+	@OneToMany(mappedBy = "choise2", cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	private Set<Application> kindergartenChoise2;
+	
+	@OneToMany(mappedBy = "choise3", cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	private Set<Application> kindergartenChoise3;
+	
+	@OneToMany(mappedBy = "choise4", cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	private Set<Application> kindergartenChoise4;
+	
+	@OneToMany(mappedBy = "choise5", cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	private Set<Application> kindergartenChoise5;
 
 	public Kindergarten() {
 
@@ -106,14 +118,55 @@ public class Kindergarten {
 
 	public void setCapacityAgeGroup3to6(int capacityAgeGroup3to6) {
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
+	}	
+
+	public Set<Application> getKindergartenChoise1() {
+		return kindergartenChoise1;
 	}
 
-	public Set<KindergartenChoise> getKindergartenChoises() {
-		return kindergartenChoises;
+	public void setKindergartenChoise1(Application kindergartenChoise1) {		
+		this.kindergartenChoise1.add(kindergartenChoise1);
+		kindergartenChoise1.setChoise1(this);
+	}
+	
+	
+
+	public void setKindergartenChoise1(Set<Application> kindergartenChoise1) {
+		this.kindergartenChoise1 = kindergartenChoise1;
 	}
 
-	public void setKindergartenChoises(Set<KindergartenChoise> kindergartenChoises) {
-		this.kindergartenChoises = kindergartenChoises;
+	public Set<Application> getKindergartenChoise2() {
+		return kindergartenChoise2;
+	}
+
+	public void setKindergartenChoise2(Set<Application> kindergartenChoise2) {
+		this.kindergartenChoise2 = kindergartenChoise2;
+	}
+	
+	
+
+	public Set<Application> getKindergartenChoise3() {
+		return kindergartenChoise3;
+	}
+
+	public void setKindergartenChoise3(Set<Application> kindergartenChoise3) {
+		this.kindergartenChoise3 = kindergartenChoise3;
+	}
+
+	public Set<Application> getKindergartenChoise4() {
+		return kindergartenChoise4;
+	}
+
+	public void setKindergartenChoise4(Set<Application> kindergartenChoise4) {
+		this.kindergartenChoise4 = kindergartenChoise4;
+	}
+
+	public Set<Application> getKindergartenChoise5() {
+		return kindergartenChoise5;
+	}
+
+	public void setKindergartenChoise5(Set<Application> kindergartenChoise5) {
+		this.kindergartenChoise5 = kindergartenChoise5;
 	}
 
 	@Override

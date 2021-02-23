@@ -1,17 +1,13 @@
 package it.akademija.application;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,10 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import it.akademija.application.priorities.Priorities;
 import it.akademija.application.priorities.PrioritiesDAO;
 import it.akademija.application.priorities.PrioritiesDTO;
-import it.akademija.kindergarten.Kindergarten;
 import it.akademija.kindergarten.KindergartenService;
-import it.akademija.kindergartenchoise.KindergartenChoise;
-import it.akademija.kindergartenchoise.KindergartenChoiseDAO;
+
 import it.akademija.kindergartenchoise.KindergartenChoiseDTO;
 import it.akademija.user.ParentDetails;
 import it.akademija.user.ParentDetailsDAO;
@@ -49,9 +43,7 @@ public class ApplicationService {
 	@Autowired
 	private PrioritiesDAO prioritiesDao;
 
-	@Autowired
-	private KindergartenChoiseDAO choiseDao;
-
+	
 	/**
 	 * 
 	 * Get information about submitted applications for logged in user
@@ -106,38 +98,31 @@ public class ApplicationService {
 		Priorities priorities = prioritiesDao.save(new Priorities(prioritiesDto.isLivesInVilnius(),
 				prioritiesDto.isChildIsAdopted(), prioritiesDto.isFamilyHasThreeOrMoreChildrenInSchools(),
 				prioritiesDto.isGuardianInSchool(), prioritiesDto.isGuardianDisability()));
-
+		
+		application.setPriorities(priorities);
+		
 		application.setSubmitedAt();
 		application.setStatus(ApplicationStatus.Pateiktas);
 		application.setChildName(data.getChildName());
 		application.setChildSurname(data.getChildSurname());
 		application.setChildPersonalCode(data.getChildPersonalCode());
 		application.setBirthdate(data.getBirthdate());
-		application.setPriorities(priorities);
+		
 
 		application.setMainGuardian(firstParent);
 
 		KindergartenChoiseDTO choisesDto = data.getKindergartenChoises();
-		Set<KindergartenChoise> choises = new HashSet<>();
 
-		for (int i = 1; i <= 5; i++) {
-			Kindergarten garten = gartenService.findById(choisesDto.getKindergartenId(i));
-			if (garten != null) {
-				KindergartenChoise choise = choiseDao.save(new KindergartenChoise(garten, application, i));
-				choises.add(choise);
-			}
-		}
+		application.setChoise1(gartenService.findById(choisesDto.getKindergartenId1()));
+		application.setChoise2(gartenService.findById(choisesDto.getKindergartenId2()));
+		application.setChoise3(gartenService.findById(choisesDto.getKindergartenId3()));
+		application.setChoise4(gartenService.findById(choisesDto.getKindergartenId4()));
+		application.setChoise5(gartenService.findById(choisesDto.getKindergartenId5()));
+	
 
-		if (choises.isEmpty()) {
+		applicationDao.saveAndFlush(application);
 
-			return new ResponseEntity<String>("Prašymo sukurti nepavyko", HttpStatus.BAD_REQUEST);
-
-		} else {
-			application.setKindergartenChoises(choises);
-			applicationDao.saveAndFlush(application);
-
-			return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
-		}
+		return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
 
 	}
 
@@ -175,6 +160,9 @@ public class ApplicationService {
 //		LocalDate septemberFirst = LocalDate.of(thisYear, 9, 1);
 //		return ChronoUnit.DAYS.between(birthdate, septemberFirst);
 //	}
+	
+	
+	
 
 	/**
 	 * 
@@ -186,6 +174,35 @@ public class ApplicationService {
 	public boolean existsByPersonalCode(String childPersonalCode) {
 		return applicationDao.existsApplicationByChildPersonalCode(childPersonalCode);
 	}
+	
+	
+	
+	/**
+	 * Returns a page of information from submited Applications list with specified
+	 * page number and page size.
+	 * 
+	 * @param pageable
+	 * @return page from Application database
+	 */
+	public Page<ApplicationInfo> getPageFromSubmittedApplications(Pageable pageable) {
+
+//		Page<Application> applications = applicationDao.findAllApplications(pageable);
+//
+//		Page<ApplicationInfo> infoPage = applications.map(new Function<Application, ApplicationInfo>() {
+//			@Override
+//			public ApplicationInfo apply(Application a) {
+//								
+//				ApplicationInfo dto = new ApplicationInfo(a.getId(), a.getChildPersonalCode(),
+//						a.getChildName(), a.getChildSurname(), a.getChoise1().getName(), a.getChoise2().getName(), a.getChoise3().getName(), a.getChoise4().getName(), a.getChoise5().getName());
+//				return dto;	
+//			}
+//
+//		});
+//		return infoPage;
+		
+		return applicationDao.findAllApplications(pageable);
+	}
+
 
 	public ApplicationDAO getApplicationDao() {
 		return applicationDao;
@@ -227,12 +244,8 @@ public class ApplicationService {
 		this.prioritiesDao = prioritiesDao;
 	}
 
-	public KindergartenChoiseDAO getChoiseDao() {
-		return choiseDao;
-	}
+	
 
-	public void setChoiseDao(KindergartenChoiseDAO choiseDao) {
-		this.choiseDao = choiseDao;
-	}
+	
 
 }

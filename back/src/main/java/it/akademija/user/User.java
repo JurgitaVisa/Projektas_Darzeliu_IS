@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,7 +52,7 @@ public class User {
 	@Column
 	private String email;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "users_parentDetails", joinColumns = {
 			@JoinColumn(name = "users_id", referencedColumnName = "userId") }, inverseJoinColumns = {
 					@JoinColumn(name = "parentDetails_id", referencedColumnName = "parentDetailsId") })
@@ -66,7 +67,7 @@ public class User {
 	@Column
 	private String password;
 
-	@OneToMany(mappedBy = "mainGuardian", cascade = { CascadeType.ALL })
+	@OneToMany(mappedBy = "mainGuardian", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	private Set<Application> userApplications;
 
 	public User() {
@@ -91,6 +92,12 @@ public class User {
 		this.email = email;
 		this.username = username;
 		this.password = password;
+	}
+	
+	public User(Long userId, Role role, String username) {
+		this.userId=userId;
+		this.role=role;
+		this.username=username;
 	}
 
 	public void setUserApplications(Set<Application> userApplications) {

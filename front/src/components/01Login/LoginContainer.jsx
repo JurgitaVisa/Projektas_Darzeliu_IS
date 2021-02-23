@@ -10,6 +10,8 @@ import AuthContext from "../11Context/AuthContext";
 import logo from "../../images/logo.png";
 import swal from "sweetalert";
 
+import ForgotPasswordWindow from "../01Login/ForgotPasswordWindow";
+
 axios.defaults.withCredentials = true;
 
 export const LoginContainer = () => {
@@ -145,6 +147,16 @@ export const LoginContainer = () => {
           >
             {data.loggingIn ? "Jungiamasi..." : "Prisijungti"}
           </button>
+
+          <button
+            type="button"
+            className="btn btn-primary float-right"
+            onClick={() => {return(ForgotPasswordWindow())}}
+            formNoValidate
+          >
+            Pamiršau slaptažodį
+          </button>
+
         </form>
         {data.loginError && (
           <span className="alert alert-danger mt-3" role="alert" id="incorrectLoginData">

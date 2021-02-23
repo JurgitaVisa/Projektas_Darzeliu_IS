@@ -57,7 +57,8 @@ export default class CreateApplicationFormContainer extends Component {
                 guardianInSchool: false,
                 livesInVilnius: false
             },
-            kindergartenList: []
+            kindergartenList: [],
+            additionalGuardianInput: false,
         }
         this.mainGuardianOnChange = this.mainGuardianOnChange.bind(this);
         this.additionalGuardianOnChange = this.additionalGuardianOnChange.bind(this);
@@ -214,10 +215,23 @@ export default class CreateApplicationFormContainer extends Component {
             return (
                 <div className="form">
                     <div className="row">
-                        <h6 className="formHeader">Atstovas 2</h6>
+                        <div className="col">
+                            <h6 className="formHeader">Atstovas 2</h6>
+                        </div>
+                        <div className="col">
+                        <button
+                            className="btn btn-primary btn-sm float-right"
+                            style={{padding: "4px"}}
+                            onClick={(e) => {this.setState({...this.state, additionalGuardianInput: !this.state.additionalGuardianInput})}}
+                        >
+                            {
+                                !this.state.additionalGuardianInput ? "Pridėti" : "Pašalinti"
+                            }
+                        </button>
+                        </div>
                     </div>
                     <div className="row form-group">
-                        <label htmlFor="txtName">Vardas</label>
+                        <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
                         <input 
                             type="text"
                             id="txtAdditionalName"
@@ -227,11 +241,13 @@ export default class CreateApplicationFormContainer extends Component {
                             value={this.state.additionalGuardian.name}
                             onChange={this.additionalGuardianOnChange}
                             onInvalid={(e) => inputValidator(e)}
+                            disabled={!this.state.additionalGuardianInput}
                             pattern="[A-zÀ-ž]{2,32}"
+                            required
                         />
                     </div>
                     <div className="row form-group">
-                        <label htmlFor="txtSurname">Pavardė</label>
+                        <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
                         <input
                             type="text"
                             id="txtAdditionalSurname"
@@ -241,11 +257,13 @@ export default class CreateApplicationFormContainer extends Component {
                             value={this.state.additionalGuardian.surname}
                             onChange={this.additionalGuardianOnChange}
                             onInvalid={(e) => inputValidator(e)}
+                            disabled={!this.state.additionalGuardianInput}
                             pattern="[A-zÀ-ž]{2,32}"
+                            required
                         />
                     </div>
                     <div className="row form-group">
-                        <label htmlFor="txtPersonalCode">Asmens kodas</label>
+                        <label htmlFor="txtPersonalCode">Asmens kodas <span className="fieldRequired">*</span></label>
                         <input
                             type="text"
                             id="txtAdditionalPersonalCode"
@@ -255,11 +273,13 @@ export default class CreateApplicationFormContainer extends Component {
                             value={this.state.additionalGuardian.personalCode}
                             onChange={this.additionalGuardianOnChange}
                             onInvalid={(e) => inputValidator(e)}
+                            disabled={!this.state.additionalGuardianInput}
                             pattern="[0-9]{11}"
+                            required
                         />
                     </div>
                     <div className="row form-group">
-                        <label htmlFor="txtTelNo">Telefonas</label>
+                        <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
                         <div className="input-group">
                             <div className="input-group-prepend">
                                 <div className="input-group-text">
@@ -275,12 +295,14 @@ export default class CreateApplicationFormContainer extends Component {
                                 value={this.state.additionalGuardian.phone}
                                 onChange={this.additionalGuardianOnChange}
                                 onInvalid={(e) => inputValidator(e)}
-                                pattern="[0-9]{8}">
-                            </input>
+                                disabled={!this.state.additionalGuardianInput}
+                                pattern="[0-9]{8}"
+                                required
+                            />
                         </div>
                     </div>
                     <div className="row form-group">
-                        <label htmlFor="txtEmail">El. paštas</label>
+                        <label htmlFor="txtEmail">El. paštas <span className="fieldRequired">*</span></label>
                         <input
                             type="text"
                             id="txtAdditionalEmail"
@@ -290,11 +312,13 @@ export default class CreateApplicationFormContainer extends Component {
                             value={this.state.additionalGuardian.email}
                             onChange={this.additionalGuardianOnChange}
                             onInvalid={(e) => inputValidator(e)}
+                            disabled={!this.state.additionalGuardianInput}
                             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
+                            required
                         />
                     </div>
                     <div className="row form-group">
-                        <label htmlFor="txtAddress">Adresas</label>
+                        <label htmlFor="txtAddress">Adresas <span className="fieldRequired">*</span></label>
                         <input
                             type="text"
                             className="form-control"
@@ -304,6 +328,8 @@ export default class CreateApplicationFormContainer extends Component {
                             value={this.state.additionalGuardian.address}
                             onChange={this.additionalGuardianOnChange}
                             onInvalid={(e) => inputValidator(e)}
+                            disabled={!this.state.additionalGuardianInput}
+                            required
                         />
                     </div>
                 </div>

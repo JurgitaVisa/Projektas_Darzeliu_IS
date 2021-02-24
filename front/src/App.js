@@ -124,8 +124,8 @@ function App() {
             <div className="container-fluid px-0">
               <ManagerNavBar>
                 <Switch>
-                  <Route exact path="/" component={KindergartenContainer} />{" "}
-                  <Route path="/home" component={KindergartenContainer} />{" "}
+                  <Route exact path="/" component={KindergartenContainer} />
+                  <Route path="/home" component={KindergartenContainer} />
                   <Route path="/darzeliai" component={KindergartenContainer} />
                   <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />                  
@@ -140,9 +140,9 @@ function App() {
             <div className="container-fluid px-0">
               <UserNavBar>
                 <Switch>
-                  <Route exact path="/" component={UserHomeContainer} />{" "}
-                  <Route path="/home" component={UserHomeContainer} />{" "}
-                  <Route exact path="/prasymai" component={UserHomeContainer} />{" "}
+                  <Route exact path="/" component={UserHomeContainer} />
+                  <Route path="/home" component={UserHomeContainer} />
+                  <Route exact path="/prasymai" component={UserHomeContainer} />
                   <Route exact path="/prasymai/naujas" component={CreateApplicationFormContainer} />
                   <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />

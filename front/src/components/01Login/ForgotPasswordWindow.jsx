@@ -16,7 +16,7 @@ export default function ForgotPasswordWindow() {
                 icon: "success",
             })
         }
-        else {
+        else if(userEmail){
             swal({
                 title: "Įvyko klaida",
                 text: "Neteisingas el. paštas",

@@ -11,13 +11,13 @@ import it.akademija.role.Role;
 
 public interface UserDAO extends JpaRepository<User, Long> {
 
-	@Query("SELECT u FROM User u LEFT JOIN ParentDetails d ON u.userId=d.user.userId GROUP BY u.userId HAVING u.username=?1 ")
 	User findByUsername(String username);
 
 	List<User> findByRole(Role role);
 
 	void deleteByUsername(String username);
 
+	@Query("SELECT new User(u.userId, u.role, u.username) FROM User u")
 	Page<User> findAll(Pageable pageable);
 
 }

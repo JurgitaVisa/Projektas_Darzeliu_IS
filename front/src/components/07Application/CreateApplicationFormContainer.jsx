@@ -733,6 +733,7 @@ export default class CreateApplicationFormContainer extends Component {
                         icon: "success",
                         button: "Gerai"
                     })
+                    this.props.history.push("/prasymai"); // TODO patikrinti, ar veikia
                     /**
                      * TODO:
                      * redirect

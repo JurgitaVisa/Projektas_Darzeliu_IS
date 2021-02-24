@@ -1,17 +1,14 @@
 package it.akademija.application;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,6 +26,7 @@ import it.akademija.user.ParentDetails;
 import it.akademija.user.ParentDetailsDAO;
 import it.akademija.user.ParentDetailsDTO;
 import it.akademija.user.User;
+import it.akademija.user.UserInfo;
 import it.akademija.user.UserService;
 
 @Service
@@ -185,6 +183,38 @@ public class ApplicationService {
 	 */
 	public boolean existsByPersonalCode(String childPersonalCode) {
 		return applicationDao.existsApplicationByChildPersonalCode(childPersonalCode);
+	}
+
+	/**
+	 * Returns a page of information from submited Applications list with specified
+	 * page number and page size.
+	 * 
+	 * @param pageable
+	 * @return page from Application database
+	 */
+	public Page<ApplicationInfo> getPageFromSubmittedApplications(Pageable pageable) {
+
+//		Page<Application> applications = applicationDao.findAllApplications(pageable);
+//
+//		Page<ApplicationInfo> dtoPage = applications.map(new Function<Application, ApplicationInfo>() {
+//			@Override
+//			public ApplicationInfo apply(Application a) {
+//				Set<KindergartenChoise> choises= a.getKindergartenChoises();
+//				for(KindergartenChoise ch: choises) {
+//					ch.getKindergarten().getName();
+//					
+//				}
+//				
+//				ApplicationInfo dto = new ApplicationInfo(a.getId(),a.getChildPersonalCode(), a.getChildName(), a.getChildSurname(), a.getKindergartenChoises());
+//				dto.set
+//				return dto;
+//			}
+//
+//		});
+//		return dtoPage;
+		
+		return applicationDao.findAllApplications(pageable);
+		
 	}
 
 	public ApplicationDAO getApplicationDao() {

@@ -12,13 +12,11 @@ public interface ApplicationDAO extends JpaRepository<Application, Long> {
 	@Query("SELECT a FROM Application a WHERE a.childPersonalCode LIKE (concat(?1 ,'%'))")
 	Page<ApplicationInfo> findByIdContaining(String childPersonalCode, Pageable pageable);
 
-	@Query("SELECT new it.akademija.application.ApplicationInfo(a.id, a.childPersonalCode, a.childName, a.childSurname, a.choise1.name, a.choise2.name, a.choise3.name, a.choise4.name, a.choise5.name) FROM Application a")
+	@Query("SELECT new it.akademija.application.ApplicationInfo(a.id, a.childPersonalCode, a.childName, a.childSurname, k1.name, k2.name, k3.name , k4.name, k5.name ) FROM Application a LEFT JOIN Kindergarten k1 ON a.choise1.id=k1.id LEFT JOIN Kindergarten k2 ON a.choise2.id=k2.id LEFT JOIN Kindergarten k3 ON a.choise3.id=k3.id LEFT JOIN Kindergarten k4 ON a.choise4.id=k4.id LEFT JOIN Kindergarten k5 ON a.choise5.id=k5.id")
 	Page<ApplicationInfo> findAllApplications(Pageable pageable);
 
+	// get all, kurių statusas yra "Pateikta"
 
-	//get all, kurių statusas yra "Pateikta"
-	
-	//get all kur username yra String username
-	
-	
+	// get all kur username yra String username
+
 }

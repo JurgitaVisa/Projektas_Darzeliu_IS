@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -56,7 +57,7 @@ public class ParentDetails {
 	@Column
 	private String phone;
 
-	@OneToMany(mappedBy = "additionalGuardian")
+	@OneToMany(mappedBy = "additionalGuardian", fetch = FetchType.LAZY)
 	private Set<Application> parentApplications;
 
 	public ParentDetails() {
@@ -83,6 +84,11 @@ public class ParentDetails {
 
 	public Set<Application> getParentApplications() {
 		return parentApplications;
+	}
+	
+	public int removeApplication(Application application) {
+		parentApplications.remove(application);	
+		return parentApplications.size();
 	}
 
 	public Long getParentDetailsId() {
@@ -144,5 +150,7 @@ public class ParentDetails {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
+	
 
 }

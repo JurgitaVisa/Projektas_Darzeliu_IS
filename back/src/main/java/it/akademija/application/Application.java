@@ -2,8 +2,9 @@
 package it.akademija.application;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,7 +57,7 @@ public class Application {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthdate;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="priorities_id")
 	private Priorities priorities;
 
@@ -72,8 +73,8 @@ public class Application {
 	// kaip jeigu jau yra toks antras tėvas? jei yra-- pridėti, jei ne-- sukurti ir
 	// pridėti
 
-	@OneToMany(mappedBy = "application")
-	private List<KindergartenChoise> kindergartenChoises;
+	@OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+	private Set<KindergartenChoise> kindergartenChoises;
 
 	public Application() {
 
@@ -130,11 +131,11 @@ public class Application {
 		this.birthdate = birthdate;
 	}
 
-	public List<KindergartenChoise> getKindergartenChoises() {
+	public Set<KindergartenChoise> getKindergartenChoises() {
 		return kindergartenChoises;
 	}
 
-	public void setKindergartenChoises(List<KindergartenChoise> kindergartenChoises) {
+	public void setKindergartenChoises(Set<KindergartenChoise> kindergartenChoises) {
 		this.kindergartenChoises = kindergartenChoises;
 	}
 

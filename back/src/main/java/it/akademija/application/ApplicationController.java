@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,29 +33,31 @@ public class ApplicationController {
 
 	@Autowired
 	private ApplicationService service;
-	
-	
+
+	/**
+	 * 
+	 * Create new application for logged user
+	 * 
+	 * @param data
+	 * @return message
+	 */
 	@Secured({ "ROLE_USER" })
-	@PostMapping	
+	@PostMapping("/user/new")
 	@ApiOperation(value = "Create new application")
 	public ResponseEntity<String> createNewApplication(
-			@ApiParam(value = "Application", required = true) 
-			@Valid @RequestBody ApplicationDTO data) {
-		
+			@ApiParam(value = "Application", required = true) @Valid @RequestBody ApplicationDTO data) {
+
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		
+
 		if (service.existsByPersonalCode(data.getChildPersonalCode())) {
-			return new ResponseEntity<String>("Prašymas vaikui su tokiu asmens kodu jau yra registruotas", HttpStatus.CONFLICT);
+			return new ResponseEntity<String>("Prašymas vaikui su tokiu asmens kodu jau yra registruotas",
+					HttpStatus.CONFLICT);
 
-		} else {
-			service.createNewApplication(currentUsername, data);
+		} else {			
 			LOG.info("**ApplicationController: kuriamas prasymas vaikui AK [{}] **", data.getChildPersonalCode());
-
-			return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
+			return service.createNewApplication(currentUsername, data);			
 		}
 	}
-	
-	
 
 	/**
 	 * Get list of all applications for logged user
@@ -61,7 +65,7 @@ public class ApplicationController {
 	 * @return list applications
 	 */
 	@Secured({ "ROLE_USER" })
-	@GetMapping
+	@GetMapping("/user")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get all user applications")
 	public List<ApplicationInfo> getAllUserApplications() {
@@ -70,9 +74,24 @@ public class ApplicationController {
 
 		return service.getAllUserApplications(currentUsername);
 	}
-
 	
-	
+	/**
+	 * 
+	 * Delete user application by id
+	 * 
+	 * @param id
+	 * @return message
+	 */
+	@Secured({"ROLE_USER"})
+	@DeleteMapping("/user/delete/{id}")
+	@ApiOperation("Delete user application by id")
+	public ResponseEntity<String> deleteApplication(@ApiParam(value = "Application id", required = true) @PathVariable Long id) {
+		
+		LOG.info("**ApplicationController: trinamas prasymas [{}] **", id);
+				
+		return service.deleteApplication(id);
+		
+	}
 	
 	
 
@@ -80,9 +99,8 @@ public class ApplicationController {
 		return service;
 	}
 
-
 	public void setService(ApplicationService service) {
 		this.service = service;
 	}
-	
+
 }

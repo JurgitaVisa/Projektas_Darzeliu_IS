@@ -23,12 +23,13 @@ public class UserInfo {
 
 	}
 
-	public UserInfo(Long userId, String role, String name, String surname, String username) {
+	public UserInfo(Long userId, String role, String name, String surname, String username, String email) {
 		this.userId = userId;
 		this.role = role;
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
+		this.email = email;
 	}
 
 	public UserInfo(String role, String name, String surname, String personalCode, String address, String phone,

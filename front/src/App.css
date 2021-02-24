@@ -34,7 +34,7 @@
   text-align: center;
 } */
 
-.swal-button {
+.swal-button--confirm {
   background-color:#007bff;
 }
 
@@ -72,4 +72,8 @@ p {
 
 .deleteColumn {
   width: 11%;
+}
+
+.formHeader {
+  padding-top: 4%;
 }

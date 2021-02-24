@@ -21,6 +21,7 @@ import AuthContext from "./components/11Context/AuthContext";
 // import http from "./components/10Services/httpService";
 // import apiEndpoint from "./components/10Services/endpoint";
 import { UserHomeContainer } from './components/02Main/UserHomeContainer';
+import { KindergartenStatContainer } from './components/09Statistics/KindergartenStatContainer';
 
 var initState = {
   isAuthenticated: false,
@@ -106,10 +107,12 @@ function App() {
           <AuthContext.Provider value={{ state, dispatch }}>
             <div className="container-fluid px-0">
               <AdminNavBar>
-                <Switch>
+                <Switch> 
+                  {/* TODO prideti exact path */}
                   <Route exact path="/" component={Admin} />
                   <Route path="/home" component={Admin} />
                   <Route path="/admin" component={Admin} />
+                  <Route path="/statistika" component={KindergartenStatContainer} />
                   <Route path="/naudotojai" component={UserListContainer} />
                   <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />
@@ -124,8 +127,10 @@ function App() {
             <div className="container-fluid px-0">
               <ManagerNavBar>
                 <Switch>
+                  {/* TODO prideti exact path */}
                   <Route exact path="/" component={KindergartenContainer} />
                   <Route path="/home" component={KindergartenContainer} />
+                  <Route path="/statistika" component={KindergartenStatContainer} />
                   <Route path="/darzeliai" component={KindergartenContainer} />
                   <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />                  
@@ -140,8 +145,10 @@ function App() {
             <div className="container-fluid px-0">
               <UserNavBar>
                 <Switch>
+                  {/* TODO prideti exact path */}
                   <Route exact path="/" component={UserHomeContainer} />
                   <Route path="/home" component={UserHomeContainer} />
+                  <Route path="/statistika" component={KindergartenStatContainer} />
                   <Route exact path="/prasymai" component={UserHomeContainer} />
                   <Route exact path="/prasymai/naujas" component={CreateApplicationFormContainer} />
                   <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />

@@ -18,17 +18,19 @@ public class UserPasswordResetRequestsService {
 	@Autowired
 	UserPasswordResetRequestsDAO userPasswordResetRequestsDAO;
 	
+	public List<UserPasswordResetRequestsEntity> getAllRequests() {
+		return userPasswordResetRequestsDAO.findAll();
+	}
+	
+	public void deletePasswordRequest(String username) {
+		userPasswordResetRequestsDAO.deleteById(userDao.findByUsername(username).getUserId());
+	}
+	
 	@Transactional(readOnly = true)
 	public boolean requestPasswordReset(String email) {
-		List<User> userList = userDao.findAll();
-		Long userId = null;
-		for(User user : userList) {
-			if(user.getEmail().equals(email)) {
-				userId = user.getUserId();
-			}
-		}
-		if(userId != null) {
-			userPasswordResetRequestsDAO.saveAndFlush(new UserPasswordResetRequestsEntity(userId));
+		User user = userDao.findByUsername(email);
+		if(user != null) {
+			userPasswordResetRequestsDAO.saveAndFlush(new UserPasswordResetRequestsEntity(user.getUserId()));
 			return true;
 		}
 		else {

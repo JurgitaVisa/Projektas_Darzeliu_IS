@@ -73,13 +73,15 @@ public class RegistrationStatusController {
 
 		// queueService.processQueue();
 
-		return new ResponseEntity<String>("Eilė suformuotos", HttpStatus.OK);
+		return new ResponseEntity<String>("Eilė suformuota", HttpStatus.OK);
 
 	}
 
 	@PostMapping("/queue/confirm")
 	@ApiOperation(value = "Confirm queue")
 	public ResponseEntity<String> confirmQueue() {
+
+		// queueService.confirmQueue();
 
 		return new ResponseEntity<String>("Eilė patvirtinta", HttpStatus.OK);
 

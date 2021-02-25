@@ -11,7 +11,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,7 +37,7 @@ public class UserPasswordResetRequestsController {
 		return userPasswordResetRequestsService.getAllRequests();
 	}
 	
-	@PutMapping(path = "/request/{username}")
+	@PostMapping(path = "/request/{username}")
 	@ApiOperation(value = "Request password reset")
 	public ResponseEntity<String> requestPasswordReset(@PathVariable(value = "username") final String username) {
 		LOG.info("** " + this.getClass().getName() + ": Naujas prasymas atstatyti slaptazodi naudotojo: " + username + " **");

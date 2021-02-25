@@ -1,5 +1,8 @@
 import swal from "sweetalert";
 
+import http from '../10Services/httpService';
+import apiEndpoint from '../10Services/endpoint';
+
 export default function ForgotPasswordWindow() {
     swal({
         title: "Slaptažodžio atstatymas",
@@ -9,12 +12,15 @@ export default function ForgotPasswordWindow() {
     }).then((userEmail) => {
         const regexPattern = /\S+@\S+\.\S+/
         if(regexPattern.test(userEmail)) {
-            swal({
-                title: "Slaptažodžio atstatymas",
-                text: "Staptažodžio atstatymo prašymas buvo sėkmingai išsiųstas administratoriui.",
-                button: "Baigti",
-                icon: "success",
-            })
+            http.post(`${apiEndpoint}/passwordresetrequests/request/${userEmail}`)
+            .then(
+                swal({
+                    title: "Slaptažodžio atstatymas",
+                    text: "Staptažodžio atstatymo prašymas buvo sėkmingai išsiųstas administratoriui.",
+                    button: "Baigti",
+                    icon: "success",
+                })
+            );
         }
         else if(userEmail){
             swal({

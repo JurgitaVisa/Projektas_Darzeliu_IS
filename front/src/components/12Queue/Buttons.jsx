@@ -3,7 +3,7 @@ import React from 'react';
 import '../../App.css';
 
 const Buttons = (props) => {
-    const { onClick, isActive } = props;
+    const { isActive, onClick, onProcess, onConfirm } = props;
 
     if (isActive) {
         
@@ -34,7 +34,7 @@ const Buttons = (props) => {
                         </button>
                     <button
                         value='Process'
-                        onClick={(e) => onClick(e)}
+                        onClick={() => onProcess()}
                         id="btnFormQueue"
                         className="btn btn-primary btn-sm ml-2">
                         Formuoti eiles
@@ -44,7 +44,7 @@ const Buttons = (props) => {
                 <div className="col-4">
                     <button
                         value='Confirm'
-                        onClick={(e) => onClick(e)}
+                        onClick={() => onConfirm()}
                         id="btnConfirmQueue"
                         className="btn btn-secondary btn-sm float-right">
                         Patvirtinti eiles

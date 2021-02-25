@@ -50,7 +50,7 @@ class QueueTable extends Component {
         },
         {            
             key: 'delete',
-            label: 'Ištrinti naudotoją',
+            label: 'Ištrinti prašymą',
             content: application => <button onClick={() => this.props.onDelete(application)} id="btnDeleteApplication" className="btn btn-outline-danger btn-sm btn-block">Ištrinti</button>
            
         }

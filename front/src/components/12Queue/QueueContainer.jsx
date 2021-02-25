@@ -24,24 +24,28 @@ export class QueueContainer extends Component {
             numberOfElements: 0,
             searchQuery: "",
             isActive: false,
-            currentButtonValue: "Off"
+            currentButtonValue: ""
         }
     }
     componentDidMount() {
-        // this.getApplicationState();
-        this.setState({ isActive: false });
-        this.getApplications(this.state.currentPage, "");
+        this.getApplicationState();
+
     }
 
     getApplicationState() {
         http
             .get(`${apiEndpoint}/api/status`)
             .then((response) => {
-
-                this.setState({
-                    isActive: response.data
-                });
-
+                let buttonValue = response.data ? "On" : "Off"
+                this.setState(
+                    {
+                        isActive: response.data,
+                        currentButtonValue: buttonValue
+                    },
+                    function () {
+                        this.getApplications(this.state.currentPage, "");
+                    }
+                );
             }).catch(error => {
                 console.log("Queue status error", error);
             });
@@ -52,7 +56,7 @@ export class QueueContainer extends Component {
         const { pageSize, isActive } = this.state;
         currentPage -= 1;
 
-        console.log("Ar aktyvus", isActive);
+        console.log("Ar aktyvus statusas", isActive);
 
         if (isActive) {
             var uri = `${apiEndpoint}/api/prasymai/manager?page=${currentPage}&size=${pageSize}`;
@@ -71,23 +75,26 @@ export class QueueContainer extends Component {
 
         }
 
-        console.log(uri);
+        console.log("**URI**", uri);
+        if (uri) {
+            http
+                .get(uri)
+                .then((response) => {
 
-        http
-            .get(uri)
-            .then((response) => {
+                    this.setState({
+                        applications: response.data.content,
+                        totalPages: response.data.totalPages,
+                        totalElements: response.data.totalElements,
+                        numberOfElements: response.data.numberOfElements,
+                        currentPage: response.data.number + 1
+                    });
 
-                this.setState({
-                    applications: response.data.content,
-                    totalPages: response.data.totalPages,
-                    totalElements: response.data.totalElements,
-                    numberOfElements: response.data.numberOfElements,
-                    currentPage: response.data.number + 1
+                }).catch(error => {
+                    console.log("Queue container error", error);
                 });
 
-            }).catch(error => {
-                console.log("Queue container error", error);
-            });
+        }
+
     }
 
     resetState() {
@@ -109,24 +116,72 @@ export class QueueContainer extends Component {
             this.resetState();
 
             if (buttonValue === "On") {
-                this.setState({
-                    isActive: true,
-                    currentButtonValue: buttonValue
-                }, function () {
-                    this.getApplications(1, "");
-                });
+                http.post(`${apiEndpoint}/api/status/${true}`)
+                    .then(() => {
+                        this.setState({
+                            isActive: true,
+                            currentButtonValue: buttonValue
+                        }, function () {
+                            this.getApplications(1, "");
+                        });
+                    });
 
             } else {
-                this.setState({
-                    isActive: false,
-                    currentButtonValue: buttonValue
-                }, function () {
-                    this.getApplications(1, "");
-                });
-
+                http.post(`${apiEndpoint}/api/status/${false}`)
+                    .then(() => {
+                        this.setState({
+                            isActive: false,
+                            currentButtonValue: buttonValue
+                        }, function () {
+                            this.getApplications(1, "");
+                        });
+                    })
             }
         }
+    }
 
+    handleProcessQueue = () => {
+        const buttonValue = "Process";
+
+        if (buttonValue !== this.state.currentButtonValue) {
+            this.resetState();
+
+            http.post(`${apiEndpoint}/api/queue/process`)
+                .then((response) => {
+                    alert(response.data);
+                    this.setState({
+                        currentButtonValue: buttonValue
+                    }, function () {
+                        this.getApplications(1, "");
+                    });
+                })
+        }
+    }
+
+    handleConfirmQueue = () => {
+        const buttonValue = "Confirm";
+
+        if (buttonValue !== this.state.currentButtonValue) {
+            swal({
+                text: "Ar tikrai norite patvirtinti eiles?\nPo patvirtinimo bus automatiškai išsiųsti pranešimai globėjams.",
+                buttons: ["Ne", "Taip"],
+                dangerMode: true,
+            }).then((actionConfirmed) => {
+                if (actionConfirmed) {
+                    this.resetState();
+
+                    http.post(`${apiEndpoint}/api/queue/confirm`)
+                        .then((response) => {
+                            alert(response.data);
+                            this.setState({
+                                currentButtonValue: buttonValue
+                            }, function () {
+                                this.getApplications(1, "");
+                            });
+                        });
+                }
+            })
+        }
     }
 
     handleSearch = (e) => {
@@ -195,6 +250,8 @@ export class QueueContainer extends Component {
 
                 <Buttons
                     onClick={this.handleClick}
+                    onProcess={this.handleProcessQueue}
+                    onConfirm={this.handleConfirmQueue}
                     isActive={isActive}
                 />
 

@@ -1,8 +1,10 @@
+
 package it.akademija.user;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,7 +44,7 @@ public class UserRESTTest {
 	private MockMvc mvc;
 
 	@Autowired
-	ObjectMapper mapper;
+	private ObjectMapper mapper;
 
 	@Autowired
 	private WebApplicationContext context;
@@ -58,7 +60,7 @@ public class UserRESTTest {
 
 	@Test
 	public void testPostNewUserMethod() throws Exception {
-		User newUser = new User(Role.MANAGER, "Test", "Test", "test@test.lt", "test@test.lt", "test@test.lt");
+		User newUser = new User(Role.MANAGER, "Test", "Test", "test@test.lt", null, "test@test.lt", "test@test.lt");
 
 		String jsonRequest = mapper.writeValueAsString(newUser);
 
@@ -79,5 +81,48 @@ public class UserRESTTest {
 		assertEquals(200, deleteUser.getResponse().getStatus());
 
 	}
+
+	@WithMockUser(username = "manager", roles = { "MANAGER" })
+
+	@Test
+	public void testGetOneUser() throws Exception {
+
+		MvcResult getOneUser = mvc.perform(get("/api/users/user", "test@test.lt")).andExpect(status().isOk())
+				.andReturn();
+
+		assertEquals(200, getOneUser.getResponse().getStatus());
+
+	}
+
+	/*
+	 * @WithMockUser(username = "admin", roles = { "ADMIN" })
+	 * 
+	 * @Test public void testGetAllUsers() throws Exception {
+	 * 
+	 * MvcResult getAllUsers =
+	 * mvc.perform(get("/api/users/admin/allusers")).andExpect(status().isOk()).
+	 * andReturn();
+	 * 
+	 * assertEquals(200, getAllUsers.getResponse().getStatus());
+	 * 
+	 * }
+	 */
+
+	// @WithMockUser(username = "manager", roles = { "MANAGER" })
+
+	/*
+	 * @Test public void testUpdateUserData() throws Exception { User updatedUser =
+	 * new User(Role.MANAGER, "Testas", "Test", "test@test.lt", null,
+	 * "test@test.lt", "test@test.lt");
+	 * 
+	 * String jsonRequest = mapper.writeValueAsString(updatedUser);
+	 * 
+	 * MvcResult postUpdated = mvc.perform( put("/api/users/update",
+	 * "test@test.lt").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
+	 * .andExpect(status().isOk()).andReturn(); assertEquals(200,
+	 * postUpdated.getResponse().getStatus());
+	 * 
+	 * }
+	 */
 
 }

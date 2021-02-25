@@ -41,16 +41,13 @@ public class UserPasswordResetRequestsController {
 	@ApiOperation(value = "Request password reset")
 	public ResponseEntity<String> requestPasswordReset(@PathVariable(value = "username") final String username) {
 		LOG.info("** " + this.getClass().getName() + ": Naujas prasymas atstatyti slaptazodi naudotojo: " + username + " **");
-		if(userPasswordResetRequestsService.requestPasswordReset(username)) {
-			return new ResponseEntity<String>("Pranesimas administratoriui sekmingai issiustas", HttpStatus.OK);
-		}
-		else {
-			return new ResponseEntity<String>("Ivyko klaida, patikrinkite ivestus duomenis", HttpStatus.BAD_REQUEST);
-		}
+		userPasswordResetRequestsService.requestPasswordReset(username);
+		return new ResponseEntity<String>("Pranešimas administratoriui sėkmingai išsiųstas", HttpStatus.OK);
 	}
 	
+	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping(path = "/delete/{username}")
-	@ApiOperation(value = "Delete password request by email")
+	@ApiOperation(value = "Delete password request")
 	public ResponseEntity<String> deletePasswordResetRequest(@PathVariable(value = "username") final String username) {
 		LOG.info("** " + this.getClass().getName() + ": Isstrinamas naudotojo: " + username + " slaptazodzio atstatymo prasymas **");
 		userPasswordResetRequestsService.deletePasswordRequest(username);

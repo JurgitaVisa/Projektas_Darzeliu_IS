@@ -27,14 +27,10 @@ public class UserPasswordResetRequestsService {
 	}
 	
 	@Transactional(readOnly = true)
-	public boolean requestPasswordReset(String email) {
+	public void requestPasswordReset(String email) {
 		User user = userDao.findByUsername(email);
 		if(user != null) {
 			userPasswordResetRequestsDAO.saveAndFlush(new UserPasswordResetRequestsEntity(user.getUserId()));
-			return true;
-		}
-		else {
-			return false;
 		}
 	}
 	

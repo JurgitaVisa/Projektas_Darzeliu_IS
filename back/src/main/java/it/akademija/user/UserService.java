@@ -1,9 +1,9 @@
 package it.akademija.user;
 
+import java.security.SecureRandom;
 import java.util.Set;
 import java.util.function.Function;
 
-import java.security.SecureRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +50,7 @@ public class UserService implements UserDetailsService {
 	 * @throws Exception
 	 */
 	@Transactional
-	public void createUser(UserDTO userData) throws Exception {
+	public void createUser(UserDTO userData) {
 		User newUser = new User();
 
 		if (userData.getRole().equals("USER")) {
@@ -211,13 +211,12 @@ public class UserService implements UserDetailsService {
 		return userDao.save(user);
 
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Set<Application> getUserApplications(String currentUsername) {
-		
+
 		return userDao.findByUsername(currentUsername).getUserApplications();
 	}
-
 
 	public UserDAO getUserDao() {
 		return userDao;
@@ -227,5 +226,4 @@ public class UserService implements UserDetailsService {
 		this.userDao = userDao;
 	}
 
-	
 }

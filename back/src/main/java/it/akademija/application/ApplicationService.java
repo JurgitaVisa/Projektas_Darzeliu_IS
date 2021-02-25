@@ -186,7 +186,7 @@ public class ApplicationService {
 	}
 
 	/**
-	 * Returns a page of information from submited Applications list with specified
+	 * Returns a page of information from submitted Applications list with specified
 	 * page number and page size.
 	 * 
 	 * @param pageable
@@ -194,27 +194,21 @@ public class ApplicationService {
 	 */
 	public Page<ApplicationInfo> getPageFromSubmittedApplications(Pageable pageable) {
 
-//		Page<Application> applications = applicationDao.findAllApplications(pageable);
-//
-//		Page<ApplicationInfo> dtoPage = applications.map(new Function<Application, ApplicationInfo>() {
-//			@Override
-//			public ApplicationInfo apply(Application a) {
-//				Set<KindergartenChoise> choises= a.getKindergartenChoises();
-//				for(KindergartenChoise ch: choises) {
-//					ch.getKindergarten().getName();
-//					
-//				}
-//				
-//				ApplicationInfo dto = new ApplicationInfo(a.getId(),a.getChildPersonalCode(), a.getChildName(), a.getChildSurname(), a.getKindergartenChoises());
-//				dto.set
-//				return dto;
-//			}
-//
-//		});
-//		return dtoPage;
-		
 		return applicationDao.findAllApplications(pageable);
-		
+
+	}
+
+	/**
+	 * Returns a filtered page of information from submitted Applications list,
+	 * containing applications that start with specified child personal code.
+	 * 
+	 * @param childPersonalCode
+	 * @param pageable
+	 * @return filtered page from Application database
+	 */
+	public Page<ApplicationInfo> getApplicationnPageFilteredById(String childPersonalCode, Pageable pageable) {
+
+		return applicationDao.findByIdContaining(childPersonalCode, pageable);
 	}
 
 	public ApplicationDAO getApplicationDao() {

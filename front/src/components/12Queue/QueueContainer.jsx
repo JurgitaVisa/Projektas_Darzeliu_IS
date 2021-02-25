@@ -23,25 +23,56 @@ export class QueueContainer extends Component {
             totalElements: 0,
             numberOfElements: 0,
             searchQuery: "",
-            isActive: false
+            isActive: false,
+            currentButtonValue: "Off"
         }
     }
     componentDidMount() {
+        // this.getApplicationState();
+        this.setState({ isActive: false });
         this.getApplications(this.state.currentPage, "");
-        //TODO: set is active 
+    }
+
+    getApplicationState() {
+        http
+            .get(`${apiEndpoint}/api/status`)
+            .then((response) => {
+
+                this.setState({
+                    isActive: response.data
+                });
+
+            }).catch(error => {
+                console.log("Queue status error", error);
+            });
     }
 
     getApplications(currentPage, personalCode) {
 
-        const { pageSize } = this.state;
+        const { pageSize, isActive } = this.state;
         currentPage -= 1;
 
-        var uri = `${apiEndpoint}/api/prasymai/manager?page=${currentPage}&size=${pageSize}`;
+        console.log("Ar aktyvus", isActive);
 
-        if (personalCode !== "") {
-            uri = `${apiEndpoint}/api/darzeliai/manager/page/${personalCode}?page=${currentPage}&size=${pageSize}`;
+        if (isActive) {
+            var uri = `${apiEndpoint}/api/prasymai/manager?page=${currentPage}&size=${pageSize}`;
+
+            if (personalCode !== "") {
+                uri = `${apiEndpoint}/api/prasymai/manager/page/${personalCode}?page=${currentPage}&size=${pageSize}`;
+
+            }
+        } else {
+            // var uri = `${apiEndpoint}/api/prasymai/manager?page=${currentPage}&size=${pageSize}`;
+
+            // if (personalCode !== "") {
+            //     uri = `${apiEndpoint}/api/prasymai/manager/page/${personalCode}?page=${currentPage}&size=${pageSize}`;
+
+            // }
 
         }
+
+        console.log(uri);
+
         http
             .get(uri)
             .then((response) => {
@@ -59,8 +90,43 @@ export class QueueContainer extends Component {
             });
     }
 
-    handleClick=(e)=>{
-        console.log(e.currentTarget.value);
+    resetState() {
+        this.setState({
+            applications: [],
+            currentPage: 1,
+            totalPages: 0,
+            totalElements: 0,
+            numberOfElements: 0,
+            searchQuery: ""
+        });
+    }
+
+    handleClick = (e) => {
+        const buttonValue = e.currentTarget.value;
+        console.log(buttonValue);
+
+        if (buttonValue !== this.state.currentButtonValue) {
+            this.resetState();
+
+            if (buttonValue === "On") {
+                this.setState({
+                    isActive: true,
+                    currentButtonValue: buttonValue
+                }, function () {
+                    this.getApplications(1, "");
+                });
+
+            } else {
+                this.setState({
+                    isActive: false,
+                    currentButtonValue: buttonValue
+                }, function () {
+                    this.getApplications(1, "");
+                });
+
+            }
+        }
+
     }
 
     handleSearch = (e) => {
@@ -69,7 +135,7 @@ export class QueueContainer extends Component {
 
         const personalCode = e.currentTarget.value;
         this.setState({ searchQuery: personalCode });
-        // this.getKindergartenInfo(1, personalCode);
+        this.getApplications(1, personalCode);
     }
 
     handleDelete = (item) => {
@@ -113,9 +179,10 @@ export class QueueContainer extends Component {
 
 
     render() {
-        
-        const placeholder = "Ieškoti pagal vaiko asmens kodą..."
+
         const { applications, totalElements, pageSize, searchQuery, isActive } = this.state;
+
+        const placeholder = "Ieškoti pagal vaiko asmens kodą..."
 
 
         return (
@@ -123,8 +190,8 @@ export class QueueContainer extends Component {
             <div className="container pt-4" >
 
                 <h6 className="pl-2 pt-3">Prašymų eilė</h6>
-               {isActive && <p className="pl-2 pt-3">Registracija vykdoma</p>}
-               {!isActive && <p className="pl-2 pt-3">Šiuo metu registracija nevykdoma</p>}
+                {isActive && <p className="pl-2 pt-3">Registracija vykdoma</p>}
+                {!isActive && <p className="pl-2 pt-3">Šiuo metu registracija nevykdoma</p>}
 
                 <Buttons
                     onClick={this.handleClick}
@@ -139,11 +206,12 @@ export class QueueContainer extends Component {
 
                 <div className=" pt-2">
 
-
-                    <QueueTable
-                        applications={applications}
-                        onDelete={this.handleDelete}
-                    />
+                    {isActive &&
+                        <QueueTable
+                            applications={applications}
+                            onDelete={this.handleDelete}
+                        />
+                    }
 
                     <Pagination
                         itemsCount={totalElements}

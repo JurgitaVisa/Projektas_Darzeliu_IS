@@ -10,7 +10,7 @@ const Buttons = (props) => {
         return (
             <div className="py-3">
                 <button
-                    value='OFF'
+                    value='Off'
                     onClick={(e) => onClick(e)}
                     id="btnStopRegistration"
                     className="btn btn-outline-danger btn-sm">
@@ -26,14 +26,14 @@ const Buttons = (props) => {
             <div className="row py-3">
                 <div className="col-8">
                     <button
-                        value='ON'
+                        value='On'
                         onClick={(e) => onClick(e)}
                         id="btnStartRegistration"
                         className="btn btn-outline-primary btn-sm ml-2">
                         Pradėti registraciją
                         </button>
                     <button
-                        value='PROCESS'
+                        value='Process'
                         onClick={(e) => onClick(e)}
                         id="btnFormQueue"
                         className="btn btn-primary btn-sm ml-2">
@@ -43,7 +43,7 @@ const Buttons = (props) => {
 
                 <div className="col-4">
                     <button
-                        value='CONFIRM'
+                        value='Confirm'
                         onClick={(e) => onClick(e)}
                         id="btnConfirmQueue"
                         className="btn btn-secondary btn-sm float-right">

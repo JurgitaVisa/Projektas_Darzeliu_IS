@@ -58,12 +58,12 @@ public class RegistrationStatusController {
 	@GetMapping("/status")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get application status")
-	public @ResponseBody String getStatus() {
+	public boolean getStatus() {
 
 		RegistrationStatus registrationStatus = statusService.getStatus();
 		LOG.info("** Statuscontroller: gaunamas registracijos statusas. **");
 
-		return registrationStatus.toString();
+		return registrationStatus.isStatus();
 
 	}
 
@@ -71,7 +71,7 @@ public class RegistrationStatusController {
 	@ApiOperation(value = "Process queue")
 	public ResponseEntity<String> processQueue() {
 
-		// queueService.processQuess();
+		// queueService.processQueue();
 
 		return new ResponseEntity<String>("Eilė suformuotos", HttpStatus.OK);
 

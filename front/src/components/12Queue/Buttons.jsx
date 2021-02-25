@@ -3,10 +3,10 @@ import React from 'react';
 import '../../App.css';
 
 const Buttons = (props) => {
-    const { isActive, onClick, onProcess, onConfirm } = props;
-
+    const { isActive, currentButtonValue, onClick, onProcess, onConfirm } = props;
+   
     if (isActive) {
-        
+
         return (
             <div className="py-3">
                 <button
@@ -21,7 +21,7 @@ const Buttons = (props) => {
         )
 
     } else {
-        
+
         return (
             <div className="row py-3">
                 <div className="col-8">
@@ -36,6 +36,7 @@ const Buttons = (props) => {
                         value='Process'
                         onClick={() => onProcess()}
                         id="btnFormQueue"
+                        disabled={currentButtonValue === "Process"}
                         className="btn btn-primary btn-sm ml-2">
                         Formuoti eiles
                         </button>
@@ -46,12 +47,12 @@ const Buttons = (props) => {
                         value='Confirm'
                         onClick={() => onConfirm()}
                         id="btnConfirmQueue"
+                        disabled={currentButtonValue === "Confirm"}
                         className="btn btn-secondary btn-sm float-right">
                         Patvirtinti eiles
                         </button>
                 </div>
             </div >
-
 
         )
 

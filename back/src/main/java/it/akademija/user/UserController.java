@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,8 +47,7 @@ public class UserController {
 	@Secured({ "ROLE_ADMIN" })
 	@PostMapping(path = "/admin/createuser")
 	@ApiOperation(value = "Create user", notes = "Creates user with data")
-	public ResponseEntity<String> createUser(@Valid @RequestBody UserDTO userInfo, BindingResult result)
-			throws Exception {
+	public ResponseEntity<String> createUser(@Valid @RequestBody UserDTO userInfo) {
 
 		LOG.info("** Usercontroller: kuriamas naujas naudotojas **");
 
@@ -102,7 +100,7 @@ public class UserController {
 	}
 
 	/**
-	 * Get detail for logged in user 
+	 * Get detail for logged in user
 	 * 
 	 * @return user details
 	 */
@@ -175,18 +173,16 @@ public class UserController {
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
 	@PutMapping(path = "/updatepassword/{oldPassword}/{newPassword}")
 	@ApiOperation(value = "Update logged in user password")
-	public ResponseEntity<String> updateUserPassword(
-			@PathVariable(value = "oldPassword") final String oldPassword,
+	public ResponseEntity<String> updateUserPassword(@PathVariable(value = "oldPassword") final String oldPassword,
 			@PathVariable(value = "newPassword") final String newPassword) {
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		if(userService.changePassword(currentUsername, oldPassword, newPassword)) {
+		if (userService.changePassword(currentUsername, oldPassword, newPassword)) {
 			return new ResponseEntity<String>("Slaptažodis pakeistas sėkmingai", HttpStatus.OK);
-		}
-		else {
+		} else {
 			return new ResponseEntity<String>("Neteisingas senas slaptažodis", HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	public UserService getUserService() {
 		return userService;
 	}

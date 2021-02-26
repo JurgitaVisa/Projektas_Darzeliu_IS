@@ -272,9 +272,7 @@ class AdminCreateUser extends Component {
                 console.log(this.state);
                 console.log(response);
                 swal({
-                    title: "Užklausa atlikta sėkmingai",
                     text: "Naujas naudotojas buvo sėkmingai sukurtas.",
-                    icon: "success",
                     button: "Gerai"
                 }).then(() => {
                     this.props.history.push("/new")
@@ -287,10 +285,8 @@ class AdminCreateUser extends Component {
             })
             .catch((error) => {
                 console.log(error);
-                swal({
-                    title: "Įvyko klaida",
-                    text: error.response.data,
-                    icon: "warning",
+                swal({                   
+                    text: error.response.data,                   
                     button: "Gerai"
                 })
             })

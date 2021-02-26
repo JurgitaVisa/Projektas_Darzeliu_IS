@@ -140,21 +140,22 @@ export const LoginContainer = () => {
           </div>
 
           <button
-            type="submit"
-            className="btn btn-primary"
-            id="btnLogin"
-            disabled={data.loggingIn}
-          >
-            {data.loggingIn ? "Jungiamasi..." : "Prisijungti"}
-          </button>
-
-          <button
             type="button"
-            className="btn btn-primary float-right"
+            className="btn btn-link"
+            style={{paddingLeft: "0px"}}
             onClick={() => {return(ForgotPasswordWindow())}}
             formNoValidate
           >
             Pamiršau slaptažodį
+          </button>
+
+          <button
+            type="submit"
+            className="btn btn-primary float-right"
+            id="btnLogin"
+            disabled={data.loggingIn}
+          >
+            {data.loggingIn ? "Jungiamasi..." : "Prisijungti"}
           </button>
 
         </form>

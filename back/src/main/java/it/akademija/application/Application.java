@@ -57,7 +57,7 @@ public class Application {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthdate;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="priorities_id")
 	private Priorities priorities;
 

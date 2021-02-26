@@ -28,7 +28,7 @@ class UserApplicationsTable extends Component {
         {            
             key: 'delete',
             label: 'Ištrinti prašymą',
-            content: application => <button onClick={() => this.props.onDelete(application)} className="btn btn-outline-danger btn-sm btn-block">Ištrinti</button>
+            content: application => <button onClick={() => this.props.onDelete(application)} id="btnDeleteApplication" className="btn btn-outline-danger btn-sm btn-block">Ištrinti</button>
            
         }
         

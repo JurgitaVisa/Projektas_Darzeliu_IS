@@ -235,7 +235,9 @@ export class QueueContainer extends Component {
 
     render() {
 
-        const { applications, totalElements, pageSize, searchQuery, isActive , currentButtonValue} = this.state;
+        const size = this.state.applications.length;
+
+        const { applications, totalElements, pageSize, searchQuery, isActive, currentButtonValue } = this.state;
 
         const placeholder = "Ieškoti pagal vaiko asmens kodą..."
 
@@ -254,15 +256,18 @@ export class QueueContainer extends Component {
                     onConfirm={this.handleConfirmQueue}
                     isActive={isActive}
                     currentButtonValue={currentButtonValue}
+                    size={size}
                 />
 
-                <SearchBox
-                    value={searchQuery}
-                    onSearch={this.handleSearch}
-                    placeholder={placeholder}
-                />
+                {(size > 0 || searchQuery !== "") &&
+                    <SearchBox
+                        value={searchQuery}
+                        onSearch={this.handleSearch}
+                        placeholder={placeholder}
+                    />
+                }
 
-                <div className=" pt-2">
+                <div className=" ">
 
                     {isActive &&
                         <QueueTable

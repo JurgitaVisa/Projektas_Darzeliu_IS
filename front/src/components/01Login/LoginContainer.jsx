@@ -16,7 +16,7 @@ axios.defaults.withCredentials = true;
 
 export const LoginContainer = () => {
 
-  const history=useHistory();
+  const history = useHistory();
 
   const { dispatch } = React.useContext(AuthContext);
 
@@ -71,7 +71,11 @@ export const LoginContainer = () => {
             username: "",
             password: "",
           });
-        } else swal("Prisijungimo klaida", error.response.status);
+        } else swal({
+          text: "Prisijungimo klaida"+ error.response.status,
+          button: "Gerai"
+        }
+        );
       });
   };
 
@@ -79,16 +83,16 @@ export const LoginContainer = () => {
     const target = event.target;
 
     if (target.validity.valueMissing && target.id === "username") {
-        console.log("target.id=username? -> " + target.id)
-        target.setCustomValidity("Būtina įvesti naudotojo prisijungimo vardą");
-      } else if (target.validity.valueMissing && target.id === "password") {
-        console.log("target.id=password? -> " + target.id)
-        target.setCustomValidity("Būtina įvesti slaptažodį");
-      }
+      console.log("target.id=username? -> " + target.id)
+      target.setCustomValidity("Būtina įvesti naudotojo prisijungimo vardą");
+    } else if (target.validity.valueMissing && target.id === "password") {
+      console.log("target.id=password? -> " + target.id)
+      target.setCustomValidity("Būtina įvesti slaptažodį");
+    }
     else {
       target.setCustomValidity("");
     }
-  
+
   };
 
   return (
@@ -151,7 +155,7 @@ export const LoginContainer = () => {
           <button
             type="button"
             className="btn btn-primary float-right"
-            onClick={() => {return(ForgotPasswordWindow())}}
+            onClick={() => { return (ForgotPasswordWindow()) }}
             formNoValidate
           >
             Pamiršau slaptažodį

@@ -9,7 +9,6 @@ const Table = (props) => {
     return (
         <div className="table-responsive-md">
 
-
             <table className="table">
 
                 <TableHeader

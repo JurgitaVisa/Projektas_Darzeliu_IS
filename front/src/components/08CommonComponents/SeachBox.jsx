@@ -1,11 +1,11 @@
 import React from 'react';
 
-const SearchBox = ({ value, onSearch }) => {
+const SearchBox = ({ value, onSearch, placeholder }) => {
     return (
         <input
             type="text"
             className="form-control my-3"
-            placeholder="Ieškoti pagal vardą..."
+            placeholder={placeholder}
             value={value}
             onChange={onSearch}
         />

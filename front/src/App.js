@@ -22,6 +22,7 @@ import AuthContext from "./components/11Context/AuthContext";
 // import apiEndpoint from "./components/10Services/endpoint";
 import { UserHomeContainer } from './components/02Main/UserHomeContainer';
 import { KindergartenStatContainer } from './components/09Statistics/KindergartenStatContainer';
+import { QueueContainer } from "./components/12Queue/QueueContainer";
 
 var initState = {
   isAuthenticated: false,
@@ -130,6 +131,7 @@ function App() {
                   {/* TODO prideti exact path */}
                   <Route exact path="/" component={KindergartenContainer} />
                   <Route path="/home" component={KindergartenContainer} />
+                  <Route path="/eile" component={QueueContainer} />
                   <Route path="/statistika" component={KindergartenStatContainer} />
                   <Route path="/darzeliai" component={KindergartenContainer} />
                   <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />

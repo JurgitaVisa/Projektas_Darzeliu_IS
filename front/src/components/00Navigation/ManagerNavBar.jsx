@@ -27,6 +27,10 @@ function Navigation(props) {
                             </li>
 
                             <li className="nav-item mr-2">
+                                <NavLink className="nav-link" id="navManagerKindergartenList" to={"/eile"}>Prašymų eilė</NavLink>
+                            </li>
+
+                            <li className="nav-item mr-2">
                                 <NavLink className="nav-link" id="navManagerApplicationQueue" to={"/statistika"}>Prašymų statistika</NavLink>
                             </li>
                             

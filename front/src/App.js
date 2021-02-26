@@ -22,6 +22,7 @@ import AuthContext from "./components/11Context/AuthContext";
 // import apiEndpoint from "./components/10Services/endpoint";
 import { UserHomeContainer } from './components/02Main/UserHomeContainer';
 import { KindergartenStatContainer } from './components/09Statistics/KindergartenStatContainer';
+import { QueueContainer } from "./components/12Queue/QueueContainer";
 
 var initState = {
   isAuthenticated: false,

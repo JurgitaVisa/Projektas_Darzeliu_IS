@@ -7,6 +7,10 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -17,12 +21,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import it.akademija.kindergarten.Kindergarten;
 
 @RestController
 @Api(value = "application")
@@ -75,6 +81,48 @@ public class ApplicationController {
 		return service.getAllUserApplications(currentUsername);
 	}
 	
+	
+	/**
+	 *
+	 *  Get page of unsorted applications 
+	 *
+	 * @param page
+	 * @param size
+	 * @return page of applications
+	 */
+	@Secured({ "ROLE_MANAGER" })
+	@GetMapping("/manager")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Get a page from all submitted applications")
+	public Page<ApplicationInfo> getPageFromSubmittedApplications(
+			@RequestParam("page") int page,
+			@RequestParam("size") int size) {
+		
+		Pageable pageable = PageRequest.of(page, size);
+
+		return service.getPageFromSubmittedApplications(pageable);
+	}
+	
+	/**
+	 * Get page of unsorted applications filtered by child personal code
+	 * 
+	 * @param childPersonalCode
+	 * @param page
+	 * @param size
+	 * @return page of applications
+	 */
+	@Secured({ "ROLE_MANAGER" })
+	@GetMapping("/manager/page/{childPersonalCode}")
+	@ApiOperation(value = "Get a page from all submitted applications with specified child personal code")
+	public ResponseEntity<Page<ApplicationInfo>> getApplicationnPageFilteredById(@PathVariable String childPersonalCode,
+			@RequestParam("page") int page, @RequestParam("size") int size) {		
+
+		Pageable pageable = PageRequest.of(page, size);
+
+		return new ResponseEntity<>(service.getApplicationnPageFilteredById(childPersonalCode, pageable),
+				HttpStatus.OK);
+	}
+	
 	/**
 	 * 
 	 * Delete user application by id
@@ -82,7 +130,7 @@ public class ApplicationController {
 	 * @param id
 	 * @return message
 	 */
-	@Secured({"ROLE_USER"})
+	@Secured({"ROLE_USER", "ROLE_MANAGER"})
 	@DeleteMapping("/user/delete/{id}")
 	@ApiOperation("Delete user application by id")
 	public ResponseEntity<String> deleteApplication(@ApiParam(value = "Application id", required = true) @PathVariable Long id) {

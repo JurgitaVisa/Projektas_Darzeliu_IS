@@ -1,9 +1,9 @@
 package it.akademija.user;
 
+import java.security.SecureRandom;
 import java.util.Set;
 import java.util.function.Function;
 
-import java.security.SecureRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.akademija.application.Application;
 import it.akademija.role.Role;
+import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsDAO;
+import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsEntity;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -25,7 +27,10 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private UserDAO userDao;
 
-	int strength = 14;
+	@Autowired
+	private UserPasswordResetRequestsDAO userPasswordResetRequestsDAO;
+
+	int strength = 12;
 
 	private PasswordEncoder encoder = new BCryptPasswordEncoder(strength, new SecureRandom());
 
@@ -50,7 +55,7 @@ public class UserService implements UserDetailsService {
 	 * @throws Exception
 	 */
 	@Transactional
-	public void createUser(UserDTO userData) throws Exception {
+	public void createUser(UserDTO userData) {
 		User newUser = new User();
 
 		if (userData.getRole().equals("USER")) {
@@ -155,8 +160,8 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public void restorePassword(String username) {
 		User user = findByUsername(username);
+		userPasswordResetRequestsDAO.delete(new UserPasswordResetRequestsEntity(user.getUserId()));
 		user.setPassword(encoder.encode(username));
-
 		userDao.save(user);
 
 	}
@@ -211,13 +216,12 @@ public class UserService implements UserDetailsService {
 		return userDao.save(user);
 
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Set<Application> getUserApplications(String currentUsername) {
-		
+
 		return userDao.findByUsername(currentUsername).getUserApplications();
 	}
-
 
 	public UserDAO getUserDao() {
 		return userDao;
@@ -227,5 +231,4 @@ public class UserService implements UserDetailsService {
 		this.userDao = userDao;
 	}
 
-	
 }

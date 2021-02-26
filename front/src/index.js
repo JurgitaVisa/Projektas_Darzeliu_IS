@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { Router } from "react-router";
-import { createBrowserHistory } from "history";
 
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,17 +11,14 @@ import App from "./App";
 
 document.title =
   "Vilniaus miesto savivaldybės vaikų darželių informacinė sistema";
-const history = createBrowserHistory();
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router history={history}>
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Switch>
           <Route path="*" component={App} />
         </Switch>
       </BrowserRouter>
-    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

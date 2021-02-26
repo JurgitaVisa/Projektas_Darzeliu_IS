@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 //import { Route, withRouter, BrowserRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import '../../App.css';
 
@@ -20,7 +21,7 @@ import inputValidator from '../08CommonComponents/InputValidator';
 // }
 
 
-export default class AdminCreateUser extends Component {
+class AdminCreateUser extends Component {
 
     constructor(props) {
         super(props);
@@ -275,10 +276,13 @@ export default class AdminCreateUser extends Component {
                     text: "Naujas naudotojas buvo sėkmingai sukurtas.",
                     icon: "success",
                     button: "Gerai"
-                }).then(
-                    function refreshWindow() {
-                        window.location.reload();
-                    }
+                }).then(() => {
+                    this.props.history.push("/new")
+                    this.props.history.replace("/admin")
+                }
+                    // function refreshWindow() {
+                    //     window.location.reload();
+                    // }
                 )
             })
             .catch((error) => {
@@ -328,3 +332,5 @@ export default class AdminCreateUser extends Component {
         )
     }
 }
+
+export default withRouter(AdminCreateUser)

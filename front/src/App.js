@@ -109,13 +109,12 @@ function App() {
             <div className="container-fluid px-0">
               <AdminNavBar>
                 <Switch> 
-                  {/* TODO prideti exact path */}
                   <Route exact path="/" component={Admin} />
-                  <Route path="/home" component={Admin} />
-                  <Route path="/admin" component={Admin} />
-                  <Route path="/statistika" component={KindergartenStatContainer} />
-                  <Route path="/naudotojai" component={UserListContainer} />
-                  <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
+                  <Route exact path="/home" component={Admin} />
+                  <Route exact path="/admin" component={Admin} />
+                  <Route exact path="/statistika" component={KindergartenStatContainer} />
+                  <Route exact path="/naudotojai" component={UserListContainer} />
+                  <Route exact path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />
                 </Switch>
               </AdminNavBar>
@@ -128,13 +127,11 @@ function App() {
             <div className="container-fluid px-0">
               <ManagerNavBar>
                 <Switch>
-                  {/* TODO prideti exact path */}
                   <Route exact path="/" component={KindergartenContainer} />
-                  <Route path="/home" component={KindergartenContainer} />
-                  <Route path="/eile" component={QueueContainer} />
-                  <Route path="/statistika" component={KindergartenStatContainer} />
-                  <Route path="/darzeliai" component={KindergartenContainer} />
-                  <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
+                  <Route exact path="/home" component={KindergartenContainer} />
+                  <Route exact path="/statistika" component={KindergartenStatContainer} />
+                  <Route exact path="/darzeliai" component={KindergartenContainer} />
+                  <Route exact path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />                  
                 </Switch>               
               </ManagerNavBar >
@@ -147,13 +144,12 @@ function App() {
             <div className="container-fluid px-0">
               <UserNavBar>
                 <Switch>
-                  {/* TODO prideti exact path */}
                   <Route exact path="/" component={UserHomeContainer} />
-                  <Route path="/home" component={UserHomeContainer} />
-                  <Route path="/statistika" component={KindergartenStatContainer} />
+                  <Route exact path="/home" component={UserHomeContainer} />
                   <Route exact path="/prasymai" component={UserHomeContainer} />
+                  <Route exact path="/statistika" component={KindergartenStatContainer} />
                   <Route exact path="/prasymai/naujas" component={CreateApplicationFormContainer} />
-                  <Route path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
+                  <Route exact path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />
                 </Switch>
               </UserNavBar>

@@ -18,15 +18,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.akademija.application.Application;
 import it.akademija.role.Role;
+import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsDAO;
+import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsEntity;
 
 @Service
 public class UserService implements UserDetailsService {
 
 	@Autowired
-	private UserDAO userDao;	
+	private UserDAO userDao;
+
+	@Autowired
+	private UserPasswordResetRequestsDAO userPasswordResetRequestsDAO;
 
 	int strength = 12;
-	
+
 	private PasswordEncoder encoder = new BCryptPasswordEncoder(strength, new SecureRandom());
 
 	@Override
@@ -155,8 +160,8 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public void restorePassword(String username) {
 		User user = findByUsername(username);
+		userPasswordResetRequestsDAO.delete(new UserPasswordResetRequestsEntity(user.getUserId()));
 		user.setPassword(encoder.encode(username));
-
 		userDao.save(user);
 
 	}

@@ -25,10 +25,13 @@ import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsEntity;
 public class UserService implements UserDetailsService {
 
 	@Autowired
-	private UserDAO userDao;	
+	private UserDAO userDao;
+
+	@Autowired
+	private UserPasswordResetRequestsDAO userPasswordResetRequestsDAO;
 
 	int strength = 12;
-	
+
 	private PasswordEncoder encoder = new BCryptPasswordEncoder(strength, new SecureRandom());
 
 	@Override

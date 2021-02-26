@@ -131,6 +131,7 @@ function App() {
                   <Route exact path="/home" component={KindergartenContainer} />
                   <Route exact path="/statistika" component={KindergartenStatContainer} />
                   <Route exact path="/darzeliai" component={KindergartenContainer} />
+                  <Route exact path="/eile" component={QueueContainer} />
                   <Route exact path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
                   <Route path="*" component={NotFound} />                  
                 </Switch>               

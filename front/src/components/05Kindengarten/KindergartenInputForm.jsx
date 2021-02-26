@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from 'react-router-dom';
 import "../../App.css";
 import http from "../10Services/httpService";
 import apiEndpoint from "../10Services/endpoint";
@@ -18,6 +19,7 @@ function KindergartenInputForm() {
 
   const [data, setData] = useState(initKindergartenData);
   const [elderates, setElderate] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     http
@@ -48,6 +50,8 @@ function KindergartenInputForm() {
         });
         savingStatus = false;
         resetForm(event);
+        history.push("/new");
+        history.replace("/darzeliai")
       })
       .catch((error) => {
         if (error.response.status === 409) {

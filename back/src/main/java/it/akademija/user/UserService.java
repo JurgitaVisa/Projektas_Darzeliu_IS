@@ -23,10 +23,10 @@ import it.akademija.role.Role;
 public class UserService implements UserDetailsService {
 
 	@Autowired
-	private UserDAO userDao;
+	private UserDAO userDao;	
 
-	int strength = 14;
-
+	int strength = 12;
+	
 	private PasswordEncoder encoder = new BCryptPasswordEncoder(strength, new SecureRandom());
 
 	@Override

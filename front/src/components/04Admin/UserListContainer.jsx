@@ -18,7 +18,8 @@ export class UserListContainer extends Component {
             currentPage: 1,
             totalPages: 0,
             totalElements: 0,
-            numberOfElements: 0
+            numberOfElements: 0,
+            passwordResetRequests: []
         }
     }
     componentDidMount() {
@@ -33,17 +34,27 @@ export class UserListContainer extends Component {
 
         var uri = `${apiEndpoint}/api/users/admin/allusers?page=${currentPage}&size=${pageSize}`;
 
+        http.get(`${apiEndpoint}/passwordresetrequests/getAllRequests`)
+        .then((response) => {
+            this.setState({
+                ...this.state,
+                passwordResetRequests: response.data,
+            })
+        })
+
         http
             .get(uri)
             .then((response) => {
 
                 this.setState({
-                    naudotojai: this.mapToViewModel(response.data.content),
+                    naudotojai: this.mapToViewModel(response.data.content, this.state.passwordResetRequests),
                     totalPages: response.data.totalPages,
                     totalElements: response.data.totalElements,
                     numberOfElements: response.data.numberOfElements,
                     currentPage: response.data.number + 1
                 });
+
+                
 
             }).catch(error => {
                 console.log("User container error", error.response);
@@ -58,15 +69,16 @@ export class UserListContainer extends Component {
             );
     }
 
+    checkIfUserIsRequestingPassword(UID, passList) {
+        return passList.some(element => element.userId === UID);
+    }
 
-
-    mapToViewModel(data) {
-
-        const naudotojai = data.map(user => ({
+    mapToViewModel(data, passList) {
+        const naudotojai = data.map((user)=> ({
             id: user.userId,
             username: user.username,
-            role: user.role
-
+            role: user.role,
+            isRequestingPasswordReset: this.checkIfUserIsRequestingPassword(user.userId, passList),
         }));
 
         return naudotojai;

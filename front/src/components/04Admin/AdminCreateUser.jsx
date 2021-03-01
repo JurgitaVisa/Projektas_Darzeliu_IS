@@ -182,11 +182,11 @@ class AdminCreateUser extends Component {
                         <div className="form-group">
                             <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
                             <div className="input-group">
-                                <div className="input-group-prepend">
+                                {/**<div className="input-group-prepend">
                                     <div className="input-group-text">
-                                        +370
+                                        +
                                     </div>
-                                </div>
+                                    </div>*/}
                                 <input
                                     type="tel"
                                     className="form-control"
@@ -195,8 +195,8 @@ class AdminCreateUser extends Component {
                                     value={this.state.phone}
                                     onChange={this.handleChange}
                                     onInvalid={(e) => inputValidator(e)}
-                                    placeholder="Telefono numeris"
-                                    required pattern="[0-9]{8}">
+                                    placeholder="Telefono numeris (formatas: +37000000000)"
+                                    required pattern="[+]{1}[0-9]{11}">
                                 </input>
                             </div>
                         </div>

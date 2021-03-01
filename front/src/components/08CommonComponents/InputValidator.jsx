@@ -58,11 +58,16 @@ function InputValidator(event) {
                 target.setCustomValidity("");
             }
             else if (target.name === "phone") {
-                if (target.validity.patternMismatch) {
-                    target.setCustomValidity("Telefono numerį sudaro 8 skaičiai, įvesta skaičių: " + target.value.length)
+                if(target.value.includes('+')) {
+                    if (target.validity.patternMismatch) {
+                        target.setCustomValidity("Telefono numerį sudaro 11 skaičiai, įvesta skaičių: " + (0 + target.value.length - 1))
+                    }
+                    else {
+                        target.setCustomValidity("");
+                    }
                 }
                 else {
-                    target.setCustomValidity("");
+                    target.setCustomValidity('Formatas: +37000000000')
                 }
             }
             else if (target.id === "txtNewPassword" || target.id === "txtNewPasswordRepeat") {

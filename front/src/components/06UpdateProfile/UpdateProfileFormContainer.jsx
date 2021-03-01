@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import '../../App.css';
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import inputValidator from '../08CommonComponents/InputValidator';
@@ -26,7 +27,7 @@ export default class UpdateProfileFormContainer extends Component {
     componentDidMount() {
         http.get(`${apiEndpoint}/api/users/user`)
             .then((response) => {
-                if(response.data.role==="USER"){
+                if (response.data.role === "USER") {
                     this.setState({
                         role: response.data.role,
                         name: response.data.name,
@@ -39,183 +40,181 @@ export default class UpdateProfileFormContainer extends Component {
                     })
                 } else {
                     this.setState({
-                    role: response.data.role,
-                    name: response.data.name,
-                    surname: response.data.surname,
-                    personalCode: response.data.personalCode,
-                    address: response.data.address,
-                    phone: response.data.phone,
-                    email: response.data.email,
-                    username: response.data.username
-                })
+                        role: response.data.role,
+                        name: response.data.name,
+                        surname: response.data.surname,
+                        personalCode: response.data.personalCode,
+                        address: response.data.address,
+                        phone: response.data.phone,
+                        email: response.data.email,
+                        username: response.data.username
+                    })
                 }
-                
+
             })
             .catch((error) => {
                 console.log(error);
                 swal({
-                    title: "Įvyko klaida",
                     text: "Įvyko klaida perduodant duomenis iš serverio.",
-                    icon: "error",
                     button: "Gerai"
                 })
             })
     }
-    
+
     /** Update user info form */
     drawUpdateForm(role) {
         /** Admin & Manager form */
-        if(role !== "USER") {
+        if (role !== "USER") {
             return (
-                    <div>
-                        <div className="row form-group">
-                            <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
-                            <input 
-                                type="text"
-                                id="txtName"
-                                name="name"
-                                placeholder="Vardas"
-                                className="form-control"
-                                value={this.state.name}
-                                onChange={this.handleChange}
-                                onInvalid={(e) => inputValidator(e)}
-                                required
-                                pattern="[A-zÀ-ž]{2,32}"
-                            />
-                        </div>
-                        <div className="row form-group">
-                            <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
-                            <input
-                                type="text"
-                                id="txtSurname"
-                                name="surname"
-                                placeholder="Pavardė"
-                                className="form-control"
-                                value={this.state.surname}
-                                onChange={this.handleChange}
-                                onInvalid={(e) => inputValidator(e)}
-                                required
-                                pattern="[A-zÀ-ž]{2,32}"
-                            />
-                        </div>
-                        <div className="row form-group">
-                            <label htmlFor="txtEmail">El. paštas <span className="fieldRequired">*</span></label>
-                            <input
-                                type="text"
-                                id="txtEmail"
-                                name="email"
-                                placeholder="El. paštas"
-                                className="form-control"
-                                value={this.state.email}
-                                onChange={this.handleChange}
-                                onInvalid={(e) => inputValidator(e)}
-                                required
-                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
-                            />
-                        </div>
+                <div>
+                    <div className="row form-group">
+                        <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
+                        <input
+                            type="text"
+                            id="txtName"
+                            name="name"
+                            placeholder="Vardas"
+                            className="form-control"
+                            value={this.state.name}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => inputValidator(e)}
+                            required
+                            pattern="[A-zÀ-ž]{2,32}"
+                        />
                     </div>
+                    <div className="row form-group">
+                        <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
+                        <input
+                            type="text"
+                            id="txtSurname"
+                            name="surname"
+                            placeholder="Pavardė"
+                            className="form-control"
+                            value={this.state.surname}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => inputValidator(e)}
+                            required
+                            pattern="[A-zÀ-ž]{2,32}"
+                        />
+                    </div>
+                    <div className="row form-group">
+                        <label htmlFor="txtEmail">El. paštas <span className="fieldRequired">*</span></label>
+                        <input
+                            type="text"
+                            id="txtEmail"
+                            name="email"
+                            placeholder="El. paštas"
+                            className="form-control"
+                            value={this.state.email}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => inputValidator(e)}
+                            required
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
+                        />
+                    </div>
+                </div>
             )
         }
         /** User form */
         else {
             return (
-                    <div>
-                        <div className="row form-group">
-                            <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
-                            <input 
-                                type="text"
-                                id="txtName"
-                                name="name"
-                                placeholder="Vardas"
-                                className="form-control"
-                                value={this.state.name}
-                                onChange={this.handleChange}
-                                onInvalid={(e) => inputValidator(e)}
-                                required
-                                pattern="[A-zÀ-ž]{2,32}"
-                            />
-                        </div>
-                        <div className="row form-group">
-                            <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
-                            <input
-                                type="text"
-                                id="txtSurname"
-                                name="surname"
-                                placeholder="Pavardė"
-                                className="form-control"
-                                value={this.state.surname}
-                                onChange={this.handleChange}
-                                onInvalid={(e) => inputValidator(e)}
-                                required
-                                pattern="[A-zÀ-ž]{2,32}"
-                            />
-                        </div>
-                        <div className="row form-group">
-                            <label htmlFor="txtPersonalCode">Asmens kodas <span className="fieldRequired">*</span></label>
-                            <input
-                                type="text"
-                                id="txtPersonalCode"
-                                name="personalCode"
-                                placeholder="Asmens kodas"
-                                className="form-control"
-                                value={this.state.personalCode}
-                                onChange={this.handleChange}
-                                onInvalid={(e) => inputValidator(e)}
-                                required
-                                pattern="[0-9]{11}"
-                            />
-                        </div>
-                        <div className="row form-group">
-                            <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
-                            <div className="input-group">
-                                <div className="input-group-prepend">
-                                    <div className="input-group-text">
-                                        +370
+                <div>
+                    <div className="row form-group">
+                        <label htmlFor="txtName">Vardas <span className="fieldRequired">*</span></label>
+                        <input
+                            type="text"
+                            id="txtName"
+                            name="name"
+                            placeholder="Vardas"
+                            className="form-control"
+                            value={this.state.name}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => inputValidator(e)}
+                            required
+                            pattern="[A-zÀ-ž]{2,32}"
+                        />
+                    </div>
+                    <div className="row form-group">
+                        <label htmlFor="txtSurname">Pavardė <span className="fieldRequired">*</span></label>
+                        <input
+                            type="text"
+                            id="txtSurname"
+                            name="surname"
+                            placeholder="Pavardė"
+                            className="form-control"
+                            value={this.state.surname}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => inputValidator(e)}
+                            required
+                            pattern="[A-zÀ-ž]{2,32}"
+                        />
+                    </div>
+                    <div className="row form-group">
+                        <label htmlFor="txtPersonalCode">Asmens kodas <span className="fieldRequired">*</span></label>
+                        <input
+                            type="text"
+                            id="txtPersonalCode"
+                            name="personalCode"
+                            placeholder="Asmens kodas"
+                            className="form-control"
+                            value={this.state.personalCode}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => inputValidator(e)}
+                            required
+                            pattern="[0-9]{11}"
+                        />
+                    </div>
+                    <div className="row form-group">
+                        <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
+                        <div className="input-group">
+                            <div className="input-group-prepend">
+                                <div className="input-group-text">
+                                    +370
                                     </div>
-                                </div>
-                                <input
-                                    type="tel"
-                                    id="txtTelNo"
-                                    name="phone"
-                                    placeholder="Telefono numeris"
-                                    className="form-control"
-                                    value={this.state.phone}
-                                    onChange={this.handleChange}
-                                    onInvalid={(e) => inputValidator(e)}
-                                    required pattern="[0-9]{8}">
-                                </input>
                             </div>
-                        </div>
-                        <div className="row form-group">
-                            <label htmlFor="txtEmail">El. paštas <span className="fieldRequired">*</span></label>
                             <input
-                                type="text"
-                                id="txtEmail"
-                                name="email"
-                                placeholder="El. paštas"
+                                type="tel"
+                                id="txtTelNo"
+                                name="phone"
+                                placeholder="Telefono numeris"
                                 className="form-control"
-                                value={this.state.email}
+                                value={this.state.phone}
                                 onChange={this.handleChange}
                                 onInvalid={(e) => inputValidator(e)}
-                                required
-                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
-                            />
-                        </div>
-                        <div className="row form-group">
-                            <label htmlFor="txtAddress">Adresas <span className="fieldRequired">*</span></label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="txtAddress"
-                                name="address"
-                                placeholder="Adresas"
-                                value={this.state.address}
-                                onChange={this.handleChange}
-                                onInvalid={(e) => inputValidator(e)}
-                                required
-                            />
+                                required pattern="[0-9]{8}">
+                            </input>
                         </div>
                     </div>
+                    <div className="row form-group">
+                        <label htmlFor="txtEmail">El. paštas <span className="fieldRequired">*</span></label>
+                        <input
+                            type="text"
+                            id="txtEmail"
+                            name="email"
+                            placeholder="El. paštas"
+                            className="form-control"
+                            value={this.state.email}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => inputValidator(e)}
+                            required
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
+                        />
+                    </div>
+                    <div className="row form-group">
+                        <label htmlFor="txtAddress">Adresas <span className="fieldRequired">*</span></label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="txtAddress"
+                            name="address"
+                            placeholder="Adresas"
+                            value={this.state.address}
+                            onChange={this.handleChange}
+                            onInvalid={(e) => inputValidator(e)}
+                            required
+                        />
+                    </div>
+                </div>
             )
         }
     }
@@ -244,28 +243,24 @@ export default class UpdateProfileFormContainer extends Component {
             "surname": this.state.surname,
             "username": this.state.username
         })
-        .then((response) => {
-            swal({
-                title: "Užklausa atlikta sėkmingai",
-                text: "Naudotojo duomenys buvo sėkmingai atnaujinti",
-                icon: "success",
-                button: "Gerai"
+            .then((response) => {
+                swal({
+                    text: "Naudotojo duomenys buvo sėkmingai atnaujinti",
+                    button: "Gerai"
+                })
             })
-        })
-        .catch((error) => {
-            swal({
-                title: "Įvyko klaida",
-                text: error.response.data,
-                icon: "warning",
-                button: "Gerai"
+            .catch((error) => {
+                swal({
+                    text: error.response.data,
+                    button: "Gerai"
+                })
             })
-        })
     }
 
     /**Update password form */
 
     drawUpdatePasswordForm() {
-        if(this.state.passwordUpdate) {
+        if (this.state.passwordUpdate) {
             return (
                 <div className="form">
                     <form onSubmit={this.handleUpdatePasswordSubmit}>
@@ -343,14 +338,12 @@ export default class UpdateProfileFormContainer extends Component {
     }
 
     /** Update password submit handler */
-    
+
     handleUpdatePasswordSubmit(e) {
         e.preventDefault();
-        if(this.state.newPassword!==this.state.newPasswordRepeat) {
+        if (this.state.newPassword !== this.state.newPasswordRepeat) {
             swal({
-                title: "Įvyko klaida",
                 text: "Slaptažodžiai nesutampa.",
-                icon: "warning",
                 button: "Gerai"
             })
         }
@@ -358,9 +351,7 @@ export default class UpdateProfileFormContainer extends Component {
             http.put(`${apiEndpoint}/api/users/updatepassword/${this.state.oldPassword}/${this.state.newPassword}`, {
             }).then((response) => {
                 swal({
-                    title: "Užklausa atlikta sėkmingai",
                     text: "Naudotojo slaptažodis atnaujintas sėkmingai",
-                    icon: "success",
                     button: "Gerai"
                 }).then(() => {
                     this.setState({
@@ -370,15 +361,13 @@ export default class UpdateProfileFormContainer extends Component {
                     })
                 })
             })
-            .catch((error) => {
-                console.log(error);
-                swal({
-                    title: "Įvyko klaida",
-                    text: error.response.data,
-                    icon: "warning",
-                    button: "Gerai"
+                .catch((error) => {
+                    console.log(error);
+                    swal({                       
+                        text: error.response.data,                       
+                        button: "Gerai"
+                    })
                 })
-            })
         }
     }
 

@@ -16,7 +16,7 @@ axios.defaults.withCredentials = true;
 
 export const LoginContainer = () => {
 
-  const history=useHistory();
+  const history = useHistory();
 
   const { dispatch } = React.useContext(AuthContext);
 
@@ -71,7 +71,11 @@ export const LoginContainer = () => {
             username: "",
             password: "",
           });
-        } else swal("Prisijungimo klaida", error.response.status);
+        } else swal({
+          text: "Prisijungimo klaida"+ error.response.status,
+          button: "Gerai"
+        }
+        );
       });
   };
 
@@ -79,16 +83,16 @@ export const LoginContainer = () => {
     const target = event.target;
 
     if (target.validity.valueMissing && target.id === "username") {
-        console.log("target.id=username? -> " + target.id)
-        target.setCustomValidity("Būtina įvesti naudotojo prisijungimo vardą");
-      } else if (target.validity.valueMissing && target.id === "password") {
-        console.log("target.id=password? -> " + target.id)
-        target.setCustomValidity("Būtina įvesti slaptažodį");
-      }
+      console.log("target.id=username? -> " + target.id)
+      target.setCustomValidity("Būtina įvesti naudotojo prisijungimo vardą");
+    } else if (target.validity.valueMissing && target.id === "password") {
+      console.log("target.id=password? -> " + target.id)
+      target.setCustomValidity("Būtina įvesti slaptažodį");
+    }
     else {
       target.setCustomValidity("");
     }
-  
+
   };
 
   return (
@@ -154,6 +158,8 @@ export const LoginContainer = () => {
             className="btn btn-primary float-right"
             id="btnLogin"
             disabled={data.loggingIn}
+            onClick={() => { return (ForgotPasswordWindow()) }}
+            formNoValidate
           >
             {data.loggingIn ? "Jungiamasi..." : "Prisijungti"}
           </button>

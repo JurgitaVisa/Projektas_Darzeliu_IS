@@ -108,10 +108,8 @@ class CreateApplicationFormContainer extends Component {
         });
       })
       .catch((error) => {
-        swal({
-          title: "Įvyko klaida",
-          text: "Įvyko klaida perduodant duomenis iš serverio.",
-          icon: "error",
+        swal({         
+          text: "Įvyko klaida perduodant duomenis iš serverio.",         
           button: "Gerai",
         });
       });
@@ -893,8 +891,7 @@ class CreateApplicationFormContainer extends Component {
         .then((response) => {
           console.log(response);
           swal({
-            title: response.data,
-            icon: "success",
+            text: response.data,           
             button: "Gerai",
           });
           /**
@@ -905,11 +902,9 @@ class CreateApplicationFormContainer extends Component {
         .then(() => this.props.history.push("/prasymai"))
         .catch((error) => {
           console.log(error);
-          swal({
-            title: "Įvyko klaida",
-            text: error.response.data,
-            icon: "warning",
-            button: "Gerai",
+          swal({            
+            text: error.response.data,           
+            button: "Gerai"
           });
         });
     }

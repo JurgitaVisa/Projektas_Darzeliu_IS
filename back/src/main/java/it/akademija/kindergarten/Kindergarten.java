@@ -7,11 +7,14 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
+import it.akademija.application.queue.ApplicationQueue;
 import it.akademija.kindergartenchoise.KindergartenChoise;
 
 @Entity
@@ -38,12 +41,19 @@ public class Kindergarten {
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
 	private int capacityAgeGroup2to3;
+	
+	private int placesTakenAgeGroup2to3;
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
 	private int capacityAgeGroup3to6;
+	
+	private int placesTakenAgeGroup3to6;
 
-	@OneToMany(mappedBy = "kindergarten", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "kindergarten", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<KindergartenChoise> kindergartenChoises;
+	
+	@OneToMany(mappedBy = "kindergarten", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private Set<ApplicationQueue> approvedApplications;
 
 	public Kindergarten() {
 
@@ -58,7 +68,7 @@ public class Kindergarten {
 		this.elderate = elderate;
 		this.capacityAgeGroup2to3 = capacityAgeGroup2to3;
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
-	}
+	}	
 
 	public String getId() {
 		return id;
@@ -108,12 +118,36 @@ public class Kindergarten {
 		this.capacityAgeGroup3to6 = capacityAgeGroup3to6;
 	}
 
+	public int getPlacesTakenAgeGroup2to3() {
+		return placesTakenAgeGroup2to3;
+	}
+
+	public void setPlacesTakenAgeGroup2to3(int placesTakenAgeGroup2to3) {
+		this.placesTakenAgeGroup2to3 = placesTakenAgeGroup2to3;
+	}
+
+	public int getPlacesTakenAgeGroup3to6() {
+		return placesTakenAgeGroup3to6;
+	}
+
+	public void setPlacesTakenAgeGroup3to6(int placesTakenAgeGroup3to6) {
+		this.placesTakenAgeGroup3to6 = placesTakenAgeGroup3to6;
+	}
+
 	public Set<KindergartenChoise> getKindergartenChoises() {
 		return kindergartenChoises;
 	}
 
 	public void setKindergartenChoises(Set<KindergartenChoise> kindergartenChoises) {
 		this.kindergartenChoises = kindergartenChoises;
+	}
+	
+	public Set<ApplicationQueue> getApprovedApplications() {
+		return approvedApplications;
+	}
+
+	public void setApprovedApplications(Set<ApplicationQueue> approvedApplications) {
+		this.approvedApplications = approvedApplications;
 	}
 
 	@Override
@@ -140,5 +174,7 @@ public class Kindergarten {
 			return false;
 		return true;
 	}
+
+	
 
 }

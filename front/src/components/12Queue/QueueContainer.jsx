@@ -7,16 +7,16 @@ import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 
 import QueueTable from './QueueTable';
+import QueueProcessedTable from './QueueProcessedTable';
 import Pagination from '../08CommonComponents/Pagination';
 import SearchBox from './../08CommonComponents/SeachBox';
 import Buttons from './Buttons';
-
 export class QueueContainer extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            applications: [],
+            applications: [],            
             pageSize: 12,
             currentPage: 1,
             totalPages: 0,
@@ -66,7 +66,7 @@ export class QueueContainer extends Component {
 
             }
         } else {
-            // var uri = `${apiEndpoint}/api/prasymai/manager?page=${currentPage}&size=${pageSize}`;
+            uri = `${apiEndpoint}/api/eile/manager/queue?page=${currentPage}&size=${pageSize}`;
 
             // if (personalCode !== "") {
             //     uri = `${apiEndpoint}/api/prasymai/manager/page/${personalCode}?page=${currentPage}&size=${pageSize}`;
@@ -149,7 +149,7 @@ export class QueueContainer extends Component {
             http.post(`${apiEndpoint}/api/queue/process`)
                 .then((response) => {
                     alert(response.data);
-                    this.setState({
+                    this.setState({                       
                         currentButtonValue: buttonValue
                     }, function () {
                         this.getApplications(1, "");
@@ -271,6 +271,13 @@ export class QueueContainer extends Component {
 
                     {isActive &&
                         <QueueTable
+                            applications={applications}
+                            onDelete={this.handleDelete}
+                        />
+                    }
+
+                    {!isActive &&
+                        <QueueProcessedTable
                             applications={applications}
                             onDelete={this.handleDelete}
                         />

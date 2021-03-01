@@ -1,5 +1,7 @@
 package it.akademija.application;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +18,8 @@ public interface ApplicationDAO extends JpaRepository<Application, Long> {
 	Page<ApplicationInfo> findAllApplications(Pageable pageable);
 
 	// get all, kurių statusas yra "Pateikta"
-
-	// get all kur username yra String username
+	@Query("SELECT a FROM Application a WHERE a.status=0")
+	List<Application> findAllApplicationsWithStatusSubmitted();
+	
 
 }

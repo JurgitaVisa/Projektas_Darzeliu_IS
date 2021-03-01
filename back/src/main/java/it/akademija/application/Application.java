@@ -24,6 +24,7 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import it.akademija.application.priorities.Priorities;
+import it.akademija.application.queue.ApplicationQueue;
 import it.akademija.kindergartenchoise.KindergartenChoise;
 import it.akademija.user.ParentDetails;
 import it.akademija.user.User;
@@ -56,6 +57,8 @@ public class Application {
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthdate;
+	
+	private int priorityScore;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="priorities_id")
@@ -75,6 +78,10 @@ public class Application {
 
 	@OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
 	private Set<KindergartenChoise> kindergartenChoises;
+	
+	@OneToOne(mappedBy = "application", cascade= CascadeType.ALL)
+	@JoinColumn(name="application_id")
+	private ApplicationQueue applicationQueue;
 
 	public Application() {
 
@@ -121,7 +128,7 @@ public class Application {
 
 	public void setChildPersonalCode(String childPersonalCode) {
 		this.childPersonalCode = childPersonalCode;
-	}
+	}	
 
 	public LocalDate getBirthdate() {
 		return birthdate;
@@ -175,5 +182,21 @@ public class Application {
 		this.priorities = priorities;
 		priorities.setApplication(this);		
 	}
+
+	public int getPriorityScore() {
+		return priorityScore;
+	}
+
+	public void setPriorityScore(int priorityScore) {
+		this.priorityScore = priorityScore;
+	}
+
+	public ApplicationQueue getApplicationQueue() {
+		return applicationQueue;
+	}
+
+	public void setApplicationQueue(ApplicationQueue applicationQueue) {
+		this.applicationQueue = applicationQueue;		
+	}	
 
 }

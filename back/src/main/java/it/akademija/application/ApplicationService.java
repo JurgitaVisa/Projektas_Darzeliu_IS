@@ -1,9 +1,10 @@
 package it.akademija.application;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,6 @@ import it.akademija.user.ParentDetails;
 import it.akademija.user.ParentDetailsDAO;
 import it.akademija.user.ParentDetailsDTO;
 import it.akademija.user.User;
-import it.akademija.user.UserInfo;
 import it.akademija.user.UserService;
 
 @Service
@@ -105,13 +105,15 @@ public class ApplicationService {
 				prioritiesDto.isChildIsAdopted(), prioritiesDto.isFamilyHasThreeOrMoreChildrenInSchools(),
 				prioritiesDto.isGuardianInSchool(), prioritiesDto.isGuardianDisability()));
 
+		application.setPriorities(priorities);
+		application.setPriorityScore(priorities.getScore());
+		
 		application.setSubmitedAt();
 		application.setStatus(ApplicationStatus.Pateiktas);
 		application.setChildName(data.getChildName());
 		application.setChildSurname(data.getChildSurname());
 		application.setChildPersonalCode(data.getChildPersonalCode());
-		application.setBirthdate(data.getBirthdate());
-		application.setPriorities(priorities);
+		application.setBirthdate(data.getBirthdate());		
 
 		application.setMainGuardian(firstParent);
 
@@ -159,6 +161,12 @@ public class ApplicationService {
 				}
 
 			}
+			
+			//TODO if application is approved, set number off available places to +1
+			for(KindergartenChoise choise: application.getKindergartenChoises()){
+				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(choise.getKindergarten(), calculateAgeInYears(application.getBirthdate()));
+				
+			}			
 
 			applicationDao.deleteById(id);
 			return new ResponseEntity<String>("Ištrinta sėkmingai", HttpStatus.OK);
@@ -167,12 +175,7 @@ public class ApplicationService {
 		return new ResponseEntity<String>("Prašymas nerastas", HttpStatus.NOT_FOUND);
 	}
 
-//	PERKELTI i prasymu eiles formavima
-//	private long calculateAgeInDays(LocalDate birthdate) {
-//		int thisYear = LocalDate.now().getYear();
-//		LocalDate septemberFirst = LocalDate.of(thisYear, 9, 1);
-//		return ChronoUnit.DAYS.between(birthdate, septemberFirst);
-//	}
+
 
 	/**
 	 * 
@@ -211,6 +214,21 @@ public class ApplicationService {
 		return applicationDao.findByIdContaining(childPersonalCode, pageable);
 	}
 
+	/**
+	 * 
+	 * Get child's age for this calendar year
+	 * 
+	 * @param birthdate
+	 * @return
+	 */
+	private long calculateAgeInYears(LocalDate birthdate) {
+
+		int thisYear = LocalDate.now().getYear();
+		LocalDate endOfYear = LocalDate.of(thisYear, 12, 31);
+		return ChronoUnit.YEARS.between(birthdate, endOfYear);
+	}
+	
+	
 	public ApplicationDAO getApplicationDao() {
 		return applicationDao;
 	}

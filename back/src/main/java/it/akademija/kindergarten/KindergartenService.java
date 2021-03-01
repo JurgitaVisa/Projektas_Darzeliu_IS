@@ -4,18 +4,31 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import it.akademija.application.queue.ApplicationQueue;
+import it.akademija.application.queue.ApplicationQueueDAO;
 
 @Service
 public class KindergartenService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(KindergartenService.class);
+
 	@Autowired
 	private KindergartenDAO gartenDao;
+	
+	@Autowired
+	private ApplicationQueueDAO queueDao;
+	
 
 	/**
 	 * Get all kindergarten ID's, names and addresses where capacity in any age
@@ -118,10 +131,26 @@ public class KindergartenService {
 	 * @param id
 	 */
 	@Transactional
-	public void deleteKindergarten(String id) {
+	public ResponseEntity<String> deleteKindergarten(String id) {
 
-		gartenDao.deleteById(id);
+		Kindergarten garten = gartenDao.findById(id).orElse(null);
 
+		if (garten != null) {
+			Set<ApplicationQueue> applicationQueue = garten.getApprovedApplications();
+			for (ApplicationQueue a : applicationQueue) {				
+				a.detachApplication();				
+				queueDao.saveAndFlush(a);
+			}	
+
+			gartenDao.deleteById(id);
+
+			LOG.info("** UserService: trinamas darželis ID [{}] **", id);
+			return new ResponseEntity<String>("Darželis ištrintas sėkmingai", HttpStatus.OK);
+
+		} else {
+
+			return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
+		}
 	}
 
 	/**
@@ -146,12 +175,13 @@ public class KindergartenService {
 	/**
 	 * 
 	 * Kindergarten prioritize statistics
-	 * @param pageable 
+	 * 
+	 * @param pageable
 	 * 
 	 * @return statistics
 	 */
 	public Page<KindergartenStatistics> getKindergartenStatistics(Pageable pageable) {
-		
+
 		return gartenDao.findAllChoises(pageable);
 	}
 
@@ -164,18 +194,59 @@ public class KindergartenService {
 	public void deleteByName(String name) {
 		gartenDao.deleteByName(name);
 	}
+	
+	/**
+	 * 
+	 * Set number of taken places in Kindergarten for corresponding age group by 1
+	 * 
+	 * @param garten
+	 */
+	public void decreaseNumberOfTakenPlacesInAgeGroup(Kindergarten garten, long age) {
 
-//	/**
-//	 * 
-//	 * Get one by name
-//	 * 
-//	 * @param name
-//	 * @return
-//	 */
-//	public List<Kindergarten> getOneByName(String name) {
-//
-//		return gartenDao.findByNameContainingIgnoreCase(name);
-//	}
+		if (age >= 2 && age < 3) {
+			int takenPlaces = garten.getPlacesTakenAgeGroup2to3() - 1;
+			garten.setPlacesTakenAgeGroup2to3(takenPlaces);
+		} else {
+			int takenPlaces = garten.getPlacesTakenAgeGroup3to6() - 1;
+			garten.setPlacesTakenAgeGroup3to6(takenPlaces);
+		}
+
+		gartenDao.save(garten);
+	}
+
+	/**
+	 * Increase number of taken places for specific Kindergarten age group by 1
+	 * 
+	 * @param garten
+	 * @param age
+	 */
+	public void increaseNumberOfTakenPlacesInAgeGroup(Kindergarten garten, long age) {
+
+		if (age >= 2 && age < 3) {
+			int capacity = garten.getPlacesTakenAgeGroup2to3() + 1;
+			garten.setPlacesTakenAgeGroup2to3(capacity);
+		} else {
+			int capacity = garten.getPlacesTakenAgeGroup3to6() + 1;
+			garten.setCapacityAgeGroup3to6(capacity);
+		}
+		gartenDao.save(garten);
+	}
+
+	/**
+	 * Reset number of taken places in all groups to 0
+	 * 
+	 */
+	@Transactional
+	public void resetTakenPlacesToZero() {
+		List<Kindergarten> gartenList = gartenDao.findAll();
+		for (Kindergarten k : gartenList) {
+			k.setPlacesTakenAgeGroup2to3(0);
+			k.setPlacesTakenAgeGroup3to6(0);
+		}
+
+		gartenDao.saveAll(gartenList);
+	}
+
 
 	public KindergartenDAO getGartenDao() {
 		return gartenDao;
@@ -184,5 +255,15 @@ public class KindergartenService {
 	public void setGartenDao(KindergartenDAO gartenDao) {
 		this.gartenDao = gartenDao;
 	}
+
+	public ApplicationQueueDAO getQueueDao() {
+		return queueDao;
+	}
+
+	public void setQueueDao(ApplicationQueueDAO queueDao) {
+		this.queueDao = queueDao;
+	}
+	
+	
 
 }

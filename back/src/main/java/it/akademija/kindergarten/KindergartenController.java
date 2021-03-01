@@ -149,14 +149,7 @@ public class KindergartenController {
 	public ResponseEntity<String> deleteKindergarten(
 			@ApiParam(value = "Kindergarten id", required = true) @PathVariable String id) {
 
-		if (kindergartenService.findById(id) != null) {
-
-			kindergartenService.deleteKindergarten(id);
-			LOG.info("** Usercontroller: trinamas darželis ID [{}] **", id);
-			return new ResponseEntity<String>("Darželis ištrintas sėkmingai", HttpStatus.OK);
-		}
-
-		return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
+		return kindergartenService.deleteKindergarten(id);
 	}
 
 	@Secured({ "ROLE_MANAGER" })

@@ -29,7 +29,7 @@ class UserListTable extends Component {
             content: naudotojas => {
                 if(naudotojas.isRequestingPasswordReset) {
                     return (
-                        <button onClick={() => this.props.onRestorePassword(naudotojas)} id="btnRestoreUserPassword" className="btn btn-outline-warning btn-sm btn-block"><b>Atkurti</b></button>
+                        <button onClick={() => this.props.onRestorePassword(naudotojas)} id="btnRestoreUserPassword" className="btn btn-secondary btn-sm btn-block"><b>Atkurti</b></button>
                     )
                 }
                 else {
@@ -37,7 +37,7 @@ class UserListTable extends Component {
                         <button onClick={() => this.props.onRestorePassword(naudotojas)} id="btnRestoreUserPassword" className="btn btn-outline-primary btn-sm btn-block">Atkurti</button>
                     )
                 }
-            }//<button onClick={() => this.props.onRestorePassword(naudotojas)} id="btnRestoreUserPassword" className="btn btn-outline-primary btn-sm btn-block">Atkurti</button>
+            }
         },
        
         {            
@@ -52,7 +52,6 @@ class UserListTable extends Component {
 
     render() {
         const { naudotojai } = this.props;
-        console.log(naudotojai)
         return (
             <Table
                 columns={this.columns}

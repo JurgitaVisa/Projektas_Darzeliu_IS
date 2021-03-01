@@ -131,6 +131,9 @@ export class UserListContainer extends Component {
                 http
                     .put(`${apiEndpoint}/api/users/admin/password/${username}`)
                     .then((response) => {
+                        const { currentPage, numberOfElements } = this.state;
+                        const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
+                        this.getUserInfo(page);
                         swal({
                             text: response.data,
                             button: "Gerai"

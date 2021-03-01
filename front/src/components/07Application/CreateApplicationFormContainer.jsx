@@ -82,7 +82,7 @@ class CreateApplicationFormContainer extends Component {
             name: response.data.name,
             surname: response.data.surname,
             personalCode: response.data.personalCode,
-            phone: response.data.phone.slice(3),
+            phone: response.data.phone,
             email: response.data.username,
             address: response.data.address,
             username: response.data.username,
@@ -183,9 +183,6 @@ class CreateApplicationFormContainer extends Component {
               Telefonas <span className="fieldRequired">*</span>
             </label>
             <div className="input-group">
-              <div className="input-group-prepend">
-                <div className="input-group-text">+370</div>
-              </div>
               <input
                 type="tel"
                 id="txtMainPhone"
@@ -197,7 +194,7 @@ class CreateApplicationFormContainer extends Component {
                 onInvalid={(e) => inputValidator(e)}
                 disabled={this.state.registrationEnabled}
                 required
-                pattern="[0-9]{8}"
+                pattern="[+]{1}[0-9]{10,11}"
               ></input>
             </div>
           </div>
@@ -320,9 +317,6 @@ class CreateApplicationFormContainer extends Component {
               Telefonas <span className="fieldRequired">*</span>
             </label>
             <div className="input-group">
-              <div className="input-group-prepend">
-                <div className="input-group-text">+370</div>
-              </div>
               <input
                 type="tel"
                 id="txtAdditionalPhone"
@@ -333,7 +327,7 @@ class CreateApplicationFormContainer extends Component {
                 onChange={this.additionalGuardianOnChange}
                 onInvalid={(e) => inputValidator(e)}
                 disabled={!this.state.additionalGuardianInput || this.state.registrationEnabled}
-                pattern="[0-9]{8}"
+                pattern="[+]{1}[0-9]{10,11}"
                 required
               />
             </div>

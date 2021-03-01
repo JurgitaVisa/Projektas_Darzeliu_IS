@@ -60,7 +60,7 @@ function InputValidator(event) {
             else if (target.name === "phone") {
                 if(target.value.includes('+')) {
                     if (target.validity.patternMismatch) {
-                        target.setCustomValidity("Telefono numerį sudaro 11 skaičiai, įvesta skaičių: " + (0 + target.value.length - 1))
+                        target.setCustomValidity("Telefono numerį sudaro 10 arba 11 skaičiai, įvesta skaičių: " + (0 + target.value.length - 1))
                     }
                     else {
                         target.setCustomValidity("");

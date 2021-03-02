@@ -1,7 +1,7 @@
 function InputValidator(event) {
     const target = event.target;
     
-        if (target.validity.valueMissing && target.name !== "birthdate") {
+        if (target.validity.valueMissing && target.name !== "birthdate" && target.name !== "phone") {
             target.setCustomValidity(target.placeholder + " yra privalomas laukelis")
         }
         else {
@@ -58,16 +58,21 @@ function InputValidator(event) {
                 target.setCustomValidity("");
             }
             else if (target.name === "phone") {
-                if(target.value.includes('+')) {
-                    if (target.validity.patternMismatch) {
-                        target.setCustomValidity("Telefono numerį sudaro 10 arba 11 skaičiai, įvesta skaičių: " + (0 + target.value.length - 1))
-                    }
-                    else {
-                        target.setCustomValidity("");
-                    }
+                if(target.validity.valueMissing) {
+                    target.setCustomValidity("Telefono numeris yra privalomas laukelis")
                 }
                 else {
-                    target.setCustomValidity('Formatas: +37000000000')
+                    if(target.value.includes('+')) {
+                        if (target.validity.patternMismatch) {
+                            target.setCustomValidity("Telefono numerį sudaro nuo 4 iki 19 skaičiai, įvesta skaičių: " + (0 + target.value.length - 1))
+                        }
+                        else {
+                            target.setCustomValidity("");
+                        }
+                    }
+                    else {
+                        target.setCustomValidity('Formatas: +37000000000')
+                    }
                 }
             }
             else if (target.id === "txtNewPassword" || target.id === "txtNewPasswordRepeat") {

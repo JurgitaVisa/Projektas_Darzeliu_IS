@@ -244,6 +244,7 @@ class CreateApplicationFormContainer extends Component {
             </div>
             <div className="col">
               <button
+                id="btnEnableAdditionalGuardian"
                 className="btn btn-primary btn-sm float-right"
                 style={{ padding: "4px" }}
                 onClick={(e) => {
@@ -253,6 +254,7 @@ class CreateApplicationFormContainer extends Component {
                       .additionalGuardianInput,
                   });
                 }}
+                disabled={this.state.registrationEnabled}
               >
                 {!this.state.additionalGuardianInput ? "Pridėti" : "Pašalinti"}
               </button>

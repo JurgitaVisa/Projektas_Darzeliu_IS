@@ -2,6 +2,7 @@
 package it.akademija.application;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 
@@ -97,6 +98,21 @@ public class Application {
 		this.mainGuardian = mainGuardian;
 		this.additionalGuardian = additionalGuardian;
 	}
+	
+	/**
+	 * 
+	 * Get child's age for this calendar year
+	 * 
+	 * @param birthdate
+	 * @return
+	 */
+	public long calculateAgeInYears() {
+
+		int thisYear = LocalDate.now().getYear();
+		LocalDate endOfYear = LocalDate.of(thisYear, 12, 31);
+		return ChronoUnit.YEARS.between(this.birthdate, endOfYear);
+	}
+	
 
 	public ApplicationStatus getStatus() {
 		return status;

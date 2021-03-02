@@ -32,7 +32,7 @@ class QueueProcessedTable extends Component {
             key: 'numberInWaitingList',
             path: 'numberInWaitingList',
             label: 'Laukiančiųjų eilės numeris',
-            content: application => <span> {application.choise2 ? application.choise2 : "-"} </span>
+            content: application => <span> {application.numberInWaitingList ? application.numberInWaitingList : "-"} </span>
         },       
         {            
             key: 'delete',

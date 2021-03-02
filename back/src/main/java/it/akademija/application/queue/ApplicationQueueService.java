@@ -43,7 +43,8 @@ public class ApplicationQueueService {
 		for (Application a : applications) {
 			ApplicationQueue notYetApproved = queueDao.findByChildPersonalCode(a.getChildPersonalCode());
 			if (notYetApproved != null) {
-				long age = calculateAgeInYears(a.getBirthdate());
+				
+				long age = a.calculateAgeInYears();				
 				resetToInitialState(notYetApproved, age);
 			}
 		}
@@ -55,7 +56,7 @@ public class ApplicationQueueService {
 
 		for (Application a : applications) {
 
-			long age = calculateAgeInYears(a.getBirthdate());
+			long age = a.calculateAgeInYears();			
 
 			ApplicationQueue newApplication = queueDao.findByChildPersonalCode(a.getChildPersonalCode());
 
@@ -125,21 +126,6 @@ public class ApplicationQueueService {
 		application.setNumberInWaitingList(0);
 		queueDao.save(application);
 	}
-
-	/**
-	 * 
-	 * Get child's age for this calendar year
-	 * 
-	 * @param birthdate
-	 * @return
-	 */
-	private long calculateAgeInYears(LocalDate birthdate) {
-
-		int thisYear = LocalDate.now().getYear();
-		LocalDate endOfYear = LocalDate.of(thisYear, 12, 31);
-		return ChronoUnit.YEARS.between(birthdate, endOfYear);
-	}
-
 	
 
 	/**

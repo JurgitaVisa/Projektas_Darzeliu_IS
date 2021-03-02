@@ -3,6 +3,7 @@ package it.akademija.user;
 import java.security.SecureRandom;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.akademija.application.Application;
+import it.akademija.application.ApplicationStatus;
+import it.akademija.kindergarten.KindergartenService;
 import it.akademija.role.Role;
 import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsDAO;
 import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsEntity;
@@ -26,6 +29,9 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserDAO userDao;
+
+	@Autowired
+	private KindergartenService gartenService;
 
 	@Autowired
 	private UserPasswordResetRequestsDAO userPasswordResetRequestsDAO;
@@ -96,9 +102,21 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public void deleteUser(String username) {
 
-		if (findByUsername(username).getRole().equals(Role.ADMIN) && userDao.findByRole(Role.ADMIN).size() == 1) {
+		User user = findByUsername(username);
+
+		if (user.getRole().equals(Role.ADMIN) && userDao.findByRole(Role.ADMIN).size() == 1) {
 			userDao.save(new User(Role.ADMIN, "admin", "admin", "admin@admin.lt", "admin@admin.lt",
 					encoder.encode("admin@admin.lt")));
+		} else if (user.getRole().equals(Role.USER)) {
+			Set<Application> submittedApplications = user.getUserApplications();
+
+			for (Application a : submittedApplications) {
+				if (a.getStatus().equals(ApplicationStatus.Pateiktas) && a.getApplicationQueue() != null
+						&& a.getApplicationQueue().getKindergarten() != null) {
+					gartenService.decreaseNumberOfTakenPlacesInAgeGroup(a.getApplicationQueue().getKindergarten(),
+							a.calculateAgeInYears());
+				}
+			}
 		}
 
 		userDao.deleteByUsername(username);

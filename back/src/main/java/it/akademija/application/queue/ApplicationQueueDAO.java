@@ -13,7 +13,7 @@ public interface ApplicationQueueDAO extends JpaRepository<ApplicationQueue, Lon
 
 	ApplicationQueue deleteByChildPersonalCode(String childPersonalCode);
 	
-	@Query("SELECT new it.akademija.application.queue.ApplicationQueueInfo(aq.application.id, aq.childPersonalCode, aq.childName, aq.childSurname, aq.kindergarten.name, aq.application.status, aq.numberInWaitingList) FROM ApplicationQueue aq")
+	@Query("SELECT new it.akademija.application.queue.ApplicationQueueInfo(aq.application.id, aq.childPersonalCode, aq.childName, aq.childSurname, k.name, aq.application.status, aq.numberInWaitingList) FROM ApplicationQueue aq LEFT JOIN Kindergarten k ON aq.kindergarten.id=k.id")
 	Page<ApplicationQueueInfo> findAllApplications(Pageable pageable);
 
 }

@@ -164,7 +164,7 @@ public class ApplicationService {
 			
 			//TODO if application is approved, set number off available places to +1
 			for(KindergartenChoise choise: application.getKindergartenChoises()){
-				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(choise.getKindergarten(), calculateAgeInYears(application.getBirthdate()));
+				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(choise.getKindergarten(), choise.getApplication().calculateAgeInYears());
 				
 			}			
 
@@ -212,20 +212,6 @@ public class ApplicationService {
 	public Page<ApplicationInfo> getApplicationnPageFilteredById(String childPersonalCode, Pageable pageable) {
 
 		return applicationDao.findByIdContaining(childPersonalCode, pageable);
-	}
-
-	/**
-	 * 
-	 * Get child's age for this calendar year
-	 * 
-	 * @param birthdate
-	 * @return
-	 */
-	private long calculateAgeInYears(LocalDate birthdate) {
-
-		int thisYear = LocalDate.now().getYear();
-		LocalDate endOfYear = LocalDate.of(thisYear, 12, 31);
-		return ChronoUnit.YEARS.between(birthdate, endOfYear);
 	}
 	
 	

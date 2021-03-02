@@ -34,7 +34,7 @@ export default class UpdateProfileFormContainer extends Component {
                         surname: response.data.surname,
                         personalCode: response.data.personalCode,
                         address: response.data.address,
-                        phone: response.data.phone.slice(3),
+                        phone: response.data.phone,
                         email: response.data.email,
                         username: response.data.username
                     })
@@ -167,21 +167,21 @@ export default class UpdateProfileFormContainer extends Component {
                     <div className="row form-group">
                         <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
                         <div className="input-group">
-                            <div className="input-group-prepend">
+                            {/**<div className="input-group-prepend">
                                 <div className="input-group-text">
-                                    +370
-                                    </div>
-                            </div>
+                                    +
+                                </div>
+                                </div>*/}
                             <input
                                 type="tel"
+                                className="form-control"
                                 id="txtTelNo"
                                 name="phone"
-                                placeholder="Telefono numeris"
-                                className="form-control"
                                 value={this.state.phone}
                                 onChange={this.handleChange}
                                 onInvalid={(e) => inputValidator(e)}
-                                required pattern="[0-9]{8}">
+                                placeholder="+37012345678"
+                                required pattern="[+]{1}[0-9]{4-19}">
                             </input>
                         </div>
                     </div>

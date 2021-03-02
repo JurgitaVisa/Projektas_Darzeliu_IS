@@ -92,12 +92,13 @@ class KindergartenListTable extends Component {
                                                     <input
                                                         type="number"
                                                         min="0"
+                                                        max="999"
                                                         className="form-control"
                                                         id="nmbCapacity2to3"
                                                         name="capacityAgeGroup2to3"
                                                         value={darzelis.capacityAgeGroup2to3}
                                                         onChange={(event) => onChange(event)}
-                                                        title="Negali būti mažiau nei 0"
+                                                        title="Negali būti mažiau nei 0 ir daugiau nei 999"
                                                         required
                                                     />
                                                     {errorMessages.capacityAgeGroup2to3 && <div className="text-danger">{errorMessages.capacityAgeGroup2to3}</div>}
@@ -106,12 +107,13 @@ class KindergartenListTable extends Component {
                                                     <input
                                                         type="number"
                                                         min="0"
+                                                        max="999"
                                                         className="form-control"
                                                         id="nmbCapacity3to6"
                                                         name="capacityAgeGroup3to6"
                                                         value={darzelis.capacityAgeGroup3to6}
                                                         onChange={(event) => onChange(event)}
-                                                        title="Negali būti mažiau nei 0"
+                                                        title="Negali būti mažiau nei 0 ir daugiau nei 999"
                                                         required
                                                     />
                                                     {errorMessages.capacityAgeGroup3to6 && <div className="text-danger">{errorMessages.capacityAgeGroup3to6}</div>}

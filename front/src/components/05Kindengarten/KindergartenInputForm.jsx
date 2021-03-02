@@ -79,6 +79,9 @@ function KindergartenInputForm() {
         target.setCustomValidity("Įstaigos kodą turi sudaryti 9 skaitmenys");
       if (target.id === "name")
         target.setCustomValidity("Pavadinimas turi būti 3-50 simbolių ir negali prasidėti tarpu");
+    } else if (target.validity.rangeUnderflow || target.validity.rangeOverflow) {
+      target.setCustomValidity("Negali būti mažiau nei 0 ir daugiau nei 999");
+
     } else {
       target.setCustomValidity("");
     }
@@ -86,25 +89,25 @@ function KindergartenInputForm() {
 
   const handleChange = (event) => {
     validateField(event);
-    if (event.target.name === "capacityAgeGroup2to3") {
-      setData({
-        ...data,
-        capacityAgeGroup2to3:
-          event.target.value >= 0 ? Number(event.target.value) : 0,
-      });
-    } else if (event.target.name === "capacityAgeGroup3to6") {
-      setData({
-        ...data,
-        savingError: false,
-        capacityAgeGroup3to6:
-          event.target.value >= 0 ? Number(event.target.value) : 0,
-      });
-    } else {
-      setData({
-        ...data,
-        [event.target.name]: event.target.value,
-      });
-    }
+    // if (event.target.name === "capacityAgeGroup2to3") {
+    //   setData({
+    //     ...data,
+    //     capacityAgeGroup2to3:
+    //       event.target.value >= 0 ? Number(event.target.value) : 0,
+    //   });
+    // } else if (event.target.name === "capacityAgeGroup3to6") {
+    //   setData({
+    //     ...data,
+    //     savingError: false,
+    //     capacityAgeGroup3to6:
+    //       event.target.value >= 0 ? Number(event.target.value) : 0,
+    //   });
+    // } else {
+    setData({
+      ...data,
+      [event.target.name]: event.target.value,
+    });
+    // }
   };
 
   const resetForm = (event) => {
@@ -210,6 +213,8 @@ function KindergartenInputForm() {
           <label htmlFor="capacityAgeGroup2to3">2-3 metų grupėse</label>
           <input
             type="number"
+            min="0"
+            max="999"
             className="form-control"
             name="capacityAgeGroup2to3"
             id="capacityAgeGroup2to3"
@@ -227,6 +232,8 @@ function KindergartenInputForm() {
           <label htmlFor="capacityAgeGroup3to6">3-6 metų grupėse</label>
           <input
             type="number"
+            min="0"
+            max="999"
             className="form-control"
             name="capacityAgeGroup3to6"
             id="capacityAgeGroup3to6"

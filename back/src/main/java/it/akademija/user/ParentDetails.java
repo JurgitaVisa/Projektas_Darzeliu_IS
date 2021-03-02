@@ -53,7 +53,7 @@ public class ParentDetails {
 	@Column
 	private String address;
 
-	@Pattern(regexp = "^370(?!\\s*$)[0-9\\s]{8}$|")
+	@Pattern(regexp = "^\\+(?!\\s*$)[0-9\\s]{5,20}$|")
 	@Column
 	private String phone;
 
@@ -68,7 +68,7 @@ public class ParentDetails {
 			@NotEmpty(message = "Vardas privalomas!") @Size(min = 2, max = 70) @Pattern(regexp = "^\\p{L}+(?: \\p{L}+)*$") String name,
 			@NotEmpty(message = "Pavardė privaloma!") @Size(min = 2, max = 70) @Pattern(regexp = "^\\p{L}+(?: \\p{L}+)*$") String surname,
 			@Email @NotEmpty(message = "El. paštas privalomas!") String email, String address,
-			@Pattern(regexp = "^370(?!\\s*$)[0-9\\s]{8}$|") String phone) {
+			@Pattern(regexp = "^\\+(?!\\s*$)[0-9\\s]{5,20}$|") String phone) {
 		super();
 		this.personalCode = personalCode;
 		this.name = name;
@@ -85,9 +85,9 @@ public class ParentDetails {
 	public Set<Application> getParentApplications() {
 		return parentApplications;
 	}
-	
+
 	public int removeApplication(Application application) {
-		parentApplications.remove(application);	
+		parentApplications.remove(application);
 		return parentApplications.size();
 	}
 
@@ -150,7 +150,5 @@ public class ParentDetails {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
-	
 
 }

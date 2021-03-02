@@ -54,7 +54,7 @@ export class KindergartenListContainer extends Component {
 
         let page = currentPage - 1;
 
-        page > 0 ? page = page : page = 0;
+        if (page < 0 ) page = 0;
 
         var uri = `${apiEndpoint}/api/darzeliai/manager/page?page=${page}&size=${pageSize}`;
 

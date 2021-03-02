@@ -166,7 +166,7 @@ export class KindergartenListContainer extends Component {
 
         const errorMessages = this.state.errorMessages;
 
-        if (input.validity.valueMissing || input.validity.patternMismatch) {
+        if (input.validity.valueMissing || input.validity.patternMismatch || input.validity.rangeUnderflow || input.validity.rangeOverflow) {
             errorMessages[input.name] = `*${input.title}`;
         } else {
             delete errorMessages[input.name];

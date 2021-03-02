@@ -26,7 +26,18 @@ class UserListTable extends Component {
         {            
             key: 'update',
             label: 'Pirminis slaptažodis',
-            content: naudotojas => <button onClick={() => this.props.onRestorePassword(naudotojas)} id="btnRestoreUserPassword" className="btn btn-outline-primary btn-sm btn-block">Atkurti</button>
+            content: naudotojas => {
+                if(naudotojas.isRequestingPasswordReset) {
+                    return (
+                        <button onClick={() => this.props.onRestorePassword(naudotojas)} id="btnRestoreUserPassword" className="btn btn-secondary btn-sm btn-block"><b>Atkurti</b></button>
+                    )
+                }
+                else {
+                    return (
+                        <button onClick={() => this.props.onRestorePassword(naudotojas)} id="btnRestoreUserPassword" className="btn btn-outline-primary btn-sm btn-block">Atkurti</button>
+                    )
+                }
+            }
         },
        
         {            
@@ -41,7 +52,6 @@ class UserListTable extends Component {
 
     render() {
         const { naudotojai } = this.props;
-
         return (
             <Table
                 columns={this.columns}

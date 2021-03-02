@@ -7,8 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +36,8 @@ import it.akademija.role.Role;
 @SpringBootTest(classes = { App.class,
 		UserController.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
+@TestMethodOrder(OrderAnnotation.class)
+
 @AutoConfigureMockMvc
 public class UserRESTTest {
 
@@ -48,16 +53,16 @@ public class UserRESTTest {
 	@Autowired
 	private WebApplicationContext context;
 
-	@Before
+	@BeforeAll
 	public void setup() throws Exception {
 		RestAssured.port = port;
 		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
 	}
 
-	@WithMockUser(username = "admin", roles = { "ADMIN" })
-
 	@Test
+	@Order(1)
+	@WithMockUser(username = "admin", roles = { "ADMIN" })
 	public void testPostNewUserMethod() throws Exception {
 		User newUser = new User(Role.MANAGER, "Test", "Test", "test@test.lt", null, "test@test.lt", "test@test.lt");
 
@@ -68,13 +73,6 @@ public class UserRESTTest {
 				.andExpect(status().isCreated()).andReturn();
 		assertEquals(201, postNew.getResponse().getStatus());
 
-	}
-
-	@WithMockUser(username = "admin", roles = { "ADMIN" })
-
-	@Test
-	public void testDeleteUserMethod() throws Exception {
-
 		MvcResult deleteUser = mvc.perform(delete("/api/users/admin/delete/{username}", "test@test.lt"))
 				.andExpect(status().isOk()).andReturn();
 		assertEquals(200, deleteUser.getResponse().getStatus());
@@ -82,6 +80,7 @@ public class UserRESTTest {
 	}
 
 	@Test
+	@Order(2)
 	@WithMockUser(username = "user", roles = { "USER" })
 	public void shouldRejectDeletingWhenNotAdmin() throws Exception {
 		MvcResult deleteUser = mvc.perform(delete("/api/users/admin/delete/{username}", "test@test.lt"))
@@ -89,9 +88,9 @@ public class UserRESTTest {
 		assertEquals(400, deleteUser.getResponse().getStatus());
 	}
 
-	@WithMockUser(username = "manager", roles = { "MANAGER" })
-
 	@Test
+	@Order(3)
+	@WithMockUser(username = "manager", roles = { "MANAGER" })
 	public void testGetOneUser() throws Exception {
 
 		MvcResult getOneUser = mvc.perform(get("/api/users/user", "test@test.lt")).andExpect(status().isOk())

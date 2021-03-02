@@ -3,7 +3,6 @@ package it.akademija.application;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import it.akademija.user.ParentDetails;
 import it.akademija.user.ParentDetailsDAO;
 import it.akademija.user.ParentDetailsDTO;
 import it.akademija.user.User;
-import it.akademija.user.UserInfo;
 import it.akademija.user.UserService;
 
 @Service
@@ -93,7 +91,7 @@ public class ApplicationService {
 			if (secondParent == null) {
 				secondParent = parentDetailsDao.save(
 						new ParentDetails(detailsDto.getPersonalCode(), detailsDto.getName(), detailsDto.getSurname(),
-								detailsDto.getEmail(), detailsDto.getAddress(), ("370" + detailsDto.getPhone())));
+								detailsDto.getEmail(), detailsDto.getAddress(), (detailsDto.getPhone())));
 			}
 
 			application.setAdditionalGuardian(secondParent);

@@ -51,12 +51,15 @@ export class KindergartenListContainer extends Component {
     getKindergartenInfo(currentPage, name) {
 
         const { pageSize } = this.state;
-        currentPage -= 1;
 
-        var uri = `${apiEndpoint}/api/darzeliai/manager/page?page=${currentPage}&size=${pageSize}`;
+        let page = currentPage - 1;
+
+        page > 0 ? page = page : page = 0;
+
+        var uri = `${apiEndpoint}/api/darzeliai/manager/page?page=${page}&size=${pageSize}`;
 
         if (name !== "") {
-            uri = `${apiEndpoint}/api/darzeliai/manager/page/${name}?page=${currentPage}&size=${pageSize}`;
+            uri = `${apiEndpoint}/api/darzeliai/manager/page/${name}?page=${page}&size=${pageSize}`;
 
         }
 
@@ -130,6 +133,7 @@ export class KindergartenListContainer extends Component {
                             text: response.data,
                             button: "Gerai"
                         });
+                        this.setState({searchQuery: ""});
                         this.getKindergartenInfo(page, "");
 
                     }).catch(error => {
@@ -214,13 +218,13 @@ export class KindergartenListContainer extends Component {
 
 
     render() {
-       
+
         const placeholder = "Ieškoti pagal vardą...";
 
         const { darzeliai, elderates, totalElements, pageSize, searchQuery, inEditMode, editRowId, errorMessages } = this.state;
 
         const hasErrors = Object.keys(errorMessages).length === 0 ? false : true;
-       
+
         return (
             <React.Fragment>
 

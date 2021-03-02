@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -37,9 +38,11 @@ public class Kindergarten {
 	private String elderate;
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
+	@Max(value=999, message = "Laisvų vietų skaičius negali būti didesnis už 999")
 	private int capacityAgeGroup2to3;
 
 	@Min(value = 0, message = "Laisvų vietų skaičius negali būti mažesnis už 0")
+	@Max(value=999, message = "Laisvų vietų skaičius negali būti didesnis už 999")
 	private int capacityAgeGroup3to6;
 
 	@OneToMany(mappedBy = "kindergarten", cascade = CascadeType.ALL)

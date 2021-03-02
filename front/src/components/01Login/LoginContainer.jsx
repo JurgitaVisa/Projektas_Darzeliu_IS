@@ -158,8 +158,6 @@ export const LoginContainer = () => {
             className="btn btn-primary float-right"
             id="btnLogin"
             disabled={data.loggingIn}
-            onClick={() => { return (ForgotPasswordWindow()) }}
-            formNoValidate
           >
             {data.loggingIn ? "Jungiamasi..." : "Prisijungti"}
           </button>

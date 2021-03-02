@@ -195,8 +195,8 @@ class AdminCreateUser extends Component {
                                     value={this.state.phone}
                                     onChange={this.handleChange}
                                     onInvalid={(e) => inputValidator(e)}
-                                    placeholder="Telefono numeris"
-                                    required pattern="[+]{1}[0-9]{10,11}">
+                                    placeholder="+37012345678"
+                                    required pattern="[+]{1}[0-9]{4-19}">
                                 </input>
                             </div>
                         </div>

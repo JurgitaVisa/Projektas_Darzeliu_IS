@@ -187,14 +187,14 @@ class CreateApplicationFormContainer extends Component {
                 type="tel"
                 id="txtMainPhone"
                 name="phone"
-                placeholder="Telefono numeris"
+                placeholder="+37012345678"
                 className="form-control"
                 value={this.state.mainGuardian.phone}
                 onChange={this.mainGuardianOnChange}
                 onInvalid={(e) => inputValidator(e)}
                 disabled={this.state.registrationEnabled}
                 required
-                pattern="[+]{1}[0-9]{10,11}"
+                pattern="[+]{1}[0-9]{4-19}"
               ></input>
             </div>
           </div>
@@ -321,13 +321,13 @@ class CreateApplicationFormContainer extends Component {
                 type="tel"
                 id="txtAdditionalPhone"
                 name="phone"
-                placeholder="Telefono numeris"
+                placeholder="+37012345678"
                 className="form-control"
                 value={this.state.additionalGuardian.phone}
                 onChange={this.additionalGuardianOnChange}
                 onInvalid={(e) => inputValidator(e)}
                 disabled={!this.state.additionalGuardianInput || this.state.registrationEnabled}
-                pattern="[+]{1}[0-9]{10,11}"
+                pattern="[+]{1}[0-9]{4-19}"
                 required
               />
             </div>

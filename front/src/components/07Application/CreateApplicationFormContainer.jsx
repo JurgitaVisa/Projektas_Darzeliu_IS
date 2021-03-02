@@ -194,7 +194,7 @@ class CreateApplicationFormContainer extends Component {
                 onInvalid={(e) => inputValidator(e)}
                 disabled={this.state.registrationEnabled}
                 required
-                pattern="[+]{1}[0-9]{4-19}"
+                pattern="[+]{1}[0-9]{4,19}"
               ></input>
             </div>
           </div>
@@ -329,7 +329,7 @@ class CreateApplicationFormContainer extends Component {
                 onChange={this.additionalGuardianOnChange}
                 onInvalid={(e) => inputValidator(e)}
                 disabled={!this.state.additionalGuardianInput || this.state.registrationEnabled}
-                pattern="[+]{1}[0-9]{4-19}"
+                pattern="[+]{1}[0-9]{4,19}"
                 required
               />
             </div>

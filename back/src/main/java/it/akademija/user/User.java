@@ -93,11 +93,11 @@ public class User {
 		this.username = username;
 		this.password = password;
 	}
-	
+
 	public User(Long userId, Role role, String username) {
-		this.userId=userId;
-		this.role=role;
-		this.username=username;
+		this.userId = userId;
+		this.role = role;
+		this.username = username;
 	}
 
 	public void setUserApplications(Set<Application> userApplications) {

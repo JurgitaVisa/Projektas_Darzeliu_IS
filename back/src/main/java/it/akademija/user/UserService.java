@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
 			details.setEmail(userData.getEmail());
 			details.setName(userData.getName());
 			details.setPersonalCode(userData.getPersonalCode());
-			details.setPhone("370" + userData.getPhone());
+			details.setPhone(userData.getPhone());
 			details.setSurname(userData.getSurname());
 			newUser.setParentDetails(details);
 		}
@@ -203,7 +203,7 @@ public class UserService implements UserDetailsService {
 		if (user.getRole().equals(Role.USER)) {
 			details.setAddress(userData.getAddress());
 			details.setPersonalCode(userData.getPersonalCode());
-			details.setPhone("370" + userData.getPhone());
+			details.setPhone(userData.getPhone());
 			details.setEmail(userData.getEmail());
 			details.setName(userData.getName());
 			details.setSurname(userData.getSurname());

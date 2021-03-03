@@ -190,6 +190,7 @@ public class ApplicationService {
 			if (application.getApprovedKindergarten() != null) {
 				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(application.getApprovedKindergarten(),
 						application.calculateAgeInYears());
+				application.setApprovedKindergarten(null);
 
 			}
 

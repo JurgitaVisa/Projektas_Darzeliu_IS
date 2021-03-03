@@ -25,10 +25,9 @@ public class KindergartenService {
 
 	@Autowired
 	private KindergartenDAO gartenDao;
-	
+
 	@Autowired
 	private ApplicationQueueDAO queueDao;
-	
 
 	/**
 	 * Get all kindergarten ID's, names and addresses where capacity in any age
@@ -137,10 +136,10 @@ public class KindergartenService {
 
 		if (garten != null) {
 			Set<ApplicationQueue> applicationQueue = garten.getApprovedApplications();
-			for (ApplicationQueue a : applicationQueue) {				
-				a.detachApplication();				
+			for (ApplicationQueue a : applicationQueue) {
+				a.detachApplication();
 				queueDao.saveAndFlush(a);
-			}	
+			}
 
 			gartenDao.deleteById(id);
 
@@ -194,7 +193,7 @@ public class KindergartenService {
 	public void deleteByName(String name) {
 		gartenDao.deleteByName(name);
 	}
-	
+
 	/**
 	 * 
 	 * Set number of taken places in Kindergarten for corresponding age group by 1
@@ -205,9 +204,15 @@ public class KindergartenService {
 
 		if (age >= 2 && age < 3) {
 			int takenPlaces = garten.getPlacesTakenAgeGroup2to3() - 1;
+			if (takenPlaces < 0) {
+				takenPlaces = 0;
+			}
 			garten.setPlacesTakenAgeGroup2to3(takenPlaces);
 		} else {
 			int takenPlaces = garten.getPlacesTakenAgeGroup3to6() - 1;
+			if (takenPlaces < 0) {
+				takenPlaces = 0;
+			}
 			garten.setPlacesTakenAgeGroup3to6(takenPlaces);
 		}
 
@@ -247,7 +252,6 @@ public class KindergartenService {
 		gartenDao.saveAll(gartenList);
 	}
 
-
 	public KindergartenDAO getGartenDao() {
 		return gartenDao;
 	}
@@ -263,7 +267,5 @@ public class KindergartenService {
 	public void setQueueDao(ApplicationQueueDAO queueDao) {
 		this.queueDao = queueDao;
 	}
-	
-	
 
 }

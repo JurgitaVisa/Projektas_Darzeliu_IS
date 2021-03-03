@@ -3,7 +3,6 @@ package it.akademija.application;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -25,7 +24,7 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import it.akademija.application.priorities.Priorities;
-import it.akademija.application.queue.ApplicationQueue;
+import it.akademija.kindergarten.Kindergarten;
 import it.akademija.kindergartenchoise.KindergartenChoise;
 import it.akademija.user.ParentDetails;
 import it.akademija.user.User;
@@ -80,9 +79,15 @@ public class Application {
 	@OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
 	private Set<KindergartenChoise> kindergartenChoises;
 	
-	@OneToOne(mappedBy = "application", cascade= CascadeType.ALL)
-	@JoinColumn(name="application_id")
-	private ApplicationQueue applicationQueue;
+//	@OneToOne(mappedBy = "application", cascade= CascadeType.ALL)
+//	@JoinColumn(name="application_id")
+//	private ApplicationQueue applicationQueue;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "approved_kindergarten_id")
+	private Kindergarten approvedKindergarten;
+	
+	private int numberInWaitingList;	
 
 	public Application() {
 
@@ -207,12 +212,22 @@ public class Application {
 		this.priorityScore = priorityScore;
 	}
 
-	public ApplicationQueue getApplicationQueue() {
-		return applicationQueue;
+	public Kindergarten getApprovedKindergarten() {
+		return approvedKindergarten;
 	}
 
-	public void setApplicationQueue(ApplicationQueue applicationQueue) {
-		this.applicationQueue = applicationQueue;		
-	}	
+	public void setApprovedKindergarten(Kindergarten approvedKindergarten) {
+		this.approvedKindergarten = approvedKindergarten;
+	}
+
+	public int getNumberInWaitingList() {
+		return numberInWaitingList;
+	}
+
+	public void setNumberInWaitingList(int numberInWaitingList) {
+		this.numberInWaitingList = numberInWaitingList;
+	}
+
+
 
 }

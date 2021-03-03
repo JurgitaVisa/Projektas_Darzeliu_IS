@@ -15,8 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.akademija.application.queue.ApplicationQueue;
-import it.akademija.application.queue.ApplicationQueueDAO;
+import it.akademija.application.Application;
+import it.akademija.application.ApplicationDAO;
 
 @Service
 public class KindergartenService {
@@ -27,7 +27,7 @@ public class KindergartenService {
 	private KindergartenDAO gartenDao;
 
 	@Autowired
-	private ApplicationQueueDAO queueDao;
+	private ApplicationDAO applicationDao;
 
 	/**
 	 * Get all kindergarten ID's, names and addresses where capacity in any age
@@ -135,10 +135,10 @@ public class KindergartenService {
 		Kindergarten garten = gartenDao.findById(id).orElse(null);
 
 		if (garten != null) {
-			Set<ApplicationQueue> applicationQueue = garten.getApprovedApplications();
-			for (ApplicationQueue a : applicationQueue) {
-				a.detachApplication();
-				queueDao.saveAndFlush(a);
+			Set<Application> applicationQueue = garten.getApprovedApplications();
+			for (Application a : applicationQueue) {
+				a.setApprovedKindergarten(null);
+				applicationDao.saveAndFlush(a);
 			}
 
 			gartenDao.deleteById(id);
@@ -260,12 +260,14 @@ public class KindergartenService {
 		this.gartenDao = gartenDao;
 	}
 
-	public ApplicationQueueDAO getQueueDao() {
-		return queueDao;
+	public ApplicationDAO getApplicationDao() {
+		return applicationDao;
 	}
 
-	public void setQueueDao(ApplicationQueueDAO queueDao) {
-		this.queueDao = queueDao;
+	public void setApplicationDao(ApplicationDAO applicationDao) {
+		this.applicationDao = applicationDao;
 	}
+
+	
 
 }

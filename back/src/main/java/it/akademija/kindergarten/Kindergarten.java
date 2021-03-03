@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-import it.akademija.application.queue.ApplicationQueue;
+import it.akademija.application.Application;
 import it.akademija.kindergartenchoise.KindergartenChoise;
 
 @Entity
@@ -55,8 +55,8 @@ public class Kindergarten {
 	@OneToMany(mappedBy = "kindergarten", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<KindergartenChoise> kindergartenChoises;
 	
-	@OneToMany(mappedBy = "kindergarten", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private Set<ApplicationQueue> approvedApplications;
+	@OneToMany(mappedBy = "approvedKindergarten", cascade = {CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	private Set<Application> approvedApplications;
 
 	public Kindergarten() {
 
@@ -145,11 +145,13 @@ public class Kindergarten {
 		this.kindergartenChoises = kindergartenChoises;
 	}
 	
-	public Set<ApplicationQueue> getApprovedApplications() {
+	
+
+	public Set<Application> getApprovedApplications() {
 		return approvedApplications;
 	}
 
-	public void setApprovedApplications(Set<ApplicationQueue> approvedApplications) {
+	public void setApprovedApplications(Set<Application> approvedApplications) {
 		this.approvedApplications = approvedApplications;
 	}
 

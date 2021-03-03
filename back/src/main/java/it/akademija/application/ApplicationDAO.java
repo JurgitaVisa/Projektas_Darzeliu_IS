@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import it.akademija.application.queue.ApplicationQueueInfo;
+
 public interface ApplicationDAO extends JpaRepository<Application, Long> {
 
 	boolean existsApplicationByChildPersonalCode(String childPersonalCode);
@@ -20,6 +22,10 @@ public interface ApplicationDAO extends JpaRepository<Application, Long> {
 	// get all, kurių statusas yra "Pateikta"
 	@Query("SELECT a FROM Application a WHERE a.status=0")
 	List<Application> findAllApplicationsWithStatusSubmitted();
+	
+	@Query("SELECT new it.akademija.application.queue.ApplicationQueueInfo(a.id, a.childPersonalCode, a.childName, a.childSurname, k.name, a.status, a.numberInWaitingList) FROM Application a LEFT JOIN Kindergarten k ON a.approvedKindergarten.id=k.id")
+	Page<ApplicationQueueInfo> findQueuedApplications(Pageable pageable);
+
 	
 
 }

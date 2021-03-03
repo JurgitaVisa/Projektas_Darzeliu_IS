@@ -28,9 +28,7 @@ public class ApplicationQueueService {
 
 	@Autowired
 	private KindergartenService gartenService;
-
-	@Autowired
-	private ApplicationQueueDAO queueDao;
+	
 
 	@Transactional
 	public void processApplicationsToQueue() {
@@ -40,30 +38,18 @@ public class ApplicationQueueService {
 				.collect(Collectors.toList());
 
 		// reset state for any non-approved applications
-		for (Application a : applications) {
-			ApplicationQueue notYetApproved = queueDao.findByChildPersonalCode(a.getChildPersonalCode());
-			if (notYetApproved != null) {
-				
-				long age = a.calculateAgeInYears();				
-				resetToInitialState(notYetApproved, age);
-			}
-		}
-
-		List<ApplicationQueue> applicationQueue = new ArrayList<>();
+		for (Application application : applications) {	
+			
+				long age = application.calculateAgeInYears();				
+				resetToInitialState(application, age);
+		}		
 
 		// set initial number to 0
 		int lastNumberInWaitingList = 0;
 
 		for (Application a : applications) {
 
-			long age = a.calculateAgeInYears();			
-
-			ApplicationQueue newApplication = queueDao.findByChildPersonalCode(a.getChildPersonalCode());
-
-			if (newApplication == null) {
-				newApplication = new ApplicationQueue(a.getChildPersonalCode(), a.getChildName(), a.getChildSurname());
-				newApplication.setApplication(a);
-			}
+			long age = a.calculateAgeInYears();	
 
 			List<KindergartenChoise> choises = a.getKindergartenChoises().stream()
 					.sorted(Comparator.comparing(KindergartenChoise::getKindergartenChoisePriority))
@@ -75,23 +61,23 @@ public class ApplicationQueueService {
 				int availablePlaces = getNumberOfAvailablePlaces(garten, age);
 
 				if (availablePlaces > 0) {
-					newApplication.setKindergarten(garten);
+					a.setApprovedKindergarten(garten);
 					gartenService.increaseNumberOfTakenPlacesInAgeGroup(garten, age);
 					break;
 				}
 			}
 
-			if (newApplication.getKindergarten() == null) {
+			if (a.getApprovedKindergarten() == null) {
 
 				lastNumberInWaitingList++;
-				newApplication.setNumberInWaitingList(lastNumberInWaitingList);
+				a.setNumberInWaitingList(lastNumberInWaitingList);
 			}
 
-			applicationQueue.add(newApplication);
+			applicationDao.saveAndFlush(a);
 		}
 		
 
-		queueDao.saveAll(applicationQueue);
+		
 
 	}
 	
@@ -105,7 +91,7 @@ public class ApplicationQueueService {
 	@Transactional(readOnly = true)
 	public Page<ApplicationQueueInfo> getApplicationQueueInformation(Pageable pageable) {
 		
-		return queueDao.findAllApplications(pageable);
+		return applicationDao.findQueuedApplications(pageable);
 	}
 	
 	
@@ -117,14 +103,14 @@ public class ApplicationQueueService {
 	 * @param application
 	 * @param age
 	 */
-	private void resetToInitialState(ApplicationQueue application, long age) {
-		Kindergarten garten = application.getKindergarten();
+	private void resetToInitialState(Application application, long age) {
+		Kindergarten garten = application.getApprovedKindergarten();
 		if (garten != null) {
 			gartenService.decreaseNumberOfTakenPlacesInAgeGroup(garten, age);
-			application.setKindergarten(null);
+			application.setApprovedKindergarten(null);
 		}
 		application.setNumberInWaitingList(0);
-		queueDao.save(application);
+		applicationDao.save(application);
 	}
 	
 
@@ -162,13 +148,7 @@ public class ApplicationQueueService {
 		this.gartenService = gartenService;
 	}
 
-	public ApplicationQueueDAO getQueueDao() {
-		return queueDao;
-	}
-
-	public void setQueueDao(ApplicationQueueDAO queueDao) {
-		this.queueDao = queueDao;
-	}
+	
 
 
 }

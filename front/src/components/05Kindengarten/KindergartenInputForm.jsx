@@ -89,6 +89,7 @@ function KindergartenInputForm() {
 
   const handleChange = (event) => {
     validateField(event);
+    // TODO patikrinti įvedimą
     // if (event.target.name === "capacityAgeGroup2to3") {
     //   setData({
     //     ...data,

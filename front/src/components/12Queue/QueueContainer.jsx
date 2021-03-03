@@ -54,19 +54,22 @@ export class QueueContainer extends Component {
     getApplications(currentPage, personalCode) {
 
         const { pageSize, isActive } = this.state;
-        currentPage -= 1;
+
+        let page = currentPage - 1;
+
+        if (page < 0 ) page = 0;
 
         console.log("Ar aktyvus statusas", isActive);
 
         if (isActive) {
-            var uri = `${apiEndpoint}/api/prasymai/manager?page=${currentPage}&size=${pageSize}`;
+            var uri = `${apiEndpoint}/api/prasymai/manager?page=${page}&size=${pageSize}`;
 
             if (personalCode !== "") {
                 uri = `${apiEndpoint}/api/prasymai/manager/page/${personalCode}?page=${currentPage}&size=${pageSize}`;
 
             }
         } else {
-            uri = `${apiEndpoint}/api/eile/manager/queue?page=${currentPage}&size=${pageSize}`;
+            uri = `${apiEndpoint}/api/eile/manager/queue?page=${page}&size=${pageSize}`;
 
             // if (personalCode !== "") {
             //     uri = `${apiEndpoint}/api/prasymai/manager/page/${personalCode}?page=${currentPage}&size=${pageSize}`;
@@ -193,10 +196,10 @@ export class QueueContainer extends Component {
         this.getApplications(1, personalCode);
     }
 
-    handleDelete = (item) => {
+    handleDeactivate = (item) => {
 
         swal({
-            text: "Ar tikrai norite ištrinti prašymą?",
+            text: "Ar tikrai norite deaktyvuoti prašymą?",
             buttons: ["Ne", "Taip"],
             dangerMode: true,
         }).then((actionConfirmed) => {
@@ -204,10 +207,10 @@ export class QueueContainer extends Component {
                 const id = item.id;
                 const { currentPage, numberOfElements } = this.state;
                 const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
-                console.log("Trinti prašymą", id);
+                console.log("Deaktyvuoti prašymą", id);
 
                 http
-                    .delete(`${apiEndpoint}/api/prasymai/user/delete/${id}`)
+                    .delete(`${apiEndpoint}/api/prasymai/manager/deactivate/${id}`)
                     .then((response) => {
                         swal({
                             text: response.data,
@@ -272,14 +275,14 @@ export class QueueContainer extends Component {
                     {isActive &&
                         <QueueTable
                             applications={applications}
-                            onDelete={this.handleDelete}
+                            onDeactivate={this.handleDeactivate}
                         />
                     }
 
                     {!isActive &&
                         <QueueProcessedTable
                             applications={applications}
-                            onDelete={this.handleDelete}
+                            onDeactivate={this.handleDeactivate}
                         />
                     }
 

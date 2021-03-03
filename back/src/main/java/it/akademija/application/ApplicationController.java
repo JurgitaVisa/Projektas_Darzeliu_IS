@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import it.akademija.kindergarten.Kindergarten;
 
 @RestController
 @Api(value = "application")
@@ -59,9 +57,9 @@ public class ApplicationController {
 			return new ResponseEntity<String>("Prašymas vaikui su tokiu asmens kodu jau yra registruotas",
 					HttpStatus.CONFLICT);
 
-		} else {			
+		} else {
 			LOG.info("**ApplicationController: kuriamas prasymas vaikui AK [{}] **", data.getChildPersonalCode());
-			return service.createNewApplication(currentUsername, data);			
+			return service.createNewApplication(currentUsername, data);
 		}
 	}
 
@@ -80,11 +78,10 @@ public class ApplicationController {
 
 		return service.getAllUserApplications(currentUsername);
 	}
-	
-	
+
 	/**
 	 *
-	 *  Get page of unsorted applications 
+	 * Get page of unsorted applications
 	 *
 	 * @param page
 	 * @param size
@@ -94,15 +91,14 @@ public class ApplicationController {
 	@GetMapping("/manager")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get a page from all submitted applications")
-	public Page<ApplicationInfo> getPageFromSubmittedApplications(
-			@RequestParam("page") int page,
+	public Page<ApplicationInfo> getPageFromSubmittedApplications(@RequestParam("page") int page,
 			@RequestParam("size") int size) {
-		
+
 		Pageable pageable = PageRequest.of(page, size);
 
 		return service.getPageFromSubmittedApplications(pageable);
 	}
-	
+
 	/**
 	 * Get page of unsorted applications filtered by child personal code
 	 * 
@@ -115,14 +111,14 @@ public class ApplicationController {
 	@GetMapping("/manager/page/{childPersonalCode}")
 	@ApiOperation(value = "Get a page from all submitted applications with specified child personal code")
 	public ResponseEntity<Page<ApplicationInfo>> getApplicationnPageFilteredById(@PathVariable String childPersonalCode,
-			@RequestParam("page") int page, @RequestParam("size") int size) {		
+			@RequestParam("page") int page, @RequestParam("size") int size) {
 
 		Pageable pageable = PageRequest.of(page, size);
 
 		return new ResponseEntity<>(service.getApplicationnPageFilteredById(childPersonalCode, pageable),
 				HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 
 	 * Delete user application by id
@@ -130,18 +126,36 @@ public class ApplicationController {
 	 * @param id
 	 * @return message
 	 */
-	@Secured({"ROLE_USER", "ROLE_MANAGER"})
+	@Secured({ "ROLE_USER" })
 	@DeleteMapping("/user/delete/{id}")
 	@ApiOperation("Delete user application by id")
-	public ResponseEntity<String> deleteApplication(@ApiParam(value = "Application id", required = true) @PathVariable Long id) {
-		
+	public ResponseEntity<String> deleteApplication(
+			@ApiParam(value = "Application id", required = true) @PathVariable Long id) {
+
 		LOG.info("**ApplicationController: trinamas prasymas [{}] **", id);
-				
+
 		return service.deleteApplication(id);
-		
+
 	}
-	
-	
+
+	/**
+	 * 
+	 * Manager sets user application status to inactive
+	 * 
+	 * @param id
+	 * @return message
+	 */
+	@Secured({ "ROLE_MANAGER" })
+	@DeleteMapping("/manager/deactivate/{id}")
+	@ApiOperation("Delete user application by id")
+	public ResponseEntity<String> deactivateApplication(
+			@ApiParam(value = "Application id", required = true) @PathVariable Long id) {
+
+		LOG.info("**ApplicationController: deaktyvuojamas prasymas [{}] **", id);
+
+		return service.deactivateApplication(id);
+
+	}
 
 	public ApplicationService getService() {
 		return service;

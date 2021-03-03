@@ -70,18 +70,11 @@ public class Application {
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	@JoinColumn(name = "additional_guardian_id")
-	private ParentDetails additionalGuardian;
-	// trinat application, istrinti parent details, jei jis nesusijęs su kt
-	// prašymais. atgalinio ryšio nėra?
-	// kaip jeigu jau yra toks antras tėvas? jei yra-- pridėti, jei ne-- sukurti ir
-	// pridėti
+	private ParentDetails additionalGuardian;	
 
 	@OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
-	private Set<KindergartenChoise> kindergartenChoises;
-	
-//	@OneToOne(mappedBy = "application", cascade= CascadeType.ALL)
-//	@JoinColumn(name="application_id")
-//	private ApplicationQueue applicationQueue;
+	private Set<KindergartenChoise> kindergartenChoises;	
+
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "approved_kindergarten_id")

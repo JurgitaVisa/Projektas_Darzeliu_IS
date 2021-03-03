@@ -21,8 +21,6 @@ public interface KindergartenDAO extends JpaRepository<Kindergarten, String> {
 	@Query("SELECT new Kindergarten(k.id, k.name , k.address, k.elderate, k.capacityAgeGroup2to3, k.capacityAgeGroup3to6) FROM Kindergarten k")
 	Page<Kindergarten> findAllKindergarten(Pageable pageable);
 
-	// List<Kindergarten> findByNameContainingIgnoreCase(String name);
-
 	@Query("SELECT DISTINCT(k.elderate) FROM Kindergarten k")
 	Set<String> findDistinctElderates();
 

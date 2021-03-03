@@ -24,8 +24,6 @@ public interface ApplicationDAO extends JpaRepository<Application, Long> {
 	List<Application> findAllApplicationsWithStatusSubmitted();
 	
 	@Query("SELECT new it.akademija.application.queue.ApplicationQueueInfo(a.id, a.childPersonalCode, a.childName, a.childSurname, k.name, a.status, a.numberInWaitingList) FROM Application a LEFT JOIN Kindergarten k ON a.approvedKindergarten.id=k.id")
-	Page<ApplicationQueueInfo> findQueuedApplications(Pageable pageable);
-
-	
+	Page<ApplicationQueueInfo> findQueuedApplications(Pageable pageable);	
 
 }

@@ -35,9 +35,9 @@ class QueueProcessedTable extends Component {
             content: application => <span> {application.numberInWaitingList ? application.numberInWaitingList : "-"} </span>
         },       
         {            
-            key: 'delete',
-            label: 'Ištrinti prašymą',
-            content: application => <button onClick={() => this.props.onDelete(application)} id="btnDeleteApplication" className="btn btn-outline-danger btn-sm btn-block">Ištrinti</button>
+            key: 'deactivate',
+            label: 'Deaktyvuoti prašymą',
+            content: application => <button onClick={() => this.props.onDeactivate(application)} id="btnDeactivateApplication" className="btn btn-outline-danger btn-sm btn-block">Deaktyvuoti</button>
            
         }
 

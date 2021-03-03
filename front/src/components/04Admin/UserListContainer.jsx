@@ -29,10 +29,11 @@ export class UserListContainer extends Component {
 
     getUserInfo(currentPage) {
 
-        const { pageSize } = this.state;
-        currentPage -= 1;
+        const { pageSize } = this.state;        let page = currentPage - 1;
 
-        var uri = `${apiEndpoint}/api/users/admin/allusers?page=${currentPage}&size=${pageSize}`;
+        if (page < 0 ) page = 0;
+
+        var uri = `${apiEndpoint}/api/users/admin/allusers?page=${page}&size=${pageSize}`;
 
         http.get(`${apiEndpoint}/passwordresetrequests/getAllRequests`)
         .then((response) => {

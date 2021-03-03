@@ -1,7 +1,5 @@
 package it.akademija.application;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -107,13 +105,13 @@ public class ApplicationService {
 
 		application.setPriorities(priorities);
 		application.setPriorityScore(priorities.getScore());
-		
+
 		application.setSubmitedAt();
 		application.setStatus(ApplicationStatus.Pateiktas);
 		application.setChildName(data.getChildName());
 		application.setChildSurname(data.getChildSurname());
 		application.setChildPersonalCode(data.getChildPersonalCode());
-		application.setBirthdate(data.getBirthdate());		
+		application.setBirthdate(data.getBirthdate());
 
 		application.setMainGuardian(firstParent);
 
@@ -143,7 +141,8 @@ public class ApplicationService {
 
 	/**
 	 * Delete application by id. Also deletes connected priorities, kindergarten
-	 * choises, and additional guardian who has no other applications.
+	 * choises, and additional guardian who has no other applications. Also
+	 * decreases number of taken places in approved Kindergarten if applicable.
 	 * 
 	 * @param id
 	 */
@@ -161,12 +160,12 @@ public class ApplicationService {
 				}
 
 			}
-			
-			//TODO if application is approved, set number off available places to +1
-			for(KindergartenChoise choise: application.getKindergartenChoises()){
-				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(choise.getKindergarten(), choise.getApplication().calculateAgeInYears());
-				
-			}			
+
+			if (application.getApprovedKindergarten() != null) {
+				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(application.getApprovedKindergarten(),
+						application.calculateAgeInYears());
+
+			}
 
 			applicationDao.deleteById(id);
 			return new ResponseEntity<String>("Ištrinta sėkmingai", HttpStatus.OK);
@@ -175,7 +174,31 @@ public class ApplicationService {
 		return new ResponseEntity<String>("Prašymas nerastas", HttpStatus.NOT_FOUND);
 	}
 
+	/**
+	 * Deactivate application by id. Also decreases number of taken places in
+	 * approved Kindergarten if applicable. Accessible to Manager only
+	 * 
+	 * @param id
+	 */
+	@Transactional
+	public ResponseEntity<String> deactivateApplication(Long id) {
+		Application application = applicationDao.getOne(id);
+		if (application != null) {
 
+			application.setStatus(ApplicationStatus.Neaktualus);
+
+			if (application.getApprovedKindergarten() != null) {
+				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(application.getApprovedKindergarten(),
+						application.calculateAgeInYears());
+
+			}
+
+			applicationDao.save(application);
+			return new ResponseEntity<String>("Statusas pakeistas sėkmingai", HttpStatus.OK);
+		}
+
+		return new ResponseEntity<String>("Prašymas nerastas", HttpStatus.NOT_FOUND);
+	}
 
 	/**
 	 * 
@@ -213,8 +236,7 @@ public class ApplicationService {
 
 		return applicationDao.findByIdContaining(childPersonalCode, pageable);
 	}
-	
-	
+
 	public ApplicationDAO getApplicationDao() {
 		return applicationDao;
 	}

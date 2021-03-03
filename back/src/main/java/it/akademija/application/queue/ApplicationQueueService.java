@@ -1,8 +1,5 @@
 package it.akademija.application.queue;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import it.akademija.application.Application;
 import it.akademija.application.ApplicationDAO;
 import it.akademija.kindergarten.Kindergarten;
-import it.akademija.kindergarten.KindergartenDAO;
 import it.akademija.kindergarten.KindergartenService;
 import it.akademija.kindergartenchoise.KindergartenChoise;
 

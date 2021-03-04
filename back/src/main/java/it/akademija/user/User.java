@@ -21,6 +21,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import it.akademija.application.Application;
 import it.akademija.role.Role;
 
@@ -56,6 +58,7 @@ public class User {
 	@JoinTable(name = "users_parentDetails", joinColumns = {
 			@JoinColumn(name = "users_id", referencedColumnName = "userId") }, inverseJoinColumns = {
 					@JoinColumn(name = "parentDetails_id", referencedColumnName = "parentDetailsId") })
+	@JsonIgnore
 	private ParentDetails parentDetails;
 
 	@NotEmpty

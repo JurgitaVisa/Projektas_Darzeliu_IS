@@ -20,8 +20,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.akademija.application.priorities.Priorities;
 import it.akademija.kindergarten.Kindergarten;
@@ -57,11 +58,12 @@ public class Application {
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthdate;
-	
+
 	private int priorityScore;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="priorities_id")
+	@JoinColumn(name = "priorities_id")
+	@JsonIgnore
 	private Priorities priorities;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
@@ -77,17 +79,18 @@ public class Application {
 	// pridėti
 
 	@OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private Set<KindergartenChoise> kindergartenChoises;
-	
+
 //	@OneToOne(mappedBy = "application", cascade= CascadeType.ALL)
 //	@JoinColumn(name="application_id")
 //	private ApplicationQueue applicationQueue;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "approved_kindergarten_id")
 	private Kindergarten approvedKindergarten;
-	
-	private int numberInWaitingList;	
+
+	private int numberInWaitingList;
 
 	public Application() {
 
@@ -103,7 +106,7 @@ public class Application {
 		this.mainGuardian = mainGuardian;
 		this.additionalGuardian = additionalGuardian;
 	}
-	
+
 	/**
 	 * 
 	 * Get child's age for this calendar year
@@ -117,7 +120,6 @@ public class Application {
 		LocalDate endOfYear = LocalDate.of(thisYear, 12, 31);
 		return ChronoUnit.YEARS.between(this.birthdate, endOfYear);
 	}
-	
 
 	public ApplicationStatus getStatus() {
 		return status;
@@ -149,7 +151,7 @@ public class Application {
 
 	public void setChildPersonalCode(String childPersonalCode) {
 		this.childPersonalCode = childPersonalCode;
-	}	
+	}
 
 	public LocalDate getBirthdate() {
 		return birthdate;
@@ -169,6 +171,10 @@ public class Application {
 
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public User getMainGuardian() {
@@ -201,7 +207,7 @@ public class Application {
 
 	public void setPriorities(Priorities priorities) {
 		this.priorities = priorities;
-		priorities.setApplication(this);		
+		priorities.setApplication(this);
 	}
 
 	public int getPriorityScore() {
@@ -227,7 +233,5 @@ public class Application {
 	public void setNumberInWaitingList(int numberInWaitingList) {
 		this.numberInWaitingList = numberInWaitingList;
 	}
-
-
 
 }

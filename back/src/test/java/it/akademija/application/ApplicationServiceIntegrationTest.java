@@ -1,4 +1,4 @@
-package it.akademija.user;
+package it.akademija.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,23 +13,23 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 
 @SpringBootTest
-public class UserServiceIntegrationTest {
+public class ApplicationServiceIntegrationTest {
 
 	@Autowired
-	private UserService service;
+	private ApplicationService service;
 
 	@Test
-	public void testGetUserByUsername() {
-		User userByUsername = service.findByUsername("admin@admin.lt");
-		assertThat(userByUsername).isNotNull();
+	public void testGetAllUserApplications() {
+
+		assertThat(service.getAllUserApplications("user@user.lt")).isNotNull();
 	}
 
 	@Test
-	public void testGetAllUsers() {
+	public void testGetPageFromSubtmittedApplications() {
 
 		PageRequest page = PageRequest.of(1, 10);
-		Page<UserInfo> users = service.getAllUsers(page);
-		assertThat(users).isNotNull();
+		Page<ApplicationInfo> applications = service.getPageFromSubmittedApplications(page);
+		assertThat(applications).isNotNull();
 	}
 
 }

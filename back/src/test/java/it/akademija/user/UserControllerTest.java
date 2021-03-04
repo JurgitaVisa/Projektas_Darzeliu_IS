@@ -1,4 +1,5 @@
-package it.akademija.kindergarten;
+
+package it.akademija.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,11 +14,11 @@ import it.akademija.App;
 @RunWith(SpringJUnit4ClassRunner.class)
 
 @SpringBootTest(classes = { App.class,
-		KindergartenController.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class KindergartenTest {
+		UserController.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class UserControllerTest {
 
 	@Autowired
-	private KindergartenController controller;
+	private UserController controller;
 
 	@Test
 	public void contextLoads() {

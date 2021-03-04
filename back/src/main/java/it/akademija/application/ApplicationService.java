@@ -188,11 +188,13 @@ public class ApplicationService {
 			application.setStatus(ApplicationStatus.Neaktualus);
 
 			if (application.getApprovedKindergarten() != null) {
+				
 				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(application.getApprovedKindergarten(),
 						application.calculateAgeInYears());
 				application.setApprovedKindergarten(null);
-
 			}
+			
+			application.setNumberInWaitingList(0);
 
 			applicationDao.save(application);
 			return new ResponseEntity<String>("Statusas pakeistas sėkmingai", HttpStatus.OK);

@@ -76,7 +76,7 @@ public class Application {
 	private Set<KindergartenChoise> kindergartenChoises;	
 
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "approved_kindergarten_id")
 	private Kindergarten approvedKindergarten;
 	

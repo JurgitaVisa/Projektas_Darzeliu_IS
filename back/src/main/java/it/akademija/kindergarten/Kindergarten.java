@@ -53,7 +53,7 @@ public class Kindergarten {
 	@OneToMany(mappedBy = "kindergarten", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<KindergartenChoise> kindergartenChoises;
 	
-	@OneToMany(mappedBy = "approvedKindergarten", cascade = {CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "approvedKindergarten", cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	private Set<Application> approvedApplications;
 
 	public Kindergarten() {

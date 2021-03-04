@@ -202,18 +202,22 @@ public class KindergartenService {
 	 */
 	public void decreaseNumberOfTakenPlacesInAgeGroup(Kindergarten garten, long age) {
 
-		if (age >= 2 && age < 3) {
-			int takenPlaces = garten.getPlacesTakenAgeGroup2to3() - 1;
-			if (takenPlaces < 0) {
-				takenPlaces = 0;
+		int takenPlaces = 0;
+
+		if (age >= 1 && age < 3) {
+
+			takenPlaces = garten.getPlacesTakenAgeGroup2to3() - 1;
+			if (takenPlaces > 0) {
+				garten.setPlacesTakenAgeGroup2to3(takenPlaces);
 			}
-			garten.setPlacesTakenAgeGroup2to3(takenPlaces);
-		} else {
-			int takenPlaces = garten.getPlacesTakenAgeGroup3to6() - 1;
-			if (takenPlaces < 0) {
-				takenPlaces = 0;
+			garten.setPlacesTakenAgeGroup2to3(0);
+
+		} else if (age >= 3 && age < 7) {
+			takenPlaces = garten.getPlacesTakenAgeGroup3to6() - 1;
+			if (takenPlaces > 0) {
+				garten.setPlacesTakenAgeGroup3to6(takenPlaces);
 			}
-			garten.setPlacesTakenAgeGroup3to6(takenPlaces);
+			garten.setPlacesTakenAgeGroup3to6(0);
 		}
 
 		gartenDao.save(garten);
@@ -227,11 +231,13 @@ public class KindergartenService {
 	 */
 	public void increaseNumberOfTakenPlacesInAgeGroup(Kindergarten garten, long age) {
 
-		if (age >= 2 && age < 3) {
-			int capacity = garten.getPlacesTakenAgeGroup2to3() + 1;
+		int capacity = 0;
+
+		if (age >= 1 && age < 3) {
+			capacity = garten.getPlacesTakenAgeGroup2to3() + 1;
 			garten.setPlacesTakenAgeGroup2to3(capacity);
-		} else {
-			int capacity = garten.getPlacesTakenAgeGroup3to6() + 1;
+		} else if (age >= 3 && age < 7) {
+			capacity = garten.getPlacesTakenAgeGroup3to6() + 1;
 			garten.setCapacityAgeGroup3to6(capacity);
 		}
 		gartenDao.save(garten);
@@ -267,7 +273,5 @@ public class KindergartenService {
 	public void setApplicationDao(ApplicationDAO applicationDao) {
 		this.applicationDao = applicationDao;
 	}
-
-	
 
 }

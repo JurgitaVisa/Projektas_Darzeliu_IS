@@ -212,7 +212,7 @@ public class KindergartenService {
 			}
 			garten.setPlacesTakenAgeGroup2to3(0);
 
-		} else if (age >= 3 && age < 7) {
+		} else if (age >= 3) {
 			takenPlaces = garten.getPlacesTakenAgeGroup3to6() - 1;
 			if (takenPlaces > 0) {
 				garten.setPlacesTakenAgeGroup3to6(takenPlaces);

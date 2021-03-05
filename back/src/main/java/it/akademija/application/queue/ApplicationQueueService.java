@@ -53,6 +53,10 @@ public class ApplicationQueueService {
 		int lastNumberInWaitingList = 0;
 
 		for (Application a : applications) {
+			
+			if(a.getStatus().equals(ApplicationStatus.Neaktualus)) {
+				continue;
+			}
 
 			long age = a.calculateAgeInYears();			
 

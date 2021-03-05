@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect, useReducer } from "react";
 import { Switch, Route } from "react-router-dom";
 
 import "./index.css";
 import "./App.css";
+import Spinner from "./components/08CommonComponents/Spinner"
 
 import Login from "./components/01Login/LoginContainer";
-// import Main from "./components/02Main/MainContainer";
 import NotFound from "./components/03NotFound/NotFound";
 import Admin from "./components/04Admin/AdminContainer";
 import UserListContainer from "./components/04Admin/UserListContainer";
@@ -18,66 +18,21 @@ import UserNavBar from "./components/00Navigation/UserNavBar";
 import ManagerNavBar from "./components/00Navigation/ManagerNavBar";
 
 import AuthContext from "./components/11Context/AuthContext";
-// import http from "./components/10Services/httpService";
-// import apiEndpoint from "./components/10Services/endpoint";
+import http from "./components/10Services/httpService";
+import apiEndpoint from "./components/10Services/endpoint";
 import { UserHomeContainer } from './components/02Main/UserHomeContainer';
 import { KindergartenStatContainer } from './components/09Statistics/KindergartenStatContainer';
 import { QueueContainer } from "./components/12Queue/QueueContainer";
 
 var initState = {
-  isAuthenticated: false,
+  isAuthenticated: null,
   username: null,
   role: null,
-};
-
-const checkLogin = () => {
-
-  if (sessionStorage.length > 0) {
-    initState = {
-      isAuthenticated: true,
-      username: sessionStorage.getItem("username"),
-      role: sessionStorage.getItem("role"),
-    };
-
-  } else
-    initState = {
-      isAuthenticated: false,
-      username: null,
-      role: null,
-    };
-
-  /* galima naudoti useEffect 
-
-      useEffect(() => {
-      -> /api/loggedUser 
-      return () => {
-        if prisijungęs {}
-        else {Login}
-      }
-    }, [input])
-  */
-
-  // problema su kreipimusi į serverį yra ta, kad užklausa yra asincroninė ir kol grąžinami rezultatai, 
-  // tolimesnis kodas dirba su isAuthenticated === false, nors realiai yra prisijungęs useris
-    // http
-  //   .get(`${apiEndpoint}/api/loggedUser`)
-  //   .then((resp) => {
-  //     console.log("user " + resp.data + " is logged in <- message from checkIfLoggedIn");
-  //     initState.isAuthenticated = true;
-  //     return true;
-  //   })
-  //   .catch((error) => {
-  //     console.log("deja");
-  //     initState.isAuthenticated = false;
-  //     return false;
-  //   });
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      sessionStorage.setItem("username", action.payload.username);
-      sessionStorage.setItem("role", action.payload.role);
       return {
         ...state,
         isAuthenticated: true,
@@ -85,7 +40,6 @@ const reducer = (state, action) => {
         role: action.payload.role,
       };
     case "LOGOUT":
-      sessionStorage.clear();
       return {
         ...state,
         isAuthenticated: false,
@@ -98,8 +52,30 @@ const reducer = (state, action) => {
 };
 
 function App() {
-  checkLogin();
-  const [state, dispatch] = React.useReducer(reducer, initState);
+  const [state, dispatch] = useReducer(reducer, initState);
+  console.log(state);
+
+  useEffect(() => {
+    if (state.isAuthenticated === null) {
+      console.log("pradedam nuskaityti login statusą")
+      http
+        .get(`${apiEndpoint}/api/loggedUserRole`)
+        .then((resp) => {
+          console.log("user " + resp.data + " is logged in");
+          dispatch({
+            type: "LOGIN",
+            payload: { role: resp.data },
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: "LOGOUT",
+            payload: null,
+          });
+          console.log("deja");
+        });
+    }
+  });
 
   if (state.isAuthenticated){
     switch (state.role) {
@@ -166,14 +142,15 @@ function App() {
           </AuthContext.Provider>
         );
     }
-  } else return (
-    <div>
-    <AuthContext.Provider value={{ state, dispatch }}>
-      <Login />
-    </AuthContext.Provider>
-    </div>
-  )
-  
+  } else if (state.isAuthenticated === false)
+    return (
+      <div>
+        <AuthContext.Provider value={{ state, dispatch }}>
+          <Login />
+        </AuthContext.Provider>
+      </div>
+    );
+    else return (<Spinner />);  
 }
 
 export default App;

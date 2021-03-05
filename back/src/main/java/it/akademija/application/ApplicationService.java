@@ -3,6 +3,7 @@ package it.akademija.application;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,8 +109,8 @@ public class ApplicationService {
 
 		application.setSubmitedAt();
 		application.setStatus(ApplicationStatus.Pateiktas);
-		application.setChildName(data.getChildName());
-		application.setChildSurname(data.getChildSurname());
+		application.setChildName(capitalize(data.getChildName()));
+		application.setChildSurname(capitalize(data.getChildSurname()));
 		application.setChildPersonalCode(data.getChildPersonalCode());
 		application.setBirthdate(data.getBirthdate());
 
@@ -137,6 +138,22 @@ public class ApplicationService {
 			return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
 		}
 
+	}
+
+	/**
+	 * 
+	 * capitalize first letter of string
+	 * 
+	 * @param str
+	 * @return
+	 */
+	private String capitalize(String str) {
+		if (str == null || str.isEmpty()) {
+			return str;
+		}
+
+		return Pattern.compile("\\b(.)(.*?)\\b").matcher(str)
+				.replaceAll(match -> match.group(1).toUpperCase() + match.group(2).toLowerCase());
 	}
 
 	/**
@@ -188,12 +205,12 @@ public class ApplicationService {
 			application.setStatus(ApplicationStatus.Neaktualus);
 
 			if (application.getApprovedKindergarten() != null) {
-				
+
 				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(application.getApprovedKindergarten(),
 						application.calculateAgeInYears());
 				application.setApprovedKindergarten(null);
 			}
-			
+
 			application.setNumberInWaitingList(0);
 
 			applicationDao.save(application);

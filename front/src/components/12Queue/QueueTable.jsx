@@ -50,9 +50,11 @@ class QueueTable extends Component {
         },
         {            
             key: 'deactivate',
-            label: 'Deaktyvuoti prašymą',
-            content: application => <button onClick={() => this.props.onDeactivate(application)} id="btnDeactivateApplication" className="btn btn-outline-danger btn-sm btn-block">Deaktyvuoti</button>
-           
+            label: 'Veiksmai',
+            content: application => 
+            <span>
+                {application.status === 'Neaktualus' ? <span>Neaktualus</span> : <button onClick={() => this.props.onDeactivate(application)} id="btnDeactivateApplication" className="btn btn-outline-danger btn-sm btn-block">Deaktyvuoti</button>}
+            </span>
         }
 
     ]

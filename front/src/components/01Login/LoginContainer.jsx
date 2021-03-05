@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { useHistory } from 'react-router';
 
 import '../../App.css';
 
@@ -8,17 +7,12 @@ import http from "../10Services/httpService";
 import apiEndpoint from "../10Services/endpoint";
 import AuthContext from "../11Context/AuthContext";
 import logo from "../../images/logo.png";
-import swal from "sweetalert";
 
 import ForgotPasswordWindow from "../01Login/ForgotPasswordWindow";
 
 axios.defaults.withCredentials = true;
 
 export const LoginContainer = () => {
-
-  const history = useHistory();
-
-  const { dispatch } = React.useContext(AuthContext);
 
   const initState = {
     username: "",
@@ -28,6 +22,7 @@ export const LoginContainer = () => {
   };
 
   const [data, setData] = React.useState(initState);
+  const { state, dispatch } = React.useContext(AuthContext);
 
   const handleChange = (event) => {
     validateText(event);
@@ -40,6 +35,8 @@ export const LoginContainer = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log("login handle submit")
+    console.log(state);
     setData({
       ...data,
       loginError: false,
@@ -59,11 +56,10 @@ export const LoginContainer = () => {
           type: "LOGIN",
           payload: resp.data,
         });
-        history.push("/home");
       })
       .catch((error) => {
-        console.log("Error log from Login submit", error);
-        if (error.response.status === 401) {
+        console.log(error);
+        if (state.error === 401)
           setData({
             ...data,
             loginError: true,
@@ -71,11 +67,13 @@ export const LoginContainer = () => {
             username: "",
             password: "",
           });
-        } else swal({
-          text: "Prisijungimo klaida"+ error.response.status,
-          button: "Gerai"
-        }
-        );
+          else setData({
+            ...data,
+            loginError: false,
+            loggingIn: false,
+            username: "",
+            password: "",
+          })
       });
   };
 

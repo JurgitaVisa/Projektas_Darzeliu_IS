@@ -33,12 +33,15 @@ class QueueProcessedTable extends Component {
             path: 'numberInWaitingList',
             label: 'Laukiančiųjų eilės numeris',
             content: application => <span> {application.numberInWaitingList ? application.numberInWaitingList : "-"} </span>
-        },       
-        {            
+        },
+        {
             key: 'deactivate',
-            label: 'Deaktyvuoti prašymą',
-            content: application => <button onClick={() => this.props.onDeactivate(application)} id="btnDeactivateApplication" className="btn btn-outline-danger btn-sm btn-block">Deaktyvuoti</button>
-           
+            label: 'Veiksmai',
+            content: application => 
+            <span>
+                {application.status === 'Neaktualus' ? <span></span> : <button onClick={() => this.props.onDeactivate(application)} id="btnDeactivateApplication" className="btn btn-outline-danger btn-sm btn-block">Deaktyvuoti</button>}
+            </span>
+
         }
 
     ]

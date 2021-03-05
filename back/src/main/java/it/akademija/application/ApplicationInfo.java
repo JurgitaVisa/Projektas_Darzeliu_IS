@@ -37,13 +37,14 @@ public class ApplicationInfo {
 
 	
 
-	public ApplicationInfo(Long id, String childPersonalCode, String childName, String childSurname, String choise1,
+	public ApplicationInfo(Long id, String childPersonalCode, String childName, String childSurname, ApplicationStatus status, String choise1,
 			String choise2, String choise3, String choise4, String choise5) {
 		super();
 		this.id = id;
 		this.childPersonalCode = childPersonalCode;
 		this.childName = childName;
 		this.childSurname = childSurname;
+		this.status = status;
 		this.choise1 = choise1;
 		this.choise2 = choise2;
 		this.choise3 = choise3;
@@ -101,61 +102,41 @@ public class ApplicationInfo {
 		this.status = status;
 	}
 
-
-
 	public String getChoise1() {
 		return choise1;
 	}
-
-
 
 	public void setChoise1(String choise1) {
 		this.choise1 = choise1;
 	}
 
-
-
 	public String getChoise2() {
 		return choise2;
 	}
-
-
 
 	public void setChoise2(String choise2) {
 		this.choise2 = choise2;
 	}
 
-
-
 	public String getChoise3() {
 		return choise3;
 	}
-
-
 
 	public void setChoise3(String choise3) {
 		this.choise3 = choise3;
 	}
 
-
-
 	public String getChoise4() {
 		return choise4;
 	}
-
-
 
 	public void setChoise4(String choise4) {
 		this.choise4 = choise4;
 	}
 
-
-
 	public String getChoise5() {
 		return choise5;
 	}
-
-
 
 	public void setChoise5(String choise5) {
 		this.choise5 = choise5;

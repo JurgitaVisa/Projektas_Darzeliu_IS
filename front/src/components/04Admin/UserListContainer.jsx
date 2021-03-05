@@ -86,8 +86,7 @@ export class UserListContainer extends Component {
     };
 
     handleDelete = (item) => {
-        const username = item.username;
-        console.log("Trinti naudotoja", username);
+        const username = item.username;       
 
         swal({
             text: "Ar tikrai norite ištrinti naudotoją?",
@@ -120,8 +119,7 @@ export class UserListContainer extends Component {
     }
 
     handleRestorePassword = (item) => {
-        const username = item.username;
-        console.log("Atstatyti slaptazodi naudotojui", username);
+        const username = item.username;       
 
         swal({
             text: "Ar tikrai norite atkurti pirminį slaptažodį?",

@@ -28,22 +28,21 @@ public class ApplicationQueueService {
 	private KindergartenService gartenService;
 
 	@Transactional
-	public void processApplicationsToQueue() {		
+	public void processApplicationsToQueue() {
 
-		List<Application> applications = applicationDao.findAllApplicationsWithStatusSubmitted()
-				.stream()
+		List<Application> applications = applicationDao.findAllApplicationsWithStatusSubmitted().stream()
 				.sorted(Comparator.comparing(Application::getPriorityScore).reversed()
-						.thenComparing(Application::getBirthdate).thenComparing(Application::getChildSurname))
+						.thenComparing(Application::getBirthdate).thenComparing(Application::getChildSurname, String.CASE_INSENSITIVE_ORDER))
 				.collect(Collectors.toList());
 
 		// reset state for any non-approved applications
 		for (Application application : applications) {
-			
+
 			long age = application.calculateAgeInYears();
 			if (age >= 7) {
 				application.setStatus(ApplicationStatus.Neaktualus);
 			}
-				
+
 			resetToInitialState(application, age);
 		}
 
@@ -58,7 +57,7 @@ public class ApplicationQueueService {
 				continue;
 			}
 
-			long age = a.calculateAgeInYears();			
+			long age = a.calculateAgeInYears();
 
 			List<KindergartenChoise> choises = a.getKindergartenChoises().stream()
 					.sorted(Comparator.comparing(KindergartenChoise::getKindergartenChoisePriority))
@@ -91,7 +90,7 @@ public class ApplicationQueueService {
 
 	/**
 	 * 
-	 * Get application queue
+	 * Get application queue sorted by Child surname
 	 * 
 	 * @param pageable
 	 * 
@@ -101,6 +100,21 @@ public class ApplicationQueueService {
 	public Page<ApplicationQueueInfo> getApplicationQueueInformation(Pageable pageable) {
 
 		return applicationDao.findQueuedApplications(pageable);
+	}
+
+	/**
+	 * 
+	 * Get application queue filtered by Child personal code and sorted by Child
+	 * surname
+	 * 
+	 * @param pageable
+	 * 
+	 * @return
+	 */
+	public Page<ApplicationQueueInfo> getApplicationQueueInformationFilteredByChildId(String childPersonalCode,
+			Pageable pageable) {
+		
+		return applicationDao.findQueuedApplicationsContaining(childPersonalCode, pageable);
 	}
 
 	/**

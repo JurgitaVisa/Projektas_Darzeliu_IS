@@ -57,28 +57,25 @@ export class QueueContainer extends Component {
 
         let page = currentPage - 1;
 
-        if (page < 0 ) page = 0;
-
-        console.log("Ar aktyvus statusas", isActive);
+        if (page < 0 ) page = 0;       
 
         if (isActive) {
             var uri = `${apiEndpoint}/api/prasymai/manager?page=${page}&size=${pageSize}`;
 
             if (personalCode !== "") {
-                uri = `${apiEndpoint}/api/prasymai/manager/page/${personalCode}?page=${currentPage}&size=${pageSize}`;
+                uri = `${apiEndpoint}/api/prasymai/manager/page/${personalCode}?page=${page}&size=${pageSize}`;
 
             }
         } else {
             uri = `${apiEndpoint}/api/eile/manager/queue?page=${page}&size=${pageSize}`;
 
-            // if (personalCode !== "") {
-            //     uri = `${apiEndpoint}/api/prasymai/manager/page/${personalCode}?page=${currentPage}&size=${pageSize}`;
+            if (personalCode !== "") {
+                uri = `${apiEndpoint}/api/eile/manager/queue/${personalCode}?page=${page}&size=${pageSize}`;
 
-            // }
+            }
 
         }
-
-        console.log("**URI**", uri);
+        
         if (uri) {
             http
                 .get(uri)
@@ -151,7 +148,10 @@ export class QueueContainer extends Component {
 
             http.post(`${apiEndpoint}/api/queue/process`)
                 .then((response) => {
-                    alert(response.data);
+                    swal({
+                        text: response.data,
+                        button: 'Gerai'
+                    });
                     this.setState({                       
                         currentButtonValue: buttonValue
                     }, function () {
@@ -166,7 +166,7 @@ export class QueueContainer extends Component {
 
         if (buttonValue !== this.state.currentButtonValue) {
             swal({
-                text: "Ar tikrai norite patvirtinti eiles?\nPo patvirtinimo bus automatiškai išsiųsti pranešimai globėjams.",
+                text: "DĖMESIO! Šio veiksmo negalėsite atšaukti!\n\nPo patvirtinimo bus automatiškai išsiųsti pranešimai vaiko atstovams.\nAr tikrai norite patvirtinti eiles?",
                 buttons: ["Ne", "Taip"],
                 dangerMode: true,
             }).then((actionConfirmed) => {
@@ -175,7 +175,10 @@ export class QueueContainer extends Component {
 
                     http.post(`${apiEndpoint}/api/queue/confirm`)
                         .then((response) => {
-                            alert(response.data);
+                            swal({
+                                text: response.data,
+                                button: 'Gerai'
+                            });
                             this.setState({
                                 currentButtonValue: buttonValue
                             }, function () {
@@ -189,8 +192,6 @@ export class QueueContainer extends Component {
 
     handleSearch = (e) => {
 
-        console.log(e.currentTarget.value);
-
         const personalCode = e.currentTarget.value;
         this.setState({ searchQuery: personalCode });
         this.getApplications(1, personalCode);
@@ -199,7 +200,7 @@ export class QueueContainer extends Component {
     handleDeactivate = (item) => {
 
         swal({
-            text: "Ar tikrai norite deaktyvuoti prašymą?",
+            text: "DĖMESIO! Šio veiksmo negalėsite atšaukti!\n\nAr tikrai norite deaktyvuoti prašymą?",
             buttons: ["Ne", "Taip"],
             dangerMode: true,
         }).then((actionConfirmed) => {
@@ -207,8 +208,7 @@ export class QueueContainer extends Component {
                 const id = item.id;
                 const { currentPage, numberOfElements } = this.state;
                 const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
-                console.log("Deaktyvuoti prašymą", id);
-
+               
                 http
                     .delete(`${apiEndpoint}/api/prasymai/manager/deactivate/${id}`)
                     .then((response) => {

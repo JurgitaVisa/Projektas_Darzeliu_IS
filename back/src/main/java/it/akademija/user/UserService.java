@@ -17,7 +17,6 @@ import it.akademija.application.Application;
 import it.akademija.application.ApplicationStatus;
 import it.akademija.kindergarten.KindergartenService;
 import it.akademija.role.Role;
-import it.akademija.security.PepperEncoder;
 import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsDAO;
 import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsEntity;
 

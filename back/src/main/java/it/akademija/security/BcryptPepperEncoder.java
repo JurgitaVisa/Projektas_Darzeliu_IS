@@ -2,14 +2,14 @@ package it.akademija.security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class PepperEncoder extends BCryptPasswordEncoder {
+public class BcryptPepperEncoder extends BCryptPasswordEncoder {
 
 	private String pepper;
 
 	/**
 	 * Standard constructor of BCryptPasswordEncoder. Set pepper value
 	 */
-	public PepperEncoder() {
+	public BcryptPepperEncoder() {
 		super(12);
 		this.pepper = "Red$1&Hot*5^Chilly&VI1CyDbqRrlA3dUu282";
 	}
@@ -34,6 +34,7 @@ public class PepperEncoder extends BCryptPasswordEncoder {
 	 */
 	@Override
 	public boolean matches(CharSequence rawPassword, String encodedPassword) {
+				
 		return super.matches(rawPassword + pepper, encodedPassword);
 	}
 }

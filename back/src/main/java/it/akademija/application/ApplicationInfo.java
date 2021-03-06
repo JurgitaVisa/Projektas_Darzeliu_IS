@@ -14,7 +14,7 @@ public class ApplicationInfo {
 
 	private LocalDate submitedAt;
 
-	private ApplicationStatus status;
+	private ApplicationStatus status;	
 
 	private String choise1;
 
@@ -24,18 +24,7 @@ public class ApplicationInfo {
 
 	private String choise4;
 
-	private String choise5;
-
-	public ApplicationInfo(Long id, String childName, String childSurname, LocalDate submitedAt,
-			ApplicationStatus status) {
-		this.id = id;
-		this.childName = childName;
-		this.childSurname = childSurname;
-		this.submitedAt = submitedAt;
-		this.status = status;
-	}
-
-	
+	private String choise5;	
 
 	public ApplicationInfo(Long id, String childPersonalCode, String childName, String childSurname, ApplicationStatus status, String choise1,
 			String choise2, String choise3, String choise4, String choise5) {

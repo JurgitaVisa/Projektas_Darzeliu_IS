@@ -102,7 +102,7 @@ public class RegistrationStatusController {
 
 		LOG.info("** Statuscontroller: suformuotos eilės patvirtinimas. **");
 
-		return new ResponseEntity<String>("Eilė patvirtinta", HttpStatus.OK);
+		return queueService.confirmApplicationsInQueue();
 	}
 
 	/**

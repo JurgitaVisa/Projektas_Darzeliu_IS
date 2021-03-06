@@ -23,6 +23,7 @@ import AuthContext from "./components/11Context/AuthContext";
 import { UserHomeContainer } from './components/02Main/UserHomeContainer';
 import { KindergartenStatContainer } from './components/09Statistics/KindergartenStatContainer';
 import { QueueContainer } from "./components/12Queue/QueueContainer";
+import UserDocumentContainer from "./components/13UserDocuments/UserDocumentContainer";
 
 var initState = {
   isAuthenticated: false,
@@ -151,6 +152,7 @@ function App() {
                   <Route exact path="/statistika" component={KindergartenStatContainer} />
                   <Route exact path="/prasymai/naujas" component={CreateApplicationFormContainer} />
                   <Route exact path="/profilis/atnaujinti" component={UpdateProfileFormContainer} />
+                  <Route exact path="/pazymos" component={UserDocumentContainer} />
                   <Route path="*" component={NotFound} />
                 </Switch>
               </UserNavBar>

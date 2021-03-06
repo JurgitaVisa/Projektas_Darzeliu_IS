@@ -5,13 +5,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.akademija.App;
 import it.akademija.application.Application;
+import it.akademija.application.ApplicationController;
 import it.akademija.application.ApplicationDAO;
 import it.akademija.application.ApplicationStatus;
 import it.akademija.kindergarten.Kindergarten;
@@ -20,6 +26,8 @@ import it.akademija.kindergartenchoise.KindergartenChoise;
 
 @Service
 public class ApplicationQueueService {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ApplicationQueueService.class);
 
 	@Autowired
 	private ApplicationDAO applicationDao;
@@ -32,7 +40,8 @@ public class ApplicationQueueService {
 
 		List<Application> applications = applicationDao.findAllApplicationsWithStatusSubmitted().stream()
 				.sorted(Comparator.comparing(Application::getPriorityScore).reversed()
-						.thenComparing(Application::getBirthdate).thenComparing(Application::getChildSurname, String.CASE_INSENSITIVE_ORDER))
+						.thenComparing(Application::getBirthdate)
+						.thenComparing(Application::getChildSurname, String.CASE_INSENSITIVE_ORDER))
 				.collect(Collectors.toList());
 
 		// reset state for any non-approved applications
@@ -52,8 +61,8 @@ public class ApplicationQueueService {
 		int lastNumberInWaitingList = 0;
 
 		for (Application a : applications) {
-			
-			if(a.getStatus().equals(ApplicationStatus.Neaktualus)) {
+
+			if (a.getStatus().equals(ApplicationStatus.Neaktualus)) {
 				continue;
 			}
 
@@ -75,16 +84,67 @@ public class ApplicationQueueService {
 				}
 			}
 
-			if (a.getApprovedKindergarten() == null) {
+			if (choises.size() > 0 && a.getApprovedKindergarten() == null) {
 
 				lastNumberInWaitingList++;
 				a.setNumberInWaitingList(lastNumberInWaitingList);
+				
+			} else if(choises.size()==0) {
+				
+				a.setStatus(ApplicationStatus.Neaktualus);
 			}
 
 			applicationQueue.add(a);
 		}
 
 		applicationDao.saveAll(applicationQueue);
+
+	}
+
+	/**
+	 * 
+	 * If all applications that have status submitted("Pateikta") are processed i.e.
+	 * they have either approved Kindergarten or a number in a waiting list, sets
+	 * application status to confirmed ("Patvirtintas") or waiting ("Laukiantis").
+	 * Also decreases number of available places in respective approved Kindergarten
+	 * where applicable.
+	 * 
+	 * @return message indicating whether confirmation was successful
+	 * 
+	 */
+	public ResponseEntity<String> confirmApplicationsInQueue() {
+
+		if (applicationDao.findNumberOfUnprocessedApplications() > 0) {
+
+			LOG.warn("**ApplicationQueueService: ");
+			return new ResponseEntity<String>("Nepavyko patvirtinti eilės. Pradžioje eilė turi būti suformuota.",
+					HttpStatus.METHOD_NOT_ALLOWED);
+
+		} else {
+
+			List<Application> applications = applicationDao.findAllApplicationsWithStatusSubmitted();
+
+			for (Application application : applications) {
+
+				Kindergarten garten = application.getApprovedKindergarten();
+
+				if (garten != null) {
+
+					application.setStatus(ApplicationStatus.Patvirtintas);
+					application.setApprovalDate();
+
+				} else if (application.getNumberInWaitingList() > 0) {
+
+					application.setStatus(ApplicationStatus.Laukiantis);
+				}
+			}
+
+			gartenService.decreaseNumberOfAvailablePlaces();
+
+			applicationDao.saveAll(applications);
+		}
+
+		return new ResponseEntity<String>("Eilė patvirtinta", HttpStatus.OK);
 
 	}
 
@@ -113,7 +173,7 @@ public class ApplicationQueueService {
 	 */
 	public Page<ApplicationQueueInfo> getApplicationQueueInformationFilteredByChildId(String childPersonalCode,
 			Pageable pageable) {
-		
+
 		return applicationDao.findQueuedApplicationsContaining(childPersonalCode, pageable);
 	}
 

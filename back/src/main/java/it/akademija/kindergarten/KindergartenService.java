@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.akademija.application.Application;
 import it.akademija.application.ApplicationDAO;
+import it.akademija.application.ApplicationStatus;
 
 @Service
 public class KindergartenService {
@@ -138,6 +139,13 @@ public class KindergartenService {
 			Set<Application> applicationQueue = garten.getApprovedApplications();
 			for (Application a : applicationQueue) {
 				a.setApprovedKindergarten(null);
+				
+				if(a.getKindergartenChoises().size()>1) {
+					a.setStatus(ApplicationStatus.Pateiktas);
+				} else {
+					a.setStatus(ApplicationStatus.Neaktualus);
+				}				
+				
 				applicationDao.saveAndFlush(a);
 			}
 
@@ -238,24 +246,53 @@ public class KindergartenService {
 			garten.setPlacesTakenAgeGroup2to3(capacity);
 		} else if (age >= 3 && age < 7) {
 			capacity = garten.getPlacesTakenAgeGroup3to6() + 1;
-			garten.setCapacityAgeGroup3to6(capacity);
+			garten.setPlacesTakenAgeGroup3to6(capacity);
 		}
 		gartenDao.save(garten);
 	}
 
 	/**
-	 * Reset number of taken places in all groups to 0
-	 * 
+	 * Upon approving Application queue decreases number of available places in all
+	 * Kindergartens' age groups by the number of places that were assigned as taken
+	 * during Application processing stage. Also resets number of taken in all
+	 * groups to zero.
 	 */
-	@Transactional
-	public void resetTakenPlacesToZero() {
-		List<Kindergarten> gartenList = gartenDao.findAll();
-		for (Kindergarten k : gartenList) {
-			k.setPlacesTakenAgeGroup2to3(0);
-			k.setPlacesTakenAgeGroup3to6(0);
+	public void decreaseNumberOfAvailablePlaces() {
+
+		List<Kindergarten> kindergartens = gartenDao.findAll();
+
+		for (Kindergarten garten : kindergartens) {
+
+			garten.setCapacityAgeGroup2to3(garten.getCapacityAgeGroup2to3() - garten.getPlacesTakenAgeGroup2to3());
+			garten.setCapacityAgeGroup3to6(garten.getCapacityAgeGroup3to6() - garten.getPlacesTakenAgeGroup3to6());
+			garten.setPlacesTakenAgeGroup2to3(0);
+			garten.setPlacesTakenAgeGroup3to6(0);
+
 		}
 
-		gartenDao.saveAll(gartenList);
+		gartenDao.saveAll(kindergartens);
+	}
+
+	/**
+	 * Upon deleting or deactivating an approved application, increases number of
+	 * available places in specified Kindergarten's age group.
+	 * 
+	 * @param approved kindergarten
+	 * @param child's age
+	 */
+	public void increaseNumberOfAvailablePlacesInAgeGroup(Kindergarten garten, long age) {
+		
+		int capacity = 0;
+
+		if (age >= 1 && age < 3) {
+			capacity = garten.getCapacityAgeGroup2to3() + 1;
+			garten.setCapacityAgeGroup2to3(capacity);
+		} else if (age >= 3 && age < 7) {
+			capacity = garten.getCapacityAgeGroup3to6() + 1;
+			garten.setCapacityAgeGroup3to6(capacity);
+		}
+		
+		gartenDao.save(garten);
 	}
 
 	public KindergartenDAO getGartenDao() {

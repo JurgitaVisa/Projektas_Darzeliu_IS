@@ -1,6 +1,6 @@
 package it.akademija.application;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import it.akademija.application.management.RegistrationStatusDAO;
 import it.akademija.application.management.RegistrationStatusService;
 
 @RestController
@@ -82,7 +81,7 @@ public class ApplicationController {
 	@GetMapping("/user")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get all user applications")
-	public List<ApplicationInfo> getAllUserApplications() {
+	public Set<ApplicationInfoUser> getAllUserApplications() {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -160,7 +159,7 @@ public class ApplicationController {
 	 * @return message
 	 */
 	@Secured({ "ROLE_MANAGER" })
-	@DeleteMapping("/manager/deactivate/{id}")
+	@PostMapping("/manager/deactivate/{id}")
 	@ApiOperation("Delete user application by id")
 	public ResponseEntity<String> deactivateApplication(
 			@ApiParam(value = "Application id", required = true) @PathVariable Long id) {

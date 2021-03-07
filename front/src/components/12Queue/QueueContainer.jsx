@@ -189,6 +189,7 @@ export class QueueContainer extends Component {
                                     text: error.response.data,
                                     button: "Gerai"
                                 });
+                                this.getApplications(1, "");
                             }
                             else if (error && error.response.status > 400 && error.response.status < 500)
                                 swal({

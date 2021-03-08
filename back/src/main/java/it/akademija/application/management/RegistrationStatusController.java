@@ -58,7 +58,7 @@ public class RegistrationStatusController {
 	 * 
 	 * @return registration status
 	 */
-	@Secured({ "ROLE_MANAGER" })
+	@Secured({ "ROLE_USER", "ROLE_ADMIN", "ROLE_MANAGER" })
 	@GetMapping("/status")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get application status")
@@ -102,7 +102,7 @@ public class RegistrationStatusController {
 
 		LOG.info("** Statuscontroller: suformuotos eilės patvirtinimas. **");
 
-		return new ResponseEntity<String>("Eilė patvirtinta", HttpStatus.OK);
+		return queueService.confirmApplicationsInQueue();
 	}
 
 	/**

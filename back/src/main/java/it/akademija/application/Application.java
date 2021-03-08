@@ -76,11 +76,13 @@ public class Application {
 	private Set<KindergartenChoise> kindergartenChoises;	
 
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "approved_kindergarten_id")
 	private Kindergarten approvedKindergarten;
 	
-	private int numberInWaitingList;	
+	private int numberInWaitingList;
+	
+	private LocalDate approvalDate;
 
 	public Application() {
 
@@ -221,6 +223,12 @@ public class Application {
 		this.numberInWaitingList = numberInWaitingList;
 	}
 
+	public LocalDate getApprovalDate() {
+		return approvalDate;
+	}
 
+	public void setApprovalDate() {
+		this.approvalDate = LocalDate.now();
+	}
 
 }

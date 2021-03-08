@@ -15,13 +15,6 @@ class QueueProcessedTable extends Component {
             label: 'Vaiko vardas, pavardė',
             content: application => <span> {application.childName} {application.childSurname}</span>
         },
-
-        {
-            key: 'kindergartenName',
-            path: 'kindergartenName',
-            label: 'Darželio pavadinimas',
-            content: application => <span> {application.kindergartenName ? application.kindergartenName : "-"} </span>
-        },
         {
             key: 'status',
             path: 'status',
@@ -29,16 +22,24 @@ class QueueProcessedTable extends Component {
             content: application => <span> {application.status ? application.status : "-"} </span>
         },
         {
+            key: 'kindergartenName',
+            path: 'kindergartenName',
+            label: 'Darželio pavadinimas',
+            content: application => <span> {application.kindergartenName ? application.kindergartenName : "-"} </span>
+        },       
+        {
             key: 'numberInWaitingList',
             path: 'numberInWaitingList',
             label: 'Laukiančiųjų eilės numeris',
             content: application => <span> {application.numberInWaitingList ? application.numberInWaitingList : "-"} </span>
-        },       
-        {            
+        },
+        {
             key: 'deactivate',
-            label: 'Deaktyvuoti prašymą',
-            content: application => <button onClick={() => this.props.onDeactivate(application)} id="btnDeactivateApplication" className="btn btn-outline-danger btn-sm btn-block">Deaktyvuoti</button>
-           
+            label: 'Veiksmai',
+            content: application => 
+            <span>
+                {application.status === 'Neaktualus' || application.status === 'Patvirtintas' ? <span>-</span> : <button onClick={() => this.props.onDeactivate(application)} id="btnDeactivateApplication" className="btn btn-outline-danger btn-sm btn-block">Deaktyvuoti</button>}
+            </span>
         }
 
     ]

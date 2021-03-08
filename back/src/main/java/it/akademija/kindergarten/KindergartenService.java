@@ -188,8 +188,8 @@ public class KindergartenService {
 	 * @return statistics
 	 */
 	public Page<KindergartenStatistics> getKindergartenStatistics(Pageable pageable) {
-
-		return gartenDao.findAllChoises(pageable);
+				
+		return gartenDao.findAllChoises(pageable);	
 	}
 
 	/**

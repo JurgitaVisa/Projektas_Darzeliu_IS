@@ -1,10 +1,15 @@
 package it.akademija.application.queue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -38,9 +43,11 @@ public class ApplicationQueueController {
 	public ResponseEntity<Page<ApplicationQueueInfo>> getApplicationQueueInformation(@RequestParam("page") int page,
 			@RequestParam("size") int size) {
 
-		Sort.Order order = new Sort.Order(Sort.Direction.ASC, "childSurname").ignoreCase();
+		List<Order> orders = new ArrayList<>();
+		orders.add(new Order(Direction.ASC, "childSurname").ignoreCase());
+		orders.add(new Order(Direction.ASC, "childName").ignoreCase());
 
-		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
+		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 
 		return new ResponseEntity<>(queueService.getApplicationQueueInformation(pageable), HttpStatus.OK);
 	}
@@ -57,9 +64,11 @@ public class ApplicationQueueController {
 	public ResponseEntity<Page<ApplicationQueueInfo>> getApplicationQueueInformationFilteredByChildId(
 			@PathVariable String childPersonalCode, @RequestParam("page") int page, @RequestParam("size") int size) {
 
-		Sort.Order order = new Sort.Order(Sort.Direction.ASC, "childSurname").ignoreCase();
-
-		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
+		List<Order> orders = new ArrayList<>();
+		orders.add(new Order(Direction.ASC, "childSurname").ignoreCase());
+		orders.add(new Order(Direction.ASC, "childName").ignoreCase());
+		
+		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 
 		return new ResponseEntity<>(
 				queueService.getApplicationQueueInformationFilteredByChildId(childPersonalCode, pageable),

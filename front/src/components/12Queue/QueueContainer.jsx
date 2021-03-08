@@ -16,7 +16,7 @@ export class QueueContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            applications: [],            
+            applications: [],
             pageSize: 12,
             currentPage: 1,
             totalPages: 0,
@@ -57,7 +57,7 @@ export class QueueContainer extends Component {
 
         let page = currentPage - 1;
 
-        if (page < 0 ) page = 0;       
+        if (page < 0) page = 0;
 
         if (isActive) {
             var uri = `${apiEndpoint}/api/prasymai/manager?page=${page}&size=${pageSize}`;
@@ -75,7 +75,7 @@ export class QueueContainer extends Component {
             }
 
         }
-        
+
         if (uri) {
             http
                 .get(uri)
@@ -109,8 +109,7 @@ export class QueueContainer extends Component {
     }
 
     handleClick = (e) => {
-        const buttonValue = e.currentTarget.value;
-        console.log(buttonValue);
+        const buttonValue = e.currentTarget.value;        
 
         if (buttonValue !== this.state.currentButtonValue) {
             this.resetState();
@@ -152,7 +151,7 @@ export class QueueContainer extends Component {
                         text: response.data,
                         button: 'Gerai'
                     });
-                    this.setState({                       
+                    this.setState({
                         currentButtonValue: buttonValue
                     }, function () {
                         this.getApplications(1, "");
@@ -184,6 +183,19 @@ export class QueueContainer extends Component {
                             }, function () {
                                 this.getApplications(1, "");
                             });
+                        }).catch((error) => {
+                            if (error && error.response.status === 405) {
+                                swal({
+                                    text: error.response.data,
+                                    button: "Gerai"
+                                });
+                                this.getApplications(1, "");
+                            }
+                            else if (error && error.response.status > 400 && error.response.status < 500)
+                                swal({
+                                    text: "Veiksmas neleidžiamas",
+                                    button: "Gerai"
+                                });
                         });
                 }
             })
@@ -208,9 +220,9 @@ export class QueueContainer extends Component {
                 const id = item.id;
                 const { currentPage, numberOfElements } = this.state;
                 const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
-               
+
                 http
-                    .delete(`${apiEndpoint}/api/prasymai/manager/deactivate/${id}`)
+                    .post(`${apiEndpoint}/api/prasymai/manager/deactivate/${id}`)
                     .then((response) => {
                         swal({
                             text: response.data,
@@ -219,7 +231,12 @@ export class QueueContainer extends Component {
                         this.getApplications(page, "");
 
                     }).catch(error => {
-                        if (error && error.response.status > 400 && error.response.status < 500)
+                        if (error && error.response.status === 405) {
+                            swal({
+                                text: "Įvyko klaida. " +error.response.data,
+                                button: "Gerai"
+                            });
+                        } else if (error && error.response.status > 400 && error.response.status < 500)
                             swal({
                                 text: "Veiksmas neleidžiamas",
                                 button: "Gerai"

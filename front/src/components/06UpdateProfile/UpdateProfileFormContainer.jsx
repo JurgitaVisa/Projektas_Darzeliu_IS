@@ -279,10 +279,10 @@ export default class UpdateProfileFormContainer extends Component {
                             />
                         </div>
                         <div className="row">
-                            <label htmlFor="txtNewPassword">Įveskite naują slaptažodį</label>
+                            <label htmlFor="txtNewPassword">Įveskite naują slaptažodį  <span className="fieldRequired">*</span></label>
                         </div>
                         <div className="row form-group">
-                            <p className="fieldRequired">Slaptažodis turi būti ne mažiau 8 simbolių ilgio, turėti bent vieną didžiąją ir mažąją raides ir bent vieną skaičių.</p>
+                            <p className="text-primary">Dėmesio! Slaptažodis turi būti ne mažiau 8 simbolių ilgio, turėti bent vieną didžiąją ir mažąją raides ir bent vieną skaičių.</p>
                             <input
                                 type="password"
                                 id="txtNewPassword"
@@ -297,7 +297,7 @@ export default class UpdateProfileFormContainer extends Component {
                             />
                         </div>
                         <div className="row form-group">
-                            <label htmlFor="txtRepeatNewPassword">Pakartokite naują slaptažodį</label>
+                            <label htmlFor="txtRepeatNewPassword">Pakartokite naują slaptažodį  <span className="fieldRequired">*</span></label>
                             <input
                                 type="password"
                                 id="txtNewPasswordRepeat"
@@ -384,13 +384,13 @@ export default class UpdateProfileFormContainer extends Component {
                         </form>
                     </div>
                     <div className="row">
-                        <h6 className="py-3"><b>Naudotojo prisijungimai</b></h6>
+                        <h6 className="py-3"><b>Naudotojo prisijungimo informacija</b></h6>
                     </div>
                     <div className="row">
-                        <div className="col">
+                        <div className="col-3 pl-0">
                             <p>Naudotojo vardas</p>
                         </div>
-                        <div className="col-10">
+                        <div className="col-9">
                             <p>{this.state.username}</p>
                         </div>
                     </div>

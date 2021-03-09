@@ -1,20 +1,19 @@
 import React from "react";
 import axios from "axios";
-import {useHistory} from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
-import '../../App.css';
+import "../../App.css";
 
-import http from "../10Services/httpService";
 import apiEndpoint from "../10Services/endpoint";
 import AuthContext from "../11Context/AuthContext";
 import logo from "../../images/logo.png";
+import swal from "sweetalert";
 
 import ForgotPasswordWindow from "../01Login/ForgotPasswordWindow";
 
 axios.defaults.withCredentials = true;
 
 export const LoginContainer = () => {
-
   const initState = {
     username: "",
     password: "",
@@ -25,6 +24,42 @@ export const LoginContainer = () => {
   const [data, setData] = React.useState(initState);
   const { state, dispatch } = React.useContext(AuthContext);
   const history = useHistory();
+
+  const loginInstance = axios.create();
+
+  loginInstance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const expectedError =
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status < 500;
+      if (!expectedError) {
+        console.log("Logging unexpected error", error);
+        swal("Įvyko klaida, puslapis nurodytu adresu nepasiekiamas");
+        dispatch({
+          type: "ERROR",
+          payload: null,
+        });
+        setData({
+          ...data,
+          loginError: false,
+          loggingIn: false,
+          username: "",
+          password: "",
+        });
+      } else if (error.response && error.response.status === 401) {
+        console.log(error.response.status);
+        setData({
+          ...data,
+          loginError: true,
+          loggingIn: false,
+          username: "",
+          password: "",
+        });
+      }
+    } 
+  );
 
   const handleChange = (event) => {
     validateText(event);
@@ -37,7 +72,7 @@ export const LoginContainer = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("login handle submit")
+    console.log("login handle submit");
     console.log(state);
     setData({
       ...data,
@@ -47,7 +82,7 @@ export const LoginContainer = () => {
     let userData = new URLSearchParams();
     userData.append("username", data.username);
     userData.append("password", data.password);
-    http
+    loginInstance
       .post(`${apiEndpoint}/login`, userData, {
         headers: { "Content-type": "application/x-www-form-urlencoded" },
       })
@@ -58,42 +93,23 @@ export const LoginContainer = () => {
           type: "LOGIN",
           payload: resp.data,
         });
-        history.push("/home")
+        history.push("/home");
       })
-      .catch((error) => {
-        console.log(error.response.status);
-        if (error.response.status === 401)
-          setData({
-            ...data,
-            loginError: true,
-            loggingIn: false,
-            username: "",
-            password: "",
-          });
-          else setData({
-            ...data,
-            loginError: false,
-            loggingIn: false,
-            username: "",
-            password: "",
-          })
-      });
+     .catch(error => error)
   };
 
   const validateText = (event) => {
     const target = event.target;
 
     if (target.validity.valueMissing && target.id === "username") {
-      console.log("target.id=username? -> " + target.id)
+      console.log("target.id=username? -> " + target.id);
       target.setCustomValidity("Būtina įvesti naudotojo prisijungimo vardą");
     } else if (target.validity.valueMissing && target.id === "password") {
-      console.log("target.id=password? -> " + target.id)
+      console.log("target.id=password? -> " + target.id);
       target.setCustomValidity("Būtina įvesti slaptažodį");
-    }
-    else {
+    } else {
       target.setCustomValidity("");
     }
-
   };
 
   return (
@@ -147,8 +163,10 @@ export const LoginContainer = () => {
           <button
             type="button"
             className="btn btn-link"
-            style={{paddingLeft: "0px"}}
-            onClick={() => {return(ForgotPasswordWindow())}}
+            style={{ paddingLeft: "0px" }}
+            onClick={() => {
+              return ForgotPasswordWindow();
+            }}
             formNoValidate
           >
             Pamiršau slaptažodį
@@ -162,10 +180,13 @@ export const LoginContainer = () => {
           >
             {data.loggingIn ? "Jungiamasi..." : "Prisijungti"}
           </button>
-
         </form>
         {data.loginError && (
-          <span className="alert alert-danger mt-3" role="alert" id="incorrectLoginData">
+          <span
+            className="alert alert-danger mt-3"
+            role="alert"
+            id="incorrectLoginData"
+          >
             Neteisingas prisijungimo vardas ir/arba slaptažodis!
           </span>
         )}

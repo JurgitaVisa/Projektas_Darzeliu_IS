@@ -52,7 +52,6 @@ const reducer = (state, action) => {
         error: null,
       };
     case "ERROR":
-      console.log("Klaidos kodas: " + action.payload);
       return {
         ...state,
         isAuthenticated: false,
@@ -67,15 +66,12 @@ const reducer = (state, action) => {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initState);
-  console.log(state);
 
   useEffect(() => {
     if (state.isAuthenticated === null) {
-      console.log("pradedam nuskaityti login statusą");
       http
         .get(`${apiEndpoint}/api/loggedUserRole`)
         .then((resp) => {
-          console.log("user " + resp.data + " is logged in");
           dispatch({
             type: "LOGIN",
             payload: { role: resp.data },
@@ -102,7 +98,6 @@ function App() {
   }, [state.isAuthenticated]);
 
   if (state.isAuthenticated) {
-    console.log("autentifikuotas")
     switch (state.role) {
       case "ADMIN":
         return (

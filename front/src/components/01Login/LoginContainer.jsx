@@ -22,7 +22,7 @@ export const LoginContainer = () => {
   };
 
   const [data, setData] = React.useState(initState);
-  const { state, dispatch } = React.useContext(AuthContext);
+  const { dispatch } = React.useContext(AuthContext);
   const history = useHistory();
 
   const loginInstance = axios.create();
@@ -35,7 +35,6 @@ export const LoginContainer = () => {
         error.response.status >= 400 &&
         error.response.status < 500;
       if (!expectedError) {
-        console.log("Logging unexpected error", error);
         swal("Įvyko klaida, puslapis nurodytu adresu nepasiekiamas");
         dispatch({
           type: "ERROR",
@@ -50,7 +49,6 @@ export const LoginContainer = () => {
         });
       } else if (error.response) {
        if (error.response.status === 401) {
-        console.log(error.response.status);
         setData({
           ...data,
           loginError: true,
@@ -59,7 +57,6 @@ export const LoginContainer = () => {
           password: "",
         });
       } else if (error.response.status === 403){
-        console.log(error.response.status);
         swal("Prieiga uždrausta")
         setData({
           ...data,
@@ -84,8 +81,6 @@ export const LoginContainer = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("login handle submit");
-    console.log(state);
     setData({
       ...data,
       loginError: false,
@@ -99,25 +94,21 @@ export const LoginContainer = () => {
         headers: { "Content-type": "application/x-www-form-urlencoded" },
       })
       .then((resp) => {
-        console.log("user " + resp.data.username + " logged in <- from Login");
-        console.log(resp);
         dispatch({
           type: "LOGIN",
           payload: resp.data,
         });
         history.push("/home");
       })
-     .catch(error => error)
+     .catch(() => {})
   };
 
   const validateText = (event) => {
     const target = event.target;
 
     if (target.validity.valueMissing && target.id === "username") {
-      console.log("target.id=username? -> " + target.id);
       target.setCustomValidity("Būtina įvesti naudotojo prisijungimo vardą");
     } else if (target.validity.valueMissing && target.id === "password") {
-      console.log("target.id=password? -> " + target.id);
       target.setCustomValidity("Būtina įvesti slaptažodį");
     } else {
       target.setCustomValidity("");

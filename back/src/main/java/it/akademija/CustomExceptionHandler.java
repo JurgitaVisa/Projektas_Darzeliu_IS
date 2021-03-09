@@ -23,7 +23,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	 * error = new ErrorResponse("Neteisingi duomenys!", details); return new
 	 * ResponseEntity(error, HttpStatus.BAD_REQUEST); }
 	 */
-
 	/*
 	 * @ExceptionHandler(RecordNotFoundException.class) public final
 	 * ResponseEntity<Object> handleUserNotFoundException(RecordNotFoundException

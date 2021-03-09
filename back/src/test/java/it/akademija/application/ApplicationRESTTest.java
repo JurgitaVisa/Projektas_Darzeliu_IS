@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -32,17 +32,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.RestAssured;
 
 import it.akademija.App;
+import it.akademija.application.management.RegistrationStatus;
+import it.akademija.application.management.RegistrationStatusController;
+import it.akademija.application.management.RegistrationStatusDAO;
 import it.akademija.application.priorities.PrioritiesDTO;
 import it.akademija.kindergartenchoise.KindergartenChoiseDTO;
 import it.akademija.user.UserDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 
-@SpringBootTest(classes = { App.class,
-		ApplicationController.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
+@SpringBootTest(classes = { App.class, ApplicationController.class,
+		RegistrationStatusController.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(OrderAnnotation.class)
-
 @AutoConfigureMockMvc
 public class ApplicationRESTTest {
 
@@ -64,16 +65,33 @@ public class ApplicationRESTTest {
 	@MockBean
 	private ApplicationDAO applicationDAO;
 
-	@BeforeAll
+	@MockBean
+	private RegistrationStatusDAO statusDAO;
+
+	@Before
 	public void setup() throws Exception {
 		RestAssured.port = port;
 		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-
 	}
 
 	@Test
 	@Order(1)
-	@WithMockUser(username = "useris@user.lt", roles = { "USER" })
+	@WithMockUser(username = "manager@manager.lt", roles = { "MANAGER" })
+	public void testChangeStatusMethod() throws Exception {
+
+		RegistrationStatus status = new RegistrationStatus();
+		status.setStatus(true);
+		statusDAO.save(status);
+
+		MvcResult changeStatus = mvc.perform(post("/api/status/{status}", status)).andExpect(status().isOk())
+				.andReturn();
+		assertEquals(200, changeStatus.getResponse().getStatus());
+
+	}
+
+	@Test
+	@Order(2)
+	@WithMockUser(username = "user@user.lt", roles = { "USER" })
 	public void testPostDeleteApplicationMethod() throws Exception {
 
 		PrioritiesDTO priorities = new PrioritiesDTO();
@@ -81,7 +99,7 @@ public class ApplicationRESTTest {
 		KindergartenChoiseDTO choices = new KindergartenChoiseDTO();
 		choices.setKindergartenId1("190031797");
 		UserDTO mainGuardian = new UserDTO("USER", "user", "user", "12345678988", "Address 1", "+37061398876",
-				"useris@user.lt", "useris@user.lt", "useris@user.lt");
+				"user@user.lt", "user@user.lt", "user@user.lt");
 
 		ApplicationDTO application = new ApplicationDTO();
 		application.setChildName("test");
@@ -103,8 +121,8 @@ public class ApplicationRESTTest {
 	}
 
 	@Test
-	@Order(2)
-	@WithMockUser(username = "manager@manager.lt", roles = { "MANAGER" })
+	@Order(3)
+	@WithMockUser(username = "user@user.lt", roles = { "USER" })
 	public void testDeleteApplicationMethod() throws Exception {
 
 		Application application = new Application();
@@ -118,7 +136,7 @@ public class ApplicationRESTTest {
 	}
 
 	@Test
-	@Order(3)
+	@Order(4)
 	@WithMockUser(username = "user@user.lt", roles = { "USER" })
 	public void testGetAllUserApplications() throws Exception {
 

@@ -10,14 +10,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -36,8 +34,6 @@ import it.akademija.role.Role;
 
 @SpringBootTest(classes = { App.class,
 		UserController.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
-@TestMethodOrder(OrderAnnotation.class)
 
 @AutoConfigureMockMvc
 public class UserRESTTest {

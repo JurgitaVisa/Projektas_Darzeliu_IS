@@ -4,22 +4,9 @@ import AuthContext from "../11Context/AuthContext";
 import swal from "sweetalert";
 import axios from 'axios';
 
-const CommonErrorHandler = () => {
+const CommonErrorHandler = ({children}) => {
     const history = useHistory();
     const { dispatch } = React.useContext(AuthContext);
-
-    const loginInstance = axios.create();
-
-    loginInstance.interceptors.response.use(response => response, async(error) => {
-        const expectedError = error.response && error.response.status >= 400 && error.response.status < 500;
-        if (!expectedError) {
-            console.log("Logging unexpected error", error);
-            swal('Įvyko klaida, puslapis nurodytu adresu nepasiekiamas');
-            dispatch({
-                type: "ERROR",
-                payload: null
-            })
-    }});
     
     React.useMemo(() => {
         axios.interceptors.response.use(response => response, async(error) => {
@@ -50,7 +37,7 @@ const CommonErrorHandler = () => {
             if (history.location.pathname !== "/login") history.push("/login")
         });
     }, [dispatch, history])
-    // return children;
+    return children;
 }
 
 export default CommonErrorHandler

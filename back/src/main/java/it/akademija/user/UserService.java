@@ -214,9 +214,9 @@ public class UserService implements UserDetailsService {
 	public User updateUserData(UserDTO userData, String username) {
 
 		User user = findByUsername(username);
-		ParentDetails details = user.getParentDetails();
 
 		if (user.getRole().equals(Role.USER)) {
+			ParentDetails details = user.getParentDetails();
 			details.setAddress(userData.getAddress());
 			details.setPersonalCode(userData.getPersonalCode());
 			details.setPhone(userData.getPhone());

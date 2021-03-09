@@ -88,12 +88,10 @@ public class UserController {
 	@Secured({ "ROLE_ADMIN" })
 	@GetMapping(path = "/admin/allusers")
 	@ApiOperation(value = "Show all users", notes = "Showing all users")
-	public Page<UserInfo> getAllUsers(
-			@RequestParam("page") int page, 
-			  @RequestParam("size") int size) {	
-		
+	public Page<UserInfo> getAllUsers(@RequestParam("page") int page, @RequestParam("size") int size) {
+
 		Sort.Order order = new Sort.Order(Sort.Direction.DESC, "userId");
-						
+
 		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
 
 		return userService.getAllUsers(pageable);
@@ -153,7 +151,7 @@ public class UserController {
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
 	@PutMapping(path = "/update")
 	@ApiOperation(value = "Update logged in user details")
-	public ResponseEntity<String> updateUserData(@RequestBody UserDTO userData) {
+	public ResponseEntity<String> updateUserData(@Valid @RequestBody UserDTO userData) {
 
 		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 		userService.updateUserData(userData, currentUserName);

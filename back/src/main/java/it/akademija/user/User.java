@@ -156,7 +156,10 @@ public class User {
 	}
 
 	public void setParentDetails(ParentDetails parentDetails) {
-		parentDetails.setUser(this);
+		if (parentDetails != null) {
+			parentDetails.setUser(this);
+		}
+
 		this.parentDetails = parentDetails;
 	}
 

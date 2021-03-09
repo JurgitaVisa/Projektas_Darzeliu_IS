@@ -8,12 +8,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,6 +34,7 @@ import it.akademija.App;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = { App.class,
 		KindergartenController.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(OrderAnnotation.class)
 @AutoConfigureMockMvc
 class KindergartenRESTTest {
 
@@ -45,6 +50,12 @@ class KindergartenRESTTest {
 	@Autowired
 	private WebApplicationContext context;
 
+	@MockBean
+	private KindergartenService kindergartenService;
+
+	@MockBean
+	private KindergartenDAO kindergartenDAO;
+
 	@Before
 	public void setUp() throws Exception {
 		RestAssured.port = port;
@@ -52,8 +63,9 @@ class KindergartenRESTTest {
 
 	}
 
-	@WithMockUser(username = "manager", roles = { "MANAGER" })
 	@Test
+	@Order(1)
+	@WithMockUser(username = "manager", roles = { "MANAGER" })
 	public void testKindergartenControllerGetMethodsAccessibleForManager() throws Exception {
 		MvcResult getAll = mvc.perform(get("/api/darzeliai")).andExpect(status().isOk()).andReturn();
 		assertEquals(200, getAll.getResponse().getStatus());
@@ -64,9 +76,11 @@ class KindergartenRESTTest {
 
 	}
 
-	@WithMockUser(username = "manager", roles = { "MANAGER" })
 	@Test
-	public void testPostNewKindergartenMethod() throws Exception {
+	@Order(2)
+	@WithMockUser(username = "manager", roles = { "MANAGER" })
+
+	public void testPostDeleteNewKindergartenMethod() throws Exception {
 		Kindergarten newKindergarten = new Kindergarten("111111111", "Test", "Test", "Test", 10, 10);
 
 		String jsonRequest = mapper.writeValueAsString(newKindergarten);
@@ -74,12 +88,6 @@ class KindergartenRESTTest {
 		MvcResult postNew = mvc.perform(post("/api/darzeliai/manager/createKindergarten").content(jsonRequest)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
 		assertEquals(200, postNew.getResponse().getStatus());
-
-	}
-
-	@WithMockUser(username = "manager", roles = { "MANAGER" })
-	@Test
-	public void testDeleteKindergartenMethod() throws Exception {
 
 		MvcResult deleteOne = mvc.perform(delete("/api/darzeliai/manager/delete/{id}", "111111111"))
 				.andExpect(status().isOk()).andReturn();

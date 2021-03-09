@@ -1,8 +1,10 @@
 package it.akademija.application;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import it.akademija.application.priorities.Priorities;
 import it.akademija.application.priorities.PrioritiesDAO;
 import it.akademija.application.priorities.PrioritiesDTO;
+import it.akademija.journal.JournalService;
+import it.akademija.journal.ObjectType;
+import it.akademija.journal.OperationType;
 import it.akademija.kindergarten.Kindergarten;
 import it.akademija.kindergarten.KindergartenService;
 import it.akademija.kindergartenchoise.KindergartenChoise;
@@ -45,6 +50,9 @@ public class ApplicationService {
 
 	@Autowired
 	private KindergartenChoiseDAO choiseDao;
+	
+	@Autowired
+	private JournalService journalService;
 
 	/**
 	 * 
@@ -127,8 +135,15 @@ public class ApplicationService {
 
 		} else {
 			application.setKindergartenChoises(choises);
-			applicationDao.saveAndFlush(application);
+			
+			application = applicationDao.saveAndFlush(application);
+			
+//			applicationDao.saveAndFlush(application);
 
+//			JournalTest
+			
+			journalService.newJournalEntry(LocalDate.now(), OperationType.APPLICATION_SUBMITED, application.getId(), ObjectType.APPLICATION, "Sukurtas naujas prašymas");
+			
 			return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
 		}
 

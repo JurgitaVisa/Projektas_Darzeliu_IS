@@ -206,7 +206,7 @@ function KindergartenInputForm() {
           </select>
         </div>
         <h6 className="py-3">
-          <b>Vietų skaičius </b>
+          <b>Laisvų vietų skaičius </b>
           <span className="fieldRequired">*</span>
         </h6>
         <div className="form-group">

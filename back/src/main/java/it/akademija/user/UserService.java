@@ -1,6 +1,5 @@
 package it.akademija.user;
 
-import java.security.SecureRandom;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -11,7 +10,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +33,8 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private UserPasswordResetRequestsDAO userPasswordResetRequestsDAO;
 
-	int strength = 12;
-
-	private PasswordEncoder encoder = new BCryptPasswordEncoder(strength, new SecureRandom());
+	@Autowired
+	private PasswordEncoder encoder;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -246,5 +243,15 @@ public class UserService implements UserDetailsService {
 	public void setUserDao(UserDAO userDao) {
 		this.userDao = userDao;
 	}
+
+	public PasswordEncoder getEncoder() {
+		return encoder;
+	}
+
+	public void setEncoder(PasswordEncoder encoder) {
+		this.encoder = encoder;
+	}
+
+	
 
 }

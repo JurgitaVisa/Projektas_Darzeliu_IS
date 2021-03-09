@@ -2,10 +2,8 @@ package it.akademija.application;
 
 import java.time.LocalDate;
 
-import it.akademija.application.priorities.Priorities;
 import it.akademija.application.priorities.PrioritiesDTO;
 import it.akademija.kindergartenchoise.KindergartenChoiseDTO;
-import it.akademija.user.ParentDetails;
 import it.akademija.user.ParentDetailsDTO;
 import it.akademija.user.UserDTO;
 

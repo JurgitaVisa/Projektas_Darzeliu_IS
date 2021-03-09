@@ -73,12 +73,9 @@ public class Application {
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	@JoinColumn(name = "additional_guardian_id")
 	private ParentDetails additionalGuardian;
-	// trinat application, istrinti parent details, jei jis nesusijęs su kt
-	// prašymais. atgalinio ryšio nėra?
-	// kaip jeigu jau yra toks antras tėvas? jei yra-- pridėti, jei ne-- sukurti ir
-	// pridėti
 
 	@OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+
 	@JsonIgnore
 	private Set<KindergartenChoise> kindergartenChoises;
 
@@ -86,11 +83,13 @@ public class Application {
 //	@JoinColumn(name="application_id")
 //	private ApplicationQueue applicationQueue;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	private int numberInWaitingList;
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "approved_kindergarten_id")
 	private Kindergarten approvedKindergarten;
 
-	private int numberInWaitingList;
+	private LocalDate approvalDate;
 
 	public Application() {
 
@@ -232,6 +231,14 @@ public class Application {
 
 	public void setNumberInWaitingList(int numberInWaitingList) {
 		this.numberInWaitingList = numberInWaitingList;
+	}
+
+	public LocalDate getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate() {
+		this.approvalDate = LocalDate.now();
 	}
 
 }

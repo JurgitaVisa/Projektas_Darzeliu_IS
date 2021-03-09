@@ -38,7 +38,7 @@ export class UserHomeContainer extends Component {
     }
 
     handleDelete = (item) => {
-        console.log("Trinti prašymą", item);
+       
         swal({
             text: "Ar tikrai norite ištrinti prašymą?",
             buttons: ["Ne", "Taip"],
@@ -46,8 +46,7 @@ export class UserHomeContainer extends Component {
         }).then((actionConfirmed) => {
             if (actionConfirmed) {
                 http.delete(`${apiEndpoint}/api/prasymai/user/delete/${item.id}`)
-                    .then((response) => {
-                        console.log(response);
+                    .then((response) => {                       
                         swal({
                             text: response.data,
                             button: "Gerai"
@@ -76,7 +75,7 @@ export class UserHomeContainer extends Component {
                 <h6 className="pl-2 pt-3">Mano prašymai</h6>
 
                 <div className="row pt-2">
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-9">
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12">
                         <UserApplicationsTable
                             applications={this.state.applications}
                             onDelete={this.handleDelete}

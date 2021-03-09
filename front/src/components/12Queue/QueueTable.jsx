@@ -48,11 +48,18 @@ class QueueTable extends Component {
             label: '5 darželio prioritetas',
             content: application => <span> {application.choise5 ? application.choise5 : "-"} </span>
         },
-        {            
-            key: 'delete',
-            label: 'Ištrinti prašymą',
-            content: application => <button onClick={() => this.props.onDelete(application)} id="btnDeleteApplication" className="btn btn-outline-danger btn-sm btn-block">Ištrinti</button>
-           
+        {
+            key: 'status',
+            label: 'Statusas',
+            content: application => <span>{application.status}</span>
+        },
+        {
+            key: 'deactivate',
+            label: 'Veiksmai',
+            content: application =>
+                <span>
+                    {application.status === 'Neaktualus' || application.status === 'Patvirtintas' ? <span>-</span> : <button onClick={() => this.props.onDeactivate(application)} id="btnDeactivateApplication" className="btn btn-outline-danger btn-sm btn-block">Deaktyvuoti</button>}
+                </span>
         }
 
     ]

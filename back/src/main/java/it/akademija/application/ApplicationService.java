@@ -1,12 +1,8 @@
 package it.akademija.application;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,12 +54,9 @@ public class ApplicationService {
 	 * @return list of user applications
 	 */
 	@Transactional(readOnly = true)
-	public List<ApplicationInfo> getAllUserApplications(String currentUsername) {
+	public Set<ApplicationInfoUser> getAllUserApplications(String currentUsername) {
 
-		Set<Application> applications = userService.getUserApplications(currentUsername);
-
-		return applications.stream().map(appl -> new ApplicationInfo(appl.getId(), appl.getChildName(),
-				appl.getChildSurname(), appl.getSubmitedAt(), appl.getStatus())).collect(Collectors.toList());
+		return applicationDao.findAllUserApplications(currentUsername);
 	}
 
 	/**
@@ -107,13 +100,13 @@ public class ApplicationService {
 
 		application.setPriorities(priorities);
 		application.setPriorityScore(priorities.getScore());
-		
+
 		application.setSubmitedAt();
 		application.setStatus(ApplicationStatus.Pateiktas);
-		application.setChildName(data.getChildName());
-		application.setChildSurname(data.getChildSurname());
+		application.setChildName(capitalize(data.getChildName()));
+		application.setChildSurname(capitalize(data.getChildSurname()));
 		application.setChildPersonalCode(data.getChildPersonalCode());
-		application.setBirthdate(data.getBirthdate());		
+		application.setBirthdate(data.getBirthdate());
 
 		application.setMainGuardian(firstParent);
 
@@ -142,14 +135,34 @@ public class ApplicationService {
 	}
 
 	/**
+	 * 
+	 * capitalize first letter of string
+	 * 
+	 * @param str
+	 * @return
+	 */
+	private String capitalize(String str) {
+		if (str == null || str.isEmpty()) {
+			return str;
+		}
+
+		return Pattern.compile("\\b(.)(.*?)\\b").matcher(str)
+				.replaceAll(match -> match.group(1).toUpperCase() + match.group(2).toLowerCase());
+	}
+
+	/**
 	 * Delete application by id. Also deletes connected priorities, kindergarten
-	 * choises, and additional guardian who has no other applications.
+	 * choises, and additional guardian who has no other applications. Also
+	 * decreases number of taken places in approved Kindergarten if applicable.
 	 * 
 	 * @param id
+	 * @return message indicating whether deletion was successful
 	 */
 	@Transactional
 	public ResponseEntity<String> deleteApplication(Long id) {
+
 		Application application = applicationDao.getOne(id);
+
 		if (application != null) {
 
 			ParentDetails additionalGuardian = application.getAdditionalGuardian();
@@ -159,23 +172,77 @@ public class ApplicationService {
 				if (numberOfAdditionalGuardianApplications == 0) {
 					parentDetailsDao.delete(additionalGuardian);
 				}
-
 			}
-			
-			//TODO if application is approved, set number off available places to +1
-			for(KindergartenChoise choise: application.getKindergartenChoises()){
-				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(choise.getKindergarten(), choise.getApplication().calculateAgeInYears());
-				
-			}			
+
+			long age = application.calculateAgeInYears();
+
+			if (age < 7) {
+
+				ApplicationStatus status = application.getStatus();
+
+				if (status.equals(ApplicationStatus.Pateiktas)) {
+
+					Kindergarten garten = application.getApprovedKindergarten();
+
+					if (garten != null) {
+
+						gartenService.decreaseNumberOfTakenPlacesInAgeGroup(garten, age);
+					}
+
+				} else if (status.equals(ApplicationStatus.Patvirtintas)) {
+
+					Kindergarten garten = application.getApprovedKindergarten();
+
+					gartenService.increaseNumberOfAvailablePlacesInAgeGroup(garten, age);
+
+				}
+			}
 
 			applicationDao.deleteById(id);
+
 			return new ResponseEntity<String>("Ištrinta sėkmingai", HttpStatus.OK);
 		}
 
 		return new ResponseEntity<String>("Prašymas nerastas", HttpStatus.NOT_FOUND);
 	}
 
+	/**
+	 * Deactivate application by id. Also decreases number of taken places in
+	 * approved Kindergarten if applicable. Accessible to Manager only
+	 * 
+	 * @param id
+	 */
+	@Transactional
+	public ResponseEntity<String> deactivateApplication(Long id) {
 
+		Application application = applicationDao.getOne(id);
+
+		if (application == null) {
+
+			return new ResponseEntity<String>("Prašymas nerastas", HttpStatus.NOT_FOUND);
+
+		} else if (application.getStatus().equals(ApplicationStatus.Patvirtintas)) {
+
+			return new ResponseEntity<String>("Veiksmas negalimas. Prašymas jau patvirtintas.", HttpStatus.METHOD_NOT_ALLOWED);
+
+		} else {
+			
+			application.setStatus(ApplicationStatus.Neaktualus);
+
+			if (application.getApprovedKindergarten() != null) {
+
+				gartenService.decreaseNumberOfTakenPlacesInAgeGroup(application.getApprovedKindergarten(),
+						application.calculateAgeInYears());
+				application.setApprovedKindergarten(null);
+			}
+
+			application.setNumberInWaitingList(0);
+
+			applicationDao.save(application);
+			return new ResponseEntity<String>("Statusas pakeistas sėkmingai", HttpStatus.OK);
+		}
+
+	}
 
 	/**
 	 * 
@@ -213,8 +280,7 @@ public class ApplicationService {
 
 		return applicationDao.findByIdContaining(childPersonalCode, pageable);
 	}
-	
-	
+
 	public ApplicationDAO getApplicationDao() {
 		return applicationDao;
 	}

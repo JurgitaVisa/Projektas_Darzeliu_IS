@@ -4,4 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DocumentDAO extends JpaRepository<DocumentEntity, Long> {
 
+	DocumentEntity getDocumentById(long id);
+	
 }

@@ -1,5 +1,7 @@
 package it.akademija.document;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +35,15 @@ public class DocumentController {
 	
 	@Secured("ROLE_USER")
 	@GetMapping(path = "/document/{id}")
-	public Optional<DocumentEntity> getDocumentById(@ApiParam(value = "id") @PathVariable Long id) {
-		return documentService.getDocumentById(id);
+	public byte[] getDocumentById(@ApiParam(value = "id") @PathVariable Long id) {
+		return documentService.getDocumentById(id).getData();
+		//return new ByteArrayInputStream(documentService.getDocumentById(id).getData());
 	}
 	
 	@Secured("ROLE_USER")
 	@PostMapping(path = "/upload")
 	public ResponseEntity<String> UploadDocument(@RequestParam("file") MultipartFile file, @RequestParam("name") String name) {
-		if(documentService.uploadDocument(file, userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUserId())) {
+		if(documentService.uploadDocument(file, name, userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUserId())) {
 			return new ResponseEntity<String>("Dokumentas buvo ikeltas sekmingai", HttpStatus.CREATED);
 		}
 		else {

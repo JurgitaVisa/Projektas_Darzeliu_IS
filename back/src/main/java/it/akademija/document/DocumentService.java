@@ -1,6 +1,6 @@
 package it.akademija.document;
 
-import java.util.Optional;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,15 +14,21 @@ public class DocumentService {
 	DocumentDAO documentDao;
 	
 	@Transactional
-	public Optional<DocumentEntity> getDocumentById(Long id) {
-		return documentDao.findById(id);
+	public DocumentEntity getDocumentById(Long id) {
+		DocumentEntity doc = documentDao.getDocumentById(id);
+		if(doc != null) {
+			return doc;
+		}
+		else {
+			return null;
+		}
 	}
 	
 	@Transactional
-	public Boolean uploadDocument(MultipartFile file, long uploaderId) {
-		if(file.getSize()<=128000) {
+	public Boolean uploadDocument(MultipartFile file, String name, long uploaderId) {
+		if(file.getSize()<=128000 && file.getContentType().equals("application/pdf")) {
 			try {
-				DocumentEntity doc = new DocumentEntity(file.getName(), file.getContentType(), file.getBytes(), uploaderId);
+				DocumentEntity doc = new DocumentEntity(name, file.getContentType(), file.getBytes(), file.getSize(), uploaderId, LocalDate.now());
 				documentDao.save(doc);
 			} catch(Exception e) {
 				e.printStackTrace();
@@ -33,5 +39,6 @@ public class DocumentService {
 			return false;
 		}
 	}
+	
 	
 }

@@ -1,5 +1,7 @@
 package it.akademija.document;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,29 +24,36 @@ public class DocumentEntity {
 	private String type;
 	
 	@Column
-	private String size;
+	private long size;
 	
 	@Lob
 	private byte[] data;
-
+	
 	@Column
 	private long uploaderId;
 	
-	public DocumentEntity(Long id, String name, String type, byte[] data, long uploaderId) {
+	@Column
+	private LocalDate uploadDate;
+	
+	public DocumentEntity(Long id, String name, String type, byte[] data, long size, long uploaderId, LocalDate uploadDate) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.data = data;
+		this.size = size;
 		this.uploaderId = uploaderId;
+		this.uploadDate = uploadDate;
 	}
 	
-	public DocumentEntity(String name, String type, byte[] data, long uploaderId) {
+	public DocumentEntity(String name, String type, byte[] data, long size, long uploaderId, LocalDate uploadDate) {
 		super();
 		this.name = name;
 		this.type = type;
 		this.data = data;
+		this.size = size;
 		this.uploaderId = uploaderId;
+		this.uploadDate = uploadDate;
 	}
 
 	public DocumentEntity() {
@@ -83,12 +92,28 @@ public class DocumentEntity {
 		this.data = data;
 	}
 
-	public String getSize() {
+	public long getSize() {
 		return size;
 	}
 
-	public void setSize(String size) {
+	public void setSize(long size) {
 		this.size = size;
+	}
+
+	public long getUploaderId() {
+		return uploaderId;
+	}
+
+	public void setUploaderId(long uploaderId) {
+		this.uploaderId = uploaderId;
+	}
+
+	public LocalDate getUploadDate() {
+		return uploadDate;
+	}
+
+	public void setUploadDate(LocalDate uploadDate) {
+		this.uploadDate = uploadDate;
 	}
 	
 	

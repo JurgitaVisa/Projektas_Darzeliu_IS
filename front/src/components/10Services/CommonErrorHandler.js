@@ -1,11 +1,9 @@
 import React from 'react';
-import { useHistory } from 'react-router';
 import AuthContext from "../11Context/AuthContext";
 import swal from "sweetalert";
 import axios from 'axios';
 
 const CommonErrorHandler = ({children}) => {
-    const history = useHistory();
     const { dispatch } = React.useContext(AuthContext);
     
     React.useMemo(() => {
@@ -28,15 +26,14 @@ const CommonErrorHandler = ({children}) => {
                 console.log("iš klaidų gaudyklės")
                 console.log(error.response.status)
             } else if (error.response.status === 403) {
-                swal('Nepasiekiamas')
+                swal('Prieiga uždrausta')
                 dispatch({
                     type: "ERROR",
                     payload: error.response.status
                 })
             }
-            if (history.location.pathname !== "/login") history.push("/login")
         });
-    }, [dispatch, history])
+    }, [dispatch])
     return children;
 }
 

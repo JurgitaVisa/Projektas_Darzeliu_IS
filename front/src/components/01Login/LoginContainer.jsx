@@ -48,7 +48,8 @@ export const LoginContainer = () => {
           username: "",
           password: "",
         });
-      } else if (error.response && error.response.status === 401) {
+      } else if (error.response) {
+       if (error.response.status === 401) {
         console.log(error.response.status);
         setData({
           ...data,
@@ -57,7 +58,18 @@ export const LoginContainer = () => {
           username: "",
           password: "",
         });
+      } else if (error.response.status === 403){
+        console.log(error.response.status);
+        swal("Prieiga uždrausta")
+        setData({
+          ...data,
+          loginError: false,
+          loggingIn: false,
+          username: "",
+          password: "",
+        });
       }
+    }
     } 
   );
 

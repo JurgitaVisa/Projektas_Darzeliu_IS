@@ -221,14 +221,12 @@ function App() {
     return (
       <div>
         <AuthContext.Provider value={{ state, dispatch }}>
-          {/* <CommonErrorHandler> */}
             <Switch>
                <Route exact path="/login" component={Login} />
                 <Route path="*">
                   <Redirect to="/login" />
                 </Route> 
             </Switch>
-          {/* </CommonErrorHandler> */}
         </AuthContext.Provider>
       </div>
     );}

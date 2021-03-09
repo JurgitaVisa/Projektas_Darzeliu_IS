@@ -3,7 +3,6 @@ package it.akademija.application;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -25,7 +24,7 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import it.akademija.application.priorities.Priorities;
-import it.akademija.application.queue.ApplicationQueue;
+import it.akademija.kindergarten.Kindergarten;
 import it.akademija.kindergartenchoise.KindergartenChoise;
 import it.akademija.user.ParentDetails;
 import it.akademija.user.User;
@@ -71,18 +70,19 @@ public class Application {
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	@JoinColumn(name = "additional_guardian_id")
-	private ParentDetails additionalGuardian;
-	// trinat application, istrinti parent details, jei jis nesusijęs su kt
-	// prašymais. atgalinio ryšio nėra?
-	// kaip jeigu jau yra toks antras tėvas? jei yra-- pridėti, jei ne-- sukurti ir
-	// pridėti
+	private ParentDetails additionalGuardian;	
 
 	@OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
-	private Set<KindergartenChoise> kindergartenChoises;
+	private Set<KindergartenChoise> kindergartenChoises;	
+
 	
-	@OneToOne(mappedBy = "application", cascade= CascadeType.ALL)
-	@JoinColumn(name="application_id")
-	private ApplicationQueue applicationQueue;
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@JoinColumn(name = "approved_kindergarten_id")
+	private Kindergarten approvedKindergarten;
+	
+	private int numberInWaitingList;
+	
+	private LocalDate approvalDate;
 
 	public Application() {
 
@@ -207,12 +207,28 @@ public class Application {
 		this.priorityScore = priorityScore;
 	}
 
-	public ApplicationQueue getApplicationQueue() {
-		return applicationQueue;
+	public Kindergarten getApprovedKindergarten() {
+		return approvedKindergarten;
 	}
 
-	public void setApplicationQueue(ApplicationQueue applicationQueue) {
-		this.applicationQueue = applicationQueue;		
-	}	
+	public void setApprovedKindergarten(Kindergarten approvedKindergarten) {
+		this.approvedKindergarten = approvedKindergarten;
+	}
+
+	public int getNumberInWaitingList() {
+		return numberInWaitingList;
+	}
+
+	public void setNumberInWaitingList(int numberInWaitingList) {
+		this.numberInWaitingList = numberInWaitingList;
+	}
+
+	public LocalDate getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate() {
+		this.approvalDate = LocalDate.now();
+	}
 
 }

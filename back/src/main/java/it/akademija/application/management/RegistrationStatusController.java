@@ -1,15 +1,11 @@
 package it.akademija.application.management;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import it.akademija.application.queue.ApplicationQueueInfo;
 import it.akademija.application.queue.ApplicationQueueService;
 
 @RestController
@@ -41,6 +36,7 @@ public class RegistrationStatusController {
 	 * 
 	 * @return registration status
 	 */
+	@Secured({ "ROLE_MANAGER" })
 	@PostMapping("/status/{status}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Set application status")
@@ -62,6 +58,7 @@ public class RegistrationStatusController {
 	 * 
 	 * @return registration status
 	 */
+	@Secured({ "ROLE_USER", "ROLE_ADMIN", "ROLE_MANAGER" })
 	@GetMapping("/status")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get application status")
@@ -74,23 +71,70 @@ public class RegistrationStatusController {
 
 	}
 
+	/**
+	 * Start queue processing
+	 * 
+	 * @return message
+	 */
+
+	@Secured({ "ROLE_MANAGER" })
 	@PostMapping("/queue/process")
 	@ApiOperation(value = "Process queue")
 	public ResponseEntity<String> processQueue() {
 		
 		queueService.processApplicationsToQueue();
 
+		LOG.info("** Statuscontroller: pradedamas eilių formavimas. **");
+
 		return new ResponseEntity<String>("Eilė suformuota", HttpStatus.OK);
 	}
 
+	/**
+	 * Confirm queue
+	 * 
+	 * @return message
+	 */
+
+	@Secured({ "ROLE_MANAGER" })
 	@PostMapping("/queue/confirm")
 	@ApiOperation(value = "Confirm queue")
 	public ResponseEntity<String> confirmQueue() {
 
-		// queueService.confirmQueue();
+		LOG.info("** Statuscontroller: suformuotos eilės patvirtinimas. **");
 
-		return new ResponseEntity<String>("Eilė patvirtinta", HttpStatus.OK);
+		return queueService.confirmApplicationsInQueue();
+	}
 
+	/**
+	 * Lock queue editing for Manager
+	 * 
+	 * @return message
+	 */
+
+	@Secured({ "ROLE_ADMIN" })
+	@PostMapping("/queue/lock")
+	@ApiOperation(value = "Lock queue editing for Manager")
+	public ResponseEntity<String> lockQueueEditing() {
+
+		LOG.info("** Statuscontroller: užrakinamas prašymų iš eilių trynimas. **");
+
+		return new ResponseEntity<String>("Eilės redagavimas užrakintas", HttpStatus.OK);
+	}
+
+	/**
+	 * Unlock queue editing for Manager
+	 * 
+	 * @return message
+	 */
+
+	@Secured({ "ROLE_ADMIN" })
+	@PostMapping("/queue/unlock")
+	@ApiOperation(value = "Unlock queue editing for Manager")
+	public ResponseEntity<String> unlockQueueEditing() {
+
+		LOG.info("** Statuscontroller: atrakinamas prašymų iš eilių trynimas. **");
+
+		return new ResponseEntity<String>("Eilės redagavimas atrakintas", HttpStatus.OK);
 	}
 
 	public RegistrationStatusService getStatusService() {

@@ -2,5 +2,5 @@ package it.akademija.application;
 
 public enum ApplicationStatus {
 
-	Pateiktas, Patvirtintas, Neaktualus
+	Pateiktas, Patvirtintas, Neaktualus, Laukiantis
 }

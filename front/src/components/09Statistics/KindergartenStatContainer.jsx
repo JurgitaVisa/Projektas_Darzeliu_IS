@@ -68,7 +68,7 @@ export class KindergartenStatContainer extends Component {
                 <h6 className="pl-2 pt-3">Prašymų statistika</h6>
 
                 <div className="row pt-2">
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-9">
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12">
 
                         <KindergartenStatTable
                             darzeliai={darzeliai}

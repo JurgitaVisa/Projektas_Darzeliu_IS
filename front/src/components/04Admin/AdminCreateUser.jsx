@@ -303,18 +303,18 @@ class AdminCreateUser extends Component {
                     <h6 className="py-3"><b>Naudotojo prisijungimai</b></h6>
 
                     <div className="row">
-                        <div className="col-7">
+                        <div className="col-12">
                             <p><b>Naudotojo vardas</b></p>
                         </div>
-                        <div className="col-6">
+                        <div className="col-12">
                             <p>{this.state.email}</p>
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-7">
+                        <div className="col-12">
                             <p><b>Slaptažodis</b></p>
                         </div>
-                        <div className="col-6">
+                        <div className="col-12">
                             <p>{this.state.email}</p>
                         </div>
                     </div>

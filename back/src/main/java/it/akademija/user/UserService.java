@@ -3,8 +3,6 @@ package it.akademija.user;
 import java.security.SecureRandom;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -111,9 +109,8 @@ public class UserService implements UserDetailsService {
 			Set<Application> submittedApplications = user.getUserApplications();
 
 			for (Application a : submittedApplications) {
-				if (a.getStatus().equals(ApplicationStatus.Pateiktas) && a.getApplicationQueue() != null
-						&& a.getApplicationQueue().getKindergarten() != null) {
-					gartenService.decreaseNumberOfTakenPlacesInAgeGroup(a.getApplicationQueue().getKindergarten(),
+				if (a.getStatus().equals(ApplicationStatus.Pateiktas) && a.getApprovedKindergarten() != null) {
+					gartenService.decreaseNumberOfTakenPlacesInAgeGroup(a.getApprovedKindergarten(),
 							a.calculateAgeInYears());
 				}
 			}

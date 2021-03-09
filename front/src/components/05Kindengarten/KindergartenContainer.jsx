@@ -18,7 +18,7 @@ export class KindergartenContainer extends Component {
                         </div>
 
                         <div className="col-12 col-sm-12 col-md-12 col-lg-9 pt-1">
-                            <h6 className="py-3"><b>Darželių sąrašas </b></h6>
+                            <h6 className="py-3"><b>Darželių sąrašas su laisvų vietų grupėse skaičiais</b></h6>
                             <KindergartenListContainer />
                         </div>
 

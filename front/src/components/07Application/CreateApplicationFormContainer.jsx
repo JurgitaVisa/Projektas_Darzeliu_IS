@@ -588,6 +588,7 @@ class CreateApplicationFormContainer extends Component {
               </label>
               <Select
                 name="kindergartenId1"
+                id="selKindergartenId1"
                 placeholder="Pasirinkite darželį iš sąrašo"
                 options={this.state.kindergartenList}
                 onChange={(e) => {
@@ -629,6 +630,7 @@ class CreateApplicationFormContainer extends Component {
               <label htmlFor="kindergartenId2">2 prioritetas</label>
               <Select
                 name="kindergartenId2"
+                id="selKindergartenId2"
                 placeholder="Pasirinkite darželį iš sąrašo"
                 options={this.state.kindergartenList}
                 onChange={(e) => {
@@ -670,6 +672,7 @@ class CreateApplicationFormContainer extends Component {
               <label htmlFor="kindergartenId3">3 prioritetas</label>
               <Select
                 name="kindergartenId3"
+                id="selKindergartenId3"
                 placeholder="Pasirinkite darželį iš sąrašo"
                 options={this.state.kindergartenList}
                 onChange={(e) => {
@@ -711,6 +714,7 @@ class CreateApplicationFormContainer extends Component {
               <label htmlFor="kindergartenId4">4 prioritetas</label>
               <Select
                 name="kindergartenId4"
+                id="selKindergartenId4"
                 placeholder="Pasirinkite darželį iš sąrašo"
                 options={this.state.kindergartenList}
                 onChange={(e) => {
@@ -752,6 +756,7 @@ class CreateApplicationFormContainer extends Component {
               <label htmlFor="kindergartenId5">5 prioritetas</label>
               <Select
                 name="kindergartenId5"
+                id="selKindergartenId5"
                 placeholder="Pasirinkite darželį iš sąrašo"
                 options={this.state.kindergartenList}
                 onChange={(e) => {

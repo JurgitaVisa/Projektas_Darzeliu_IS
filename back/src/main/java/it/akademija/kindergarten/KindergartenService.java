@@ -15,8 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.akademija.application.queue.ApplicationQueue;
-import it.akademija.application.queue.ApplicationQueueDAO;
+import it.akademija.application.Application;
+import it.akademija.application.ApplicationDAO;
+import it.akademija.application.ApplicationStatus;
 
 @Service
 public class KindergartenService {
@@ -25,10 +26,9 @@ public class KindergartenService {
 
 	@Autowired
 	private KindergartenDAO gartenDao;
-	
+
 	@Autowired
-	private ApplicationQueueDAO queueDao;
-	
+	private ApplicationDAO applicationDao;
 
 	/**
 	 * Get all kindergarten ID's, names and addresses where capacity in any age
@@ -136,11 +136,18 @@ public class KindergartenService {
 		Kindergarten garten = gartenDao.findById(id).orElse(null);
 
 		if (garten != null) {
-			Set<ApplicationQueue> applicationQueue = garten.getApprovedApplications();
-			for (ApplicationQueue a : applicationQueue) {				
-				a.detachApplication();				
-				queueDao.saveAndFlush(a);
-			}	
+			Set<Application> applicationQueue = garten.getApprovedApplications();
+			for (Application a : applicationQueue) {
+				a.setApprovedKindergarten(null);
+				
+				if(a.getKindergartenChoises().size()>1) {
+					a.setStatus(ApplicationStatus.Pateiktas);
+				} else {
+					a.setStatus(ApplicationStatus.Neaktualus);
+				}				
+				
+				applicationDao.saveAndFlush(a);
+			}
 
 			gartenDao.deleteById(id);
 
@@ -181,8 +188,8 @@ public class KindergartenService {
 	 * @return statistics
 	 */
 	public Page<KindergartenStatistics> getKindergartenStatistics(Pageable pageable) {
-
-		return gartenDao.findAllChoises(pageable);
+				
+		return gartenDao.findAllChoises(pageable);	
 	}
 
 	/**
@@ -194,7 +201,7 @@ public class KindergartenService {
 	public void deleteByName(String name) {
 		gartenDao.deleteByName(name);
 	}
-	
+
 	/**
 	 * 
 	 * Set number of taken places in Kindergarten for corresponding age group by 1
@@ -203,12 +210,22 @@ public class KindergartenService {
 	 */
 	public void decreaseNumberOfTakenPlacesInAgeGroup(Kindergarten garten, long age) {
 
-		if (age >= 2 && age < 3) {
-			int takenPlaces = garten.getPlacesTakenAgeGroup2to3() - 1;
-			garten.setPlacesTakenAgeGroup2to3(takenPlaces);
-		} else {
-			int takenPlaces = garten.getPlacesTakenAgeGroup3to6() - 1;
-			garten.setPlacesTakenAgeGroup3to6(takenPlaces);
+		int takenPlaces = 0;
+
+		if (age >= 1 && age < 3) {
+
+			takenPlaces = garten.getPlacesTakenAgeGroup2to3() - 1;
+			if (takenPlaces > 0) {
+				garten.setPlacesTakenAgeGroup2to3(takenPlaces);
+			}
+			garten.setPlacesTakenAgeGroup2to3(0);
+
+		} else if (age >= 3) {
+			takenPlaces = garten.getPlacesTakenAgeGroup3to6() - 1;
+			if (takenPlaces > 0) {
+				garten.setPlacesTakenAgeGroup3to6(takenPlaces);
+			}
+			garten.setPlacesTakenAgeGroup3to6(0);
 		}
 
 		gartenDao.save(garten);
@@ -222,31 +239,61 @@ public class KindergartenService {
 	 */
 	public void increaseNumberOfTakenPlacesInAgeGroup(Kindergarten garten, long age) {
 
-		if (age >= 2 && age < 3) {
-			int capacity = garten.getPlacesTakenAgeGroup2to3() + 1;
+		int capacity = 0;
+
+		if (age >= 1 && age < 3) {
+			capacity = garten.getPlacesTakenAgeGroup2to3() + 1;
 			garten.setPlacesTakenAgeGroup2to3(capacity);
-		} else {
-			int capacity = garten.getPlacesTakenAgeGroup3to6() + 1;
-			garten.setCapacityAgeGroup3to6(capacity);
+		} else if (age >= 3 && age < 7) {
+			capacity = garten.getPlacesTakenAgeGroup3to6() + 1;
+			garten.setPlacesTakenAgeGroup3to6(capacity);
 		}
 		gartenDao.save(garten);
 	}
 
 	/**
-	 * Reset number of taken places in all groups to 0
-	 * 
+	 * Upon approving Application queue decreases number of available places in all
+	 * Kindergartens' age groups by the number of places that were assigned as taken
+	 * during Application processing stage. Also resets number of taken in all
+	 * groups to zero.
 	 */
-	@Transactional
-	public void resetTakenPlacesToZero() {
-		List<Kindergarten> gartenList = gartenDao.findAll();
-		for (Kindergarten k : gartenList) {
-			k.setPlacesTakenAgeGroup2to3(0);
-			k.setPlacesTakenAgeGroup3to6(0);
+	public void decreaseNumberOfAvailablePlaces() {
+
+		List<Kindergarten> kindergartens = gartenDao.findAll();
+
+		for (Kindergarten garten : kindergartens) {
+
+			garten.setCapacityAgeGroup2to3(garten.getCapacityAgeGroup2to3() - garten.getPlacesTakenAgeGroup2to3());
+			garten.setCapacityAgeGroup3to6(garten.getCapacityAgeGroup3to6() - garten.getPlacesTakenAgeGroup3to6());
+			garten.setPlacesTakenAgeGroup2to3(0);
+			garten.setPlacesTakenAgeGroup3to6(0);
+
 		}
 
-		gartenDao.saveAll(gartenList);
+		gartenDao.saveAll(kindergartens);
 	}
 
+	/**
+	 * Upon deleting or deactivating an approved application, increases number of
+	 * available places in specified Kindergarten's age group.
+	 * 
+	 * @param approved kindergarten
+	 * @param child's age
+	 */
+	public void increaseNumberOfAvailablePlacesInAgeGroup(Kindergarten garten, long age) {
+		
+		int capacity = 0;
+
+		if (age >= 1 && age < 3) {
+			capacity = garten.getCapacityAgeGroup2to3() + 1;
+			garten.setCapacityAgeGroup2to3(capacity);
+		} else if (age >= 3 && age < 7) {
+			capacity = garten.getCapacityAgeGroup3to6() + 1;
+			garten.setCapacityAgeGroup3to6(capacity);
+		}
+		
+		gartenDao.save(garten);
+	}
 
 	public KindergartenDAO getGartenDao() {
 		return gartenDao;
@@ -256,14 +303,12 @@ public class KindergartenService {
 		this.gartenDao = gartenDao;
 	}
 
-	public ApplicationQueueDAO getQueueDao() {
-		return queueDao;
+	public ApplicationDAO getApplicationDao() {
+		return applicationDao;
 	}
 
-	public void setQueueDao(ApplicationQueueDAO queueDao) {
-		this.queueDao = queueDao;
+	public void setApplicationDao(ApplicationDAO applicationDao) {
+		this.applicationDao = applicationDao;
 	}
-	
-	
 
 }

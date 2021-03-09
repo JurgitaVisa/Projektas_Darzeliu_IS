@@ -14,13 +14,7 @@ public class DatabaseUserDetailPasswordService implements UserDetailsPasswordSer
 
 	private UserDetailsService userDetailsService;
 
-	private UserDAO userDao;
-
-	public DatabaseUserDetailPasswordService(UserDetailsService userDetailsService, UserDAO userDao) {
-		super();
-		this.userDetailsService = userDetailsService;
-		this.userDao = userDao;
-	}
+	private UserDAO userDao;	
 
 	@Override
 	@Transactional
@@ -32,5 +26,23 @@ public class DatabaseUserDetailPasswordService implements UserDetailsPasswordSer
 
 		return this.userDetailsService.loadUserByUsername(user.getUsername());
 	}
+
+	public UserDetailsService getUserDetailsService() {
+		return userDetailsService;
+	}
+
+	public void setUserDetailsService(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
+
+	public UserDAO getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(UserDAO userDao) {
+		this.userDao = userDao;
+	}
+	
+	
 
 }

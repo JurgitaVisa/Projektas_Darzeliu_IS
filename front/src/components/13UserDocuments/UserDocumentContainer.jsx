@@ -19,10 +19,23 @@ export default class UserDocumentContainer extends Component {
 
     }
     
-    uploadDocument() {
-        const file = this.state.documentToUpload;
-        console.log(file);
-        //** Todo: POST */
+    uploadDocument(document) {
+        const formData = new FormData();
+        formData.append('name',document.name);
+        formData.append('file',document);
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        http.post(`${apiEndpoint}/api/documents/upload`, formData, config)
+            .then((response) => {
+                console.log("OK");
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     uploadDocumentOnChange(e) {
@@ -60,16 +73,16 @@ export default class UserDocumentContainer extends Component {
                             />
                         </div>
                         <div className="row">
-                            <div className="col-1">
+                            <div className="col">
                                 <button 
                                     id="btnUploadDocument"
                                     className="btn btn-primary"
-                                    onClick={this.uploadDocument(this.state.documentToUpload)}
+                                    onClick={() => this.uploadDocument(this.state.documentToUpload)}
                                 >
                                     Įkelti
                                 </button>
                             </div>
-                            <div className="col">
+                            {/**<div className="col">
                                 <button
                                     id="btnCancelUpload"
                                     className="btn btn-danger"
@@ -77,7 +90,7 @@ export default class UserDocumentContainer extends Component {
                                 >
                                     Atšaukti
                                 </button>
-                            </div>
+            </div>*/}
                             
                         </div>
                         
@@ -91,7 +104,7 @@ export default class UserDocumentContainer extends Component {
                         <button 
                             id="btnUploadDocument"
                             className="btn btn-primary"
-                            onClick={() => {this.setState({showUploadForm: true})}}
+                            onClick={() => {this.setState({...this.state, showUploadForm: true})}}
                         >
                             Įkelti naują
                         </button>

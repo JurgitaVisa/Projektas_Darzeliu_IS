@@ -1,6 +1,8 @@
 package it.akademija.document;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,7 @@ public class DocumentService {
 	DocumentDAO documentDao;
 	
 	@Transactional
-	public DocumentEntity getDocumentById(Long id) {
+	public DocumentEntity getDocumentById(long id) {
 		DocumentEntity doc = documentDao.getDocumentById(id);
 		if(doc != null) {
 			return doc;
@@ -22,6 +24,13 @@ public class DocumentService {
 		else {
 			return null;
 		}
+	}
+	
+	@Transactional
+	public List<DocumentEntity> getDocumentsByUploaderId(long id) {
+		return documentDao.findAll().stream()
+									.filter(x -> x.getUploaderId()==id)
+									.collect(Collectors.toList());
 	}
 	
 	@Transactional
@@ -40,5 +49,9 @@ public class DocumentService {
 		}
 	}
 	
+	@Transactional
+	public void deleteDocument(long id) {
+		documentDao.delete(getDocumentById(id));
+	}
 	
 }

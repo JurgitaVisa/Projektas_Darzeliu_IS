@@ -2,6 +2,8 @@ package it.akademija.document;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,7 @@ public class DocumentController {
 	
 	@Secured("ROLE_USER")
 	@GetMapping(path = "/document/{id}")
-	public byte[] getDocumentById(@ApiParam(value = "id") @PathVariable Long id) {
+	public byte[] getDocumentFileById(@ApiParam(value = "id") @PathVariable Long id) {
 		return documentService.getDocumentById(id).getData();
 		//return new ByteArrayInputStream(documentService.getDocumentById(id).getData());
 	}
@@ -51,5 +53,15 @@ public class DocumentController {
 		}
 	}
 	
+	@Secured("ROLE_USER")
+	@GetMapping(path = "/documents")
+	public List<DocumentViewmodel> getLoggedUserDocuments() {
+		List<DocumentEntity> docEntityList = documentService.getDocumentsByUploaderId(userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUserId());
+		List<DocumentViewmodel> docViewmodelList = new ArrayList<>();
+		for(DocumentEntity doc : docEntityList) {
+			docViewmodelList.add(new DocumentViewmodel(doc.getId(), doc.getName(), doc.getUploadDate()));
+		}
+		return docViewmodelList;
+	}
 	
 }

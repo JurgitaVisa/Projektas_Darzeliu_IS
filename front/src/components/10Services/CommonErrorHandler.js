@@ -9,7 +9,7 @@ const CommonErrorHandler = ({children}) => {
     const { dispatch } = React.useContext(AuthContext);
     
     React.useMemo(() => {
-        
+        if (history.location.pathname !== "/login")
         axios.interceptors.response.use(response => response, async(error) => {
             const expectedError = error.response && error.response.status >= 400 && error.response.status < 500;
             console.log("CommonErrorHandler kalba")
@@ -35,7 +35,7 @@ const CommonErrorHandler = ({children}) => {
                     payload: error.response.status
                 })
             }
-            if (history.location.pathname !== "/") history.push("/")
+            if (history.location.pathname !== "/login") history.push("/login")
         });
     }, [dispatch, history])
     return children;

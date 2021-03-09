@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import {useHistory} from 'react-router-dom';
 
 import '../../App.css';
 
@@ -23,6 +24,7 @@ export const LoginContainer = () => {
 
   const [data, setData] = React.useState(initState);
   const { state, dispatch } = React.useContext(AuthContext);
+  const history = useHistory();
 
   const handleChange = (event) => {
     validateText(event);
@@ -56,10 +58,11 @@ export const LoginContainer = () => {
           type: "LOGIN",
           payload: resp.data,
         });
+        history.push("/home")
       })
       .catch((error) => {
-        console.log(error);
-        if (state.error === 401)
+        console.log(error.response.status);
+        if (error.response.status === 401)
           setData({
             ...data,
             loginError: true,

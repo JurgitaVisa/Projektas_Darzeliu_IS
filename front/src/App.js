@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import "./index.css";
 import "./App.css";
@@ -217,16 +217,21 @@ function App() {
           </AuthContext.Provider>
         );
     }
-  } else if (state.isAuthenticated === false)
+  } else if (state.isAuthenticated === false){
     return (
       <div>
         <AuthContext.Provider value={{ state, dispatch }}>
-          <CommonErrorHandler>
-            <Login />
-          </CommonErrorHandler>
+          {/* <CommonErrorHandler> */}
+            <Switch>
+               <Route exact path="/login" component={Login} />
+                <Route path="*">
+                  <Redirect to="/login" />
+                </Route> 
+            </Switch>
+          {/* </CommonErrorHandler> */}
         </AuthContext.Provider>
       </div>
-    );
+    );}
   else return <Spinner />;
 }
 

@@ -1,5 +1,6 @@
 package it.akademija.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,8 +13,10 @@ import it.akademija.user.UserDAO;
 @Component
 public class DatabaseUserDetailPasswordService implements UserDetailsPasswordService {
 
+	@Autowired
 	private UserDetailsService userDetailsService;
-
+	
+	@Autowired
 	private UserDAO userDao;	
 
 	@Override

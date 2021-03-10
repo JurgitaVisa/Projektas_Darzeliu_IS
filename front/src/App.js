@@ -9,7 +9,6 @@ import swal from "sweetalert";
 import Login from "./components/01Login/LoginContainer";
 import NotFound from "./components/03NotFound/NotFound";
 import Admin from "./components/04Admin/AdminContainer";
-import UserListContainer from "./components/04Admin/UserListContainer";
 import KindergartenContainer from "./components/05Kindengarten/KindergartenContainer";
 import UpdateProfileFormContainer from "./components/06UpdateProfile/UpdateProfileFormContainer";
 import CreateApplicationFormContainer from "./components/07Application/CreateApplicationFormContainer";
@@ -116,11 +115,6 @@ function App() {
                     />
                     <Route
                       exact
-                      path="/naudotojai"
-                      component={UserListContainer}
-                    />
-                    <Route
-                      exact
                       path="/profilis/atnaujinti"
                       component={UpdateProfileFormContainer}
                     />
@@ -213,6 +207,7 @@ function App() {
         );
     }
   } else if (state.isAuthenticated === false){
+    console.log(state)
     return (
       <div>
         <AuthContext.Provider value={{ state, dispatch }}>

@@ -15,9 +15,10 @@ document.title =
 ReactDOM.render(
   <React.StrictMode>
       <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <Switch>
+        <App />
+        {/* <Switch>
           <Route path="*" component={App} />
-        </Switch>
+        </Switch> */}
       </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")

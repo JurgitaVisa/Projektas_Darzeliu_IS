@@ -405,9 +405,7 @@ export default class UpdateProfileFormContainer extends Component {
                     </div>
 
                     <div className="col-lg-7">
-
                         {this.drawUpdatePasswordForm()}
-
                     </div>
 
                 </div>

@@ -25,9 +25,14 @@ export class DownloaderContainer extends Component {
             link.href = downloadUrl;
             link.setAttribute('download', 'naudotojas.zip');
 
-          //  document.body.appendChild(link);
+            document.body.appendChild(link);
             link.click();
             link.remove();
+            
+            window.document.activeElement.blur();
+
+        }).catch((error)=> {
+            console.log(error);
         });
     }
 
@@ -36,8 +41,8 @@ export class DownloaderContainer extends Component {
         return (
 
             <div className="pt-5" >
-                
-                <a href="/#" className="pl-2 pt-3" onClick={this.getUserDetailsArchive}>Atsisiųsti informaciją apie kaupiamus asmens duomenis (.zip)</a>
+
+                <button className="btn btn-link pl-2 pt-3" onClick={this.getUserDetailsArchive}>Atsisiųsti informaciją apie kaupiamus asmens duomenis (.zip)</button>
 
             </div>
         )

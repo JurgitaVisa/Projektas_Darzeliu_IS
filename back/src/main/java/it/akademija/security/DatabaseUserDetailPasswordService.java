@@ -15,7 +15,7 @@ public class DatabaseUserDetailPasswordService implements UserDetailsPasswordSer
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private UserDAO userDao;	
 

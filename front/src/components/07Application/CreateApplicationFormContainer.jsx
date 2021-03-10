@@ -902,7 +902,7 @@ class CreateApplicationFormContainer extends Component {
         })
         .then(() => this.props.history.push("/prasymai"))
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           swal({            
             text: error.response.data,           
             button: "Gerai"

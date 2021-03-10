@@ -9,12 +9,9 @@ const CommonErrorHandler = ({children}) => {
     const { dispatch } = React.useContext(AuthContext);
     
     React.useMemo(() => {
-        if (history.location.pathname !== "/login")
         axios.interceptors.response.use(response => response, async(error) => {
             const expectedError = error.response && error.response.status >= 400 && error.response.status < 500;
-            console.log("CommonErrorHandler kalba")
             if (!expectedError) {
-                console.log("Logging unexpected error", error);
                 swal('Įvyko klaida, puslapis nurodytu adresu nepasiekiamas');
                 dispatch({
                     type: "ERROR",
@@ -26,16 +23,14 @@ const CommonErrorHandler = ({children}) => {
                     type: "ERROR",
                     payload: error.response.status
                 })
-                console.log("iš klaidų gaudyklės")
-                console.log(error.response.status)
             } else if (error.response.status === 403) {
-                swal('Nepasiekiamas')
+                swal('Prieiga uždrausta')
                 dispatch({
                     type: "ERROR",
                     payload: error.response.status
                 })
             }
-            if (history.location.pathname !== "/login") history.push("/login")
+            history.push("/")
         });
     }, [dispatch, history])
     return children;

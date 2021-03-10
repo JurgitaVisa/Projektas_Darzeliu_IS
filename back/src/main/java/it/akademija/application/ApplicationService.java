@@ -1,6 +1,5 @@
 package it.akademija.application;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -138,11 +137,7 @@ public class ApplicationService {
 			
 			application = applicationDao.saveAndFlush(application);
 			
-//			applicationDao.saveAndFlush(application);
-
-//			JournalTest
-			
-			journalService.newJournalEntry(LocalDate.now(), OperationType.APPLICATION_SUBMITED, application.getId(), ObjectType.APPLICATION, "Sukurtas naujas prašymas");
+			journalService.newJournalEntry(OperationType.APPLICATION_SUBMITED, application.getId(), ObjectType.APPLICATION, "Sukurtas naujas prašymas");
 			
 			return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
 		}

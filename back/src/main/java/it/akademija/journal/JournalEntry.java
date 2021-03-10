@@ -1,6 +1,6 @@
 package it.akademija.journal;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "event_journal")
@@ -27,7 +26,7 @@ public class JournalEntry {
 	private String userName;
 	
 	@Column(name= "event_time")
-	private LocalDate eventTime;
+	private LocalDateTime eventTime;
 	
 	@Column(name= "operation_type")
 	private OperationType operationType;
@@ -68,10 +67,10 @@ public class JournalEntry {
 	public void setUserID(Long userID) {
 		this.userID = userID;
 	}
-	public LocalDate getEventTime() {
+	public LocalDateTime getEventTime() {
 		return eventTime;
 	}
-	public void setEventTime(LocalDate eventTime) {
+	public void setEventTime(LocalDateTime eventTime) {
 		this.eventTime = eventTime;
 	}
 	public OperationType getOperationType() {
@@ -93,22 +92,12 @@ public class JournalEntry {
 		this.objectType = objectType;
 	}
 
-//	public JournalEntry(@NotEmpty Long entryID, @NotEmpty(message = "user id") Long userID, String userName,
-//			@NotEmpty LocalDate eventTime, @NotEmpty OperationType operationType, @NotEmpty Long objectID,
-//			@NotEmpty ObjectType objectType, @NotEmpty String entryMessage) {
-//		super();
-//		this.entryID = entryID;
-//		this.userID = userID;
-//		this.userName = userName;
-//		this.eventTime = eventTime;
-//		this.operationType = operationType;
-//		this.objectID = objectID;
-//		this.objectType = objectType;
-//		this.entryMessage = entryMessage;
-//	}
+	public JournalEntry() {
+	
+	}
 	
 	public JournalEntry(@NotEmpty(message = "user id") Long userID, String userName,
-			@NotEmpty LocalDate eventTime, @NotEmpty OperationType operationType, @NotEmpty Long objectID,
+			@NotEmpty LocalDateTime eventTime, @NotEmpty OperationType operationType, @NotEmpty Long objectID,
 			@NotEmpty ObjectType objectType, @NotEmpty String entryMessage) {
 		
 		super();

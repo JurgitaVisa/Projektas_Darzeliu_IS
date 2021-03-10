@@ -1,6 +1,6 @@
 package it.akademija.journal;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,13 +26,13 @@ public class JournalService {
 	}
 	
 	@Transactional
-	public void newJournalEntry(LocalDate eventTime, OperationType operationType, Long objectID,
+	public void newJournalEntry(OperationType operationType, Long objectID,
 			ObjectType objectType, String entryMessage) {
 		
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 		Long currentUserID = userDAO.findByUsername(currentUsername).getUserId();
 		
-		JournalEntry entry = new JournalEntry(currentUserID, currentUsername, eventTime, operationType, objectID, objectType, entryMessage);
+		JournalEntry entry = new JournalEntry(currentUserID, currentUsername, LocalDateTime.now(), operationType, objectID, objectType, entryMessage);
 		
 		journalEntryDAO.saveAndFlush(entry);
 	}

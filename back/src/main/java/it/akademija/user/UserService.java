@@ -54,7 +54,6 @@ public class UserService implements UserDetailsService {
 	 * in the user repository
 	 * 
 	 * @param userData data for new user
-	 * @throws Exception
 	 */
 	@Transactional
 	public void createUser(UserDTO userData) {
@@ -91,7 +90,7 @@ public class UserService implements UserDetailsService {
 	 * 
 	 * Delete user with a specified username. In case there are no other users with
 	 * ADMIN authorization in the user repository, creates a temporary user with
-	 * username "admin" and password "laikinas"
+	 * username "admin@admin.lt" and password "admin@admin.lt"
 	 * 
 	 * @param username
 	 */
@@ -137,6 +136,12 @@ public class UserService implements UserDetailsService {
 		return dtoPage;
 	}
 
+	/**
+	 * Returns details of specified user size
+	 * 
+	 * @return list of user details for ADMIN
+	 * @param username
+	 */
 	@Transactional
 	public UserInfo getUserDetails(String username) {
 		User user = userDao.findByUsername(username);
@@ -185,7 +190,7 @@ public class UserService implements UserDetailsService {
 	 * @param username
 	 * @param oldPassword
 	 * @param newPassword
-	 * @return
+	 * @return true or false
 	 */
 	@Transactional
 	public boolean changePassword(String username, String oldPassword, String newPassword) {
@@ -201,11 +206,12 @@ public class UserService implements UserDetailsService {
 
 	/**
 	 * 
-	 * Updates fields for user with specified username. Field for setting user role
-	 * can not be updated. Any user can update their own data.
+	 * Updates fields for user with specified username. Field for setting user role,
+	 * password or username can not be updated. Any user can update their own data.
 	 * 
 	 * @param userData new user data
 	 * @param username
+	 * @return updated user
 	 */
 	@Transactional
 	public User updateUserData(UserDTO userData, String username) {
@@ -227,8 +233,15 @@ public class UserService implements UserDetailsService {
 		user.setEmail(userData.getEmail());
 
 		return userDao.save(user);
-
 	}
+
+	/**
+	 * 
+	 * Returns all applications of specified user.
+	 * 
+	 * @param username
+	 * @return user's applications
+	 */
 
 	@Transactional(readOnly = true)
 	public Set<Application> getUserApplications(String currentUsername) {
@@ -251,7 +264,5 @@ public class UserService implements UserDetailsService {
 	public void setEncoder(PasswordEncoder encoder) {
 		this.encoder = encoder;
 	}
-
-	
 
 }

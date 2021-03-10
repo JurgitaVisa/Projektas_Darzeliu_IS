@@ -105,9 +105,10 @@ function App() {
               <div className="container-fluid px-0">
                 <AdminNavBar>
                   <Switch>
-                    <Route exact path="/" component={Admin} />
-                    <Route exact path="/home" component={Admin} />
-                    <Route exact path="/admin" component={Admin} />
+                    <Route exact path={["/admin", "/home", "/"]} component={Admin} />
+                    <Route exact path="/login">
+                      <Redirect to="/admin" />
+                    </Route>
                     <Route
                       exact
                       path="/statistika"
@@ -132,21 +133,14 @@ function App() {
               <div className="container-fluid px-0">
                 <ManagerNavBar>
                   <Switch>
-                    <Route exact path="/" component={KindergartenContainer} />
-                    <Route
-                      exact
-                      path="/home"
-                      component={KindergartenContainer}
-                    />
+                    <Route exact path={["/darzeliai", "/home", "/"]} component={KindergartenContainer} />
+                    <Route exact path="/login">
+                      <Redirect to="/darzeliai" />
+                    </Route>
                     <Route
                       exact
                       path="/statistika"
                       component={KindergartenStatContainer}
-                    />
-                    <Route
-                      exact
-                      path="/darzeliai"
-                      component={KindergartenContainer}
                     />
                     <Route exact path="/eile" component={QueueContainer} />
                     <Route
@@ -168,13 +162,10 @@ function App() {
               <div className="container-fluid px-0">
                 <UserNavBar>
                   <Switch>
-                    <Route exact path="/" component={UserHomeContainer} />
-                    <Route exact path="/home" component={UserHomeContainer} />
-                    <Route
-                      exact
-                      path="/prasymai"
-                      component={UserHomeContainer}
-                    />
+                  <Route exact path={["/prasymai", "/home", "/"]} component={UserHomeContainer} />
+                    <Route exact path="/login">
+                      <Redirect to="/prasymai" />
+                    </Route>
                     <Route
                       exact
                       path="/statistika"
@@ -206,21 +197,21 @@ function App() {
           </AuthContext.Provider>
         );
     }
-  } else if (state.isAuthenticated === false){
-    console.log(state)
+  } else if (state.isAuthenticated === false) {
+    console.log(state);
     return (
       <div>
         <AuthContext.Provider value={{ state, dispatch }}>
-            <Switch>
-               <Route exact path="/login" component={Login} />
-                <Route path="*">
-                  <Redirect to="/login" />
-                </Route> 
-            </Switch>
+          <Switch>
+            <Route exact path="/login" component={Login} />
+            <Route path="*">
+              <Redirect to="/login" />
+            </Route>
+          </Switch>
         </AuthContext.Provider>
       </div>
-    );}
-  else return <Spinner />;
+    );
+  } else return <Spinner />;
 }
 
 export default App;

@@ -1,7 +1,15 @@
 package it.akademija.user;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import it.akademija.gdprservice.JsonExporter;
 
 @RestController
 @Api(value = "user")
@@ -36,6 +45,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private JsonExporter jsonExporter;
 
 	/**
 	 * 
@@ -88,12 +100,10 @@ public class UserController {
 	@Secured({ "ROLE_ADMIN" })
 	@GetMapping(path = "/admin/allusers")
 	@ApiOperation(value = "Show all users", notes = "Showing all users")
-	public Page<UserInfo> getAllUsers(
-			@RequestParam("page") int page, 
-			  @RequestParam("size") int size) {	
-		
+	public Page<UserInfo> getAllUsers(@RequestParam("page") int page, @RequestParam("size") int size) {
+
 		Sort.Order order = new Sort.Order(Sort.Direction.DESC, "userId");
-						
+
 		Pageable pageable = PageRequest.of(page, size, Sort.by(order));
 
 		return userService.getAllUsers(pageable);
@@ -182,6 +192,44 @@ public class UserController {
 			return new ResponseEntity<String>("Neteisingas senas slaptažodis", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	/**
+	 * Get GDPR user data zip archive
+	 *  	
+	 * @param response
+	 * @throws IOException
+	 */
+	@Secured({ "ROLE_USER" })
+	@GetMapping(path = "/zip")
+	@ApiOperation(value = "Get GDPR user data zip archive")
+	public void zipUserInformation(HttpServletResponse response) throws IOException {
+
+		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		User user = userService.findByUsername(currentUsername);
+
+		String userJsonString = jsonExporter.export(user);
+
+		byte[] jsonBytes = userJsonString.getBytes();
+
+		response.setContentType("application/zip");
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.setHeader("Content-Disposition", "attachment; filename=naudotojas.zip");
+
+		ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
+
+		InputStream inputStream = new ByteArrayInputStream(jsonBytes);
+
+		zipOutputStream.putNextEntry(new ZipEntry("naudotojas.json"));
+
+		IOUtils.copy(inputStream, zipOutputStream);
+
+		inputStream.close();
+
+		zipOutputStream.closeEntry();
+
+		zipOutputStream.close();
+	}
 
 	public UserService getUserService() {
 		return userService;
@@ -189,6 +237,14 @@ public class UserController {
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	public JsonExporter getJsonExporter() {
+		return jsonExporter;
+	}
+
+	public void setJsonExporter(JsonExporter jsonExporter) {
+		this.jsonExporter = jsonExporter;
 	}
 
 }

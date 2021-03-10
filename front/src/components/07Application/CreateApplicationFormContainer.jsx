@@ -91,9 +91,9 @@ class CreateApplicationFormContainer extends Component {
         });
         /** Get registation status */
         http.get(`${apiEndpoint}/api/status`)
-        .then((response) => {
-          this.setState({registrationEnabled: !response.data})
-        })
+          .then((response) => {
+            this.setState({ registrationEnabled: !response.data })
+          })
         /** get kindergarten list */
         var kindergartenList = [];
         http.get(`${apiEndpoint}/api/darzeliai`).then((response) => {
@@ -108,8 +108,8 @@ class CreateApplicationFormContainer extends Component {
         });
       })
       .catch((error) => {
-        swal({         
-          text: "Įvyko klaida perduodant duomenis iš serverio.",         
+        swal({
+          text: "Įvyko klaida perduodant duomenis iš serverio.",
           button: "Gerai",
         });
       });
@@ -586,7 +586,10 @@ class CreateApplicationFormContainer extends Component {
               <label htmlFor="kindergartenId1">
                 1 prioritetas <span className="fieldRequired">*</span>
               </label>
+              <span id="selectKindergarten1">
               <Select
+                className="basic-single"
+                classNamePrefix="select"
                 name="kindergartenId1"
                 id="selKindergartenId1"
                 placeholder="Pasirinkite darželį iš sąrašo"
@@ -625,6 +628,7 @@ class CreateApplicationFormContainer extends Component {
                 }}
                 isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
               />
+              </span>
             </div>
             <div className="form-group">
               <label htmlFor="kindergartenId2">2 prioritetas</label>
@@ -892,7 +896,7 @@ class CreateApplicationFormContainer extends Component {
         .then((response) => {
           console.log(response);
           swal({
-            text: response.data,           
+            text: response.data,
             button: "Gerai",
           });
           /**
@@ -903,8 +907,8 @@ class CreateApplicationFormContainer extends Component {
         .then(() => this.props.history.push("/prasymai"))
         .catch((error) => {
           console.log(error);
-          swal({            
-            text: error.response.data,           
+          swal({
+            text: error.response.data,
             button: "Gerai"
           });
         });
@@ -912,10 +916,10 @@ class CreateApplicationFormContainer extends Component {
   }
 
   drawMessageRegistrationNotAvailable(status) {
-    if(status) {
+    if (status) {
       return (
         <div class="alert alert-warning" role="alert">
-            Šiuo metu registracija nevyksta.
+          Šiuo metu registracija nevyksta.
         </div>
       )
     }

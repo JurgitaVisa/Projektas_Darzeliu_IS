@@ -28,10 +28,10 @@ export class DownloaderContainer extends Component {
             document.body.appendChild(link);
             link.click();
             link.remove();
-            
+
             window.document.activeElement.blur();
 
-        }).catch((error)=> {
+        }).catch((error) => {
             console.log(error);
         });
     }
@@ -39,12 +39,9 @@ export class DownloaderContainer extends Component {
     render() {
 
         return (
+            
+            <button className="btn btn-link pt-5 px-0" onClick={this.getUserDetailsArchive}>Atsisiųsti informaciją apie kaupiamus asmens duomenis (.zip)</button>
 
-            <div className="pt-5" >
-
-                <button className="btn btn-link pl-2 pt-3" onClick={this.getUserDetailsArchive}>Atsisiųsti informaciją apie kaupiamus asmens duomenis (.zip)</button>
-
-            </div>
         )
     }
 }

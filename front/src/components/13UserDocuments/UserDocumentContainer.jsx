@@ -29,13 +29,25 @@ export default class UserDocumentContainer extends Component {
         http.get(`${apiEndpoint}/api/documents/documents`)
             .then((response) => {
                 this.setState({
-                    documentList: response.data
+                    documentList: this.mapDocumentsToViewmodel(response.data)
                 })
-                console.log(this.state);
             })
             .catch((error) => {
+                swal({         
+                    text: "Įvyko klaida perduodant duomenis iš serverio.",         
+                    button: "Gerai",
+                  });
                 console.log(error);
             })
+    }
+
+    mapDocumentsToViewmodel = (docList) => {
+        const docViewmodelList = docList.map((document) => ({
+            id: document.documentId,
+            name: document.name,
+            uploadDate: document.uploadDate
+        }))
+        return docViewmodelList;
     }
 
     uploadDocument(document) {
@@ -54,12 +66,13 @@ export default class UserDocumentContainer extends Component {
                     text: "Pažyma buvo įkelta sėkmingai",
                     buttons: "Gerai"
                 })
-                this.setState({showUploadForm: false, documentToUpload: ""})
+                this.setState({showUploadForm: false, documentToUpload: "", documentValid: false})
             })
             .catch((error) => {
                 console.log(error);
                 swal({
-                    text: "Įvyko klaida įkeliant pažymą"
+                    text: "Įvyko klaida įkeliant pažymą",
+                    buttons: "Gerai"
                 })
             })
     }
@@ -81,14 +94,14 @@ export default class UserDocumentContainer extends Component {
             }
             else {
                 swal({
-                    text: "Pasirinktas failas yra per didelis",
+                    text: "Failas per didelis, leidžiama iki 128 KB",
                     icon: "error",
                 })
             }
         }
         else {
             swal({
-                text: "Pasirinktas failas yra ne .pdf",
+                text: "Netinkamo formato dokumentas. Pažyma turi būti pdf formatu",
                 icon: "error",
             })
         }
@@ -155,7 +168,7 @@ export default class UserDocumentContainer extends Component {
             dangerMode: true,
         }).then((actionConfirmed) => {
             if(actionConfirmed) {
-                http.delete(`${apiEndpoint}/api/documents/delete/${document.documentId}`)
+                http.delete(`${apiEndpoint}/api/documents/delete/${document.id}`)
                     .then((response) => {
                         this.getDocuments();
                         swal({
@@ -182,17 +195,25 @@ export default class UserDocumentContainer extends Component {
                         <h6 className="py-3"><b>Mano pažymos</b></h6>
                     </div>
                 </div>
-                {
-                    //** Upload Form */
-                    this.uploadForm()
-                }
-                {
-                    //**UserDocumentList */
-                    <UserDocumentListTable
-                        documents={this.state.documentList}
-                        onDelete={this.handleDelete}
-                    />
-                }
+                <div className="row">
+                    <div className="col">
+                        {
+                            //** Upload Form */
+                            this.uploadForm()
+                        }
+                    </div>
+                </div>
+                <div className="row formHeader">
+                    <div className="col-6">
+                        {
+                        //**UserDocumentList */
+                        <UserDocumentListTable
+                            documents={this.state.documentList}
+                            onDelete={this.handleDelete}
+                        />
+                        }
+                    </div>
+                </div>
             </div>
         )
     }

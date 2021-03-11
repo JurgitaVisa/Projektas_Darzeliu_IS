@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -136,7 +137,7 @@ public class ApplicationService {
 
 	/**
 	 * 
-	 * capitalize first letter of string
+	 * capitalize first letter of word, other letters to lowercase
 	 * 
 	 * @param str
 	 * @return
@@ -151,9 +152,10 @@ public class ApplicationService {
 	}
 
 	/**
-	 * Delete application by id. Also deletes connected priorities, kindergarten
-	 * choises, and additional guardian who has no other applications. Also
-	 * decreases number of taken places in approved Kindergarten if applicable.
+	 * Delete user application by id. Also deletes connected priorities,
+	 * kindergarten choises, and additional guardian who has no other applications
+	 * connected to them. Also decreases number of taken places in approved
+	 * Kindergarten if applicable. Accessible to User only
 	 * 
 	 * @param id
 	 * @return message indicating whether deletion was successful
@@ -163,48 +165,75 @@ public class ApplicationService {
 
 		Application application = applicationDao.getOne(id);
 
-		if (application != null) {
+		User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
-			ParentDetails additionalGuardian = application.getAdditionalGuardian();
-			if (additionalGuardian != null) {
-				int numberOfAdditionalGuardianApplications = additionalGuardian.removeApplication(application);
+		if (application != null && application.getMainGuardian().equals(user)) {
 
-				if (numberOfAdditionalGuardianApplications == 0) {
-					parentDetailsDao.delete(additionalGuardian);
-				}
-			}
+			detachAdditionalGuardian(application);
 
-			long age = application.calculateAgeInYears();
+			updateAvailablePlacesInKindergarten(application);
 
-			if (age < 7) {
-
-				ApplicationStatus status = application.getStatus();
-
-				if (status.equals(ApplicationStatus.Pateiktas)) {
-
-					Kindergarten garten = application.getApprovedKindergarten();
-
-					if (garten != null) {
-
-						gartenService.decreaseNumberOfTakenPlacesInAgeGroup(garten, age);
-					}
-
-				} else if (status.equals(ApplicationStatus.Patvirtintas)) {
-
-					Kindergarten garten = application.getApprovedKindergarten();
-
-					gartenService.increaseNumberOfAvailablePlacesInAgeGroup(garten, age);
-
-				}
-			}
-
-			applicationDao.deleteById(id);
+			applicationDao.delete(application);
 
 			return new ResponseEntity<String>("Ištrinta sėkmingai", HttpStatus.OK);
 		}
 
 		return new ResponseEntity<String>("Prašymas nerastas", HttpStatus.NOT_FOUND);
 	}
+	
+	/**
+	 * Removes additional guardian who has no other applications connected to them.
+	 *	  
+	 * @param id
+	 * @param application
+	 */
+	public void detachAdditionalGuardian(Application application) {
+		ParentDetails additionalGuardian = application.getAdditionalGuardian();
+
+		if (additionalGuardian != null) {
+			int numberOfAdditionalGuardianApplications = additionalGuardian.removeApplication(application);
+
+			if (numberOfAdditionalGuardianApplications == 0) {
+				parentDetailsDao.delete(additionalGuardian);
+			}
+			
+			application.setAdditionalGuardian(null);			
+
+		}
+	}
+
+	/**
+	 * Updates number of available places in approved Kindergarten
+	 * 
+	 * @param application
+	 */
+	public void updateAvailablePlacesInKindergarten(Application application) {
+		long age = application.calculateAgeInYears();
+
+		if (age < 7) {
+
+			ApplicationStatus status = application.getStatus();
+
+			if (status.equals(ApplicationStatus.Pateiktas)) {
+
+				Kindergarten garten = application.getApprovedKindergarten();
+
+				if (garten != null) {
+
+					gartenService.decreaseNumberOfTakenPlacesInAgeGroup(garten, age);
+				}
+
+			} else if (status.equals(ApplicationStatus.Patvirtintas)) {
+
+				Kindergarten garten = application.getApprovedKindergarten();
+
+				gartenService.increaseNumberOfAvailablePlacesInAgeGroup(garten, age);
+
+			}
+		}
+
+	}
+	
 
 	/**
 	 * Deactivate application by id. Also decreases number of taken places in
@@ -223,10 +252,11 @@ public class ApplicationService {
 
 		} else if (application.getStatus().equals(ApplicationStatus.Patvirtintas)) {
 
-			return new ResponseEntity<String>("Veiksmas negalimas. Prašymas jau patvirtintas.", HttpStatus.METHOD_NOT_ALLOWED);
+			return new ResponseEntity<String>("Veiksmas negalimas. Prašymas jau patvirtintas.",
+					HttpStatus.METHOD_NOT_ALLOWED);
 
 		} else {
-			
+
 			application.setStatus(ApplicationStatus.Neaktualus);
 
 			if (application.getApprovedKindergarten() != null) {

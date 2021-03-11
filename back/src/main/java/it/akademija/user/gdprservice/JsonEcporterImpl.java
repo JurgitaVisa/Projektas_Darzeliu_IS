@@ -1,4 +1,4 @@
-package it.akademija.gdprservice;
+package it.akademija.user.gdprservice;
 
 import java.lang.reflect.Type;
 

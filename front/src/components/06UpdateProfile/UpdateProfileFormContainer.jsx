@@ -5,6 +5,7 @@ import apiEndpoint from '../10Services/endpoint';
 import inputValidator from '../08CommonComponents/InputValidator';
 import swal from 'sweetalert';
 import DownloaderContainer from './DownloaderContainer';
+import ForgetMe from './ForgetMe';
 
 export default class UpdateProfileFormContainer extends Component {
     constructor(props) {
@@ -371,6 +372,9 @@ export default class UpdateProfileFormContainer extends Component {
     }
 
     render(props) {
+
+        const currenUserRole = this.state.role;
+
         return (
 
             <div className="container pt-4">
@@ -410,8 +414,18 @@ export default class UpdateProfileFormContainer extends Component {
 
                 </div>
 
-                <DownloaderContainer />
+                {currenUserRole === 'USER' &&
+                    <div className="row">
 
+                        <div className="col-12">
+                            <DownloaderContainer />
+                        </div>
+
+                        <div className="col-12 pt-3">
+                            <ForgetMe />
+                        </div>
+                    </div>
+                }
             </div>
         )
     }

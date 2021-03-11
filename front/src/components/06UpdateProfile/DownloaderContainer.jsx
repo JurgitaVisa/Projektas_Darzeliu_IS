@@ -5,12 +5,12 @@ import '../../App.css';
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 
-export class DownloaderContainer extends Component {
+class DownloaderContainer extends Component {
 
     getUserDetailsArchive() {
 
         const method = 'GET';
-        const url = `${apiEndpoint}/api/users/zip`;
+        const url = `${apiEndpoint}/api/users/user/zip`;
 
         http.request({
             url,
@@ -40,7 +40,7 @@ export class DownloaderContainer extends Component {
 
         return (
             
-            <button className="btn btn-link pt-5 px-0" onClick={this.getUserDetailsArchive}>Atsisiųsti informaciją apie kaupiamus asmens duomenis (.zip)</button>
+            <button className="btn btn-link pt-5 px-0" onClick={this.getUserDetailsArchive} id="btnGetUserZip">Atsisiųsti informaciją apie kaupiamus asmens duomenis (.zip)</button>
 
         )
     }

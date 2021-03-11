@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,7 @@ public class DocumentController {
 	UserService userService;
 	
 	@Secured("ROLE_USER")
-	@GetMapping(path = "/document/{id}")
+	@GetMapping(path = "/get/{id}")
 	public byte[] getDocumentFileById(@ApiParam(value = "id") @PathVariable Long id) {
 		return documentService.getDocumentById(id).getData();
 		//return new ByteArrayInputStream(documentService.getDocumentById(id).getData());
@@ -51,6 +52,13 @@ public class DocumentController {
 		else {
 			return new ResponseEntity<String>("Ivyko klaida", HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@Secured("ROLE_USER")
+	@DeleteMapping(path = "/delete/{id}")
+	public ResponseEntity<String> deleteDocument(@ApiParam(value = "id") @PathVariable final long id) {
+		documentService.deleteDocument(id);
+		return new ResponseEntity<String>("Dokumentas su tokiu id buvo ištrintas.", HttpStatus.OK);
 	}
 	
 	@Secured("ROLE_USER")

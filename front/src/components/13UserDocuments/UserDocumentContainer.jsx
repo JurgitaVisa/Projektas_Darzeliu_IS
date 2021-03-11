@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import swal from 'sweetalert';
+import UserDocumentListTable from './UserDocumentListTable';
 
 export default class UserDocumentContainer extends Component {
     
@@ -16,9 +17,26 @@ export default class UserDocumentContainer extends Component {
         this.uploadDocument = this.uploadDocument.bind(this);
         this.uploadForm = this.uploadForm.bind(this);
         this.uploadDocumentOnChange = this.uploadDocumentOnChange.bind(this);
-
+        this.getDocuments = this.getDocuments.bind(this);
     }
     
+    componentDidMount() {
+        this.getDocuments();
+    }
+
+    getDocuments() {
+        http.get(`${apiEndpoint}/api/documents/documents`)
+            .then((response) => {
+                this.setState({
+                    documentList: response.data
+                })
+                console.log(this.state);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
     uploadDocument(document) {
         const formData = new FormData();
         formData.append('name',document.name);
@@ -30,11 +48,18 @@ export default class UserDocumentContainer extends Component {
         }
         http.post(`${apiEndpoint}/api/documents/upload`, formData, config)
             .then((response) => {
-                console.log("OK");
-                console.log(response);
+                this.getDocuments();
+                swal({
+                    text: "Pažyma buvo įkelta sėkmingai",
+                    buttons: "Gerai"
+                })
+                this.setState({showUploadForm: false, documentToUpload: ""})
             })
             .catch((error) => {
                 console.log(error);
+                swal({
+                    text: "Įvyko klaida įkeliant pažymą"
+                })
             })
     }
 
@@ -64,7 +89,7 @@ export default class UserDocumentContainer extends Component {
             return (
                 <div className="form">
                         <div className="form-group">
-                            <h6 className="py-3">Pažyma privalo būti .pdf formato ir neužimti daugiau negu 128KB vietos!</h6>
+                            <h6 className="py-3">Pažyma privalo būti .pdf formato ir neužimti daugiau negu 128KB vietos.</h6>
                             <input 
                                 type="file"
                                 className="form-control-file"
@@ -104,7 +129,7 @@ export default class UserDocumentContainer extends Component {
                         <button 
                             id="btnUploadDocument"
                             className="btn btn-primary"
-                            onClick={() => {this.setState({...this.state, showUploadForm: true})}}
+                            onClick={() => {this.setState({showUploadForm: true})}}
                         >
                             Įkelti naują
                         </button>
@@ -112,6 +137,32 @@ export default class UserDocumentContainer extends Component {
                 </div>
             )
         }
+    }
+
+    handleDelete = (document) => {
+        swal({
+            text: "Ar tikrai norite ištrinti pažymą?",
+            buttons: ["Ne", "Taip"],
+            dangerMode: true,
+        }).then((actionConfirmed) => {
+            if(actionConfirmed) {
+                http.delete(`${apiEndpoint}/api/documents/delete/${document.documentId}`)
+                    .then((response) => {
+                        this.getDocuments();
+                        swal({
+                            text: "Pažyma buvo sėkmingai ištrinta",
+                            button: "Gerai"
+                        })
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        swal({
+                            text: "Įvyko klaida",
+                            button: "Gerai"
+                        })
+                    })
+            }
+        })
     }
 
     render() {
@@ -128,6 +179,10 @@ export default class UserDocumentContainer extends Component {
                 }
                 {
                     //**UserDocumentList */
+                    <UserDocumentListTable
+                        documents={this.state.documentList}
+                        onDelete={this.handleDelete}
+                    />
                 }
             </div>
         )

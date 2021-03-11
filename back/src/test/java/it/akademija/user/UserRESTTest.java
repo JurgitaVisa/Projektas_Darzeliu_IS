@@ -84,8 +84,8 @@ public class UserRESTTest {
 	@WithMockUser(username = "user", roles = { "USER" })
 	public void shouldRejectDeletingWhenNotAdmin() throws Exception {
 		MvcResult deleteUser = mvc.perform(delete("/api/users/admin/delete/{username}", "test@test.lt"))
-				.andExpect(status().isBadRequest()).andReturn();
-		assertEquals(400, deleteUser.getResponse().getStatus());
+				.andExpect(status().isForbidden()).andReturn();
+		assertEquals(403, deleteUser.getResponse().getStatus());
 	}
 
 	@Test

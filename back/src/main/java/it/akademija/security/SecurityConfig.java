@@ -1,6 +1,7 @@
 package it.akademija.security;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +19,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -38,19 +41,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private UserDetailsPasswordService userDetailsPasswordService;
 
 	@Autowired
 	private UserDAO userDao;
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder(14);
+
+		BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+
+		BcryptPepperEncoder pepper = new BcryptPepperEncoder();
+
+		Map<String, PasswordEncoder> encoders = Map.of("pepper", pepper);
+		DelegatingPasswordEncoder delegatingPasswordEncoder = new DelegatingPasswordEncoder("pepper", encoders);
+
+		delegatingPasswordEncoder.setDefaultPasswordEncoderForMatches(bcrypt);
+
+		return delegatingPasswordEncoder;
 	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
-		auth.userDetailsService(userDetailsService);
+		auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder()).userDetailsPasswordManager(userDetailsPasswordService);
 	}
 
 	@Override
@@ -59,8 +75,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// be saugumo UI dalis ir swaggeris
 				.antMatchers("/", "/swagger-ui/").permitAll()
 				// visi /api/ saugus (dar galima .anyRequest() )
-				.antMatchers("/home/**", "/api/**", "/admin/**", "/naudotojai/**", "/hello/**").authenticated().and()
-				.formLogin() // leidziam login
+				.antMatchers("/home/**", "/api/**", "/admin/**", "/naudotojai/**").authenticated().and().formLogin() // leidziam
+																														// login
 				// prisijungus
 				.successHandler(new AuthenticationSuccessHandler() {
 
@@ -74,7 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						Object[] roles = user.getAuthorities().toArray();
 						String role = roles[0].toString().substring(5);
 
-						LOG.info("** SecurityConfig: Naudotojas [{}] prisijunge prie sistemos **", username);
+						LOG.info("Naudotojas [{}] prisijunge prie sistemos", username);
 
 						response.setHeader("Access-Control-Allow-Credentials", "true");
 						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));

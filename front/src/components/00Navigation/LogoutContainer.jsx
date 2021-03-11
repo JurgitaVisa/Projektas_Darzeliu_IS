@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router';
+import {useHistory} from 'react-router-dom';
 
 import '../../App.css';
 
@@ -12,19 +12,17 @@ import Logout from './Logout';
 
 export default function LogoutContainer() {
 
-    const history = useHistory();
     const { dispatch } = React.useContext(AuthContext);
+    const history = useHistory();
 
     const handleLogout = e => {
         http
       .post(`${apiEndpoint}/logout`)
       .then(response => {
-        // console.log("atsijungimas")
-        dispatch({        // svarbu eiliškumas - pirma dispatch: išvalo kontekstą, ištrina sessionStorage, isAutthenticated -> false
-          type: "LOGOUT",
-          payload: null
+        dispatch({ 
+          type: "LOGOUT"
         })
-        history.push("/");  // tada tik history.push("/") ir kraunamas pradinis puslapis jau atsijungus naudotojui
+        history.push("/")
       })
       .catch(error => {
         console.log("Error on logout", error);

@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 
 import '../../App.css';
 
-// import http from '../10Services/httpService';
-// import apiEndpoint from '../10Services/endpoint';
-
 import AdminCreateUser from '../04Admin/AdminCreateUser';
 import { UserListContainer } from './UserListContainer';
 

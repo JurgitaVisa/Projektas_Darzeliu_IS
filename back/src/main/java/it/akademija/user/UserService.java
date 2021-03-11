@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,8 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.akademija.application.Application;
-import it.akademija.application.ApplicationStatus;
-import it.akademija.kindergarten.KindergartenService;
+import it.akademija.application.ApplicationService;
 import it.akademija.role.Role;
 import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsDAO;
 import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsEntity;
@@ -27,7 +27,7 @@ public class UserService implements UserDetailsService {
 	private UserDAO userDao;
 
 	@Autowired
-	private KindergartenService gartenService;
+	private ApplicationService applicationService;
 
 	@Autowired
 	private UserPasswordResetRequestsDAO userPasswordResetRequestsDAO;
@@ -90,7 +90,9 @@ public class UserService implements UserDetailsService {
 	 * 
 	 * Delete user with a specified username. In case there are no other users with
 	 * ADMIN authorization in the user repository, creates a temporary user with
-	 * username "admin" and password "laikinas"
+	 * username "admin" and password "laikinas". If user role equals USER, deletes
+	 * associated Application and ParentDetails entries in the database and
+	 * increases number of available places in approved Kindergarten if applicable.
 	 * 
 	 * @param username
 	 */
@@ -100,20 +102,34 @@ public class UserService implements UserDetailsService {
 		User user = findByUsername(username);
 
 		if (user.getRole().equals(Role.ADMIN) && userDao.findByRole(Role.ADMIN).size() == 1) {
+
 			userDao.save(new User(Role.ADMIN, "admin", "admin", "admin@admin.lt", "admin@admin.lt",
 					encoder.encode("admin@admin.lt")));
+
 		} else if (user.getRole().equals(Role.USER)) {
+
 			Set<Application> submittedApplications = user.getUserApplications();
 
-			for (Application a : submittedApplications) {
-				if (a.getStatus().equals(ApplicationStatus.Pateiktas) && a.getApprovedKindergarten() != null) {
-					gartenService.decreaseNumberOfTakenPlacesInAgeGroup(a.getApprovedKindergarten(),
-							a.calculateAgeInYears());
-				}
+			for (Application application : submittedApplications) {
+
+				applicationService.detachAdditionalGuardian(application);
+				applicationService.updateAvailablePlacesInKindergarten(application);
 			}
 		}
 
 		userDao.deleteByUsername(username);
+	}
+
+	/**
+	 * User can delete their own data. GDPR related functionality that deletes all
+	 * user related entries from database.
+	 */
+	@Transactional
+	public void deleteMyUserData() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		deleteUser(username);
+
 	}
 
 	/**
@@ -251,6 +267,12 @@ public class UserService implements UserDetailsService {
 		this.encoder = encoder;
 	}
 
-	
+	public ApplicationService getApplicationService() {
+		return applicationService;
+	}
+
+	public void setApplicationService(ApplicationService applicationService) {
+		this.applicationService = applicationService;
+	}
 
 }

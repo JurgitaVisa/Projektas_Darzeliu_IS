@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import it.akademija.gdprservice.JsonExporter;
+import it.akademija.user.gdprservice.JsonExporter;
 
 @RestController
 @Api(value = "user")
@@ -200,7 +200,7 @@ public class UserController {
 	 * @throws IOException
 	 */
 	@Secured({ "ROLE_USER" })
-	@GetMapping(path = "/zip")
+	@GetMapping(path = "/user/zip")
 	@ApiOperation(value = "Get GDPR user data zip archive")
 	public void zipUserInformation(HttpServletResponse response) throws IOException {
 
@@ -230,6 +230,19 @@ public class UserController {
 
 		zipOutputStream.close();
 	}
+	
+	/**
+	 * "Forget me" functionality which deletes all user related entries from database
+	 * 
+	 */
+	@Secured({"ROLE_USER"})
+	@DeleteMapping(path="/user/deletemydata")
+	@ApiOperation(value="Forget me - delete all user data")
+	public void deleteMyUserData() {
+		
+		userService.deleteMyUserData();
+	}
+	
 
 	public UserService getUserService() {
 		return userService;

@@ -13,6 +13,7 @@ export default class UserDocumentContainer extends Component {
             documentList: [],
             showUploadForm: false,
             documentToUpload: "",
+            documentValid: false,
         };
         this.uploadDocument = this.uploadDocument.bind(this);
         this.uploadForm = this.uploadForm.bind(this);
@@ -63,6 +64,15 @@ export default class UserDocumentContainer extends Component {
             })
     }
 
+    validateDocument = (doc) => {
+        if(doc.type === "application/pdf" && doc.size <= 128000) {
+            this.setState({documentValid: true});
+        }
+        else {
+            this.setState({documentValid: false});
+        }
+    }
+
     uploadDocumentOnChange(e) {
         const file = e.target.files[0];
         if(file.type === "application/pdf") {
@@ -82,43 +92,42 @@ export default class UserDocumentContainer extends Component {
                 icon: "error",
             })
         }
+        this.validateDocument(file);
     }
 
     uploadForm = () => {
         if(this.state.showUploadForm) {
             return (
                 <div className="form">
-                        <div className="form-group">
-                            <h6 className="py-3">Pažyma privalo būti .pdf formato ir neužimti daugiau negu 128KB vietos.</h6>
-                            <input 
-                                type="file"
-                                className="form-control-file"
-                                id="inputUploadDocument"
-                                onChange={this.uploadDocumentOnChange}
-                            />
-                        </div>
-                        <div className="row">
-                            <div className="col">
-                                <button 
-                                    id="btnUploadDocument"
-                                    className="btn btn-primary"
-                                    onClick={() => this.uploadDocument(this.state.documentToUpload)}
-                                >
-                                    Įkelti
-                                </button>
-                            </div>
-                            {/**<div className="col">
-                                <button
-                                    id="btnCancelUpload"
-                                    className="btn btn-danger"
-                                    onClick={() => {this.setState({showUploadForm: false})}}
-                                >
-                                    Atšaukti
-                                </button>
-            </div>*/}
-                            
-                        </div>
-                        
+                    <div className="form-group">
+                        <h6 className="py-3">Pažyma privalo būti .pdf formato ir neužimti daugiau negu 128KB vietos.</h6>
+                        <input 
+                            type="file"
+                            className="form-control-file"
+                            id="inputUploadDocument"
+                            onChange={this.uploadDocumentOnChange}
+                        />
+                    </div>
+                    <div className="row">
+                        <div className="col">
+                            <button 
+                                id="btnUploadDocument"
+                                className="btn btn-primary"
+                                onClick={() => this.uploadDocument(this.state.documentToUpload)}
+                                disabled={!this.state.documentValid}
+                            >
+                                Įkelti
+                            </button>
+                            <button
+                                id="btnCancelUpload"
+                                className="btn btn-secondary"
+                                style={{marginLeft: "64px"}}
+                                onClick={() => {this.setState({showUploadForm: false})}}
+                            >
+                                Atšaukti
+                            </button>
+                        </div>   
+                    </div>
                 </div>
             )
         }

@@ -36,4 +36,13 @@ public class JournalService {
 		
 		journalEntryDAO.saveAndFlush(entry);
 	}
+	
+	@Transactional
+	public void newJournalEntry(Long currentUserID, String currentUsername, OperationType operationType, Long objectID,
+			ObjectType objectType, String entryMessage) {
+		
+		JournalEntry entry = new JournalEntry(currentUserID, currentUsername, LocalDateTime.now(), operationType, objectID, objectType, entryMessage);
+		
+		journalEntryDAO.saveAndFlush(entry);
+	}
 }

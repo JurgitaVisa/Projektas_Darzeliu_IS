@@ -27,6 +27,7 @@ import { KindergartenStatContainer } from "./components/09Statistics/Kindergarte
 import { QueueContainer } from "./components/12Queue/QueueContainer";
 import UserDocumentContainer from "./components/13UserDocuments/UserDocumentContainer";
 import { ApplicationStatusContainer } from './components/04Admin/ApplicationStatusContainer';
+import EventJournalContainer from "./components/14EventJournal/EventJournalContainer";
 
 var initState = {
   isAuthenticated: null,
@@ -125,6 +126,11 @@ function App() {
                       exact
                       path="/naudotojai"
                       component={UserListContainer}
+                    />
+                    <Route
+                      exact
+                      path="/zurnalas"
+                      component={EventJournalContainer}
                     />
                     <Route
                       exact

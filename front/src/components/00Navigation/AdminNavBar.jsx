@@ -35,7 +35,7 @@ function Navigation(props) {
                             </li>                            
 
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link disabled" id="navAdminEventLog" to={"#"}>Įvykių žurnalas</NavLink>
+                                <NavLink className="nav-link" id="navAdminEventLog" to={"/zurnalas"}>Įvykių žurnalas</NavLink>
                             </li>
 
                             <li className="nav-item mr-2">

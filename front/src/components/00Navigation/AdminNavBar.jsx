@@ -23,12 +23,16 @@ function Navigation(props) {
                         <ul className="navbar-nav ml-auto ">
 
                             <li className="nav-item mr-2">
-                                <NavLink className="nav-link" id="navAdminUserList" to={"/admin"}>Naudotojų sąrašas</NavLink>
+                                <NavLink className="nav-link" id="navAdminUserList" to={"/admin"}>Naudotojai</NavLink>
                             </li>
 
                             <li className="nav-item mr-2">
                                 <NavLink className="nav-link" id="navAdminApplicationStats" to={"/statistika"}>Prašymų statistika</NavLink>
                             </li>
+                            
+                            <li className="nav-item mr-2">
+                                <NavLink className="nav-link" id="navManagerApplicationAdmin" to={"/prasymai/statusas"}>Sąrašo redagavimas</NavLink>
+                            </li>                            
 
                             <li className="nav-item mr-2">
                                 <NavLink className="nav-link disabled" id="navAdminEventLog" to={"#"}>Įvykių žurnalas</NavLink>

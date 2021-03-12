@@ -27,7 +27,7 @@ public class JsonEcporterImpl implements JsonExporter {
 		            jsonObject.addProperty("Naudotojo_vardas", user.getUsername());
 		            jsonObject.addProperty("Asmens_kodas", user.getParentDetails().getPersonalCode());
 		            jsonObject.addProperty("Vardas", user.getName());
-		            jsonObject.addProperty("Pavarde", user.getSurname());
+		            jsonObject.addProperty("Pavardė", user.getSurname());
 		            jsonObject.addProperty("Telefonas", user.getParentDetails().getPhone());
 		            jsonObject.addProperty("El.pastas", user.getParentDetails().getEmail());
 		            return jsonObject;

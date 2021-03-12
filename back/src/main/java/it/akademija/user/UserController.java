@@ -210,7 +210,7 @@ public class UserController {
 
 		String userJsonString = jsonExporter.export(user);
 
-		byte[] jsonBytes = userJsonString.getBytes();
+		byte[] jsonBytes = userJsonString.getBytes("UTF8");
 
 		response.setContentType("application/zip");
 		response.setStatus(HttpServletResponse.SC_OK);

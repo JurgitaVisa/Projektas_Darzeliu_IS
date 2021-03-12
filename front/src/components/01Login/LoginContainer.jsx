@@ -11,6 +11,8 @@ import swal from "sweetalert";
 
 import ForgotPasswordWindow from "../01Login/ForgotPasswordWindow";
 
+import instructionsPdf from '../../documents/VDIS_naudotojo_gidas.pdf';
+
 axios.defaults.withCredentials = true;
 
 export const LoginContainer = () => {
@@ -193,6 +195,11 @@ export const LoginContainer = () => {
             Neteisingas prisijungimo vardas ir/arba slaptažodis!
           </span>
         )}
+      </div>
+      <div className="row">
+        <div className="col">
+          <h6 className="py-3">Kaip naudotis šia sistema? <a href={instructionsPdf}>Parsisiųsti naudotojo instrukciją.</a></h6>
+        </div>
       </div>
     </div>
   );

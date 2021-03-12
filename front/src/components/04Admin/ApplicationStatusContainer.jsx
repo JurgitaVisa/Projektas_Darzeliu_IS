@@ -28,6 +28,7 @@ export class ApplicationStatusContainer extends Component {
                     { isActive: response.data }
                 );
             })
+            .catch(() => {})
     }
 
     handleClick = (e) => {

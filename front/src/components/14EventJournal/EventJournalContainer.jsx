@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import swal from 'sweetalert';
 
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
@@ -7,6 +6,7 @@ import '../../App.css';
 import Spinner from '../08CommonComponents/Spinner'
 
 import Pagination from './../08CommonComponents/Pagination';
+import EventJournalTable from './EventJournalTable';
 
 export class EventJournalContainer extends Component {
 
@@ -38,22 +38,40 @@ export class EventJournalContainer extends Component {
         http
             .get(uri)
             .then((response) => {
-                this.setState({ entries: response.data,
+                this.setState({ entries: response.data.content.map((entry) => ({
+                    ...entry,
+                   id: entry.entryID 
+                })),
+                                totalPages: response.data.totalPages,
+                                totalElements: response.data.totalElements,
+                                numberOfElements: response.data.numberOfElements,
+                                currentPage: response.data.number + 1,
                                 entriesLoaded: true
                             });
-                console.log(this.state.entries)
             })
             .catch(() => {});
     }
 
+    handlePageChange = (page) => {
+        this.setState({ currentPage: page });
+        this.getJournalEntries(page);
+    };
+
     render() {
-        console.log(this.state.entriesLoaded)
         return (
             
             <div className="container pt-4" >
 
                 <h6 className="pl-2 pt-3">Sistemos įvykių žurnalas</h6>
-                {this.state.entriesLoaded ? 'užkrauta info' : (<Spinner />) }                
+                {this.state.entriesLoaded ? (
+                    <EventJournalTable entries={this.state.entries}/>
+                ) : (<Spinner />) }      
+                <Pagination
+                    itemsCount={this.state.totalElements}
+                    pageSize={this.state.pageSize}
+                    onPageChange={this.handlePageChange}
+                    currentPage={this.state.currentPage}
+                />          
             </div>
         )
     }

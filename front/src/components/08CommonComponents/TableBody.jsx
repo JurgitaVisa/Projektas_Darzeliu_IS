@@ -8,8 +8,8 @@ class TableBody extends Component {
 
         if(data){
             return (
-
-                <tbody >
+                
+                <tbody>
                     {data.map(item =>
                         <tr key={item.id}>
                             {columns.map(column =>

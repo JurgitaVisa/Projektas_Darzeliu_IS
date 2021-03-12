@@ -48,7 +48,15 @@ function Navigation(props) {
                             </li>
 
                             <li className="nav-item mr-1">
-                                <a className="nav-link" id="navInstructions" href={instructionsPdf} target="_blank"><FontAwesomeIcon icon={faQuestionCircle} /></a>
+                                <a className="nav-link"
+                                id="navInstructions"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={instructionsPdf}
+                                title="Parsisiųsti naudotojo instrukciją"
+                            >
+                                <FontAwesomeIcon icon={faQuestionCircle} />
+                                </a>
                             </li>
 
                             <li className="nav-item nav-item mr-2">

@@ -78,3 +78,7 @@ p {
 .formHeader {
   padding-top: 4%;
 }
+
+a.#navInstructions.nav-link {
+  background-color: #ffc107;
+}

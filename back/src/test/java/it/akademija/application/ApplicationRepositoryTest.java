@@ -6,12 +6,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import it.akademija.application.priorities.Priorities;
 import it.akademija.kindergarten.Kindergarten;
@@ -22,8 +20,6 @@ import it.akademija.role.Role;
 import it.akademija.user.ParentDetails;
 import it.akademija.user.User;
 import it.akademija.user.UserDAO;
-
-@RunWith(SpringJUnit4ClassRunner.class)
 
 @DataJpaTest
 public class ApplicationRepositoryTest {

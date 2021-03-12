@@ -8,17 +8,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -30,8 +30,7 @@ import com.jayway.restassured.RestAssured;
 import it.akademija.App;
 import it.akademija.role.Role;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-
+@TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest(classes = { App.class,
 		UserController.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
@@ -71,7 +70,7 @@ public class UserRESTTest {
 		details.setEmail("test@test.lt");
 		details.setAddress("Adresas 5");
 		details.setPhone("+37061502254");
-		User newUser = new User(Role.MANAGER, "Test", "Test", "test@test.lt", details, "test@test.lt", "test@test.lt");
+		User newUser = new User(Role.USER, "Test", "Test", "test@test.lt", details, "test@test.lt", "test@test.lt");
 
 		String jsonRequest = mapper.writeValueAsString(newUser);
 
@@ -84,18 +83,29 @@ public class UserRESTTest {
 				.andExpect(status().isOk()).andReturn();
 		assertEquals(200, deleteUser.getResponse().getStatus());
 
+		MvcResult deleteUser2 = mvc.perform(delete("/api/users/admin/delete/{username}", "no@no.lt"))
+				.andExpect(status().isNotFound()).andReturn();
+		assertEquals(404, deleteUser2.getResponse().getStatus());
+
 	}
 
 	@Test
 	@Order(2)
-	@WithMockUser(username = "manager@manager.lt", roles = { "MANAGER" })
+	@WithMockUser(username = "user@user.lt", roles = { "USER" })
 	public void updateUser() throws Exception {
 
-		User newUser = userService.findByUsername("manager@manager.lt");
+		User newUser = userService.findByUsername("user@user.lt");
 
-		newUser.setName("manageris");
-		newUser.setSurname("manager");
-		newUser.setEmail("manager@manager.lt");
+		newUser.setName("useris");
+		newUser.setSurname("user");
+		newUser.setEmail("user@user.lt");
+		ParentDetails details = newUser.getParentDetails();
+		details.setAddress("Address 1");
+		details.setPersonalCode("12345678987");
+		details.setPhone("+37061398876");
+		details.setEmail("user@user.lt");
+		details.setName("useris");
+		details.setSurname("user");
 
 		String jsonRequest1 = mapper.writeValueAsString(newUser);
 
@@ -120,8 +130,12 @@ public class UserRESTTest {
 	@WithMockUser(username = "manager", roles = { "MANAGER" })
 	public void testGetOneUser() throws Exception {
 
-		MvcResult getOneUser = mvc.perform(get("/api/users/user", "test@test.lt")).andExpect(status().isOk())
-				.andReturn();
+		UserInfo userInfo = userService.getUserDetails("user@user.lt");
+		String jsonRequest = mapper.writeValueAsString(userInfo);
+
+		MvcResult getOneUser = mvc
+				.perform(get("/api/users/user").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn();
 
 		assertEquals(200, getOneUser.getResponse().getStatus());
 

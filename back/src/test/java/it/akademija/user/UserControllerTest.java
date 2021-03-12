@@ -1,7 +1,7 @@
 
 package it.akademija.user;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class UserControllerTest {
 
 	@Test
 	public void contextLoads() {
-		assertThat(controller).isNotNull();
+		assertNotNull(controller);
 	}
 
 }

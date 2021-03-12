@@ -1,7 +1,8 @@
 package it.akademija.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,22 +16,19 @@ public class ApplicationServiceIntegrationTest {
 	private ApplicationService service;
 
 	@Test
-	public void testGetAllUserApplications() {
-
-		assertThat(service.getAllUserApplications("user@user.lt")).isNotNull();
-	}
-
-	@Test
+	@Order(1)
 	public void testGetPageFromSubtmittedApplications() {
 
 		PageRequest page = PageRequest.of(1, 10);
 		Page<ApplicationInfo> applications = service.getPageFromSubmittedApplications(page);
-		assertThat(applications).isNotNull();
+		assertTrue(applications.getSize() != 0);
 	}
 
 	@Test
-	public void testCreateNewApplication() {
 
+	@Order(2)
+	public void testGetAllUserApplications() {
+		assertTrue(service.getAllUserApplications("user@user.lt").size() == 0);
 	}
 
 }

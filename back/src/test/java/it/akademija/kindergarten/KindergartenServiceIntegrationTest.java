@@ -1,9 +1,7 @@
 package it.akademija.kindergarten;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +16,19 @@ public class KindergartenServiceIntegrationTest {
 	@Test
 	public void testNameAlreadyExist() {
 		boolean doesKindergartenExists = service.nameAlreadyExists("Karuselė", "190033652");
-		assertThat(doesKindergartenExists).isTrue();
+		assertTrue(doesKindergartenExists);
 	}
 
 	@Test
 	public void testFindById() {
 		Kindergarten kindergarten = service.findById("190033652");
-		assertThat(kindergarten).isNotNull();
+		assertEquals("Karuselė", kindergarten.getName());
 	}
 
 	@Test
 	public void testGetAllElderates() {
-		List<String> elderates = new ArrayList<String>();
-		elderates.add("Justiniškių");
-		elderates.add("Naujininkų");
 
-		assertThat(service.getAllElderates()).containsAll(elderates);
+		assertTrue(service.getAllElderates().size() != 0);
 	}
 
 }

@@ -1,7 +1,7 @@
 
 package it.akademija.kindergarten;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +30,10 @@ public class KindergartenRepositoryTest {
 		kindergarten.setCapacityAgeGroup3to6(12);
 		kindergarten = entityManager.persistAndFlush(kindergarten);
 
-		assertThat(kindergartenDAO.findById("123456789").isPresent());
+		assertTrue(kindergartenDAO.findById("123456789").isPresent());
+
 		kindergartenDAO.deleteByName("test");
-		assertThat(kindergartenDAO.findById("123456789").isEmpty());
+		assertTrue(kindergartenDAO.findById("123456789").isEmpty());
 
 	}
 }

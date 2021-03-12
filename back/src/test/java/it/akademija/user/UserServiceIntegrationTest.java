@@ -1,7 +1,10 @@
 package it.akademija.user;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,24 +18,32 @@ public class UserServiceIntegrationTest {
 	private UserService service;
 
 	@Test
+	@Order(1)
 	public void testGetUserByUsername() {
-		User userByUsername = service.findByUsername("admin@admin.lt");
-		assertThat(userByUsername).isNotNull();
+
+		assertEquals("admin", service.getUserDetails("admin@admin.lt").getName());
 	}
 
 	@Test
+	@Order(2)
 	public void testGetAllUsers() {
 
 		PageRequest page = PageRequest.of(1, 10);
 		Page<UserInfo> users = service.getAllUsers(page);
-		assertThat(users).isNotNull();
+		assertTrue(users.getSize() != 0);
 	}
 
 	@Test
-	public void testCreateUser() {
+	@Order(3)
+	public void testCreateDeleteUser() {
+
 		UserDTO newUser = new UserDTO("MANAGER", "stest", "stest", "stest@test.lt", "stest@test.lt", "stest@test.lt");
 		service.createUser(newUser);
-		assertThat(newUser).isNotNull();
+		assertEquals("stest", service.findByUsername("stest@test.lt").getName());
+
+		service.deleteUser("stest@test.lt");
+		assertNull(service.findByUsername("stest@test.lt"));
+
 	}
 
 }

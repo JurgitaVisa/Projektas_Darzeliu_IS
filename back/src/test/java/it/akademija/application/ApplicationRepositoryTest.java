@@ -1,6 +1,7 @@
 package it.akademija.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -77,10 +78,10 @@ public class ApplicationRepositoryTest {
 
 		application = entityManager.persistAndFlush(application);
 
-		assertThat(applicationDAO.findById(application.getId()).get()).isEqualTo(application);
-		assertThat(applicationDAO.existsApplicationByChildPersonalCode("49902256547")).isEqualTo(true);
+		assertEquals(application.getChildName(), applicationDAO.findById(application.getId()).get().getChildName());
+		assertTrue(applicationDAO.existsApplicationByChildPersonalCode("49902256547"));
 		applicationDAO.deleteById(application.getId());
-		assertThat(applicationDAO.findAll().isEmpty());
+		assertTrue(applicationDAO.findAll().isEmpty());
 
 	}
 

@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "event_journal")
@@ -96,9 +95,9 @@ public class JournalEntry {
 	
 	}
 	
-	public JournalEntry(@NotEmpty(message = "user id") Long userID, String userName,
-			@NotEmpty LocalDateTime eventTime, @NotEmpty OperationType operationType, @NotEmpty Long objectID,
-			@NotEmpty ObjectType objectType, @NotEmpty String entryMessage) {
+	public JournalEntry(Long userID, String userName,
+			LocalDateTime eventTime, OperationType operationType, Long objectID,
+			ObjectType objectType, String entryMessage) {
 		
 		super();
 		this.userID = userID;
@@ -108,5 +107,5 @@ public class JournalEntry {
 		this.objectID = objectID;
 		this.objectType = objectType;
 		this.entryMessage = entryMessage;
-	}
+	}	
 }

@@ -119,7 +119,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	                    String username = request.getParameter("username");
 						
 	                    LOG.info("Nesėkmingas prisijungimas prie sistemos. Naudotojo vardas: {}", username);
-	                    journalService.newJournalEntry(Long.valueOf(000), username, OperationType.UNSUCCESSFUL_LOGIN, Long.valueOf(000), ObjectType.LOGIN, "Nesėkmingas prisijungimas");
+	                    journalService.newJournalEntry(null, username, OperationType.UNSUCCESSFUL_LOGIN, null, ObjectType.LOGIN, "Nesėkmingas prisijungimas");
 	                    response.sendError(401, "Neteisingas prisijungimo vardas ir/arba slaptažodis");
 	                }
 	            }).loginPage("/login").permitAll() // jis jau

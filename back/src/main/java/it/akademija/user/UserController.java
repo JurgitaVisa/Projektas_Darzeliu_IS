@@ -54,20 +54,29 @@ public class UserController {
 	 * Create new user. Method only accessible to ADMIN users
 	 * 
 	 * @param userInfo
-	 * @throws Exception
 	 */
 	@Secured({ "ROLE_ADMIN" })
 	@PostMapping(path = "/admin/createuser")
 	@ApiOperation(value = "Create user", notes = "Creates user with data")
 	public ResponseEntity<String> createUser(@Valid @RequestBody UserDTO userInfo) {
 
+		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
 		LOG.info("** Usercontroller: kuriamas naujas naudotojas **");
 
 		if (userService.findByUsername(userInfo.getUsername()) != null) {
+
+			LOG.warn("Naudotojas [{}] bandė sukurti naują naudotoją su jau egzistuojančiu vardu [{}]", currentUsername,
+					userInfo.getUsername());
+
 			return new ResponseEntity<String>("Toks naudotojas jau egzistuoja!", HttpStatus.BAD_REQUEST);
+
 		} else {
 
 			userService.createUser(userInfo);
+
+			LOG.info("Naudotojas [{}] sukūrė naują naudotoją [{}]", currentUsername, userInfo.getUsername());
+
 			return new ResponseEntity<String>("Naudotojas sukurtas sėkmingai!", HttpStatus.CREATED);
 		}
 	}
@@ -83,11 +92,17 @@ public class UserController {
 	@ApiOperation(value = "Delete user", notes = "Deletes user by username")
 	public ResponseEntity<String> deleteUser(
 			@ApiParam(value = "Username", required = true) @PathVariable final String username) {
+
 		if (userService.findByUsername(username) != null) {
+
 			userService.deleteUser(username);
+
 			LOG.info("** Usercontroller: trinamas naudotojas vardu [{}] **", username);
+
 			return new ResponseEntity<String>("Naudotojas ištrintas sėkmingai", HttpStatus.OK);
 		}
+
+		LOG.warn("Naudotojas bandė ištrinti naudotoją neegzistuojančiu vardu [{}]", username);
 
 		return new ResponseEntity<String>("Naudotojas tokiu vardu nerastas", HttpStatus.NOT_FOUND);
 	}
@@ -145,8 +160,11 @@ public class UserController {
 			@ApiParam(value = "Username", required = true) @PathVariable final String username) {
 
 		if (userService.findByUsername(username) != null) {
+
 			userService.restorePassword(username);
+
 			LOG.info("** Usercontroller: keiciamas slaptazodis naudotojui vardu [{}] **", username);
+
 			return new ResponseEntity<String>("Slaptažodis atkurtas sėkmingai", HttpStatus.OK);
 		}
 
@@ -163,10 +181,12 @@ public class UserController {
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
 	@PutMapping(path = "/update")
 	@ApiOperation(value = "Update logged in user details")
-	public ResponseEntity<String> updateUserData(@RequestBody UserDTO userData) {
+	public ResponseEntity<String> updateUserData(@Valid @RequestBody UserDTO userData) {
 
 		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+
 		userService.updateUserData(userData, currentUserName);
+
 		LOG.info("** Usercontroller: keiciami duomenys naudotojui vardu [{}] **", currentUserName);
 
 		return new ResponseEntity<String>("Duomenys pakeisti sėkmingai", HttpStatus.OK);
@@ -185,11 +205,21 @@ public class UserController {
 	@ApiOperation(value = "Update logged in user password")
 	public ResponseEntity<String> updateUserPassword(@PathVariable(value = "oldPassword") final String oldPassword,
 			@PathVariable(value = "newPassword") final String newPassword) {
+
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
 		if (userService.changePassword(currentUsername, oldPassword, newPassword)) {
+
+			LOG.info(" [{}] slaptažodis pakeistas sėkmingai. **", currentUsername);
+
 			return new ResponseEntity<String>("Slaptažodis pakeistas sėkmingai", HttpStatus.OK);
+
 		} else {
+
+			LOG.warn(" [{}] įvedė neteisingą seną slaptažodį. **", currentUsername);
+
 			return new ResponseEntity<String>("Neteisingas senas slaptažodis", HttpStatus.BAD_REQUEST);
+
 		}
 	}
 	
@@ -210,7 +240,7 @@ public class UserController {
 
 		String userJsonString = jsonExporter.export(user);
 
-		byte[] jsonBytes = userJsonString.getBytes();
+		byte[] jsonBytes = userJsonString.getBytes("UTF8");
 
 		response.setContentType("application/zip");
 		response.setStatus(HttpServletResponse.SC_OK);

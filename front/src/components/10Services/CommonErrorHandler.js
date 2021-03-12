@@ -30,6 +30,7 @@ const CommonErrorHandler = ({children}) => {
                     payload: error.response.status
                 })
             }
+            else return Promise.reject(error);
             history.push("/")
         });
     }, [dispatch, history])

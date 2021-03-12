@@ -17,10 +17,10 @@ import it.akademija.kindergarten.Kindergarten;
 public class KindergartenChoise {
 
 	@Id
-	@Column(name="choise_id")
+	@Column(name = "choise_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long choiseId;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "kindergarten_id")
 	private Kindergarten kindergarten;
@@ -28,7 +28,7 @@ public class KindergartenChoise {
 	@ManyToOne
 	@JoinColumn(name = "application_id")
 	private Application application;
-	
+
 	@Min(value = 1)
 	@Max(value = 5)
 	private int kindergartenChoisePriority;
@@ -39,7 +39,7 @@ public class KindergartenChoise {
 
 	public KindergartenChoise(Kindergarten kindergarten, Application application,
 			@Min(1) @Max(5) int kindergartenChoisePriority) {
-		
+
 		this.kindergarten = kindergarten;
 		this.application = application;
 		this.kindergartenChoisePriority = kindergartenChoisePriority;

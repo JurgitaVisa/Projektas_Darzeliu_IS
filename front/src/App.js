@@ -26,6 +26,7 @@ import { UserHomeContainer } from "./components/02Main/UserHomeContainer";
 import { KindergartenStatContainer } from "./components/09Statistics/KindergartenStatContainer";
 import { QueueContainer } from "./components/12Queue/QueueContainer";
 import UserDocumentContainer from "./components/13UserDocuments/UserDocumentContainer";
+import { ApplicationStatusContainer } from './components/04Admin/ApplicationStatusContainer';
 
 var initState = {
   isAuthenticated: null,
@@ -114,6 +115,11 @@ function App() {
                       exact
                       path="/statistika"
                       component={KindergartenStatContainer}
+                    />
+                     <Route
+                      exact
+                      path="/prasymai/statusas"
+                      component={ApplicationStatusContainer}
                     />
                     <Route
                       exact

@@ -28,6 +28,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 import it.akademija.user.UserDAO;
+import it.akademija.journal.JournalService;
+import it.akademija.journal.ObjectType;
+import it.akademija.journal.OperationType;
 
 @Configuration
 @EnableWebSecurity
@@ -47,6 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDAO userDao;
+	
+	@Autowired
+	private JournalService journalService;
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
@@ -91,6 +97,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						String role = roles[0].toString().substring(5);
 
 						LOG.info("Naudotojas [{}] prisijunge prie sistemos", username);
+						
+						journalService.newJournalEntry(OperationType.APPLICATION_SUBMITED, userDao.findByUsername(username).getUserId(), ObjectType.APPLICATION, "Naudotojas prisijungė prie sistemos");
 
 						response.setHeader("Access-Control-Allow-Credentials", "true");
 						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));

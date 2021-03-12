@@ -91,9 +91,9 @@ class CreateApplicationFormContainer extends Component {
         });
         /** Get registation status */
         http.get(`${apiEndpoint}/api/status`)
-        .then((response) => {
-          this.setState({registrationEnabled: !response.data})
-        })
+          .then((response) => {
+            this.setState({ registrationEnabled: !response.data })
+          })
         /** get kindergarten list */
         var kindergartenList = [];
         http.get(`${apiEndpoint}/api/darzeliai`).then((response) => {
@@ -108,8 +108,8 @@ class CreateApplicationFormContainer extends Component {
         });
       })
       .catch((error) => {
-        swal({         
-          text: "Įvyko klaida perduodant duomenis iš serverio.",         
+        swal({
+          text: "Įvyko klaida perduodant duomenis iš serverio.",
           button: "Gerai",
         });
       });
@@ -120,11 +120,9 @@ class CreateApplicationFormContainer extends Component {
   userForm(mainGuardian) {
     if (mainGuardian) {
       return (
-        <div className="form">
-          <div className="row">
-            <h6 className="formHeader">Atstovas 1</h6>
-          </div>
-          <div className="row form-group">
+        <div className="form">         
+            <h6 className="formHeader">Atstovas 1</h6>         
+          <div className="form-group">
             <label htmlFor="txtName">
               Vardas <span className="fieldRequired">*</span>
             </label>
@@ -142,7 +140,7 @@ class CreateApplicationFormContainer extends Component {
               pattern="[A-zÀ-ž]{2,32}"
             />
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtSurname">
               Pavardė <span className="fieldRequired">*</span>
             </label>
@@ -160,7 +158,7 @@ class CreateApplicationFormContainer extends Component {
               pattern="[A-zÀ-ž]{2,32}"
             />
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtPersonalCode">
               Asmens kodas <span className="fieldRequired">*</span>
             </label>
@@ -178,7 +176,7 @@ class CreateApplicationFormContainer extends Component {
               pattern="[0-9]{11}"
             />
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtTelNo">
               Telefonas <span className="fieldRequired">*</span>
             </label>
@@ -198,7 +196,7 @@ class CreateApplicationFormContainer extends Component {
               ></input>
             </div>
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtEmail">
               El. paštas <span className="fieldRequired">*</span>
             </label>
@@ -216,7 +214,7 @@ class CreateApplicationFormContainer extends Component {
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
             />
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtAddress">
               Adresas <span className="fieldRequired">*</span>
             </label>
@@ -238,14 +236,14 @@ class CreateApplicationFormContainer extends Component {
     } else {
       return (
         <div className="form">
-          <div className="row">
-            <div className="col">
+          <div className="row py-1">
+            <div className="col-7">
               <h6 className="formHeader">Atstovas 2</h6>
             </div>
-            <div className="col">
+            <div className="col-5">
               <button
                 id="btnEnableAdditionalGuardian"
-                className="btn btn-primary btn-sm float-right"
+                className="btn btn-primary btn-sm btn-block float-right my-1"
                 style={{ padding: "4px" }}
                 onClick={(e) => {
                   this.setState({
@@ -260,7 +258,7 @@ class CreateApplicationFormContainer extends Component {
               </button>
             </div>
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtName">
               Vardas <span className="fieldRequired">*</span>
             </label>
@@ -278,7 +276,7 @@ class CreateApplicationFormContainer extends Component {
               required
             />
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtSurname">
               Pavardė <span className="fieldRequired">*</span>
             </label>
@@ -296,7 +294,7 @@ class CreateApplicationFormContainer extends Component {
               required
             />
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtPersonalCode">
               Asmens kodas <span className="fieldRequired">*</span>
             </label>
@@ -314,7 +312,7 @@ class CreateApplicationFormContainer extends Component {
               required
             />
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtTelNo">
               Telefonas <span className="fieldRequired">*</span>
             </label>
@@ -334,7 +332,7 @@ class CreateApplicationFormContainer extends Component {
               />
             </div>
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtEmail">
               El. paštas <span className="fieldRequired">*</span>
             </label>
@@ -352,7 +350,7 @@ class CreateApplicationFormContainer extends Component {
               required
             />
           </div>
-          <div className="row form-group">
+          <div className="form-group">
             <label htmlFor="txtAddress">
               Adresas <span className="fieldRequired">*</span>
             </label>
@@ -378,10 +376,10 @@ class CreateApplicationFormContainer extends Component {
   childForm() {
     return (
       <div className="form">
-        <div className="row">
+        <div className="pb-1">
           <h6 className="formHeader">Vaiko duomenys</h6>
         </div>
-        <div className="row form-group">
+        <div className="form-group">
           <label htmlFor="txtName">
             Vaiko vardas <span className="fieldRequired">*</span>
           </label>
@@ -399,7 +397,7 @@ class CreateApplicationFormContainer extends Component {
             pattern="[A-zÀ-ž]{2,32}"
           />
         </div>
-        <div className="row form-group">
+        <div className="form-group">
           <label htmlFor="txtSurname">
             Vaiko pavardė <span className="fieldRequired">*</span>
           </label>
@@ -417,7 +415,7 @@ class CreateApplicationFormContainer extends Component {
             pattern="[A-zÀ-ž]{2,32}"
           />
         </div>
-        <div className="row form-group">
+        <div className="form-group">
           <label htmlFor="txtPersonalCode">
             Asmens kodas <span className="fieldRequired">*</span>
           </label>
@@ -436,7 +434,7 @@ class CreateApplicationFormContainer extends Component {
           />
         </div>
         {/** Gimimo data */}
-        <div className="row form-group">
+        <div className="form-group">
           <label htmlFor="txtBirthdate">
             Gimimo data <span className="fieldRequired">*</span>
           </label>
@@ -459,22 +457,13 @@ class CreateApplicationFormContainer extends Component {
 
   /** Checkbox forma prioritetams */
   checkboxPriorityForm() {
-    return (
-      <div className="row">
-        <div className="col">
+    return (     
           <div className="form">
-            <div className="row">
-              <div className="form-check">
-                <div className="row">
-                  <h6 className="formHeader">
-                    Vaiko priėmimo tvarkos prioritetai
-                  </h6>
-                </div>
-                <div className="row">
-                  <p>Pažymėkite tinkamus prioritetus</p>
-                </div>
-              </div>
-            </div>
+            <h6 className="formHeader">
+              Vaiko priėmimo tvarkos prioritetai
+            </h6>
+            <p>Pažymėkite tinkamus prioritetus</p>
+
             <div className="form-check">
               <input
                 type="checkbox"
@@ -551,9 +540,7 @@ class CreateApplicationFormContainer extends Component {
                 darbingumo lygio
               </label>
             </div>
-          </div>
-        </div>
-      </div>
+          </div>       
     );
   }
 
@@ -570,46 +557,29 @@ class CreateApplicationFormContainer extends Component {
   /** Darzeliu prioritetu forma */
   kindergartenPriorityForm() {
     return (
-      <div className="row">
-        <div className="col">
-          <div className="form">
-            <div className="row">
-              <h6 className="formHeader">Darželių prioritetas</h6>
-            </div>
-            <div className="row">
-              <p>
-                Pasirinkite darželių prioritetą, daugiausiai leidžiamos 5
-                įstaigos.
-              </p>
-            </div>
-            <div className="form-group">
-              <label htmlFor="kindergartenId1">
-                1 prioritetas <span className="fieldRequired">*</span>
-              </label>
-              <Select
-                name="kindergartenId1"
-                id="selKindergartenId1"
-                placeholder="Pasirinkite darželį iš sąrašo"
-                options={this.state.kindergartenList}
-                onChange={(e) => {
-                  if (
-                    e.value !== this.state.kindergartenChoises.kindergartenId1
-                  ) {
-                    const lastIdValue = this.state.kindergartenChoises
-                      .kindergartenId1;
-                    this.setState({
-                      ...this.state,
-                      kindergartenChoises: {
-                        ...this.state.kindergartenChoises,
-                        kindergartenId1: e.value,
-                      },
-                    });
-                    this.state.kindergartenList.forEach((element) => {
-                      if (element.value === lastIdValue) {
-                        element.disabled = "no";
-                      }
-                    });
-                  }
+      <div className="form">
+        <h6 className="formHeader">Darželių prioritetas</h6>
+        <p>Pasirinkite darželių prioritetą, daugiausiai leidžiamos 5
+          įstaigos.</p>
+
+        <div className="form-group">
+          <label htmlFor="kindergartenId1">
+            1 prioritetas <span className="fieldRequired">*</span>
+          </label>
+          <span id="selectKindergarten1">
+            <Select
+              className="basic-single"
+              classNamePrefix="select"
+              name="kindergartenId1"
+              id="selKindergartenId1"
+              placeholder="Pasirinkite darželį iš sąrašo"
+              options={this.state.kindergartenList}
+              onChange={(e) => {
+                if (
+                  e.value !== this.state.kindergartenChoises.kindergartenId1
+                ) {
+                  const lastIdValue = this.state.kindergartenChoises
+                    .kindergartenId1;
                   this.setState({
                     ...this.state,
                     kindergartenChoises: {
@@ -618,185 +588,198 @@ class CreateApplicationFormContainer extends Component {
                     },
                   });
                   this.state.kindergartenList.forEach((element) => {
-                    if (element.value === e.value) {
-                      element.disabled = "yes";
+                    if (element.value === lastIdValue) {
+                      element.disabled = "no";
                     }
                   });
-                }}
-                isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="kindergartenId2">2 prioritetas</label>
-              <Select
-                name="kindergartenId2"
-                id="selKindergartenId2"
-                placeholder="Pasirinkite darželį iš sąrašo"
-                options={this.state.kindergartenList}
-                onChange={(e) => {
-                  if (
-                    e.value !== this.state.kindergartenChoises.kindergartenId2
-                  ) {
-                    const lastIdValue = this.state.kindergartenChoises
-                      .kindergartenId2;
-                    this.setState({
-                      ...this.state,
-                      kindergartenChoises: {
-                        ...this.state.kindergartenChoises,
-                        kindergartenId2: e.value,
-                      },
-                    });
-                    this.state.kindergartenList.forEach((element) => {
-                      if (element.value === lastIdValue) {
-                        element.disabled = "no";
-                      }
-                    });
+                }
+                this.setState({
+                  ...this.state,
+                  kindergartenChoises: {
+                    ...this.state.kindergartenChoises,
+                    kindergartenId1: e.value,
+                  },
+                });
+                this.state.kindergartenList.forEach((element) => {
+                  if (element.value === e.value) {
+                    element.disabled = "yes";
                   }
-                  this.setState({
-                    ...this.state,
-                    kindergartenChoises: {
-                      ...this.state.kindergartenChoises,
-                      kindergartenId2: e.value,
-                    },
-                  });
-                  this.state.kindergartenList.forEach((element) => {
-                    if (element.value === e.value) {
-                      element.disabled = "yes";
-                    }
-                  });
-                }}
-                isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="kindergartenId3">3 prioritetas</label>
-              <Select
-                name="kindergartenId3"
-                id="selKindergartenId3"
-                placeholder="Pasirinkite darželį iš sąrašo"
-                options={this.state.kindergartenList}
-                onChange={(e) => {
-                  if (
-                    e.value !== this.state.kindergartenChoises.kindergartenId3
-                  ) {
-                    const lastIdValue = this.state.kindergartenChoises
-                      .kindergartenId3;
-                    this.setState({
-                      ...this.state,
-                      kindergartenChoises: {
-                        ...this.state.kindergartenChoises,
-                        kindergartenId3: e.value,
-                      },
-                    });
-                    this.state.kindergartenList.forEach((element) => {
-                      if (element.value === lastIdValue) {
-                        element.disabled = "no";
-                      }
-                    });
+                });
+              }}
+              isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
+            />
+          </span>
+        </div>
+        <div className="form-group">
+          <label htmlFor="kindergartenId2">2 prioritetas</label>
+          <Select
+            name="kindergartenId2"
+            id="selKindergartenId2"
+            placeholder="Pasirinkite darželį iš sąrašo"
+            options={this.state.kindergartenList}
+            onChange={(e) => {
+              if (
+                e.value !== this.state.kindergartenChoises.kindergartenId2
+              ) {
+                const lastIdValue = this.state.kindergartenChoises
+                  .kindergartenId2;
+                this.setState({
+                  ...this.state,
+                  kindergartenChoises: {
+                    ...this.state.kindergartenChoises,
+                    kindergartenId2: e.value,
+                  },
+                });
+                this.state.kindergartenList.forEach((element) => {
+                  if (element.value === lastIdValue) {
+                    element.disabled = "no";
                   }
-                  this.setState({
-                    ...this.state,
-                    kindergartenChoises: {
-                      ...this.state.kindergartenChoises,
-                      kindergartenId3: e.value,
-                    },
-                  });
-                  this.state.kindergartenList.forEach((element) => {
-                    if (element.value === e.value) {
-                      element.disabled = "yes";
-                    }
-                  });
-                }}
-                isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="kindergartenId4">4 prioritetas</label>
-              <Select
-                name="kindergartenId4"
-                id="selKindergartenId4"
-                placeholder="Pasirinkite darželį iš sąrašo"
-                options={this.state.kindergartenList}
-                onChange={(e) => {
-                  if (
-                    e.value !== this.state.kindergartenChoises.kindergartenId4
-                  ) {
-                    const lastIdValue = this.state.kindergartenChoises
-                      .kindergartenId4;
-                    this.setState({
-                      ...this.state,
-                      kindergartenChoises: {
-                        ...this.state.kindergartenChoises,
-                        kindergartenId4: e.value,
-                      },
-                    });
-                    this.state.kindergartenList.forEach((element) => {
-                      if (element.value === lastIdValue) {
-                        element.disabled = "no";
-                      }
-                    });
+                });
+              }
+              this.setState({
+                ...this.state,
+                kindergartenChoises: {
+                  ...this.state.kindergartenChoises,
+                  kindergartenId2: e.value,
+                },
+              });
+              this.state.kindergartenList.forEach((element) => {
+                if (element.value === e.value) {
+                  element.disabled = "yes";
+                }
+              });
+            }}
+            isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="kindergartenId3">3 prioritetas</label>
+          <Select
+            name="kindergartenId3"
+            id="selKindergartenId3"
+            placeholder="Pasirinkite darželį iš sąrašo"
+            options={this.state.kindergartenList}
+            onChange={(e) => {
+              if (
+                e.value !== this.state.kindergartenChoises.kindergartenId3
+              ) {
+                const lastIdValue = this.state.kindergartenChoises
+                  .kindergartenId3;
+                this.setState({
+                  ...this.state,
+                  kindergartenChoises: {
+                    ...this.state.kindergartenChoises,
+                    kindergartenId3: e.value,
+                  },
+                });
+                this.state.kindergartenList.forEach((element) => {
+                  if (element.value === lastIdValue) {
+                    element.disabled = "no";
                   }
-                  this.setState({
-                    ...this.state,
-                    kindergartenChoises: {
-                      ...this.state.kindergartenChoises,
-                      kindergartenId4: e.value,
-                    },
-                  });
-                  this.state.kindergartenList.forEach((element) => {
-                    if (element.value === e.value) {
-                      element.disabled = "yes";
-                    }
-                  });
-                }}
-                isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="kindergartenId5">5 prioritetas</label>
-              <Select
-                name="kindergartenId5"
-                id="selKindergartenId5"
-                placeholder="Pasirinkite darželį iš sąrašo"
-                options={this.state.kindergartenList}
-                onChange={(e) => {
-                  if (
-                    e.value !== this.state.kindergartenChoises.kindergartenId5
-                  ) {
-                    const lastIdValue = this.state.kindergartenChoises
-                      .kindergartenId5;
-                    this.setState({
-                      ...this.state,
-                      kindergartenChoises: {
-                        ...this.state.kindergartenChoises,
-                        kindergartenId5: e.value,
-                      },
-                    });
-                    this.state.kindergartenList.forEach((element) => {
-                      if (element.value === lastIdValue) {
-                        element.disabled = "no";
-                      }
-                    });
+                });
+              }
+              this.setState({
+                ...this.state,
+                kindergartenChoises: {
+                  ...this.state.kindergartenChoises,
+                  kindergartenId3: e.value,
+                },
+              });
+              this.state.kindergartenList.forEach((element) => {
+                if (element.value === e.value) {
+                  element.disabled = "yes";
+                }
+              });
+            }}
+            isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="kindergartenId4">4 prioritetas</label>
+          <Select
+            name="kindergartenId4"
+            id="selKindergartenId4"
+            placeholder="Pasirinkite darželį iš sąrašo"
+            options={this.state.kindergartenList}
+            onChange={(e) => {
+              if (
+                e.value !== this.state.kindergartenChoises.kindergartenId4
+              ) {
+                const lastIdValue = this.state.kindergartenChoises
+                  .kindergartenId4;
+                this.setState({
+                  ...this.state,
+                  kindergartenChoises: {
+                    ...this.state.kindergartenChoises,
+                    kindergartenId4: e.value,
+                  },
+                });
+                this.state.kindergartenList.forEach((element) => {
+                  if (element.value === lastIdValue) {
+                    element.disabled = "no";
                   }
-                  this.setState({
-                    ...this.state,
-                    kindergartenChoises: {
-                      ...this.state.kindergartenChoises,
-                      kindergartenId5: e.value,
-                    },
-                  });
-                  this.state.kindergartenList.forEach((element) => {
-                    if (element.value === e.value) {
-                      element.disabled = "yes";
-                    }
-                  });
-                }}
-                isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
-              />
-            </div>
-          </div>
+                });
+              }
+              this.setState({
+                ...this.state,
+                kindergartenChoises: {
+                  ...this.state.kindergartenChoises,
+                  kindergartenId4: e.value,
+                },
+              });
+              this.state.kindergartenList.forEach((element) => {
+                if (element.value === e.value) {
+                  element.disabled = "yes";
+                }
+              });
+            }}
+            isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="kindergartenId5">5 prioritetas</label>
+          <Select
+            name="kindergartenId5"
+            id="selKindergartenId5"
+            placeholder="Pasirinkite darželį iš sąrašo"
+            options={this.state.kindergartenList}
+            onChange={(e) => {
+              if (
+                e.value !== this.state.kindergartenChoises.kindergartenId5
+              ) {
+                const lastIdValue = this.state.kindergartenChoises
+                  .kindergartenId5;
+                this.setState({
+                  ...this.state,
+                  kindergartenChoises: {
+                    ...this.state.kindergartenChoises,
+                    kindergartenId5: e.value,
+                  },
+                });
+                this.state.kindergartenList.forEach((element) => {
+                  if (element.value === lastIdValue) {
+                    element.disabled = "no";
+                  }
+                });
+              }
+              this.setState({
+                ...this.state,
+                kindergartenChoises: {
+                  ...this.state.kindergartenChoises,
+                  kindergartenId5: e.value,
+                },
+              });
+              this.state.kindergartenList.forEach((element) => {
+                if (element.value === e.value) {
+                  element.disabled = "yes";
+                }
+              });
+            }}
+            isOptionDisabled={(option) => option.disabled === "yes" || this.state.registrationEnabled}
+          />
         </div>
       </div>
+
     );
   }
 
@@ -843,6 +826,18 @@ class CreateApplicationFormContainer extends Component {
   /** Handle submit */
   submitHandle(e) {
     e.preventDefault();
+
+    const data = {
+      additionalGuardian: this.state.additionalGuardian,
+      birthdate: this.state.birthdate.toLocaleDateString("en-CA"),
+      childName: this.state.childName,
+      childPersonalCode: this.state.childPersonalCode,
+      childSurname: this.state.childSurname,
+      kindergartenChoises: this.state.kindergartenChoises,
+      mainGuardian: this.state.mainGuardian,
+      priorities: this.state.priorities
+    }
+
     if (!this.state.kindergartenChoises.kindergartenId1) {
       swal({
         title: "Įvyko klaida",
@@ -850,78 +845,37 @@ class CreateApplicationFormContainer extends Component {
       });
     } else {
       http
-        .post(`${apiEndpoint}/api/prasymai/user/new`, {
-          additionalGuardian: {
-            address: this.state.additionalGuardian.address,
-            email: this.state.additionalGuardian.email,
-            name: this.state.additionalGuardian.name,
-            personalCode: this.state.additionalGuardian.personalCode,
-            phone: this.state.additionalGuardian.phone,
-            surname: this.state.additionalGuardian.surname,
-          },
-          birthdate: this.state.birthdate.toLocaleDateString("en-CA"),
-          childName: this.state.childName,
-          childPersonalCode: this.state.childPersonalCode,
-          childSurname: this.state.childSurname,
-          kindergartenChoises: {
-            kindergartenId1: this.state.kindergartenChoises.kindergartenId1,
-            kindergartenId2: this.state.kindergartenChoises.kindergartenId2,
-            kindergartenId3: this.state.kindergartenChoises.kindergartenId3,
-            kindergartenId4: this.state.kindergartenChoises.kindergartenId4,
-            kindergartenId5: this.state.kindergartenChoises.kindergartenId5,
-          },
-          mainGuardian: {
-            address: this.state.mainGuardian.address,
-            email: this.state.mainGuardian.email,
-            name: this.state.mainGuardian.name,
-            personalCode: this.state.mainGuardian.personalCode,
-            phone: this.state.mainGuardian.phone,
-            role: this.state.mainGuardian.role,
-            surname: this.state.mainGuardian.surname,
-            username: this.state.mainGuardian.username,
-          },
-          priorities: {
-            childIsAdopted: this.state.priorities.childIsAdopted,
-            familyHasThreeOrMoreChildrenInSchools: this.state.priorities
-              .familyHasThreeOrMoreChildrenInSchools,
-            guardianDisability: this.state.priorities.guardianDisability,
-            guardianInSchool: this.state.priorities.guardianInSchool,
-            livesInVilnius: this.state.priorities.livesInVilnius,
-          },
-        })
+        .post(`${apiEndpoint}/api/prasymai/user/new`, data)
         .then((response) => {
           console.log(response);
           swal({
-            text: response.data,           
+            text: response.data,
             button: "Gerai",
           });
-          /**
-           * TODO:
-           * redirect
-           * .then(()=>{return window.location.href="/"}) */
+
+          this.props.history.push("/prasymai")
         })
-        .then(() => this.props.history.push("/prasymai"))
-        .catch((error) => {
-          console.log(error);
-          swal({            
-            text: error.response.data,           
-            button: "Gerai"
-          });
+        .catch((error) => {          
+            swal({
+              text: "Įvyko klaida. " + error.response.data,
+              button: "Gerai"
+            });          
         });
     }
   }
 
   drawMessageRegistrationNotAvailable(status) {
-    if(status) {
+    if (status) {
       return (
-        <div class="alert alert-warning" role="alert">
-            Šiuo metu registracija nevyksta.
+        <div class="alert alert-warning p-1" role="alert">
+          Šiuo metu registracija nevykdoma
         </div>
       )
     }
   }
 
   render() {
+
     return (
       <div className="container pt-4">
         {
@@ -930,21 +884,21 @@ class CreateApplicationFormContainer extends Component {
         <div className="form">
           <form onSubmit={this.submitHandle}>
             <div className="row">
-              <div className="col-3">
+              <div className="col-4">
                 {
                   /** Atstovas 1 */
                   this.userForm(true)
                 }
               </div>
-              <div className="col" />
-              <div className="col-3">
+
+              <div className="col-4">
                 {
                   /** Atstovas 2 */
                   this.userForm(false)
                 }
               </div>
-              <div className="col" />
-              <div className="col-3">
+
+              <div className="col-4">
                 {
                   /** Vaiko forma */
                   this.childForm()
@@ -952,24 +906,23 @@ class CreateApplicationFormContainer extends Component {
               </div>
             </div>
             <div className="row">
-              <div className="col">{this.checkboxPriorityForm()}</div>
-            </div>
-            <div className="row">
-              <div className="col-6">{this.kindergartenPriorityForm()}</div>
-            </div>
-            <div className="row">
-              <p>
-                Dėmesio! Naujas prašymas anuliuoja prieš tai esantį aktyvų
-                prašymą. Jei pirmu numeriu nurodytoje įstaigoje nėra laisvų
-                vietų, vieta skiriama antru numeriu pažymėtoje įstaigoje, jei
-                joje yra laisvų vietų ir t. t. Jeigu visuose prašyme pažymėtose
-                įstaigose nėra laisvų vietų, prašymas lieka laukiančiųjų eilėje.
+              <div className="col-12">{this.checkboxPriorityForm()}</div>
+
+              <div className="col-7">
+                <div className="">{this.kindergartenPriorityForm()}</div>
+
+                <p>
+                  Dėmesio! Jei pirmu numeriu nurodytoje įstaigoje nėra laisvų
+                  vietų, vieta skiriama antru numeriu pažymėtoje įstaigoje, jei
+                  joje yra laisvų vietų ir t. t. Jeigu visuose prašyme pažymėtose
+                  įstaigose nėra laisvų vietų, prašymas lieka laukiančiųjų eilėje.
               </p>
-            </div>
-            <div className="row">
-              <button type="submit" className="btn btn-primary" disabled={this.state.registrationEnabled}>
-                Sukurti prašymą
+
+                <button type="submit" className="btn btn-primary mt-3" disabled={this.state.registrationEnabled}>
+                  Sukurti prašymą
               </button>
+
+              </div>
             </div>
           </form>
         </div>

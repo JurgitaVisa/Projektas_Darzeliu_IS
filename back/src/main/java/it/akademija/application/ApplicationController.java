@@ -41,7 +41,7 @@ import it.akademija.application.management.RegistrationStatusService;
 public class ApplicationController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ApplicationController.class);
-
+	
 	@Autowired
 	private ApplicationService service;
 

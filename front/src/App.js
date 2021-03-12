@@ -25,6 +25,7 @@ import apiEndpoint from "./components/10Services/endpoint";
 import { UserHomeContainer } from "./components/02Main/UserHomeContainer";
 import { KindergartenStatContainer } from "./components/09Statistics/KindergartenStatContainer";
 import { QueueContainer } from "./components/12Queue/QueueContainer";
+import UserDocumentContainer from "./components/13UserDocuments/UserDocumentContainer";
 
 var initState = {
   isAuthenticated: null,
@@ -195,6 +196,11 @@ function App() {
                       exact
                       path="/profilis/atnaujinti"
                       component={UpdateProfileFormContainer}
+                    />
+                    <Route 
+                      exact
+                      path="/pazymos"
+                      component={UserDocumentContainer} 
                     />
                     <Route path="*" component={NotFound} />
                   </Switch>

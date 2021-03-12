@@ -17,12 +17,12 @@ public class DatabaseUserDetailPasswordService implements UserDetailsPasswordSer
 	private UserDetailsService userDetailsService;
 
 	@Autowired
-	private UserDAO userDao;	
+	private UserDAO userDao;
 
 	@Override
 	@Transactional
 	public UserDetails updatePassword(UserDetails userDetails, String newPassword) {
-		
+
 		User user = userDao.findByUsername(userDetails.getUsername());
 		user.setPassword(newPassword);
 		userDao.saveAndFlush(user);
@@ -45,7 +45,5 @@ public class DatabaseUserDetailPasswordService implements UserDetailsPasswordSer
 	public void setUserDao(UserDAO userDao) {
 		this.userDao = userDao;
 	}
-	
-	
 
 }

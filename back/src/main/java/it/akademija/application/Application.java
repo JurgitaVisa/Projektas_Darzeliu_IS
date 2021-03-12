@@ -20,8 +20,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.akademija.application.priorities.Priorities;
 import it.akademija.kindergarten.Kindergarten;
@@ -57,11 +58,12 @@ public class Application {
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthdate;
-	
+
 	private int priorityScore;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="priorities_id")
+	@JoinColumn(name = "priorities_id")
+	@JsonIgnore
 	private Priorities priorities;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
@@ -70,18 +72,23 @@ public class Application {
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	@JoinColumn(name = "additional_guardian_id")
-	private ParentDetails additionalGuardian;	
+	private ParentDetails additionalGuardian;
 
 	@OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
-	private Set<KindergartenChoise> kindergartenChoises;	
 
-	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@JsonIgnore
+	private Set<KindergartenChoise> kindergartenChoises;
+
+//	@OneToOne(mappedBy = "application", cascade= CascadeType.ALL)
+//	@JoinColumn(name="application_id")
+//	private ApplicationQueue applicationQueue;
+
+	private int numberInWaitingList;
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "approved_kindergarten_id")
 	private Kindergarten approvedKindergarten;
-	
-	private int numberInWaitingList;
-	
+
 	private LocalDate approvalDate;
 
 	public Application() {
@@ -98,7 +105,7 @@ public class Application {
 		this.mainGuardian = mainGuardian;
 		this.additionalGuardian = additionalGuardian;
 	}
-	
+
 	/**
 	 * 
 	 * Get child's age for this calendar year
@@ -112,7 +119,6 @@ public class Application {
 		LocalDate endOfYear = LocalDate.of(thisYear, 12, 31);
 		return ChronoUnit.YEARS.between(this.birthdate, endOfYear);
 	}
-	
 
 	public ApplicationStatus getStatus() {
 		return status;
@@ -144,7 +150,7 @@ public class Application {
 
 	public void setChildPersonalCode(String childPersonalCode) {
 		this.childPersonalCode = childPersonalCode;
-	}	
+	}
 
 	public LocalDate getBirthdate() {
 		return birthdate;
@@ -164,6 +170,10 @@ public class Application {
 
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public User getMainGuardian() {
@@ -196,7 +206,7 @@ public class Application {
 
 	public void setPriorities(Priorities priorities) {
 		this.priorities = priorities;
-		priorities.setApplication(this);		
+		priorities.setApplication(this);
 	}
 
 	public int getPriorityScore() {

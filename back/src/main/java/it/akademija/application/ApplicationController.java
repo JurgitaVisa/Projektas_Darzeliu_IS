@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,6 +57,7 @@ public class ApplicationController {
 	 */
 	@Secured({ "ROLE_USER" })
 	@PostMapping("/user/new")
+	@Async
 	@ApiOperation(value = "Create new application")
 	public ResponseEntity<String> createNewApplication(
 			@ApiParam(value = "Application", required = true) @Valid @RequestBody ApplicationDTO data) {
@@ -63,21 +65,26 @@ public class ApplicationController {
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
 		String childPersonalCode = data.getChildPersonalCode();
-		
+
 		if (!statusService.getStatus().isStatus()) {
-			
+
 			LOG.warn("Naudotojas [{}] bandė registruoti prašymą esant neaktyviai registracijai", currentUsername);
 			return new ResponseEntity<String>("Šiuo metu registracija nevykdoma.", HttpStatus.METHOD_NOT_ALLOWED);
 
 		} else if (service.existsByPersonalCode(childPersonalCode)) {
-			
-			LOG.warn("Naudotojas [{}] bandė registruoti prašymą jau registruotam vaikui su asmens kodu [{}]", currentUsername, data.getChildPersonalCode());
+
+			LOG.warn("Naudotojas [{}] bandė registruoti prašymą jau registruotam vaikui su asmens kodu [{}]",
+					currentUsername, data.getChildPersonalCode());
 
 			return new ResponseEntity<String>("Prašymas vaikui su tokiu asmens kodu jau yra registruotas",
 					HttpStatus.CONFLICT);
 
 		} else {
+
+			LOG.info("**ApplicationController: kuriamas prasymas vaikui AK [{}] **", data.getChildPersonalCode());
+
 			LOG.info("Naudotojas [{}] sukūrė prašymą vaikui AK [{}]", currentUsername, childPersonalCode);
+
 			return service.createNewApplication(currentUsername, data);
 		}
 	}
@@ -112,7 +119,7 @@ public class ApplicationController {
 	@ApiOperation(value = "Get a page from all submitted applications")
 	public Page<ApplicationInfo> getPageFromSubmittedApplications(@RequestParam("page") int page,
 			@RequestParam("size") int size) {
-		
+
 		List<Order> orders = new ArrayList<>();
 		orders.add(new Order(Direction.ASC, "childSurname").ignoreCase());
 		orders.add(new Order(Direction.ASC, "childName").ignoreCase());
@@ -153,7 +160,9 @@ public class ApplicationController {
 	 * @param id
 	 * @return message
 	 */
+
 	@Secured({ "ROLE_USER" })
+
 	@DeleteMapping("/user/delete/{id}")
 	@ApiOperation("Delete user application by id")
 	public ResponseEntity<String> deleteApplication(

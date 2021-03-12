@@ -32,6 +32,7 @@ public class Priorities {
 	private boolean guardianDisability;
 
 	@OneToOne(mappedBy = "priorities")
+
 	private Application application;
 
 	public Priorities() {

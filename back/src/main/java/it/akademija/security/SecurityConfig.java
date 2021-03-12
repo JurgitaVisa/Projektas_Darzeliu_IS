@@ -27,6 +27,7 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import it.akademija.user.UserDAO;
 import it.akademija.journal.JournalService;
@@ -126,18 +127,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// atsijungimas nuo sistemos
 				.and().logout().logoutUrl("/logout")
 				// ištrina sausainėlius ir uždaro sesiją
-				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID")
+				.logoutSuccessHandler(new LogoutSuccessHandler() {
 
-//				.logoutSuccessHandler(new LogoutSuccessHandler() {
-//
-//					@Override
-//					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
-//							Authentication authentication) throws IOException, ServletException {
-//
-//						LOG.info("** SecurityConfig: Naudotojas atsijunge nuo sistemos **");
-//
-//					}
-//				})
+					@Override
+					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+							Authentication authentication) throws IOException, ServletException {
+						
+						String username = authentication.getName();
+						Long userID = userDao.findByUsername(username).getUserId();
+						
+						LOG.info("** SecurityConfig: Naudotojas {} ID: {} atsijunge nuo sistemos **", username, userID);
+						
+						journalService.newJournalEntry(userID, username, OperationType.LOGOUT, userID, ObjectType.LOGIN, "Naudotojas atsijungė nuo sistemos");
+
+					}
+				})
+				
+				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID")
 				.logoutSuccessUrl("/").permitAll() // leidziam logout
 
 				.and().csrf().disable() // nenaudojam tokenu

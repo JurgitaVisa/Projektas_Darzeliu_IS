@@ -11,24 +11,34 @@ public class RegistrationStatus {
 	private Integer id;
 
 	@Column(name = "registration_status")
-	private boolean status;
+	private boolean registrationActive;
+	
+	@Column(name = "queue_editing_locked")
+	private boolean queueEditingLocked;
+	
 
 	public RegistrationStatus() {
 		id = 1;
-		status = false;
+		registrationActive = false;
+		queueEditingLocked = false;
+	}		
+
+	public boolean isRegistrationActive() {
+		return registrationActive;
 	}
 
-	public boolean isStatus() {
-		return status;
+	public void setRegistrationActive(boolean registrationActive) {
+		this.registrationActive = registrationActive;
 	}
 
-	public void setStatus(boolean status) {
-		this.status = status;
+	public boolean isQueueEditingLocked() {
+		return queueEditingLocked;
 	}
 
-	@Override
-	public String toString() {
-		return status ? "On" : "Off";
+	public void setQueueEditingLocked(boolean queueEditingLocked) {
+		this.queueEditingLocked = queueEditingLocked;
 	}
+
+	
 
 }

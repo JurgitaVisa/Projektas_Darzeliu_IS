@@ -26,32 +26,43 @@ class QueueProcessedTable extends Component {
             path: 'kindergartenName',
             label: 'Darželio pavadinimas',
             content: application => <span> {application.kindergartenName ? application.kindergartenName : "-"} </span>
-        },       
+        },
         {
             key: 'numberInWaitingList',
             path: 'numberInWaitingList',
             label: 'Laukiančiųjų eilės numeris',
             content: application => <span> {application.numberInWaitingList ? application.numberInWaitingList : "-"} </span>
-        },
-        {
-            key: 'deactivate',
-            label: 'Veiksmai',
-            content: application => 
+        }
+    ]
+
+    additionalColumn = {
+        key: 'deactivate',
+        label: 'Veiksmai',
+        content: application =>
             <span>
                 {application.status === 'Neaktualus' || application.status === 'Patvirtintas' ? <span>-</span> : <button onClick={() => this.props.onDeactivate(application)} id="btnDeactivateApplication" className="btn btn-outline-danger btn-sm btn-block">Deaktyvuoti</button>}
             </span>
-        }
+    }
 
-    ]
+
 
 
     render() {
-        const { applications } = this.props;
+        const { applications, isLocked } = this.props;
+
+        let columns=[];
+
+        if(isLocked){
+            columns=this.columns;
+        } else {
+            columns=[...this.columns, this.additionalColumn]
+        }
 
         return (
             <Table
-                columns={this.columns}
+                columns={columns}
                 data={applications}
+                isLocked={isLocked}
 
             />
         );

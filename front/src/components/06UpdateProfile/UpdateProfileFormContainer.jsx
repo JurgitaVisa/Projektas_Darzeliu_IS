@@ -415,14 +415,18 @@ export default class UpdateProfileFormContainer extends Component {
                 </div>
 
                 {currenUserRole === 'USER' &&
-                    <div className="row">
+                    <div>
+                        <h6 className="pt-4"><b>Tvarkyti paskyrą</b></h6>
 
-                        <div className="col-12">
-                            <DownloaderContainer />
-                        </div>
+                        <div className="row">
 
-                        <div className="col-12 pt-3">
-                            <ForgetMe />
+                            <div className="col-12">
+                                <DownloaderContainer />
+                            </div>
+
+                            <div className="col-12 py-3">
+                                <ForgetMe />
+                            </div>
                         </div>
                     </div>
                 }

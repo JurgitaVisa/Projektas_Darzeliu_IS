@@ -1,6 +1,6 @@
 package it.akademija.kindergarten;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class KindergartenControllerTest {
 
 	@Test
 	public void contextLoads() {
-		assertThat(controller).isNotNull();
+		assertNotNull(controller);
 	}
 
 }

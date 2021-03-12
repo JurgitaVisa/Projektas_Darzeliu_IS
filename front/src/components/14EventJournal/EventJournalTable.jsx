@@ -22,7 +22,7 @@ function EventJournalTable(props) {
         },
         {                              
             key: 'user_name',
-            label: 'Naudotojas',
+            label: 'Naudotojo prisijungimo vardas',
             content: entry => <span>{entry.userName}</span>
         },
         {                              
@@ -51,8 +51,6 @@ function EventJournalTable(props) {
             content: entry => <span>{entry.operationType}</span>
         },
     ]
-
-    console.log(entries)
 
     return (
             <Table

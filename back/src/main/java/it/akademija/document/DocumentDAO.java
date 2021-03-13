@@ -6,4 +6,6 @@ public interface DocumentDAO extends JpaRepository<DocumentEntity, Long> {
 
 	DocumentEntity getDocumentById(long id);
 	
+	void deleteByUploaderId(long uploaderId);
+	
 }

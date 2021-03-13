@@ -97,10 +97,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						String username = user.getName();
 						Object[] roles = user.getAuthorities().toArray();
 						String role = roles[0].toString().substring(5);
-
+						
 						LOG.info("Naudotojas [{}] prisijunge prie sistemos", username);
 						
-						journalService.newJournalEntry(OperationType.SUCCESSFUL_LOGIN, userDao.findByUsername(username).getUserId(), ObjectType.LOGIN, "Naudotojas prisijungė prie sistemos");
+						journalService.newJournalEntry(OperationType.SUCCESSFUL_LOGIN, ObjectType.LOGIN, "Naudotojas prisijungė prie sistemos");
 
 						response.setHeader("Access-Control-Allow-Credentials", "true");
 						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));

@@ -24,6 +24,9 @@ public class JournalService {
 	public Page<JournalEntry> getAllJournalEntries(Pageable pageable) {
 		return journalEntryDAO.getAllJournalEntries(pageable);
 	}
+	/**
+	 *	Metodas visiems atvejams, kai pasiekiamas user iš SecurityContext
+	 */
 	
 	@Transactional
 	public void newJournalEntry(OperationType operationType, Long objectID,
@@ -36,6 +39,26 @@ public class JournalService {
 		
 		journalEntryDAO.saveAndFlush(entry);
 	}
+	
+	/**
+	* Metodas sėkmingo prisijungimo atvejui, kad nereikėtų ieškoti userID duombazėje
+	*/
+	
+	@Transactional
+	public void newJournalEntry(OperationType operationType, ObjectType objectType, String entryMessage) {
+		
+		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		Long currentUserID = userDAO.findByUsername(currentUsername).getUserId();
+		
+		JournalEntry entry = new JournalEntry(currentUserID, currentUsername, LocalDateTime.now(), operationType, currentUserID, objectType, entryMessage);
+		
+		journalEntryDAO.saveAndFlush(entry);
+	}
+	
+	/**
+	* Metodas atvejams, kai SecurityContext'e nelieka/nėra userio - logout ir unsuccessful login atvejais
+	* Nesėkmingo prisijungimo atveju currentUserID, objectID reiškmes paduoti null
+	*/
 	
 	@Transactional
 	public void newJournalEntry(Long currentUserID, String currentUsername, OperationType operationType, Long objectID,

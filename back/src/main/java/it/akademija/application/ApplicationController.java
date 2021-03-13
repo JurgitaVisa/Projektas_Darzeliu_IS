@@ -66,7 +66,7 @@ public class ApplicationController {
 
 		String childPersonalCode = data.getChildPersonalCode();
 
-		if (!statusService.getStatus().isStatus()) {
+		if (!statusService.getStatus().isRegistrationActive()) {
 
 			LOG.warn("Naudotojas [{}] bandė registruoti prašymą esant neaktyviai registracijai", currentUsername);
 			return new ResponseEntity<String>("Šiuo metu registracija nevykdoma.", HttpStatus.METHOD_NOT_ALLOWED);

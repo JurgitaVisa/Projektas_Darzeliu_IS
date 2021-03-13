@@ -39,22 +39,16 @@ public class RegistrationStatusController {
 	 * @param status
 	 */
 	@Secured({ "ROLE_MANAGER" })
-	@PostMapping("/status/{status}")
+	@PostMapping("/status/{registrationActive}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Set application status")
-	public @ResponseBody String setStatus(@PathVariable boolean status) {
+	public RegistrationStatus setStatus(@PathVariable boolean registrationActive) {		
 
-		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		RegistrationStatus registrationStatus = statusService.getStatus();
+		//String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		return statusService.setStatus(registrationActive);
 
-		registrationStatus.setStatus(status);
-		registrationStatus = statusService.saveStatus(registrationStatus);
-
-		LOG.info("** StatusController: keičiamas prašymo registracijos statusas **");
-		LOG.info("Naudotojas [{}] pakeitė prašymo registracijos statusą", currentUsername);
-
-		return registrationStatus.toString();
-
+		//LOG.info("Naudotojas [{}] pakeitė prašymo registracijos statusą", currentUsername);
 	}
 
 	/**
@@ -66,13 +60,9 @@ public class RegistrationStatusController {
 	@GetMapping("/status")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get application status")
-	public boolean getStatus() {
+	public RegistrationStatus getStatus() {
 
-		RegistrationStatus registrationStatus = statusService.getStatus();
-		LOG.info("** Statuscontroller: gaunamas registracijos statusas. **");
-
-		return registrationStatus.isStatus();
-
+		return statusService.getStatus();
 	}
 
 	/**
@@ -88,8 +78,7 @@ public class RegistrationStatusController {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 		queueService.processApplicationsToQueue();
-
-		LOG.info("** Statuscontroller: pradedamas eilių formavimas. **");
+		
 		LOG.info("Naudotojas [{}] pradeda eilių formavimą", currentUsername);
 
 		return new ResponseEntity<String>("Eilė suformuota", HttpStatus.OK);
@@ -107,7 +96,7 @@ public class RegistrationStatusController {
 	public ResponseEntity<String> confirmQueue() {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		LOG.info("** Statuscontroller: patvirtinama suformuota eilė. **");
+		
 		LOG.info("Naudotojas [{}] tvirtina eiles.", currentUsername);
 
 		return queueService.confirmApplicationsInQueue();
@@ -122,13 +111,14 @@ public class RegistrationStatusController {
 	@Secured({ "ROLE_ADMIN" })
 	@PostMapping("/queue/lock")
 	@ApiOperation(value = "Lock queue editing for Manager")
-	public ResponseEntity<String> lockQueueEditing() {
+	public void lockQueueEditing() {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		LOG.info("** Statuscontroller: užrakinamas eilės redagavimas. **");
+		
 		LOG.info("Naudotojas [{}] užrakina eilių redagavimą.", currentUsername);
 
-		return new ResponseEntity<String>("Eilės redagavimas užrakintas", HttpStatus.OK);
+		statusService.lockQueueEditing();	
+		
 	}
 
 	/**
@@ -140,13 +130,13 @@ public class RegistrationStatusController {
 	@Secured({ "ROLE_ADMIN" })
 	@PostMapping("/queue/unlock")
 	@ApiOperation(value = "Unlock queue editing for Manager")
-	public ResponseEntity<String> unlockQueueEditing() {
+	public void unlockQueueEditing() {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		LOG.info("** Statuscontroller: atrakinamas eilės redagavimas. **");
+		
 		LOG.info("Naudotojas [{}] atrakina eilių redagavimą.", currentUsername);
 
-		return new ResponseEntity<String>("Eilės redagavimas atrakintas", HttpStatus.OK);
+		statusService.unlockQueueEditing();		
 	}
 
 	public RegistrationStatusService getStatusService() {

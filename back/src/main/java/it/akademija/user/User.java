@@ -70,6 +70,7 @@ public class User {
 	@Column
 	private String password;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "mainGuardian", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	private Set<Application> userApplications;
 
@@ -102,7 +103,7 @@ public class User {
 		this.role = role;
 		this.username = username;
 	}
-
+	
 	public void setUserApplications(Set<Application> userApplications) {
 		this.userApplications = userApplications;
 	}

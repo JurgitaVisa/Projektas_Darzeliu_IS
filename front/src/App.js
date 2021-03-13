@@ -71,6 +71,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initState);
 
   useEffect(() => {
+
     if (state.isAuthenticated === null) {
       http
         .get(`${apiEndpoint}/api/loggedUserRole`)
@@ -81,21 +82,21 @@ function App() {
           });
         })
         .catch((error) => {
-          if (
-            error.response &&
-            error.response.status >= 400 &&
-            error.response.status < 500
-          )
-            dispatch({
-              type: "ERROR",
-              payload: error.response.status,
-            });
-          else {
+          const unexpectedError = error.response &&
+                                  error.response.status >= 400 &&
+                                  error.response.status < 500;
+                                  
+          if (!unexpectedError || (error.response && error.response.status === 404))
+          {
             swal("Įvyko klaida, puslapis nurodytu adresu nepasiekiamas");
             dispatch({
               type: "ERROR",
             });
           }
+          else dispatch({
+            type: "ERROR",
+            payload: error.response.status,
+          });
         });
     }
   }, [state.isAuthenticated]);

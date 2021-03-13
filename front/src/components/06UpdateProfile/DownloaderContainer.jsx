@@ -40,7 +40,7 @@ class DownloaderContainer extends Component {
 
         return (
             
-            <button className="btn btn-link pt-5 px-0" onClick={this.getUserDetailsArchive} id="btnGetUserZip">Atsisiųsti informaciją apie kaupiamus asmens duomenis (.zip)</button>
+            <button className="btn btn-link pt-3 px-0" onClick={this.getUserDetailsArchive} id="btnGetUserZip">Atsisiųsti informaciją apie kaupiamus asmens duomenis (.zip)</button>
 
         )
     }

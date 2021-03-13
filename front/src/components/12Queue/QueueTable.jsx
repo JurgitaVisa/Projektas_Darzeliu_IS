@@ -52,7 +52,10 @@ class QueueTable extends Component {
             key: 'status',
             label: 'Statusas',
             content: application => <span>{application.status}</span>
-        },
+        }
+    ]
+
+    additionalColumn =
         {
             key: 'deactivate',
             label: 'Veiksmai',
@@ -62,15 +65,24 @@ class QueueTable extends Component {
                 </span>
         }
 
-    ]
+
 
 
     render() {
-        const { applications } = this.props;
+
+        const { applications, isLocked } = this.props;
+
+        let columns=[];
+
+        if(isLocked){
+            columns=this.columns;
+        } else {
+            columns=[...this.columns, this.additionalColumn]
+        }
 
         return (
             <Table
-                columns={this.columns}
+                columns={columns}
                 data={applications}
 
             />

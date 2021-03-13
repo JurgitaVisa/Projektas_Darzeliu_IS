@@ -24,6 +24,7 @@ export class QueueContainer extends Component {
             numberOfElements: 0,
             searchQuery: "",
             isActive: false,
+            isLocked: false,
             currentButtonValue: ""
         }
     }
@@ -36,10 +37,13 @@ export class QueueContainer extends Component {
         http
             .get(`${apiEndpoint}/api/status`)
             .then((response) => {
-                let buttonValue = response.data ? "On" : "Off"
+                
+                let buttonValue = response.data.registrationActive ? "On" : "Off"
+                
                 this.setState(
                     {
-                        isActive: response.data,
+                        isActive: response.data.registrationActive,
+                        isLocked: response.data.queueEditingLocked,
                         currentButtonValue: buttonValue
                     },
                     function () {
@@ -257,7 +261,7 @@ export class QueueContainer extends Component {
 
         const size = this.state.applications.length;
 
-        const { applications, totalElements, pageSize, searchQuery, isActive, currentButtonValue } = this.state;
+        const { applications, totalElements, pageSize, searchQuery, isActive, isLocked, currentButtonValue } = this.state;
 
         const placeholder = "Ieškoti pagal vaiko asmens kodą..."
 
@@ -292,6 +296,7 @@ export class QueueContainer extends Component {
                     {isActive &&
                         <QueueTable
                             applications={applications}
+                            isLocked={isLocked}
                             onDeactivate={this.handleDeactivate}
                         />
                     }
@@ -299,6 +304,7 @@ export class QueueContainer extends Component {
                     {!isActive &&
                         <QueueProcessedTable
                             applications={applications}
+                            isLocked={isLocked}
                             onDeactivate={this.handleDeactivate}
                         />
                     }

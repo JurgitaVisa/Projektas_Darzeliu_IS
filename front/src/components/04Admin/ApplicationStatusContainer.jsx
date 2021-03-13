@@ -25,7 +25,10 @@ export class ApplicationStatusContainer extends Component {
             .get(`${apiEndpoint}/api/status`)
             .then((response) => {
                 this.setState(
-                    { isActive: response.data }
+                    {
+                        isActive: response.data.registrationActive,
+                        isLocked: response.data.queueEditingLocked
+                    }
                 );
             })
     }
@@ -61,12 +64,13 @@ export class ApplicationStatusContainer extends Component {
 
             <div className="container pt-4" >
 
-                <h6 className="pl-2 pt-3">Prašymų sąrašo redagavimo administravimas</h6>
-                {isActive && <p className="pl-2 pt-3">Registracija vykdoma</p>}
-                {!isActive && <p className="pl-2 pt-3">Šiuo metu registracija nevykdoma</p>}
+                <h6 className="py-3">Prašymų sąrašo redagavimo administravimas</h6>
 
-                {isLocked && <button className="btn btn-outline-primary btn-sm" id="btnUnlockQueueEdit">Atrakinti sąrašo redagavimą</button>}
-                {!isLocked && <button className="btn btn-outline-danger btn-sm" id="btnLockQueueEdit">Užrakinti sąrašo redagavimą</button>}
+                {isActive && <p >Prašymų teikimo statusas:   Registracija vykdoma</p>}
+                {!isActive && <p >Prašymų teikimo statusas:   Šiuo metu registracija nevykdoma</p>}
+
+                {isLocked && <button onClick={this.handleClick} value="Unlock" className="btn btn-outline-primary btn-sm" id="btnUnlockQueueEdit">Atrakinti sąrašo redagavimą</button>}
+                {!isLocked && <button onClick={this.handleClick} value="Lock" className="btn btn-outline-danger btn-sm" id="btnLockQueueEdit">Užrakinti sąrašo redagavimą</button>}
 
             </div>
         )

@@ -49,7 +49,7 @@ public class JournalService {
 		List<JournalEntry> userJournalEntries= journalEntryDAO.findByUserName(username);
 		
 		for(JournalEntry entry: userJournalEntries) {
-			entry.setUserName("deleted_by_user");
+			entry.setUserName("pašalinta pagal BDAR");
 		}
 		
 		journalEntryDAO.saveAll(userJournalEntries);

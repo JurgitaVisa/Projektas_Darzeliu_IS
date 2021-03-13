@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.akademija.application.Application;
 import it.akademija.application.ApplicationService;
+import it.akademija.document.DocumentDAO;
+import it.akademija.journal.JournalService;
 import it.akademija.role.Role;
 import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsDAO;
 import it.akademija.user.passwordresetrequests.UserPasswordResetRequestsEntity;
@@ -35,6 +37,12 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private PasswordEncoder encoder;
+	
+	@Autowired
+	DocumentDAO documentDao;
+	
+	@Autowired 
+	JournalService journalService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -116,6 +124,8 @@ public class UserService implements UserDetailsService {
 				applicationService.detachAdditionalGuardian(application);
 				applicationService.updateAvailablePlacesInKindergarten(application);
 			}
+			
+			documentDao.deleteByUploaderId(user.getUserId());
 		}
 
 		userDao.deleteByUsername(username);
@@ -129,6 +139,8 @@ public class UserService implements UserDetailsService {
 	public void deleteMyUserData() {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
+		journalService.depersonalizeUserLogs(username);
+		
 		deleteUser(username);
 
 	}

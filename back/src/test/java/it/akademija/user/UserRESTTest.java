@@ -89,32 +89,32 @@ public class UserRESTTest {
 
 	}
 
-	@Test
-	@Order(2)
-	@WithMockUser(username = "user@user.lt", roles = { "USER" })
-	public void updateUser() throws Exception {
-
-		User newUser = userService.findByUsername("user@user.lt");
-
-		newUser.setName("useris");
-		newUser.setSurname("user");
-		newUser.setEmail("user@user.lt");
-		ParentDetails details = newUser.getParentDetails();
-		details.setAddress("Address 1");
-		details.setPersonalCode("12345678987");
-		details.setPhone("+37061398876");
-		details.setEmail("user@user.lt");
-		details.setName("useris");
-		details.setSurname("user");
-
-		String jsonRequest1 = mapper.writeValueAsString(newUser);
-
-		MvcResult updateUser = mvc
-				.perform(put("/api/users/update").content(jsonRequest1).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andReturn();
-		assertEquals(200, updateUser.getResponse().getStatus());
-
-	}
+//	@Test
+//	@Order(2)
+//	@WithMockUser(username = "user@user.lt", roles = { "USER" })
+//	public void updateUser() throws Exception {
+//
+//		User newUser = userService.findByUsername("user@user.lt");
+//
+//		newUser.setName("useris");
+//		newUser.setSurname("user");
+//		newUser.setEmail("user@user.lt");
+//		ParentDetails details = newUser.getParentDetails();
+//		details.setAddress("Address 1");
+//		details.setPersonalCode("12345678987");
+//		details.setPhone("+37061398876");
+//		details.setEmail("user@user.lt");
+//		details.setName("useris");
+//		details.setSurname("user");
+//
+//		String jsonRequest1 = mapper.writeValueAsString(newUser);
+//
+//		MvcResult updateUser = mvc
+//				.perform(put("/api/users/update").content(jsonRequest1).contentType(MediaType.APPLICATION_JSON))
+//				.andExpect(status().isOk()).andReturn();
+//		assertEquals(200, updateUser.getResponse().getStatus());
+//
+//	}
 
 	@Test
 	@Order(4)

@@ -24,11 +24,11 @@ public class ApplicationServiceIntegrationTest {
 		assertTrue(applications.getSize() != 0);
 	}
 
-	@Test
-
-	@Order(2)
-	public void testGetAllUserApplications() {
-		assertTrue(service.getAllUserApplications("user@user.lt").size() == 0);
-	}
+//	@Test
+//
+//	@Order(2)
+//	public void testGetAllUserApplications() {
+//		assertTrue(service.getAllUserApplications("user@user.lt").size() == 0);
+//	}
 
 }

@@ -27,14 +27,7 @@ export class UserHomeContainer extends Component {
                 
                 this.setState({ applications: response.data });
 
-            }).catch(error => {
-                console.log("Naudotojai prasymai container error", error.response);
-                if (error && error.response.status > 400 && error.response.status < 500)
-                    swal({
-                        text: "Veiksmas neleidžiamas",
-                        button: "Gerai"
-                    });
-            });
+            }).catch(() => {});
     }
 
     handleDelete = (item) => {

@@ -11,14 +11,25 @@ System user roles and their authorities:
 |MANAGER | create a kindergarten, update kindergarten, start/ stop application submission, deactivate users' applications before approval (if not locked by admin), process applications queue, confirm applications queue, update own account |
 | USER | submit an application (if not locked by manager), review submitted applications and their status, submit/ review pdf documents, delete application, get user data, update and delete own account |
 
-#### Built with: 
+#### Technologies used: 
 - React 17.0.1,  Boostrap 4.5.3
 - Spring Boot 2.4.0, Java 11
 - Spring security
 - H2 database
 - Apache Tomcat 9.0.40 server
 - Swagger-UI, Maven
+- Selenium 3.141.59
+- TestNG 
 
+#### Design previews:
+
+ADMIN pages: https://agn709575.invisionapp.com/console/share/VM26ELGVGT/550993621
+
+MANAGER pages: https://agn709575.invisionapp.com/console/share/JB26EZTCR9/550996106
+
+USER pages: https://agn709575.invisionapp.com/console/share/GB26F5SD2U/550996143
+
+<sub>*actual pages may differ to a degree from the initial designs<sub>
 
 ## Getting Started
 
@@ -63,22 +74,28 @@ http://localhost:8081/darzelis/swagger-ui/
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+- for smoke tests, run smoke.xml
+- for regression tests, run regression.xml
 
 ### Break down into end to end tests
 
-Explain what these tests test and why
+There are 7 different test packages: adminTests, specialistTests, parentTests, login, smokeTests, generalMethods and basetest. First 3 are the main ones, generalMethods holds reusable code for different test cases and basetest is for set up (getting Chrome driver and application link) and closing all tests after running them.
 
 ```
-Give an example
-```
+adminTests package tests:
+- create and delete new user (all three roles)
+- update admin details (change user information, password, reset password)
 
-### And coding style tests
+specialistTests package tests:
+- create and delete new kindergarten
+- update specialist details (change user information, password, reset password)
 
-Explain what these tests test and why
+parentPages package tests:
+- submit and delete new application
+- submit 2 applications and check if the one with more priority points gets the place at the kindergarten
+- update parent details (change user information, password, reset password)
+- upload medical document (pdf)
 
-```
-Give an example
 ```
 
 ## Deployment

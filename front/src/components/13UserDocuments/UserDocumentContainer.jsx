@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-
+import '../../App.css';
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import swal from 'sweetalert';
 import UserDocumentListTable from './UserDocumentListTable';
+import Axios from 'axios';
 
 export default class UserDocumentContainer extends Component {
     
@@ -19,6 +20,7 @@ export default class UserDocumentContainer extends Component {
         this.uploadForm = this.uploadForm.bind(this);
         this.uploadDocumentOnChange = this.uploadDocumentOnChange.bind(this);
         this.getDocuments = this.getDocuments.bind(this);
+        this.handleDownload = this.handleDownload.bind(this);
     }
     
     componentDidMount() {
@@ -78,7 +80,7 @@ export default class UserDocumentContainer extends Component {
     }
 
     validateDocument = (doc) => {
-        if(doc.type === "application/pdf" && doc.size <= 128000) {
+        if(doc.type === "application/pdf" && doc.size <= 1024000) {
             this.setState({documentValid: true});
         }
         else {
@@ -89,12 +91,12 @@ export default class UserDocumentContainer extends Component {
     uploadDocumentOnChange(e) {
         const file = e.target.files[0];
         if(file.type === "application/pdf") {
-            if(file.size <= 128000) {
+            if(file.size <= 1024000) {
                 this.setState({documentToUpload: file});
             }
             else {
                 swal({
-                    text: "Failas per didelis, leidžiama iki 128 KB",
+                    text: "Failas per didelis, leidžiama iki 1 MB",
                     icon: "error",
                 })
             }
@@ -113,7 +115,7 @@ export default class UserDocumentContainer extends Component {
             return (
                 <div className="form">
                     <div className="form-group">
-                        <h6 className="py-3">Pažyma privalo būti .pdf formato ir neužimti daugiau negu 128KB vietos.</h6>
+                        <h6 className="py-3">Pažyma privalo būti .pdf formato ir neužimti daugiau negu 128MB vietos.</h6>
                         <input 
                             type="file"
                             className="form-control-file"
@@ -187,6 +189,28 @@ export default class UserDocumentContainer extends Component {
         })
     }
 
+    handleDownload = (doc) => {
+        http.request({
+            url: `${apiEndpoint}/api/documents/get/${doc.id}`,
+            method: "GET",
+            responseType: "blob",
+        }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${doc.name}`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }).catch((error) => {
+            console.log(error);
+            swal({
+                text: "Įvyko klaida atsisiunčiant pažymą.",
+                buttons: "Gerai",
+            })
+        })
+    }
+
     render() {
         return (
             <div className="container">
@@ -210,6 +234,7 @@ export default class UserDocumentContainer extends Component {
                         <UserDocumentListTable
                             documents={this.state.documentList}
                             onDelete={this.handleDelete}
+                            onDownload={this.handleDownload}
                         />
                         }
                     </div>

@@ -20,6 +20,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -149,7 +151,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().csrf().disable() // nenaudojam tokenu
 				// toliau forbidden klaidai
 				.exceptionHandling().authenticationEntryPoint(securityEntryPoint).and().headers().frameOptions()
-				.disable(); // H2 konsolei
+				.disable().and().sessionManagement().maximumSessions(1)               
+                .sessionRegistry(sessionRegistry());
+
 	}
+	
+	 @Bean
+	    SessionRegistry sessionRegistry() {
+	        return new SessionRegistryImpl();
+	    }
+
 
 }

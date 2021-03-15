@@ -1,29 +1,28 @@
 # Kindergarten information system
 
 Vocational school project designed for learning purposes. 
-Developed system registers and processes children's requests to the kindergarten. A child is allocated a place at a kindergarten or a place ij a waiting list depending on pre-agreed criteria.
+Developed system registers and processes children's requests to the kindergarten. A child is allocated a place at a kindergarten or a place in a waiting list depending on pre-determined criteria.
 
 System user roles and their authorities:
 
-| ROLE | AUTHORITIES |
+| ROLES | AUTHORITIES |
 | --- | --- |
-| ADMIN |  create user, delete user, reset user password, lock application queue editing manager, review system logs, update owned account |
-|MANAGER | create a kindergarten, update kindergarten, start/ stop application submission, deactivate users' applications before approval (if not locked by admin), process applications queue, confirm applications queue, update owned account |
-| USER | submit an application (if not locked by manager), review submitted applications and their status, submit/ review pdf documents, delete application, get user data, update and delete owned account |
+| ADMIN |  create user, delete user, reset user password, lock application queue editing for manager, review system logs, update own account |
+|MANAGER | create a kindergarten, update kindergarten, start/ stop application submission, deactivate users' applications before approval (if not locked by admin), process applications queue, confirm applications queue, update own account |
+| USER | submit an application (if not locked by manager), review submitted applications and their status, submit/ review pdf documents, delete application, get user data, update and delete own account |
 
-** Technologies used: **
-- React 17.0.1
+#### Built with: 
+- React 17.0.1,  Boostrap 4.5.3
 - Spring Boot 2.4.0, Java 11
 - Spring security
 - H2 database
 - Apache Tomcat 9.0.40 server
-- Swagger-UI
-- Maven
+- Swagger-UI, Maven
 
 
 ## Getting Started
 
-- Clone the repository git clone https://github.com/JurgitaVisa/Projektas_Darzeliu_IS.git
+- Clone the repository `git clone https://github.com/JurgitaVisa/Projektas_Darzeliu_IS.git`
 
 ### Run on Tomcat Server
 
@@ -42,9 +41,9 @@ System user roles and their authorities:
 - go to project folder `cd .../Projektas_Darzeliu_IS/front`
 - run `npm install` or `yarn install`
 - open file `..\Projektas_Darzeliu_IS\front\src\components\10Services\endpoint.js`
-- change `const apiEndpoint` to `const apiEndpoint = "http://localhost:8080"`
+- change `const apiEndpoint= process.env.PUBLIC_URL` to `const apiEndpoint = "http://localhost:8080"`
 - run `npm run start` or `yarn start`
-- application will open in your browser at http://localhost:3000
+- application will open on your browser at http://localhost:3000
 
 ### Accessing the database
 

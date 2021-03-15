@@ -1,13 +1,15 @@
 package it.akademija.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import it.akademija.user.ParentDetailsDTO;
 import it.akademija.user.UserDTO;
 import it.akademija.user.UserService;
 
+@TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
 public class ApplicationServiceIntegrationTest {
 
@@ -35,15 +38,6 @@ public class ApplicationServiceIntegrationTest {
 
 	@Test
 	@Order(1)
-	public void testGetPageFromSubmittedApplications() {
-
-		PageRequest page = PageRequest.of(1, 10);
-		Page<ApplicationInfo> applications = service.getPageFromSubmittedApplications(page);
-		assertTrue(applications.getSize() != 0);
-	}
-
-	@Test
-	@Order(2)
 	public void testGetQueueInformation() {
 
 		ApplicationQueueInfo queueInfo = new ApplicationQueueInfo(123L, "39902254789", "Test", "Test", "Kindergarten 1",
@@ -56,9 +50,13 @@ public class ApplicationServiceIntegrationTest {
 	}
 
 	@Test
-
-	@Order(3)
+	@Order(2)
 	public void testCreateNewApplication() {
+
+		/*
+		 * if (null != userService.findByUsername("user1@user.lt")) {
+		 * userService.deleteUser("user1@user.lt"); }
+		 */
 
 		UserDTO newUser = new UserDTO("USER", "firstuser", "firstuser", "22345678989", "Address 1", "+37061398876",
 				"user1@user.lt", "user1@user.lt", "user1@user.lt");
@@ -76,11 +74,18 @@ public class ApplicationServiceIntegrationTest {
 		ApplicationDTO application = new ApplicationDTO("Test", "Test", "49702253898", LocalDate.of(2019, 5, 5),
 				priorities, newUser, secondGuardian, choices);
 
-		// service.createNewApplication("user1@user.lt", application);
+		service.createNewApplication("user1@user.lt", application);
+
 		assertEquals("firstuser", userService.findByUsername("user1@user.lt").getName());
-		// service.deleteApplication(userService.findByUsername("user1@user.lt").getUserId());
+
+		assertTrue(service.existsByPersonalCode("49702253898"));
+
+		assertNotNull(userService.findByUsername("user1@user.lt"));
+
+		// service.deleteApplication(newApplication.getId());
+
+		assertEquals(1, service.getAllUserApplications("user1@user.lt").size());
 		userService.deleteUser("user1@user.lt");
-		assertNull(userService.findByUsername("user1@user.lt"));
 
 	}
 

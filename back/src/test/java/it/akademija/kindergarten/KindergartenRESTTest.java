@@ -5,6 +5,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -86,6 +87,10 @@ class KindergartenRESTTest {
 		MvcResult postNew = mvc.perform(post("/api/darzeliai/manager/createKindergarten").content(jsonRequest)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
 		assertEquals(200, postNew.getResponse().getStatus());
+
+		MvcResult update = mvc.perform(put("/api/darzeliai/manager/update/{id}", "111111112").content(jsonRequest)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound()).andReturn();
+		assertEquals(404, update.getResponse().getStatus());
 
 		MvcResult deleteOne = mvc.perform(delete("/api/darzeliai/manager/delete/{id}", "111111111"))
 				.andExpect(status().isOk()).andReturn();

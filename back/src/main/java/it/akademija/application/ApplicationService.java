@@ -80,7 +80,7 @@ public class ApplicationService {
 	 * @return application or null if no kindergarten are chosen
 	 */
 	@Transactional
-	public ResponseEntity<String> createNewApplication(String currentUsername, ApplicationDTO data) {
+	public Application createNewApplication(String currentUsername, ApplicationDTO data) {
 
 		Application application = new Application();
 
@@ -122,27 +122,25 @@ public class ApplicationService {
 		Set<KindergartenChoise> choises = new HashSet<>();
 
 		for (int i = 1; i <= 5; i++) {
-			Kindergarten garten = gartenService.findById(choisesDto.getKindergartenId(i));
-			if (garten != null) {
-				KindergartenChoise choise = choiseDao.save(new KindergartenChoise(garten, application, i));
-				choises.add(choise);
+			if (null != choisesDto.getKindergartenId(i)) {
+				Kindergarten garten = gartenService.findById(choisesDto.getKindergartenId(i));
+				if (garten != null) {
+					KindergartenChoise choise = choiseDao.save(new KindergartenChoise(garten, application, i));
+					choises.add(choise);
+				}
 			}
 		}
 
 		if (choises.isEmpty()) {
 
-			return new ResponseEntity<String>("Prašymo sukurti nepavyko", HttpStatus.BAD_REQUEST);
+			return null;
 
-		} else {
-			application.setKindergartenChoises(choises);
-
-			applicationDao.saveAndFlush(application);
-
-			journalService.newJournalEntry(OperationType.APPLICATION_SUBMITED, application.getId(),
-					ObjectType.APPLICATION, "Sukurtas naujas prašymas");
-
-			return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
 		}
+
+		application.setKindergartenChoises(choises);
+		application = applicationDao.saveAndFlush(application);
+
+		return application;
 
 	}
 

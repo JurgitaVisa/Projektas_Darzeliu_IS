@@ -48,6 +48,7 @@ import it.akademija.user.UserService;
 		RegistrationStatusController.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(OrderAnnotation.class)
 @AutoConfigureMockMvc
+
 public class ApplicationRESTTest {
 
 	@Value("${local.server.port}")
@@ -64,6 +65,9 @@ public class ApplicationRESTTest {
 
 	@MockBean
 	private ApplicationService applicationService;
+
+	@MockBean
+	private ApplicationController applicationController;
 
 	@MockBean
 	private UserService userService;
@@ -112,6 +116,11 @@ public class ApplicationRESTTest {
 		priorities.setLivesInVilnius(true);
 		KindergartenChoiseDTO choices = new KindergartenChoiseDTO();
 		choices.setKindergartenId1("190031797");
+		choices.setKindergartenId2("190029045");
+		choices.setKindergartenId3("190648777");
+		choices.setKindergartenId4("190021874");
+		choices.setKindergartenId5("190011951");
+
 		UserDTO mainGuardian = new UserDTO("USER", "user", "user", "12345678988", "Address 1", "+37061398876",
 				"user@user.lt", "user@user.lt", "user@user.lt");
 
@@ -130,6 +139,7 @@ public class ApplicationRESTTest {
 		MvcResult postNew = mvc
 				.perform(post("/api/prasymai/user/new").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
+
 		assertEquals(200, postNew.getResponse().getStatus());
 
 		status.setRegistrationActive(false);

@@ -34,6 +34,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.application.management.RegistrationStatusService;
+import it.akademija.journal.JournalService;
+import it.akademija.journal.ObjectType;
+import it.akademija.journal.OperationType;
 
 @RestController
 @Api(value = "application")
@@ -47,6 +50,9 @@ public class ApplicationController {
 
 	@Autowired
 	private RegistrationStatusService statusService;
+
+	@Autowired
+	private JournalService journalService;
 
 	/**
 	 * 
@@ -81,9 +87,19 @@ public class ApplicationController {
 
 		} else {
 
-			LOG.info("**ApplicationController: kuriamas prasymas vaikui AK [{}] **", data.getChildPersonalCode());
+			Application application = service.createNewApplication(currentUsername, data);
 
-			return service.createNewApplication(currentUsername, data);
+			if (application != null) {
+
+				journalService.newJournalEntry(OperationType.APPLICATION_SUBMITED, 123L, ObjectType.APPLICATION,
+						"Sukurtas naujas prašymas");
+
+				return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
+
+			}
+
+			return new ResponseEntity<String>("Prašymo sukurti nepavyko", HttpStatus.BAD_REQUEST);
+
 		}
 	}
 

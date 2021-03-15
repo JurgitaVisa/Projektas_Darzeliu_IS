@@ -103,7 +103,7 @@ public class User {
 		this.role = role;
 		this.username = username;
 	}
-	
+
 	public void setUserApplications(Set<Application> userApplications) {
 		this.userApplications = userApplications;
 	}
@@ -210,7 +210,5 @@ public class User {
 			return false;
 		return true;
 	}
-	
-	
 
 }

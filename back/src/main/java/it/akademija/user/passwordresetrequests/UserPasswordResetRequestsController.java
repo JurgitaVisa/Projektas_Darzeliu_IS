@@ -23,35 +23,45 @@ import it.akademija.user.UserService;
 @Api(value = "Password Reset Requests")
 @RequestMapping(path = "/passwordresetrequests")
 public class UserPasswordResetRequestsController {
+
 	@Autowired
 	UserPasswordResetRequestsService userPasswordResetRequestsService;
+
 	@Autowired
 	UserService userService;
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(UserPasswordResetRequestsController.class);
-	
+
 	@Secured({ "ROLE_ADMIN" })
 	@GetMapping(path = "/getAllRequests")
 	@ApiOperation(value = "Returns a list of userId that want their password reset.")
 	public List<UserPasswordResetRequestsEntity> getAllPasswordResetRequests() {
+
 		return userPasswordResetRequestsService.getAllRequests();
 	}
-	
+
 	@PostMapping(path = "/request/{username}")
 	@ApiOperation(value = "Request password reset")
 	public ResponseEntity<String> requestPasswordReset(@PathVariable(value = "username") final String username) {
-		LOG.info("** " + this.getClass().getName() + ": Naujas prasymas atstatyti slaptazodi naudotojo: " + username + " **");
+
+		LOG.info("** " + this.getClass().getName() + ": Naujas prašymas atstatyti slaptažodį naudotojo: " + username
+				+ " **");
+
 		userPasswordResetRequestsService.requestPasswordReset(username);
+
 		return new ResponseEntity<String>("Pranešimas administratoriui sėkmingai išsiųstas", HttpStatus.OK);
 	}
-	
+
 	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping(path = "/delete/{username}")
 	@ApiOperation(value = "Delete password request")
 	public ResponseEntity<String> deletePasswordResetRequest(@PathVariable(value = "username") final String username) {
-		LOG.info("** " + this.getClass().getName() + ": Isstrinamas naudotojo: " + username + " slaptazodzio atstatymo prasymas **");
+
+		LOG.info("** " + this.getClass().getName() + ": Trinamas naudotojo: " + username
+				+ " slaptažodžio atstatymo prašymas **");
 		userPasswordResetRequestsService.deletePasswordRequest(username);
+
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
-	
+
 }

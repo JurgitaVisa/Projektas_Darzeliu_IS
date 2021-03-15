@@ -14,24 +14,27 @@ public class UserPasswordResetRequestsService {
 
 	@Autowired
 	UserDAO userDao;
-	
+
 	@Autowired
 	UserPasswordResetRequestsDAO userPasswordResetRequestsDAO;
-	
+
 	public List<UserPasswordResetRequestsEntity> getAllRequests() {
+
 		return userPasswordResetRequestsDAO.findAll();
 	}
-	
+
 	public void deletePasswordRequest(String username) {
+
 		userPasswordResetRequestsDAO.deleteById(userDao.findByUsername(username).getUserId());
 	}
-	
+
 	@Transactional(readOnly = true)
 	public void requestPasswordReset(String email) {
+
 		User user = userDao.findByUsername(email);
-		if(user != null) {
+		if (user != null) {
 			userPasswordResetRequestsDAO.saveAndFlush(new UserPasswordResetRequestsEntity(user.getUserId()));
 		}
 	}
-	
+
 }

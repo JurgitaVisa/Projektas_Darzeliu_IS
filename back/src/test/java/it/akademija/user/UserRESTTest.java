@@ -60,8 +60,10 @@ public class UserRESTTest {
 	}
 
 	@Test
+
 	@Order(1)
-	@WithMockUser(username = "admin", roles = { "ADMIN" })
+
+	@WithMockUser(username = "admin@admin.lt", roles = { "ADMIN" })
 	public void testPostDeleteUserMethod() throws Exception {
 		ParentDetails details = new ParentDetails();
 		details.setPersonalCode("48902230223");
@@ -83,38 +85,24 @@ public class UserRESTTest {
 				.andExpect(status().isOk()).andReturn();
 		assertEquals(200, deleteUser.getResponse().getStatus());
 
-		MvcResult deleteUser2 = mvc.perform(delete("/api/users/admin/delete/{username}", "no@no.lt"))
-				.andExpect(status().isNotFound()).andReturn();
-		assertEquals(404, deleteUser2.getResponse().getStatus());
-
 	}
 
-//	@Test
-//	@Order(2)
-//	@WithMockUser(username = "user@user.lt", roles = { "USER" })
-//	public void updateUser() throws Exception {
-//
-//		User newUser = userService.findByUsername("user@user.lt");
-//
-//		newUser.setName("useris");
-//		newUser.setSurname("user");
-//		newUser.setEmail("user@user.lt");
-//		ParentDetails details = newUser.getParentDetails();
-//		details.setAddress("Address 1");
-//		details.setPersonalCode("12345678987");
-//		details.setPhone("+37061398876");
-//		details.setEmail("user@user.lt");
-//		details.setName("useris");
-//		details.setSurname("user");
-//
-//		String jsonRequest1 = mapper.writeValueAsString(newUser);
-//
-//		MvcResult updateUser = mvc
-//				.perform(put("/api/users/update").content(jsonRequest1).contentType(MediaType.APPLICATION_JSON))
-//				.andExpect(status().isOk()).andReturn();
-//		assertEquals(200, updateUser.getResponse().getStatus());
-//
-//	}
+	@Test
+	@Order(2)
+	@WithMockUser(username = "user@user.lt", roles = { "USER" })
+	public void updateUser() throws Exception {
+
+		UserDTO firstUser = new UserDTO("USER", "user", "useris", "12345678987", "Address 1", "+37061398876",
+				"user@user.lt", "user@user.lt", "user@user.lt");
+
+		String jsonRequest1 = mapper.writeValueAsString(firstUser);
+
+		MvcResult updateUser = mvc
+				.perform(put("/api/users/update").content(jsonRequest1).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn();
+		assertEquals(200, updateUser.getResponse().getStatus());
+
+	}
 
 	@Test
 	@Order(4)

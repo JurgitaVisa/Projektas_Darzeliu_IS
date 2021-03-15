@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import it.akademija.application.queue.ApplicationQueueService;
+import it.akademija.journal.JournalService;
+import it.akademija.journal.ObjectType;
+import it.akademija.journal.OperationType;
 
 @RestController
 @Api(value = "status-manager")
@@ -32,6 +34,9 @@ public class RegistrationStatusController {
 	@Autowired
 	private ApplicationQueueService queueService;
 
+	@Autowired
+	private JournalService journalService;
+
 	/**
 	 * Changes registration status
 	 * 
@@ -42,13 +47,18 @@ public class RegistrationStatusController {
 	@PostMapping("/status/{registrationActive}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Set application status")
-	public RegistrationStatus setStatus(@PathVariable boolean registrationActive) {		
+	public RegistrationStatus setStatus(@PathVariable boolean registrationActive) {
 
-		//String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		
+		if (registrationActive) {
+			journalService.newJournalEntry(OperationType.REGISTRATION_STARTED, null, ObjectType.REGISTRATION,
+					"Prašymų registracija pradėta");
+
+		} else {
+			journalService.newJournalEntry(OperationType.REGISTRATION_ENDED, null, ObjectType.REGISTRATION,
+					"Prašymų registracija sustabdyta");
+		}
+
 		return statusService.setStatus(registrationActive);
-
-		//LOG.info("Naudotojas [{}] pakeitė prašymo registracijos statusą", currentUsername);
 	}
 
 	/**
@@ -78,7 +88,7 @@ public class RegistrationStatusController {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 		queueService.processApplicationsToQueue();
-		
+
 		LOG.info("Naudotojas [{}] pradeda eilių formavimą", currentUsername);
 
 		return new ResponseEntity<String>("Eilė suformuota", HttpStatus.OK);
@@ -96,7 +106,7 @@ public class RegistrationStatusController {
 	public ResponseEntity<String> confirmQueue() {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		
+
 		LOG.info("Naudotojas [{}] tvirtina eiles.", currentUsername);
 
 		return queueService.confirmApplicationsInQueue();
@@ -114,11 +124,11 @@ public class RegistrationStatusController {
 	public void lockQueueEditing() {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		
+
 		LOG.info("Naudotojas [{}] užrakina eilių redagavimą.", currentUsername);
 
-		statusService.lockQueueEditing();	
-		
+		statusService.lockQueueEditing();
+
 	}
 
 	/**
@@ -133,10 +143,10 @@ public class RegistrationStatusController {
 	public void unlockQueueEditing() {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		
+
 		LOG.info("Naudotojas [{}] atrakina eilių redagavimą.", currentUsername);
 
-		statusService.unlockQueueEditing();		
+		statusService.unlockQueueEditing();
 	}
 
 	public RegistrationStatusService getStatusService() {

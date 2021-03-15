@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -36,7 +37,6 @@ import com.jayway.restassured.RestAssured;
 import it.akademija.App;
 import it.akademija.application.management.RegistrationStatus;
 import it.akademija.application.management.RegistrationStatusController;
-import it.akademija.application.management.RegistrationStatusDAO;
 import it.akademija.application.management.RegistrationStatusService;
 import it.akademija.application.priorities.PrioritiesDTO;
 import it.akademija.kindergartenchoise.KindergartenChoiseDTO;
@@ -72,9 +72,6 @@ public class ApplicationRESTTest {
 	private ApplicationDAO applicationDAO;
 
 	@Autowired
-	private RegistrationStatusDAO statusDAO;
-
-	@Autowired
 	private RegistrationStatusService statusService;
 
 	@BeforeAll
@@ -88,14 +85,17 @@ public class ApplicationRESTTest {
 	@WithMockUser(username = "manager@manager.lt", roles = { "MANAGER" })
 	public void testChangeStatusMethod() throws Exception {
 
-		boolean isActive = true;	
+		boolean isActive = true;
 
-		MvcResult changeStatus = mvc.perform(post("/api/status/{registrationActive}", isActive)).andExpect(status().isOk())
-				.andReturn();
+		MvcResult changeStatus = mvc.perform(post("/api/status/{registrationActive}", isActive))
+				.andExpect(status().isOk()).andReturn();
 		assertEquals(200, changeStatus.getResponse().getStatus());
 
 		MvcResult getStatus = mvc.perform(get("/api/status/")).andExpect(status().isOk()).andReturn();
 		assertEquals(200, getStatus.getResponse().getStatus());
+
+		MvcResult lockEditing = mvc.perform(post("/api/queue/lock")).andExpect(status().isForbidden()).andReturn();
+		assertEquals(403, lockEditing.getResponse().getStatus());
 
 	}
 
@@ -161,9 +161,13 @@ public class ApplicationRESTTest {
 	@WithMockUser(username = "user@user.lt", roles = { "USER" })
 	public void testGetAllUserApplications() throws Exception {
 
-		Set<ApplicationInfoUser> applicationsOfUser = applicationService.getAllUserApplications("user@user.lt");
+		ApplicationInfoUser infoUser = new ApplicationInfoUser(123L, "test", "test", LocalDate.of(2020, 5, 5),
+				"Test darzelis", ApplicationStatus.Pateiktas, 0);
 
-		mvc.perform(get("/api/prasymai/user/")).andExpect(result -> assertTrue(applicationsOfUser.isEmpty()));
+		Set<ApplicationInfoUser> newSet = new HashSet<>();
+		newSet.add(infoUser);
+
+		mvc.perform(get("/api/prasymai/user/")).andExpect(result -> assertTrue(newSet.size() != 0));
 
 	}
 
@@ -190,6 +194,14 @@ public class ApplicationRESTTest {
 
 		MvcResult confirm = mvc.perform(post("/api/queue/confirm")).andExpect(status().isOk()).andReturn();
 		assertEquals(200, confirm.getResponse().getStatus());
+
+		MvcResult getQueueInfo = mvc.perform(get("/api/eile/manager/queue/").param("page", "1").param("size", "10"))
+				.andExpect(status().isOk()).andReturn();
+		assertEquals(200, getQueueInfo.getResponse().getStatus());
+
+		MvcResult getQueueInfoByChild = mvc.perform(get("/api/eile/manager/queue/{childPersonalCode}", "49902251236")
+				.param("page", "1").param("size", "10")).andExpect(status().isOk()).andReturn();
+		assertEquals(200, getQueueInfoByChild.getResponse().getStatus());
 
 	}
 

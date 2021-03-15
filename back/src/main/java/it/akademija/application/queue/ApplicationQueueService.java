@@ -16,9 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.akademija.App;
 import it.akademija.application.Application;
-import it.akademija.application.ApplicationController;
 import it.akademija.application.ApplicationDAO;
 import it.akademija.application.ApplicationStatus;
 import it.akademija.kindergarten.Kindergarten;
@@ -38,7 +36,7 @@ public class ApplicationQueueService {
 
 	@Transactional
 	public void processApplicationsToQueue() {
-		
+
 		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 
 		LOG.info("Naudotojas [{}] inicijavo eilių sudarymą", currentUserName);
@@ -54,9 +52,9 @@ public class ApplicationQueueService {
 
 			long age = application.calculateAgeInYears();
 			if (age >= 7) {
-				
+
 				application.setStatus(ApplicationStatus.Neaktualus);
-				
+
 				LOG.info("Prašymo Nr. [{}] statusas automatiškai pakeistas į 'Neaktualus'", application.getId());
 			}
 
@@ -98,16 +96,17 @@ public class ApplicationQueueService {
 				a.setNumberInWaitingList(lastNumberInWaitingList);
 
 			} else if (choises.size() == 0) {
-				
+
 				a.setStatus(ApplicationStatus.Neaktualus);
 				LOG.info("Prašymo Nr. [{}] statusas automatiškai pakeistas į 'Neaktualus'", a.getId());
-			
+
 			}
 
 			applicationQueue.add(a);
 		}
-		
-		LOG.info("Naudotojo [{}] inicijuotas eilės sudarymas baigtas. Eilėje [{}] prašymų.", currentUserName, applicationQueue.size());
+
+		LOG.info("Naudotojo [{}] inicijuotas eilės sudarymas baigtas. Eilėje [{}] prašymų.", currentUserName,
+				applicationQueue.size());
 
 		applicationDao.saveAll(applicationQueue);
 
@@ -131,7 +130,7 @@ public class ApplicationQueueService {
 		if (applicationDao.findNumberOfUnprocessedApplications() > 0) {
 
 			LOG.warn("Naudotojas [{}] bandė patvirtinti nesuformuotas eiles", currentUserName);
-			
+
 			return new ResponseEntity<String>("Nepavyko patvirtinti eilės. Pradžioje eilė turi būti suformuota.",
 					HttpStatus.METHOD_NOT_ALLOWED);
 
@@ -157,8 +156,9 @@ public class ApplicationQueueService {
 			gartenService.decreaseNumberOfAvailablePlaces();
 
 			applicationDao.saveAll(applications);
-			
-			LOG.info("Naudotojas [{}] patvirtino eiles. Pakeistas [{}] prašymų statusas.", currentUserName, applications.size());
+
+			LOG.info("Naudotojas [{}] patvirtino eiles. Pakeistas [{}] prašymų statusas.", currentUserName,
+					applications.size());
 		}
 
 		return new ResponseEntity<String>("Eilė patvirtinta", HttpStatus.OK);

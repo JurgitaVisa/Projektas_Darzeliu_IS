@@ -37,11 +37,11 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private PasswordEncoder encoder;
-	
+
 	@Autowired
 	DocumentDAO documentDao;
-	
-	@Autowired 
+
+	@Autowired
 	JournalService journalService;
 
 	@Override
@@ -124,7 +124,7 @@ public class UserService implements UserDetailsService {
 				applicationService.detachAdditionalGuardian(application);
 				applicationService.updateAvailablePlacesInKindergarten(application);
 			}
-			
+
 			documentDao.deleteByUploaderId(user.getUserId());
 		}
 
@@ -140,7 +140,7 @@ public class UserService implements UserDetailsService {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
 		journalService.depersonalizeUserLogs(username);
-		
+
 		deleteUser(username);
 
 	}

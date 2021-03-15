@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import it.akademija.application.Application;
 import it.akademija.application.ApplicationDAO;
 import it.akademija.application.ApplicationStatus;
+import it.akademija.journal.JournalService;
+import it.akademija.journal.ObjectType;
+import it.akademija.journal.OperationType;
 
 @Service
 public class KindergartenService {
@@ -30,6 +33,9 @@ public class KindergartenService {
 	@Autowired
 	private ApplicationDAO applicationDao;
 
+	@Autowired
+	private JournalService journalService;
+
 	/**
 	 * Get all kindergarten ID's, names and addresses where capacity in any age
 	 * group is more than zero
@@ -38,13 +44,15 @@ public class KindergartenService {
 	 */
 	@Transactional(readOnly = true)
 	public List<KindergartenInfo> getAllWithNonZeroCapacity() {
+
 		List<Kindergarten> kindergartens = gartenDao.findAllWithNonZeroCapacity(Sort.by("name").ascending());
+
 		return kindergartens.stream().map(garten -> new KindergartenInfo(garten.getId(), garten.getName(),
 				garten.getAddress(), garten.getElderate())).collect(Collectors.toList());
 	}
 
 	/**
-	 * Gel all elderate names
+	 * Gel all elderates' names
 	 * 
 	 * @return list of elderates
 	 */
@@ -115,6 +123,7 @@ public class KindergartenService {
 	 */
 	@Transactional(readOnly = true)
 	public boolean nameAlreadyExists(String name, String id) {
+
 		Kindergarten kindergarten = gartenDao.findByName(name);
 
 		if (kindergarten != null && kindergarten.getId() != id) {
@@ -133,25 +142,31 @@ public class KindergartenService {
 	@Transactional
 	public ResponseEntity<String> deleteKindergarten(String id) {
 
+		String gartenID = id;
+
 		Kindergarten garten = gartenDao.findById(id).orElse(null);
 
 		if (garten != null) {
 			Set<Application> applicationQueue = garten.getApprovedApplications();
 			for (Application a : applicationQueue) {
 				a.setApprovedKindergarten(null);
-				
-				if(a.getKindergartenChoises().size()>1) {
+
+				if (a.getKindergartenChoises().size() > 1) {
 					a.setStatus(ApplicationStatus.Pateiktas);
 				} else {
 					a.setStatus(ApplicationStatus.Neaktualus);
-				}				
-				
+				}
+
 				applicationDao.saveAndFlush(a);
 			}
 
 			gartenDao.deleteById(id);
 
 			LOG.info("** UserService: trinamas darželis ID [{}] **", id);
+
+			journalService.newJournalEntry(OperationType.KINDERGARTEN_DELETED, Long.parseLong(gartenID),
+					ObjectType.KINDERGARTEN, "Ištrintas darželis");
+
 			return new ResponseEntity<String>("Darželis ištrintas sėkmingai", HttpStatus.OK);
 
 		} else {
@@ -168,6 +183,7 @@ public class KindergartenService {
 	 */
 	@Transactional
 	public void updateKindergarten(String id, KindergartenDTO updatedInfo) {
+
 		Kindergarten current = gartenDao.findById(id).orElse(null);
 
 		current.setName(updatedInfo.getName());
@@ -188,8 +204,8 @@ public class KindergartenService {
 	 * @return statistics
 	 */
 	public Page<KindergartenStatistics> getKindergartenStatistics(Pageable pageable) {
-				
-		return gartenDao.findAllChoises(pageable);	
+
+		return gartenDao.findAllChoises(pageable);
 	}
 
 	/**
@@ -199,6 +215,7 @@ public class KindergartenService {
 	 */
 	@Transactional
 	public void deleteByName(String name) {
+
 		gartenDao.deleteByName(name);
 	}
 
@@ -278,10 +295,10 @@ public class KindergartenService {
 	 * available places in specified Kindergarten's age group.
 	 * 
 	 * @param approved kindergarten
-	 * @param child's age
+	 * @param child's  age
 	 */
 	public void increaseNumberOfAvailablePlacesInAgeGroup(Kindergarten garten, long age) {
-		
+
 		int capacity = 0;
 
 		if (age >= 1 && age < 3) {
@@ -291,7 +308,7 @@ public class KindergartenService {
 			capacity = garten.getCapacityAgeGroup3to6() + 1;
 			garten.setCapacityAgeGroup3to6(capacity);
 		}
-		
+
 		gartenDao.save(garten);
 	}
 

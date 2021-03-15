@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import it.akademija.journal.JournalService;
+import it.akademija.journal.ObjectType;
+import it.akademija.journal.OperationType;
 
 @RestController
 @Api(value = "kindergarten")
@@ -39,6 +42,9 @@ public class KindergartenController {
 
 	@Autowired
 	private KindergartenService kindergartenService;
+
+	@Autowired
+	private JournalService journalService;
 
 	/**
 	 * Get list of all Kindergarten names and addresses with capacity of more than
@@ -122,14 +128,25 @@ public class KindergartenController {
 		String id = kindergarten.getId();
 
 		if (kindergartenService.findById(id) != null) {
+
+			LOG.warn("Kuriamas darželis su jau egzistuojančiu įstaigos kodu [{}]", id);
+
 			return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu jau yra", HttpStatus.CONFLICT);
 
 		} else if (kindergartenService.nameAlreadyExists(kindergarten.getName().trim(), id)) {
+
+			LOG.warn("Kuriamas darželis su jau egzistuojančiu įstaigos pavadinimu [{}]", kindergarten.getName().trim());
+
 			return new ResponseEntity<String>("Darželis su tokiu įstaigos pavadinimu jau yra", HttpStatus.CONFLICT);
 
 		} else {
+
 			kindergartenService.createNewKindergarten(kindergarten);
+
 			LOG.info("**KindergartenController: kuriamas darzelis pavadinimu [{}] **", kindergarten.getName());
+
+			journalService.newJournalEntry(OperationType.KINDERGARTEN_CREATED, Long.parseLong(id),
+					ObjectType.KINDERGARTEN, "Sukurtas naujas darželis");
 
 			return new ResponseEntity<String>("Darželis sukurtas sėkmingai", HttpStatus.OK);
 		}
@@ -160,14 +177,26 @@ public class KindergartenController {
 			@PathVariable String id) {
 
 		if (kindergartenService.findById(id) == null) {
+
+			LOG.warn("Darželio įstaigos kodu [{}] nėra", id);
+
 			return new ResponseEntity<String>("Darželis su tokiu įstaigos kodu nerastas", HttpStatus.NOT_FOUND);
 
 		} else if (kindergartenService.nameAlreadyExists(updated.getName().trim(), id)) {
+
+			LOG.warn("Darželis pavadinimu [{}] jau egzituoja", updated.getName().trim());
+
 			return new ResponseEntity<String>("Darželis su tokiu įstaigos pavadinimu jau yra", HttpStatus.CONFLICT);
 
 		} else {
+
 			kindergartenService.updateKindergarten(id, updated);
+
 			LOG.info("** Usercontroller: atnaujinamas darželis ID [{}] **", id);
+
+			journalService.newJournalEntry(OperationType.KINDERGARTEN_UPDATED, Long.parseLong(id),
+					ObjectType.KINDERGARTEN, "Atnaujinti darželio duomenys");
+
 			return new ResponseEntity<String>("Darželio duomenys atnaujinti sėkmingai", HttpStatus.OK);
 		}
 

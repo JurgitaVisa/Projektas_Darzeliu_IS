@@ -14,44 +14,47 @@ public class DocumentService {
 
 	@Autowired
 	DocumentDAO documentDao;
-	
+
 	@Transactional
 	public DocumentEntity getDocumentById(long id) {
+
 		DocumentEntity doc = documentDao.getDocumentById(id);
-		if(doc != null) {
+
+		if (doc != null) {
+
 			return doc;
-		}
-		else {
+		} else {
+
 			return null;
 		}
 	}
-	
+
 	@Transactional
 	public List<DocumentEntity> getDocumentsByUploaderId(long id) {
-		return documentDao.findAll().stream()
-									.filter(x -> x.getUploaderId()==id)
-									.collect(Collectors.toList());
+
+		return documentDao.findAll().stream().filter(x -> x.getUploaderId() == id).collect(Collectors.toList());
 	}
-	
+
 	@Transactional
 	public Boolean uploadDocument(MultipartFile file, String name, long uploaderId) {
-		if(file.getSize()<=128000 && file.getContentType().equals("application/pdf")) {
+
+		if (file.getSize() <= 128000 && file.getContentType().equals("application/pdf")) {
 			try {
-				DocumentEntity doc = new DocumentEntity(name, file.getContentType(), file.getBytes(), file.getSize(), uploaderId, LocalDate.now());
+				DocumentEntity doc = new DocumentEntity(name, file.getContentType(), file.getBytes(), file.getSize(),
+						uploaderId, LocalDate.now());
 				documentDao.save(doc);
-			} catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
-	
+
 	@Transactional
 	public void deleteDocument(long id) {
 		documentDao.delete(getDocumentById(id));
 	}
-	
+
 }

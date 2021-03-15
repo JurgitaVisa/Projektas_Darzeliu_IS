@@ -34,6 +34,9 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import it.akademija.journal.JournalService;
+import it.akademija.journal.ObjectType;
+import it.akademija.journal.OperationType;
 import it.akademija.user.gdprservice.JsonExporter;
 
 @RestController
@@ -48,6 +51,9 @@ public class UserController {
 
 	@Autowired
 	private JsonExporter jsonExporter;
+
+	@Autowired
+	private JournalService journalService;
 
 	/**
 	 * 
@@ -77,6 +83,10 @@ public class UserController {
 
 			LOG.info("Naudotojas [{}] sukūrė naują naudotoją [{}]", currentUsername, userInfo.getUsername());
 
+			journalService.newJournalEntry(OperationType.USER_CREATED,
+					userService.findByUsername(userInfo.getUsername()).getUserId(), ObjectType.USER,
+					"Sukurtas naujas naudotojas");
+
 			return new ResponseEntity<String>("Naudotojas sukurtas sėkmingai!", HttpStatus.CREATED);
 		}
 	}
@@ -93,11 +103,15 @@ public class UserController {
 	public ResponseEntity<String> deleteUser(
 			@ApiParam(value = "Username", required = true) @PathVariable final String username) {
 
+		long id = userService.findByUsername(username).getUserId();
+
 		if (userService.findByUsername(username) != null) {
 
 			userService.deleteUser(username);
 
 			LOG.info("** Usercontroller: trinamas naudotojas vardu [{}] **", username);
+
+			journalService.newJournalEntry(OperationType.USER_DELETED, id, ObjectType.USER, "Ištrintas naudotojas");
 
 			return new ResponseEntity<String>("Naudotojas ištrintas sėkmingai", HttpStatus.OK);
 		}
@@ -165,6 +179,10 @@ public class UserController {
 
 			LOG.info("** Usercontroller: keiciamas slaptazodis naudotojui vardu [{}] **", username);
 
+			journalService.newJournalEntry(OperationType.USER_DATA_CHANGED,
+					userService.findByUsername(username).getUserId(), ObjectType.USER,
+					"Atstatytas naudotojo slaptažodis");
+
 			return new ResponseEntity<String>("Slaptažodis atkurtas sėkmingai", HttpStatus.OK);
 		}
 
@@ -173,7 +191,7 @@ public class UserController {
 
 	/**
 	 * 
-	 * Updata user data
+	 * Update user data
 	 * 
 	 * @param userData
 	 * @return message
@@ -188,6 +206,10 @@ public class UserController {
 		userService.updateUserData(userData, currentUserName);
 
 		LOG.info("** Usercontroller: keiciami duomenys naudotojui vardu [{}] **", currentUserName);
+
+		journalService.newJournalEntry(OperationType.USER_DATA_CHANGED,
+				userService.findByUsername(currentUserName).getUserId(), ObjectType.USER,
+				"Pakeisti naudotojo duomenys");
 
 		return new ResponseEntity<String>("Duomenys pakeisti sėkmingai", HttpStatus.OK);
 
@@ -212,6 +234,10 @@ public class UserController {
 
 			LOG.info(" [{}] slaptažodis pakeistas sėkmingai. **", currentUsername);
 
+			journalService.newJournalEntry(OperationType.USER_DATA_CHANGED,
+					userService.findByUsername(currentUsername).getUserId(), ObjectType.USER,
+					"Pakeistas naudotojo slaptažodis");
+
 			return new ResponseEntity<String>("Slaptažodis pakeistas sėkmingai", HttpStatus.OK);
 
 		} else {
@@ -222,10 +248,10 @@ public class UserController {
 
 		}
 	}
-	
+
 	/**
 	 * Get GDPR user data zip archive
-	 *  	
+	 * 
 	 * @param response
 	 * @throws IOException
 	 */
@@ -260,19 +286,19 @@ public class UserController {
 
 		zipOutputStream.close();
 	}
-	
+
 	/**
-	 * "Forget me" functionality which deletes all user related entries from database
+	 * "Forget me" functionality which deletes all user related entries from
+	 * database
 	 * 
 	 */
-	@Secured({"ROLE_USER"})
-	@DeleteMapping(path="/user/deletemydata")
-	@ApiOperation(value="Forget me - delete all user data")
+	@Secured({ "ROLE_USER" })
+	@DeleteMapping(path = "/user/deletemydata")
+	@ApiOperation(value = "Forget me - delete all user data")
 	public void deleteMyUserData() {
-		
+
 		userService.deleteMyUserData();
 	}
-	
 
 	public UserService getUserService() {
 		return userService;

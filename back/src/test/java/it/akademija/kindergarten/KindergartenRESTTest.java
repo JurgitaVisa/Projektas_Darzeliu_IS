@@ -75,7 +75,7 @@ class KindergartenRESTTest {
 
 	@Test
 	@Order(2)
-	@WithMockUser(username = "manager", roles = { "MANAGER" })
+	@WithMockUser(username = "manager@manager.lt", roles = { "MANAGER" })
 
 	public void testPostDeleteNewKindergartenMethod() throws Exception {
 		Kindergarten newKindergarten = new Kindergarten("111111111", "Test", "Test", "Test", 10, 10);

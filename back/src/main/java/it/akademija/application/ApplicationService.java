@@ -50,7 +50,7 @@ public class ApplicationService {
 
 	@Autowired
 	private KindergartenChoiseDAO choiseDao;
-	
+
 	@Autowired
 	private JournalService journalService;
 
@@ -80,7 +80,7 @@ public class ApplicationService {
 	 * @return application or null if no kindergarten are chosen
 	 */
 	@Transactional
-	public ResponseEntity<String> createNewApplication(String currentUsername, ApplicationDTO data) {
+	public Application createNewApplication(String currentUsername, ApplicationDTO data) {
 
 		Application application = new Application();
 
@@ -88,7 +88,7 @@ public class ApplicationService {
 
 		ParentDetailsDTO detailsDto = data.getAdditionalGuardian();
 
-		if (detailsDto.getPersonalCode() != null && detailsDto.getPersonalCode() != "") {
+		if (detailsDto!=null && detailsDto.getPersonalCode() != null && detailsDto.getPersonalCode() != "") {
 			ParentDetails secondParent = parentDetailsDao.findByPersonalCode(detailsDto.getPersonalCode());
 
 			if (secondParent == null) {
@@ -128,20 +128,16 @@ public class ApplicationService {
 				choises.add(choise);
 			}
 		}
-
+		
 		if (choises.isEmpty()) {
 
-			return new ResponseEntity<String>("Prašymo sukurti nepavyko", HttpStatus.BAD_REQUEST);
+			return null;
 
 		} else {
-			application.setKindergartenChoises(choises);
+			application.setKindergartenChoises(choises);			
 			
-			application = applicationDao.saveAndFlush(application);
-			
-			journalService.newJournalEntry(OperationType.APPLICATION_SUBMITED, application.getId(), ObjectType.APPLICATION, "Sukurtas naujas prašymas");
-			
-			return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
-		}
+			return applicationDao.saveAndFlush(application);
+		}	
 
 	}
 
@@ -190,10 +186,10 @@ public class ApplicationService {
 
 		return new ResponseEntity<String>("Prašymas nerastas", HttpStatus.NOT_FOUND);
 	}
-	
+
 	/**
 	 * Removes additional guardian who has no other applications connected to them.
-	 *	  
+	 * 
 	 * @param id
 	 * @param application
 	 */
@@ -206,8 +202,8 @@ public class ApplicationService {
 			if (numberOfAdditionalGuardianApplications == 0) {
 				parentDetailsDao.delete(additionalGuardian);
 			}
-			
-			application.setAdditionalGuardian(null);			
+
+			application.setAdditionalGuardian(null);
 
 		}
 	}
@@ -243,7 +239,6 @@ public class ApplicationService {
 		}
 
 	}
-	
 
 	/**
 	 * Deactivate application by id. Also decreases number of taken places in

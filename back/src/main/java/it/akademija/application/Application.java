@@ -240,5 +240,6 @@ public class Application {
 	public void setApprovalDate() {
 		this.approvalDate = LocalDate.now();
 	}
+	
 
 }

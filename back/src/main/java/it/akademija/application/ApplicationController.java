@@ -34,6 +34,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.application.management.RegistrationStatusService;
+import it.akademija.journal.JournalService;
+import it.akademija.journal.ObjectType;
+import it.akademija.journal.OperationType;
 
 @RestController
 @Api(value = "application")
@@ -41,12 +44,15 @@ import it.akademija.application.management.RegistrationStatusService;
 public class ApplicationController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ApplicationController.class);
-	
+
 	@Autowired
 	private ApplicationService service;
 
 	@Autowired
 	private RegistrationStatusService statusService;
+
+	@Autowired
+	private JournalService journalService;
 
 	/**
 	 * 
@@ -81,11 +87,18 @@ public class ApplicationController {
 
 		} else {
 
-			LOG.info("**ApplicationController: kuriamas prasymas vaikui AK [{}] **", data.getChildPersonalCode());
+			Application application = service.createNewApplication(currentUsername, data);			
 
-			LOG.info("Naudotojas [{}] sukūrė prašymą vaikui AK [{}]", currentUsername, childPersonalCode);
+			if (application != null) {
+				journalService.newJournalEntry(OperationType.APPLICATION_SUBMITED, application.getId(),
+						ObjectType.APPLICATION, "Sukurtas naujas prašymas");
 
-			return service.createNewApplication(currentUsername, data);
+				return new ResponseEntity<String>("Prašymas sukurtas sėkmingai", HttpStatus.OK);
+
+			}
+
+			return new ResponseEntity<String>("Prašymo sukurti nepavyko", HttpStatus.BAD_REQUEST);
+
 		}
 	}
 
@@ -187,9 +200,15 @@ public class ApplicationController {
 	public ResponseEntity<String> deactivateApplication(
 			@ApiParam(value = "Application id", required = true) @PathVariable Long id) {
 
-		LOG.info("**ApplicationController: deaktyvuojamas prasymas [{}] **", id);
+		if (statusService.getStatus().isQueueEditingLocked()) {
+			return new ResponseEntity<String>("Administratorius užrakino sąrašo redagavimą.",
+					HttpStatus.METHOD_NOT_ALLOWED);
 
-		return service.deactivateApplication(id);
+		} else {
+			LOG.info("**ApplicationController: deaktyvuojamas prasymas [{}] **", id);
+
+			return service.deactivateApplication(id);
+		}
 
 	}
 

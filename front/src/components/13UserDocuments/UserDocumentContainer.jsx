@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-
+import '../../App.css';
 import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import swal from 'sweetalert';
 import UserDocumentListTable from './UserDocumentListTable';
+import Axios from 'axios';
 
 export default class UserDocumentContainer extends Component {
     
@@ -19,6 +20,7 @@ export default class UserDocumentContainer extends Component {
         this.uploadForm = this.uploadForm.bind(this);
         this.uploadDocumentOnChange = this.uploadDocumentOnChange.bind(this);
         this.getDocuments = this.getDocuments.bind(this);
+        this.handleDownload = this.handleDownload.bind(this);
     }
     
     componentDidMount() {
@@ -187,6 +189,24 @@ export default class UserDocumentContainer extends Component {
         })
     }
 
+    handleDownload = (document) => {
+        http.request({
+            url: `${apiEndpoint}/api/documents/get/${document.id}`,
+            method: "GET",
+            responseType: "blob",
+        }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${document.name}`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
     render() {
         return (
             <div className="container">
@@ -210,6 +230,7 @@ export default class UserDocumentContainer extends Component {
                         <UserDocumentListTable
                             documents={this.state.documentList}
                             onDelete={this.handleDelete}
+                            onDownload={this.handleDownload}
                         />
                         }
                     </div>

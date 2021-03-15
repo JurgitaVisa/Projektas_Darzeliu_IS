@@ -35,7 +35,7 @@ public class DocumentService {
 	
 	@Transactional
 	public Boolean uploadDocument(MultipartFile file, String name, long uploaderId) {
-		if(file.getSize()<=128000 && file.getContentType().equals("application/pdf")) {
+		if(file.getSize()<=1024000 && file.getContentType().equals("application/pdf")) {
 			try {
 				DocumentEntity doc = new DocumentEntity(name, file.getContentType(), file.getBytes(), file.getSize(), uploaderId, LocalDate.now());
 				documentDao.save(doc);

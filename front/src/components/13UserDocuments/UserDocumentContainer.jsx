@@ -78,7 +78,7 @@ export default class UserDocumentContainer extends Component {
     }
 
     validateDocument = (doc) => {
-        if(doc.type === "application/pdf" && doc.size <= 128000) {
+        if(doc.type === "application/pdf" && doc.size <= 1024000) {
             this.setState({documentValid: true});
         }
         else {
@@ -89,12 +89,12 @@ export default class UserDocumentContainer extends Component {
     uploadDocumentOnChange(e) {
         const file = e.target.files[0];
         if(file.type === "application/pdf") {
-            if(file.size <= 128000) {
+            if(file.size <= 1024000) {
                 this.setState({documentToUpload: file});
             }
             else {
                 swal({
-                    text: "Failas per didelis, leidžiama iki 128 KB",
+                    text: "Failas per didelis, leidžiama iki 1 MB",
                     icon: "error",
                 })
             }
@@ -113,7 +113,7 @@ export default class UserDocumentContainer extends Component {
             return (
                 <div className="form">
                     <div className="form-group">
-                        <h6 className="py-3">Pažyma privalo būti .pdf formato ir neužimti daugiau negu 128KB vietos.</h6>
+                        <h6 className="py-3">Pažyma privalo būti .pdf formato ir neužimti daugiau negu 128MB vietos.</h6>
                         <input 
                             type="file"
                             className="form-control-file"

@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.akademija.user.User;
 import it.akademija.user.UserDAO;
 
 @Service
@@ -35,8 +36,13 @@ public class JournalService {
 			String entryMessage) {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		Long currentUserID = userDAO.findByUsername(currentUsername).getUserId();
-
+		User currentUser = userDAO.findByUsername(currentUsername);
+		Long currentUserID = 0L;
+		
+		if(currentUser!=null) {
+			currentUserID = currentUser.getUserId();
+		} 
+		
 		JournalEntry entry = new JournalEntry(currentUserID, currentUsername, LocalDateTime.now(), operationType,
 				objectID, objectType, entryMessage);
 
@@ -69,8 +75,14 @@ public class JournalService {
 	public void newJournalEntry(OperationType operationType, ObjectType objectType, String entryMessage) {
 
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		Long currentUserID = userDAO.findByUsername(currentUsername).getUserId();
-
+		
+		User currentUser = userDAO.findByUsername(currentUsername);
+		Long currentUserID = 0L;
+		
+		if(currentUser!=null) {
+			currentUserID = currentUser.getUserId();
+		} 
+		
 		JournalEntry entry = new JournalEntry(currentUserID, currentUsername, LocalDateTime.now(), operationType,
 				currentUserID, objectType, entryMessage);
 

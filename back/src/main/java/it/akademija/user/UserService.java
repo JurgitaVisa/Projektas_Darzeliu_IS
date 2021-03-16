@@ -1,13 +1,17 @@
 package it.akademija.user;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,6 +47,10 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	JournalService journalService;
+
+	@Autowired
+	@Lazy
+	private SessionRegistry sessionRegistry;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -128,7 +136,28 @@ public class UserService implements UserDetailsService {
 			documentDao.deleteByUploaderId(user.getUserId());
 		}
 
+		expireSession(user);
+
 		userDao.deleteByUsername(username);
+	}
+
+	/**
+	 * 
+	 * Expire session of logged in user if ADMIN deletes their account
+	 * 
+	 * @param user
+	 */
+	private void expireSession(User user) {
+
+		List<Object> principals = sessionRegistry.getAllPrincipals();
+		for (Object principal : principals) {
+			UserDetails pUser = (UserDetails) principal;
+			if (pUser.getUsername().equals(user.getUsername())) {
+				for (SessionInformation activeSession : sessionRegistry.getAllSessions(principal, false)) {
+					activeSession.expireNow();
+				}
+			}
+		}
 	}
 
 	/**

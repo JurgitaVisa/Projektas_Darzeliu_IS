@@ -15,6 +15,16 @@ export default class UserDocumentListTable extends Component {
             content: document => <span>{document.name}</span>
         },
         {
+            key: "download",
+            label: "Atsisiųsti",
+            content: document => <button
+                className="btn btn-primary btn-sm btn-block"
+                onClick={() => this.props.onDownload(document)}
+                >
+                    Atsisiųsti
+                </button>
+        },
+        {
             key: "delete",
             label: "Ištrinti pažymą",
             content: document => <button 

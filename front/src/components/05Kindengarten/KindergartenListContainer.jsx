@@ -76,7 +76,7 @@ export class KindergartenListContainer extends Component {
                 });
 
             }).catch(error => {
-                console.log(error);
+                //console.log(error);
                 console.log("Darzeliai container error", error.response);
                 if (error && error.response.status === 401)
 
@@ -124,7 +124,7 @@ export class KindergartenListContainer extends Component {
                 const id = item.id;
                 const { currentPage, numberOfElements } = this.state;
                 const page = numberOfElements === 1 ? (currentPage - 1) : currentPage;
-                console.log("Trinti darzeli", id);
+                //console.log("Trinti darzeli", id);
 
                 http
                     .delete(`${apiEndpoint}/api/darzeliai/manager/delete/${id}`)

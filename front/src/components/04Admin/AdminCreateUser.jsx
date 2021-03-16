@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import { Route, withRouter, BrowserRouter } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
 import '../../App.css';
@@ -9,16 +8,6 @@ import apiEndpoint from '../10Services/endpoint';
 import swal from 'sweetalert';
 
 import inputValidator from '../08CommonComponents/InputValidator';
-
-
-//var currentDate = (new Date().getUTCFullYear()) + "-" + dateFormat(new Date().getUTCMonth() + 1) + "-" + dateFormat(new Date().getUTCDate());
-
-// function dateFormat(num) {
-//     if (num >= 1 && num <= 9) {
-//         return "0" + num;
-//     }
-//     else return num;
-// }
 
 
 class AdminCreateUser extends Component {
@@ -254,7 +243,6 @@ class AdminCreateUser extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        console.log("Posting to " + apiEndpoint + "/api/users/admin/createuser")
         http.post(`${apiEndpoint}/api/users/admin/createuser`, {
             "address": this.state.address,
             //"birthdate": this.state.birthdate,
@@ -268,20 +256,13 @@ class AdminCreateUser extends Component {
             "username": this.state.email
         })
             .then((response) => {
-                console.log("Naujas naudotojas sukurtas");
-                console.log(this.state);
-                console.log(response);
                 swal({
                     text: "Naujas naudotojas buvo sėkmingai sukurtas.",
                     button: "Gerai"
                 }).then(() => {
                     this.props.history.push("/new")
                     this.props.history.replace("/admin")
-                }
-                    // function refreshWindow() {
-                    //     window.location.reload();
-                    // }
-                )
+                })
             })
             .catch((error) => {
                 console.log(error);

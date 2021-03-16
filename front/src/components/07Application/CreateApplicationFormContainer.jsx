@@ -75,7 +75,7 @@ class CreateApplicationFormContainer extends Component {
      /** Get registation status */
      http.get(`${apiEndpoint}/api/status`)
      .then((response) => {
-       console.log(response.data.registrationActive);
+       //console.log(response.data.registrationActive);
        this.setState({ registrationDisabled: !response.data.registrationActive })
      })
     
@@ -850,7 +850,7 @@ class CreateApplicationFormContainer extends Component {
       http
         .post(`${apiEndpoint}/api/prasymai/user/new`, data)
         .then((response) => {
-          console.log(response);
+          //console.log(response);
           swal({
             text: response.data,
             button: "Gerai",

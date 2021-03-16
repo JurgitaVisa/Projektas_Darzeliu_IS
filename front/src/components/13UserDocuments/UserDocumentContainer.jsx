@@ -4,7 +4,6 @@ import http from '../10Services/httpService';
 import apiEndpoint from '../10Services/endpoint';
 import swal from 'sweetalert';
 import UserDocumentListTable from './UserDocumentListTable';
-import Axios from 'axios';
 
 export default class UserDocumentContainer extends Component {
     

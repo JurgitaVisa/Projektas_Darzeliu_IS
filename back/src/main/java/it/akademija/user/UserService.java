@@ -95,21 +95,11 @@ public class UserService implements UserDetailsService {
 		userDao.saveAndFlush(newUser);
 	}
 
-	/*
-	 * if (userData.getRole().equals("ADMIN") &&
-	 * userDao.findByRole(Role.ADMIN).size() > 1 &&
-	 * userDao.findByUsername("admin@admin.lt") != null) {
-	 * userDao.deleteByUsername("admin@admin.lt"); }
-	 */
-
 	/**
 	 * 
-	 * Delete user with a specified username. In case there are no other users with
-	 * ADMIN authorization in the user repository, creates a temporary user with
-	 * username "admin@admin.lt" and password "admin@admin.lt". If user role equals
-	 * USER, deletes associated Application and ParentDetails entries in the
-	 * database and increases number of available places in approved Kindergarten if
-	 * applicable.
+	 * Delete user with a specified username. If user role equals USER, deletes
+	 * associated Application and ParentDetails entries in the database and
+	 * increases number of available places in approved Kindergarten if applicable.
 	 * 
 	 * @param username
 	 */

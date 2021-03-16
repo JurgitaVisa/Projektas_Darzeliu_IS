@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class KindergartenInit {
 	KindergartenService service;
 
 	/**
-	 * Initialise database if no records are available. Saves info from txt file.
+	 * Initialize database if no records are available. Saves info from txt file.
 	 * 
 	 * @throws IOException
 	 */
@@ -32,7 +33,8 @@ public class KindergartenInit {
 
 			InputStream inputStream = obj.getClass().getClassLoader().getResourceAsStream("darzeliu_adresai.txt");
 
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+			try (BufferedReader reader = new BufferedReader(
+					new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
 				String line;
 				while ((line = reader.readLine()) != null) {
 					String[] data = line.split(";");
@@ -46,7 +48,7 @@ public class KindergartenInit {
 
 					gartenDao.save(kindergarten);
 				}
-				// apėjimas: pirmą įrašą ištrinam, nes kitaip meta validacijos klaidas
+				// apėjimas: pirmą įrašą ištrinam dė duomenų bazės problemų
 				service.deleteByName("test");
 			}
 

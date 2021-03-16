@@ -51,8 +51,6 @@ public class DocumentController {
 				"Atsisiųsta medicininė pažyma");
 
 		return documentService.getDocumentById(id).getData();
-		// return new
-		// ByteArrayInputStream(documentService.getDocumentById(id).getData());
 	}
 
 	@Secured("ROLE_USER")

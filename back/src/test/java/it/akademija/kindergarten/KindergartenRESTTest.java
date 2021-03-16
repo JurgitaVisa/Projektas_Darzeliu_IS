@@ -9,10 +9,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,6 +35,7 @@ import it.akademija.App;
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest(classes = { App.class, KindergartenController.class,
 		KindergartenService.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(OrderAnnotation.class)
 @AutoConfigureMockMvc
 class KindergartenRESTTest {
 
@@ -50,9 +53,6 @@ class KindergartenRESTTest {
 
 	@MockBean
 	private KindergartenService kindergartenService;
-
-	@MockBean
-	private KindergartenDAO kindergartenDAO;
 
 	@BeforeAll
 	public void setUp() throws Exception {
@@ -80,7 +80,6 @@ class KindergartenRESTTest {
 
 	public void testPostDeleteNewKindergartenMethod() throws Exception {
 		Kindergarten newKindergarten = new Kindergarten("111111111", "Test", "Test", "Test", 10, 10);
-		kindergartenDAO.save(newKindergarten);
 
 		String jsonRequest = mapper.writeValueAsString(newKindergarten);
 

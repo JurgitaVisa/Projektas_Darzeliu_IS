@@ -1,6 +1,7 @@
 package it.akademija.user;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,13 +20,6 @@ public class UserServiceIntegrationTest {
 
 	@Test
 	@Order(1)
-	public void testGetUserByUsername() {
-
-		assertEquals("admin", service.getUserDetails("admin@admin.lt").getName());
-	}
-
-	@Test
-	@Order(2)
 	public void testGetAllUsers() {
 
 		PageRequest page = PageRequest.of(1, 10);
@@ -34,12 +28,18 @@ public class UserServiceIntegrationTest {
 	}
 
 	@Test
-	@Order(3)
+	@Order(2)
 	public void testCreateDeleteUser() {
 
 		UserDTO newUser = new UserDTO("MANAGER", "stest", "stest", "stest@test.lt", "stest@test.lt", "stest@test.lt");
 		service.createUser(newUser);
 		assertEquals("stest", service.findByUsername("stest@test.lt").getName());
+
+		service.changePassword("stest@test.lt", "stest@test.lt", "saltpeppeR45!");
+		assertFalse(service.findByUsername("stest@test.lt").getPassword().equals("stest@test.lt"));
+		service.restorePassword("stest@test.lt");
+
+		assertEquals("stest", service.getUserDetails("stest@test.lt").getName());
 
 		service.deleteUser("stest@test.lt");
 		assertNull(service.findByUsername("stest@test.lt"));

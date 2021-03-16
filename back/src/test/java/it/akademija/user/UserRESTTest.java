@@ -9,10 +9,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,7 +35,7 @@ import it.akademija.role.Role;
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest(classes = { App.class,
 		UserController.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
+@TestMethodOrder(OrderAnnotation.class)
 @AutoConfigureMockMvc
 public class UserRESTTest {
 
@@ -81,26 +83,41 @@ public class UserRESTTest {
 				.andExpect(status().isCreated()).andReturn();
 		assertEquals(201, postNew.getResponse().getStatus());
 
-		MvcResult deleteUser = mvc.perform(delete("/api/users/admin/delete/{username}", "test@test.lt"))
-				.andExpect(status().isOk()).andReturn();
-		assertEquals(200, deleteUser.getResponse().getStatus());
-
 	}
 
 	@Test
 	@Order(2)
-	@WithMockUser(username = "user@user.lt", roles = { "USER" })
+	@WithMockUser(username = "test@test.lt", roles = { "USER" })
 	public void updateUser() throws Exception {
 
-		UserDTO firstUser = new UserDTO("USER", "user", "useris", "12345678987", "Address 1", "+37061398876",
-				"user@user.lt", "user@user.lt", "user@user.lt");
+		ParentDetails details = new ParentDetails();
+		details.setPersonalCode("48902230223");
+		details.setName("Testas");
+		details.setSurname("Test");
+		details.setEmail("test@test.lt");
+		details.setAddress("Adresas 5");
+		details.setPhone("+37061502254");
+		User newUser = new User(Role.USER, "Test", "Test", "test@test.lt", details, "test@test.lt", "test@test.lt");
 
-		String jsonRequest1 = mapper.writeValueAsString(firstUser);
+		String jsonRequest = mapper.writeValueAsString(newUser);
 
 		MvcResult updateUser = mvc
-				.perform(put("/api/users/update").content(jsonRequest1).contentType(MediaType.APPLICATION_JSON))
+				.perform(put("/api/users/update").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 		assertEquals(200, updateUser.getResponse().getStatus());
+
+	}
+
+	@Test
+
+	@Order(3)
+
+	@WithMockUser(username = "admin@admin.lt", roles = { "ADMIN" })
+	public void deleteUserMethod() throws Exception {
+
+		MvcResult deleteUser = mvc.perform(delete("/api/users/admin/delete/{username}", "test@test.lt"))
+				.andExpect(status().isOk()).andReturn();
+		assertEquals(200, deleteUser.getResponse().getStatus());
 
 	}
 
@@ -114,33 +131,40 @@ public class UserRESTTest {
 	}
 
 	@Test
-	@Order(3)
-	@WithMockUser(username = "manager", roles = { "MANAGER" })
-	public void testGetOneUser() throws Exception {
-
-		UserInfo userInfo = userService.getUserDetails("user@user.lt");
-		String jsonRequest = mapper.writeValueAsString(userInfo);
-
-		MvcResult getOneUser = mvc
-				.perform(get("/api/users/user").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andReturn();
-
-		assertEquals(200, getOneUser.getResponse().getStatus());
-
-	}
-
-	@Test
 	@Order(5)
-	@WithMockUser(username = "admin", roles = { "ADMIN" })
+	@WithMockUser(username = "admin@admin.lt", roles = { "ADMIN" })
 	public void userAlreadyExsists() throws Exception {
-		User newUser = new User(Role.MANAGER, "manager", "manager", "manager@manager.lt", null, "manager@manager.lt",
-				"manager@manager.lt");
+		User newUser = new User(Role.MANAGER, "manager", "manager", "manager1@manager.lt", null, "manager1@manager.lt",
+				"manager1@manager.lt");
 
 		String jsonRequest = mapper.writeValueAsString(newUser);
 
 		MvcResult postNew = mvc.perform(
 				post("/api/users/admin/createuser").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated()).andReturn();
+		assertEquals(201, postNew.getResponse().getStatus());
+
+		UserInfo userInfo = userService.getUserDetails("manager1@manager.lt");
+		String jsonRequest3 = mapper.writeValueAsString(userInfo);
+
+		MvcResult getOneUser = mvc
+				.perform(get("/api/users/user").content(jsonRequest3).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn();
+
+		assertEquals(200, getOneUser.getResponse().getStatus());
+
+		User newUser2 = new User(Role.MANAGER, "manageris", "manager", "manager1@manager.lt", null,
+				"manager1@manager.lt", "manager1@manager.lt");
+
+		String jsonRequest2 = mapper.writeValueAsString(newUser2);
+
+		MvcResult postNew2 = mvc.perform(
+				post("/api/users/admin/createuser").content(jsonRequest2).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andReturn();
-		assertEquals(400, postNew.getResponse().getStatus());
+		assertEquals(400, postNew2.getResponse().getStatus());
+
+		MvcResult deleteUser = mvc.perform(delete("/api/users/admin/delete/{username}", "manager1@manager.lt"))
+				.andExpect(status().isOk()).andReturn();
+		assertEquals(200, deleteUser.getResponse().getStatus());
 	}
 }

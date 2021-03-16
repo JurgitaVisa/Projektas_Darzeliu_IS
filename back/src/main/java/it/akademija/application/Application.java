@@ -79,10 +79,6 @@ public class Application {
 	@JsonIgnore
 	private Set<KindergartenChoise> kindergartenChoises;
 
-//	@OneToOne(mappedBy = "application", cascade= CascadeType.ALL)
-//	@JoinColumn(name="application_id")
-//	private ApplicationQueue applicationQueue;
-
 	private int numberInWaitingList;
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE }, fetch = FetchType.LAZY)

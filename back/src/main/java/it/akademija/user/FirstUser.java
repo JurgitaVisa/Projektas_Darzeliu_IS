@@ -2,8 +2,6 @@ package it.akademija.user;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +10,6 @@ import it.akademija.role.Role;
 @Component
 public class FirstUser {
 
-	private static final Logger LOG = LoggerFactory.getLogger(FirstUser.class);
-
 	@Autowired
 	UserDAO userDao;
 
@@ -21,16 +17,14 @@ public class FirstUser {
 	UserService userService;
 
 	/**
-	 * Add first ADMIN user to the User repository if no ADMIN users are in the
-	 * database
+	 * Add first users (ADMIN, MANAGER, USER) to the User repository for testing
+	 * purposes
 	 * 
 	 * @throws Exception
 	 * 
 	 */
 	@PostConstruct
 	public void addFirstUser() throws Exception {
-
-		// Nepamirsti istrinti firstUser ir firstManager!
 
 		if (userDao.findByRole(Role.ADMIN).size() == 0) {
 
@@ -46,8 +40,6 @@ public class FirstUser {
 			userService.createUser(firstAdmin);
 			userService.createUser(firstUser);
 			userService.createUser(firstManager);
-
-			LOG.warn("Pirmas ADMIN naudotojas sukurtas");
 
 		}
 

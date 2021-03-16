@@ -31,10 +31,10 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
-import it.akademija.user.UserDAO;
 import it.akademija.journal.JournalService;
 import it.akademija.journal.ObjectType;
 import it.akademija.journal.OperationType;
+import it.akademija.user.UserDAO;
 
 @Configuration
 @EnableWebSecurity
@@ -48,13 +48,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private UserDetailsPasswordService userDetailsPasswordService;
 
 	@Autowired
 	private UserDAO userDao;
-	
+
 	@Autowired
 	private JournalService journalService;
 
@@ -76,18 +76,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
-		auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder()).userDetailsPasswordManager(userDetailsPasswordService);
+		auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder())
+				.userDetailsPasswordManager(userDetailsPasswordService);
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().authorizeRequests()
-				// be saugumo UI dalis ir swaggeris
+
 				.antMatchers("/", "/swagger-ui/").permitAll()
-				// visi /api/ saugus (dar galima .anyRequest() )
-				.antMatchers("/api/**").authenticated().and().formLogin() // leidziam
-																			// login
-				// prisijungus
+
+				.antMatchers("/api/**").authenticated().and().formLogin()
+
 				.successHandler(new AuthenticationSuccessHandler() {
 
 					@Override
@@ -99,10 +99,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						String username = user.getName();
 						Object[] roles = user.getAuthorities().toArray();
 						String role = roles[0].toString().substring(5);
-						
+
 						LOG.info("Naudotojas [{}] prisijunge prie sistemos", username);
-						
-						journalService.newJournalEntry(OperationType.SUCCESSFUL_LOGIN, ObjectType.LOGIN, "Naudotojas prisijungė prie sistemos");
+
+						journalService.newJournalEntry(OperationType.SUCCESSFUL_LOGIN, ObjectType.LOGIN,
+								"Naudotojas prisijungė prie sistemos");
 
 						response.setHeader("Access-Control-Allow-Credentials", "true");
 						response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
@@ -112,54 +113,53 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					}
 
 				})
-				// esant blogiems user/pass
+
 				.failureHandler(new AuthenticationFailureHandler() {
-					 
-	                @Override
-	                public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-	                        AuthenticationException exception) throws IOException, ServletException {
-	                    String username = request.getParameter("username");
-						
-	                    LOG.info("Nesėkmingas prisijungimas prie sistemos. Naudotojo vardas: {}", username);
-	                    journalService.newJournalEntry(null, username, OperationType.UNSUCCESSFUL_LOGIN, null, ObjectType.LOGIN, "Nesėkmingas prisijungimas");
-	                    response.sendError(401, "Neteisingas prisijungimo vardas ir/arba slaptažodis");
-	                }
-	            }).loginPage("/login").permitAll() // jis jau
-																												// egzistuoja
-				// atsijungimas nuo sistemos
+
+					@Override
+					public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+							AuthenticationException exception) throws IOException, ServletException {
+						String username = request.getParameter("username");
+
+						LOG.info("Nesėkmingas prisijungimas prie sistemos. Naudotojo vardas: {}", username);
+						journalService.newJournalEntry(null, username, OperationType.UNSUCCESSFUL_LOGIN, null,
+								ObjectType.LOGIN, "Nesėkmingas prisijungimas");
+						response.sendError(401, "Neteisingas prisijungimo vardas ir/arba slaptažodis");
+					}
+				}).loginPage("/login").permitAll()
+
 				.and().logout().logoutUrl("/logout")
-				// ištrina sausainėlius ir uždaro sesiją
+
 				.logoutSuccessHandler(new LogoutSuccessHandler() {
 
 					@Override
 					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 							Authentication authentication) throws IOException, ServletException {
-						
+
 						String username = authentication.getName();
 						Long userID = userDao.findByUsername(username).getUserId();
-						
+
 						LOG.info("** SecurityConfig: Naudotojas {} ID: {} atsijunge nuo sistemos **", username, userID);
-						
-						journalService.newJournalEntry(userID, username, OperationType.LOGOUT, userID, ObjectType.LOGIN, "Naudotojas atsijungė nuo sistemos");
+
+						journalService.newJournalEntry(userID, username, OperationType.LOGOUT, userID, ObjectType.LOGIN,
+								"Naudotojas atsijungė nuo sistemos");
 
 					}
 				})
-				
-				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID")
-				.logoutSuccessUrl("/").permitAll() // leidziam logout
 
-				.and().csrf().disable() // nenaudojam tokenu
-				// toliau forbidden klaidai
+				.clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSIONID").logoutSuccessUrl("/")
+				.permitAll()
+
+				.and().csrf().disable()
+
 				.exceptionHandling().authenticationEntryPoint(securityEntryPoint).and().headers().frameOptions()
-				.disable().and().sessionManagement().maximumSessions(1)               
-                .sessionRegistry(sessionRegistry());
+				.disable().and().sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
 
 	}
-	
-	 @Bean
-	    SessionRegistry sessionRegistry() {
-	        return new SessionRegistryImpl();
-	    }
 
+	@Bean
+	SessionRegistry sessionRegistry() {
+		return new SessionRegistryImpl();
+	}
 
 }

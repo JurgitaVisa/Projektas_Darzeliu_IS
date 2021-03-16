@@ -75,8 +75,7 @@ public class ApplicationService {
 	 * application.
 	 * 
 	 * @param currentUsername
-	 * @param data            child data, gurdians' data, priorities data,
-	 *                        kindergarten choises
+	 * @param data
 	 * @return application or null if no kindergarten are chosen
 	 */
 	@Transactional
@@ -146,7 +145,7 @@ public class ApplicationService {
 
 	/**
 	 * 
-	 * capitalize first letter of word, other letters to lowercase
+	 * Capitalize first letter of word, other letters to lowercase
 	 * 
 	 * @param str
 	 * @return

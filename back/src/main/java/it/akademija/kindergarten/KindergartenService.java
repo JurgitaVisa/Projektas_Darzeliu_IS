@@ -19,8 +19,6 @@ import it.akademija.application.Application;
 import it.akademija.application.ApplicationDAO;
 import it.akademija.application.ApplicationStatus;
 import it.akademija.journal.JournalService;
-import it.akademija.journal.ObjectType;
-import it.akademija.journal.OperationType;
 
 @Service
 public class KindergartenService {
@@ -163,9 +161,6 @@ public class KindergartenService {
 			gartenDao.deleteById(id);
 
 			LOG.info("** UserService: trinamas darželis ID [{}] **", id);
-
-			journalService.newJournalEntry(OperationType.KINDERGARTEN_DELETED, Long.parseLong(gartenID),
-					ObjectType.KINDERGARTEN, "Ištrintas darželis");
 
 			return new ResponseEntity<String>("Darželis ištrintas sėkmingai", HttpStatus.OK);
 

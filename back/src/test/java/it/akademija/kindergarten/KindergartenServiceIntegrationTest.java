@@ -50,6 +50,11 @@ public class KindergartenServiceIntegrationTest {
 		service.deleteByName("Test");
 		assertNull(service.findById("123456789"));
 
+		KindergartenDTO garten = new KindergartenDTO("123456787", "Testas", "Testas", "Testas", 11, 9);
+		service.createNewKindergarten(garten);
+		assertTrue(service.findById("123456787").getCapacityAgeGroup2to3() == 11);
+		service.deleteKindergarten("123456787");
+		assertNull(service.findById("123456787"));
 	}
 
 }

@@ -166,6 +166,9 @@ public class KindergartenController {
 	public ResponseEntity<String> deleteKindergarten(
 			@ApiParam(value = "Kindergarten id", required = true) @PathVariable String id) {
 
+		journalService.newJournalEntry(OperationType.KINDERGARTEN_DELETED, Long.parseLong(id), ObjectType.KINDERGARTEN,
+				"Ištrintas darželis");
+
 		return kindergartenService.deleteKindergarten(id);
 	}
 

@@ -53,11 +53,6 @@ public class ApplicationServiceIntegrationTest {
 	@Order(2)
 	public void testCreateNewApplication() {
 
-		/*
-		 * if (null != userService.findByUsername("user1@user.lt")) {
-		 * userService.deleteUser("user1@user.lt"); }
-		 */
-
 		UserDTO newUser = new UserDTO("USER", "firstuser", "firstuser", "22345678989", "Address 1", "+37061398876",
 				"user1@user.lt", "user1@user.lt", "user1@user.lt");
 		userService.createUser(newUser);
@@ -82,9 +77,15 @@ public class ApplicationServiceIntegrationTest {
 
 		assertNotNull(userService.findByUsername("user1@user.lt"));
 
-		// service.deleteApplication(newApplication.getId());
-
 		assertEquals(1, service.getAllUserApplications("user1@user.lt").size());
+
+		assertEquals(1, userService.findByUsername("user1@user.lt").getUserApplications().size());
+		Long id = userService.findByUsername("user1@user.lt").getUserApplications().stream()
+				.filter(a -> a.getChildName().equals("Test")).findFirst().get().getId();
+		service.deactivateApplication(id);
+		assertEquals(ApplicationStatus.Neaktualus, userService.findByUsername("user1@user.lt").getUserApplications()
+				.stream().filter(a -> a.getChildName().equals("Test")).findFirst().get().getStatus());
+
 		userService.deleteUser("user1@user.lt");
 
 	}

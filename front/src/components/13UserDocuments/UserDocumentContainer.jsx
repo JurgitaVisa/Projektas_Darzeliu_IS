@@ -115,7 +115,7 @@ export default class UserDocumentContainer extends Component {
             return (
                 <div className="form">
                     <div className="form-group">
-                        <h6 className="py-3">Pažyma privalo būti .pdf formato ir neužimti daugiau negu 128MB vietos.</h6>
+                        <h6 className="py-3">Pažyma privalo būti .pdf formato ir neužimti daugiau negu 1 MB vietos.</h6>
                         <input 
                             type="file"
                             className="form-control-file"

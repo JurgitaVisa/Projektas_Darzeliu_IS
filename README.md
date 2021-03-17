@@ -92,7 +92,6 @@ specialistTests package tests:
 
 parentPages package tests:
 - submit and delete new application
-- submit 2 applications and check if the one with more priority points gets the place at the kindergarten
 - update parent details (change user information, password, reset password)
 - upload medical document (pdf)
 

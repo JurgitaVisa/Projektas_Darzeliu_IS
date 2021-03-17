@@ -36,7 +36,7 @@ export default function ForgetMe() {
                             type: "LOGOUT"
                         })
                         history.push("/")
-                    })
+                    }).catch(() => {});
             }
         })
     }

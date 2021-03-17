@@ -89,26 +89,12 @@ function KindergartenInputForm() {
 
   const handleChange = (event) => {
     validateField(event);
-    // TODO patikrinti įvedimą
-    // if (event.target.name === "capacityAgeGroup2to3") {
-    //   setData({
-    //     ...data,
-    //     capacityAgeGroup2to3:
-    //       event.target.value >= 0 ? Number(event.target.value) : 0,
-    //   });
-    // } else if (event.target.name === "capacityAgeGroup3to6") {
-    //   setData({
-    //     ...data,
-    //     savingError: false,
-    //     capacityAgeGroup3to6:
-    //       event.target.value >= 0 ? Number(event.target.value) : 0,
-    //   });
-    // } else {
+   
     setData({
       ...data,
       [event.target.name]: event.target.value,
     });
-    // }
+    
   };
 
   const resetForm = (event) => {

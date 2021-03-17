@@ -45,13 +45,7 @@ export class UserHomeContainer extends Component {
                             button: "Gerai"
                         })
                         this.getUserApplications();
-                    }).catch((error) => {
-                        if (error && error.response.status > 400 && error.response.status < 500)
-                            swal({
-                                text: "Veiksmas neleidžiamas",
-                                button: "Gerai"
-                            });
-                    });
+                    }).catch(() => {});
             }
         });
     }

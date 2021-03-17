@@ -100,17 +100,7 @@ export class UserListContainer extends Component {
 
             this.getUserInfo(page);
           })
-          .catch((error) => {
-            if (
-              error &&
-              error.response.status > 400 &&
-              error.response.status < 500
-            )
-              swal({
-                title: "Veiksmas neleidžiamas",
-                button: "Gerai",
-              });
-          });
+          .catch(() => {});
       }
     });
   };
@@ -135,17 +125,7 @@ export class UserListContainer extends Component {
               button: "Gerai",
             });
           })
-          .catch((error) => {
-            if (
-              error &&
-              error.response.status > 400 &&
-              error.response.status < 500
-            )
-              swal({
-                text: "Veiksmas neleidžiamas",
-                button: "Gerai",
-              });
-          });
+          .catch(() => {});
       }
     });
   };

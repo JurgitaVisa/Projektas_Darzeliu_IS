@@ -40,7 +40,7 @@ export class KindergartenListContainer extends Component {
     handleEscape = (e) => {
         if (e.key === 'Escape') {
             this.onCancel();
-            //this.props.history.push("/darzeliai");  
+             
             setTimeout(function () {
                 window.location.reload();
             }, 10);
@@ -75,18 +75,7 @@ export class KindergartenListContainer extends Component {
                     currentPage: response.data.number + 1
                 });
 
-            }).catch(error => {
-                //console.log(error);
-                //console.log("Darzeliai container error", error.response);
-                if (error && error.response.status === 401)
-
-                    swal({
-                        text: "Puslapis pasiekiamas tik teises turintiems naudotojams",
-                        button: "Gerai"
-                    });
-                // this.props.history.replace("/home");
-            }
-            );
+            }).catch(() => {});
     }
 
     getElderates() {
@@ -95,15 +84,7 @@ export class KindergartenListContainer extends Component {
             .then((response) => {
                 this.setState({ elderates: response.data });
             })
-            .catch((error) => {
-                //console.log("Darzeliai container error", error.response);
-                if (error && error.response.status === 401)
-
-                    swal({
-                        text: "Puslapis pasiekiamas tik teises turintiems naudotojams",
-                        button: "Gerai"
-                    });
-            });
+            .catch(() => {});
     }
 
     handleSearch = (e) => {
@@ -136,13 +117,7 @@ export class KindergartenListContainer extends Component {
                         this.setState({searchQuery: ""});
                         this.getKindergartenInfo(page, "");
 
-                    }).catch(error => {
-                        if (error && error.response.status > 400 && error.response.status < 500)
-                            swal({
-                                text: "Veiksmas neleidžiamas",
-                                button: "Gerai"
-                            });
-                    });
+                    }).catch(() => {});
             }
         });
     }
@@ -198,11 +173,7 @@ export class KindergartenListContainer extends Component {
                             button: "Gerai"
                         });
                     }
-                    else if (error && error.response.status > 400 && error.response.status < 500)
-                        swal({
-                            text: "Veiksmas neleidžiamas",
-                            button: "Gerai"
-                        });
+                    
                 })
         }
     }

@@ -51,9 +51,7 @@ export class QueueContainer extends Component {
                         this.getApplications(this.state.currentPage, "");
                     }
                 );
-            }).catch(error => {
-                //console.log("Queue status error", error);
-            });
+            }).catch(() => {});
     }
 
     getApplications(currentPage, personalCode) {
@@ -94,9 +92,7 @@ export class QueueContainer extends Component {
                         currentPage: response.data.number + 1
                     });
 
-                }).catch(error => {
-                    //console.log("Queue container error", error);
-                });
+                }).catch(() => {});
 
         }
 
@@ -128,7 +124,7 @@ export class QueueContainer extends Component {
                         }, function () {
                             this.getApplications(1, "");
                         });
-                    });
+                    }).catch(() => {});
 
             } else {
                 http.post(`${apiEndpoint}/api/status/${false}`)
@@ -139,7 +135,7 @@ export class QueueContainer extends Component {
                         }, function () {
                             this.getApplications(1, "");
                         });
-                    })
+                    }).catch(() => {});
             }
         }
     }
@@ -161,7 +157,7 @@ export class QueueContainer extends Component {
                     }, function () {
                         this.getApplications(1, "");
                     });
-                })
+                }).catch(() => {});
         }
     }
 
@@ -196,11 +192,7 @@ export class QueueContainer extends Component {
                                 });
                                 this.getApplications(1, "");
                             }
-                            else if (error && error.response.status > 400 && error.response.status < 500)
-                                swal({
-                                    text: "Veiksmas neleidžiamas",
-                                    button: "Gerai"
-                                });
+                            
                         });
                 }
             })
@@ -241,11 +233,7 @@ export class QueueContainer extends Component {
                                 text: "Įvyko klaida. " + error.response.data,
                                 button: "Gerai"
                             });
-                        } else if (error && error.response.status > 400 && error.response.status < 500)
-                            swal({
-                                text: "Veiksmas neleidžiamas",
-                                button: "Gerai"
-                            });
+                        } 
                     });
             }
         });

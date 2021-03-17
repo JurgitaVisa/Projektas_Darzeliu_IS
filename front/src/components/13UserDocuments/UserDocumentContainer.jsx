@@ -38,7 +38,7 @@ export default class UserDocumentContainer extends Component {
                     text: "Įvyko klaida perduodant duomenis iš serverio.",         
                     button: "Gerai",
                   });
-                console.log(error);
+                //console.log(error);
             })
     }
 
@@ -70,7 +70,7 @@ export default class UserDocumentContainer extends Component {
                 this.setState({showUploadForm: false, documentToUpload: "", documentValid: false})
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 swal({
                     text: "Įvyko klaida įkeliant pažymą",
                     buttons: "Gerai"
@@ -178,7 +178,7 @@ export default class UserDocumentContainer extends Component {
                         })
                     })
                     .catch((error) => {
-                        console.log(error);
+                        //console.log(error);
                         swal({
                             text: "Įvyko klaida",
                             button: "Gerai"
@@ -202,7 +202,7 @@ export default class UserDocumentContainer extends Component {
             link.click();
             link.remove();
         }).catch((error) => {
-            console.log(error);
+            //console.log(error);
             swal({
                 text: "Įvyko klaida atsisiunčiant pažymą.",
                 buttons: "Gerai",

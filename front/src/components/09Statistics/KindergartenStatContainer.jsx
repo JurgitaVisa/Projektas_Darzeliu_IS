@@ -45,7 +45,7 @@ export class KindergartenStatContainer extends Component {
                 });
 
             }).catch(error => {
-                console.log("Statistics container error", error);
+                //console.log("Statistics container error", error);
             });
     }
 

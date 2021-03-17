@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b2362a484ee4ef8ea8c7ac8a819628c4",
+    "revision": "f78984a24a5aa7a5855337c1c8716aa3",
     "url": "/darzelis/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/darzelis/static/css/2.30f2e618.chunk.css"
   },
   {
-    "revision": "986a9f92b1818fe43f88",
+    "revision": "f9c5b281b5a76276d803",
     "url": "/darzelis/static/css/main.35913a40.chunk.css"
   },
   {
@@ -24,8 +24,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/darzelis/static/js/3.6c99a684.chunk.js"
   },
   {
-    "revision": "986a9f92b1818fe43f88",
-    "url": "/darzelis/static/js/main.d468e075.chunk.js"
+    "revision": "f9c5b281b5a76276d803",
+    "url": "/darzelis/static/js/main.9d07ad00.chunk.js"
   },
   {
     "revision": "ba56b13eb1d129134eea",

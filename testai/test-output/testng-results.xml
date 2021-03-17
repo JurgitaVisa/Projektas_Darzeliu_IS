@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="2" passed="2" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2021-03-17T18:20:32 EET" name="Default suite" finished-at="2021-03-17T18:20:54 EET" duration-ms="22288">
+    <groups>
+      <group name="regression">
+        <method signature="SubmitNewApplication.deleteApplication()[pri:2, instance:parentTests.SubmitNewApplication@a3d8174]" name="deleteApplication" class="parentTests.SubmitNewApplication"/>
+        <method signature="SubmitNewApplication.successfullySubmitNewApplication()[pri:1, instance:parentTests.SubmitNewApplication@a3d8174]" name="successfullySubmitNewApplication" class="parentTests.SubmitNewApplication"/>
+      </group> <!-- regression -->
+    </groups>
+    <test started-at="2021-03-17T18:20:32 EET" name="Default test" finished-at="2021-03-17T18:20:54 EET" duration-ms="22288">
+      <class name="parentTests.SubmitNewApplication">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:parentTests.SubmitNewApplication@a3d8174]" started-at="2021-03-17T18:20:32 EET" name="setUp" finished-at="2021-03-17T18:20:36 EET" duration-ms="4121" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="successfullySubmitNewApplication()[pri:1, instance:parentTests.SubmitNewApplication@a3d8174]" started-at="2021-03-17T18:20:36 EET" name="successfullySubmitNewApplication" finished-at="2021-03-17T18:20:49 EET" duration-ms="13173" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- successfullySubmitNewApplication -->
+        <test-method signature="deleteApplication()[pri:2, instance:parentTests.SubmitNewApplication@a3d8174]" started-at="2021-03-17T18:20:49 EET" name="deleteApplication" finished-at="2021-03-17T18:20:54 EET" duration-ms="4821" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- deleteApplication -->
+        <test-method is-config="true" signature="closeBrowser()[pri:0, instance:parentTests.SubmitNewApplication@a3d8174]" started-at="2021-03-17T18:20:54 EET" name="closeBrowser" finished-at="2021-03-17T18:20:54 EET" duration-ms="121" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeBrowser -->
+      </class> <!-- parentTests.SubmitNewApplication -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

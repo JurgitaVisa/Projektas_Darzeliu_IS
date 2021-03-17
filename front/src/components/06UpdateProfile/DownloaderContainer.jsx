@@ -31,9 +31,7 @@ class DownloaderContainer extends Component {
 
             window.document.activeElement.blur();
 
-        }).catch((error) => {
-            //console.log(error);
-        });
+        }).catch(() => {});
     }
 
     render() {

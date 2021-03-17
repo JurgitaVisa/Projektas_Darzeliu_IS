@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -62,6 +61,7 @@ public class ApplicationController {
 	 */
 	@Secured({ "ROLE_USER" })
 	@PostMapping("/user/new")
+
 	@ApiOperation(value = "Create new application")
 	public ResponseEntity<String> createNewApplication(
 			@ApiParam(value = "Application", required = true) @Valid @RequestBody ApplicationDTO data) {
@@ -108,7 +108,6 @@ public class ApplicationController {
 	 */
 	@Secured({ "ROLE_USER" })
 	@GetMapping("/user")
-	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get all user applications")
 	public Set<ApplicationInfoUser> getAllUserApplications() {
 
@@ -127,7 +126,6 @@ public class ApplicationController {
 	 */
 	@Secured({ "ROLE_MANAGER" })
 	@GetMapping("/manager")
-	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get a page from all submitted applications")
 	public Page<ApplicationInfo> getPageFromSubmittedApplications(@RequestParam("page") int page,
 			@RequestParam("size") int size) {
@@ -174,7 +172,6 @@ public class ApplicationController {
 	 */
 
 	@Secured({ "ROLE_USER" })
-
 	@DeleteMapping("/user/delete/{id}")
 	@ApiOperation("Delete user application by id")
 	public ResponseEntity<String> deleteApplication(

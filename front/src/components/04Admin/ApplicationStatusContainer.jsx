@@ -45,7 +45,7 @@ export class ApplicationStatusContainer extends Component {
                         //TODO: nustatyti statusą pagal atsakymą
                         isLocked: false
                     })
-                })
+                }).catch(() => {});
         } else {
             http.post(`${apiEndpoint}/api/queue/lock`)
                 .then((response) => {
@@ -53,7 +53,7 @@ export class ApplicationStatusContainer extends Component {
                     this.setState({
                         isLocked: true
                     });
-                })
+                }).catch(() => {});
         }
     }
 

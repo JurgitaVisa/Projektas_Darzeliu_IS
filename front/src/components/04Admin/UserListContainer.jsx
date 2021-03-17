@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import swal from "sweetalert";
+import Pagination from "react-js-pagination";
 
 import http from "../10Services/httpService";
 import apiEndpoint from "../10Services/endpoint";
 import "../../App.css";
 
 import UserListTable from "./UserListTable";
-import Pagination from "./../08CommonComponents/Pagination";
 
 export class UserListContainer extends Component {
   constructor(props) {
@@ -41,7 +41,7 @@ export class UserListContainer extends Component {
           passwordResetRequests: response.data,
         });
       })
-      .catch(() => {});
+      .catch(() => { });
 
     http
       .get(uri)
@@ -57,7 +57,7 @@ export class UserListContainer extends Component {
           currentPage: response.data.number + 1,
         });
       })
-      .catch(() => {});
+      .catch(() => { });
   }
 
   checkIfUserIsRequestingPassword(UID, passList) {
@@ -100,17 +100,7 @@ export class UserListContainer extends Component {
 
             this.getUserInfo(page);
           })
-          .catch((error) => {
-            if (
-              error &&
-              error.response.status > 400 &&
-              error.response.status < 500
-            )
-              swal({
-                title: "Veiksmas neleidžiamas",
-                button: "Gerai",
-              });
-          });
+          .catch(() => { });
       }
     });
   };
@@ -135,17 +125,7 @@ export class UserListContainer extends Component {
               button: "Gerai",
             });
           })
-          .catch((error) => {
-            if (
-              error &&
-              error.response.status > 400 &&
-              error.response.status < 500
-            )
-              swal({
-                text: "Veiksmas neleidžiamas",
-                button: "Gerai",
-              });
-          });
+          .catch(() => { });
       }
     });
   };
@@ -156,7 +136,10 @@ export class UserListContainer extends Component {
   };
 
   render() {
-    const { length: count } = this.state.naudotojai;
+    const { naudotojai } = this.state;
+    let count = 0;
+
+    if (naudotojai !== undefined) count = naudotojai.length;
 
     if (count === 0)
       return (
@@ -165,7 +148,7 @@ export class UserListContainer extends Component {
         </div>
       );
 
-    const { naudotojai, totalElements, pageSize } = this.state;
+    const { totalPages } = this.state;
 
     return (
       <React.Fragment>
@@ -175,12 +158,18 @@ export class UserListContainer extends Component {
           onRestorePassword={this.handleRestorePassword}
         />
 
-        <Pagination
-          itemsCount={totalElements}
-          pageSize={pageSize}
-          onPageChange={this.handlePageChange}
-          currentPage={this.state.currentPage}
-        />
+        {totalPages > 1 && <div className="d-flex justify-content-center">
+          <Pagination
+            itemClass="page-item"
+            linkClass="page-link"
+            activePage={this.state.currentPage}
+            itemsCountPerPage={this.state.pageSize}
+            totalItemsCount={this.state.totalElements}
+            pageRangeDisplayed={15}
+            onChange={this.handlePageChange.bind(this)}
+          />
+        </div>
+        }
       </React.Fragment>
     );
   }

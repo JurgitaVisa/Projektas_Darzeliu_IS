@@ -44,8 +44,7 @@ public class RegistrationStatusController {
 	 * @param status
 	 */
 	@Secured({ "ROLE_MANAGER" })
-	@PostMapping("/status/{registrationActive}")
-	@ResponseStatus(HttpStatus.OK)
+	@PostMapping("/status/{registrationActive}")	
 	@ApiOperation(value = "Set application status")
 	public RegistrationStatus setStatus(@PathVariable boolean registrationActive) {
 
@@ -67,8 +66,7 @@ public class RegistrationStatusController {
 	 * @return registration status
 	 */
 	@Secured({ "ROLE_USER", "ROLE_ADMIN", "ROLE_MANAGER" })
-	@GetMapping("/status")
-	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/status")	
 	@ApiOperation(value = "Get application status")
 	public RegistrationStatus getStatus() {
 

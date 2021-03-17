@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
+import Pagination from "react-js-pagination";
 
 import '../../App.css';
 
@@ -8,7 +9,7 @@ import apiEndpoint from '../10Services/endpoint';
 
 import QueueTable from './QueueTable';
 import QueueProcessedTable from './QueueProcessedTable';
-import Pagination from '../08CommonComponents/Pagination';
+
 import SearchBox from './../08CommonComponents/SeachBox';
 import Buttons from './Buttons';
 export class QueueContainer extends Component {
@@ -37,9 +38,9 @@ export class QueueContainer extends Component {
         http
             .get(`${apiEndpoint}/api/status`)
             .then((response) => {
-                
+
                 let buttonValue = response.data.registrationActive ? "On" : "Off"
-                
+
                 this.setState(
                     {
                         isActive: response.data.registrationActive,
@@ -50,9 +51,7 @@ export class QueueContainer extends Component {
                         this.getApplications(this.state.currentPage, "");
                     }
                 );
-            }).catch(error => {
-                //console.log("Queue status error", error);
-            });
+            }).catch(() => {});
     }
 
     getApplications(currentPage, personalCode) {
@@ -93,9 +92,7 @@ export class QueueContainer extends Component {
                         currentPage: response.data.number + 1
                     });
 
-                }).catch(error => {
-                    //console.log("Queue container error", error);
-                });
+                }).catch(() => {});
 
         }
 
@@ -113,7 +110,7 @@ export class QueueContainer extends Component {
     }
 
     handleClick = (e) => {
-        const buttonValue = e.currentTarget.value;        
+        const buttonValue = e.currentTarget.value;
 
         if (buttonValue !== this.state.currentButtonValue) {
             this.resetState();
@@ -127,7 +124,7 @@ export class QueueContainer extends Component {
                         }, function () {
                             this.getApplications(1, "");
                         });
-                    });
+                    }).catch(() => {});
 
             } else {
                 http.post(`${apiEndpoint}/api/status/${false}`)
@@ -138,7 +135,7 @@ export class QueueContainer extends Component {
                         }, function () {
                             this.getApplications(1, "");
                         });
-                    })
+                    }).catch(() => {});
             }
         }
     }
@@ -160,7 +157,7 @@ export class QueueContainer extends Component {
                     }, function () {
                         this.getApplications(1, "");
                     });
-                })
+                }).catch(() => {});
         }
     }
 
@@ -195,11 +192,7 @@ export class QueueContainer extends Component {
                                 });
                                 this.getApplications(1, "");
                             }
-                            else if (error && error.response.status > 400 && error.response.status < 500)
-                                swal({
-                                    text: "Veiksmas neleidžiamas",
-                                    button: "Gerai"
-                                });
+                            
                         });
                 }
             })
@@ -237,14 +230,10 @@ export class QueueContainer extends Component {
                     }).catch(error => {
                         if (error && error.response.status === 405) {
                             swal({
-                                text: "Įvyko klaida. " +error.response.data,
+                                text: "Įvyko klaida. " + error.response.data,
                                 button: "Gerai"
                             });
-                        } else if (error && error.response.status > 400 && error.response.status < 500)
-                            swal({
-                                text: "Veiksmas neleidžiamas",
-                                button: "Gerai"
-                            });
+                        } 
                     });
             }
         });
@@ -258,13 +247,14 @@ export class QueueContainer extends Component {
 
 
     render() {
-
-        const size = this.state.applications.length;
-
-        const { applications, totalElements, pageSize, searchQuery, isActive, isLocked, currentButtonValue } = this.state;
-
+        
+        const { applications, totalPages,  searchQuery, isActive, isLocked, currentButtonValue } = this.state;
+       
+        let size =0;
+        
+        if(applications!==undefined) size = applications.length;
+       
         const placeholder = "Ieškoti pagal vaiko asmens kodą..."
-
 
         return (
 
@@ -309,12 +299,18 @@ export class QueueContainer extends Component {
                         />
                     }
 
-                    <Pagination
-                        itemsCount={totalElements}
-                        pageSize={pageSize}
-                        onPageChange={this.handlePageChange}
-                        currentPage={this.state.currentPage}
-                    />
+                    {totalPages > 1 && <div className="d-flex justify-content-center">
+                        <Pagination
+                            itemClass="page-item"
+                            linkClass="page-link"
+                            activePage={this.state.currentPage}
+                            itemsCountPerPage={this.state.pageSize}
+                            totalItemsCount={this.state.totalElements}
+                            pageRangeDisplayed={15}
+                            onChange={this.handlePageChange.bind(this)}
+                        />
+                    </div>
+                    }
 
                 </div>
             </div>

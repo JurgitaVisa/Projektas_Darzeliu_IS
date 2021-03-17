@@ -7,7 +7,7 @@ import '../../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 
-import instructionsPdf from '../../documents/VDIS_naudotojo_gidas.pdf';
+import instructionsPdf from '../../documents/VMS_VDIS_naudotojo_gidas.pdf';
 
 import LogoutContainer from './LogoutContainer';
 

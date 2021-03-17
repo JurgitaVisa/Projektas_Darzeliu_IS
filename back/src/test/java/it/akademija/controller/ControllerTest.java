@@ -74,6 +74,7 @@ public class ControllerTest {
 				.andExpect(status().isOk()).andReturn();
 
 		assertEquals(200, getUser.getResponse().getStatus());
+
 	}
 
 	@Test

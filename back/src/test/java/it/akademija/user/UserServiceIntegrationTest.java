@@ -12,11 +12,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import it.akademija.journal.JournalEntryDAO;
+import it.akademija.journal.JournalService;
+import it.akademija.user.gdprservice.JsonEcporterImpl;
+
 @SpringBootTest
 public class UserServiceIntegrationTest {
 
 	@Autowired
 	private UserService service;
+
+	@Autowired
+	private JsonEcporterImpl jsonService;
+
+	@Autowired
+	private JournalService journalService;
+
+	@Autowired
+	private JournalEntryDAO journalDAO;
 
 	@Test
 	@Order(1)
@@ -40,6 +53,45 @@ public class UserServiceIntegrationTest {
 		service.restorePassword("stest@test.lt");
 
 		assertEquals("stest", service.getUserDetails("stest@test.lt").getName());
+
+		service.deleteUser("stest@test.lt");
+		assertNull(service.findByUsername("stest@test.lt"));
+
+	}
+
+	@Test
+	@Order(3)
+	public void testCreateJSON() {
+
+		UserDTO newUser = new UserDTO("USER", "stest", "stest", "12345898987", "Address 1", "+37061398876",
+				"stest@test.lt", "stest@test.lt", "stest@test.lt");
+
+		service.createUser(newUser);
+
+		assertFalse(jsonService.export(service.findByUsername("stest@test.lt")).isEmpty());
+
+		service.deleteUser("stest@test.lt");
+		assertNull(service.findByUsername("stest@test.lt"));
+
+	}
+
+	@Test
+	@Order(4)
+	public void testJournal() {
+
+		PageRequest page = PageRequest.of(1, 10);
+
+		assertTrue(journalService.getAllJournalEntries(page).getSize() != 0);
+
+		UserDTO newUser = new UserDTO("USER", "stest", "stest", "12345898987", "Address 1", "+37061398876",
+				"stest@test.lt", "stest@test.lt", "stest@test.lt");
+
+		service.createUser(newUser);
+
+		journalService.depersonalizeUserLogs("stest");
+
+		PageRequest page2 = PageRequest.of(1, 10);
+		assertTrue(journalDAO.getAllJournalEntries(page2).getSize() != 0);
 
 		service.deleteUser("stest@test.lt");
 		assertNull(service.findByUsername("stest@test.lt"));

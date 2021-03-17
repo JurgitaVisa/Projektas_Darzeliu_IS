@@ -1,6 +1,9 @@
 package it.akademija.document;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +43,15 @@ class DocumentServiceTest {
 
 	@Test
 	void getDocumentById() {
+
+		DocumentViewmodel newDocument = new DocumentViewmodel();
+		newDocument.setDocumentId(123L);
+		newDocument.setName("pazyma");
+		newDocument.setUploadDate(LocalDate.of(2019, 5, 5));
+
+		assertEquals(123L, newDocument.getDocumentId());
+		assertEquals("pazyma", newDocument.getName());
+		assertEquals(LocalDate.of(2019, 5, 5), newDocument.getUploadDate());
 
 		assertTrue(documentService.getDocumentsByUploaderId(userDao.findByUsername("user@user.lt").getUserId())
 				.size() == 0);

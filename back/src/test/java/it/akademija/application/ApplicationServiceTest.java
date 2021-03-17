@@ -1,10 +1,11 @@
 package it.akademija.application;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -12,11 +13,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.akademija.application.priorities.PrioritiesDAO;
 import it.akademija.application.priorities.PrioritiesDTO;
+import it.akademija.application.queue.ApplicationQueueService;
 import it.akademija.kindergarten.Kindergarten;
 import it.akademija.kindergarten.KindergartenDAO;
 import it.akademija.kindergarten.KindergartenService;
@@ -43,6 +46,9 @@ class ApplicationServiceTest {
 
 	@MockBean
 	private KindergartenService gartenService;
+
+	@MockBean
+	private ApplicationQueueService queueService;
 
 	@MockBean
 	private ParentDetailsDAO parentDetailsDao;
@@ -82,6 +88,12 @@ class ApplicationServiceTest {
 		assertNotNull(applicationService.createNewApplication("test@test.lt", data));
 		assertTrue(applicationService.existsByPersonalCode("11111111111"));
 
-	}	
+		PageRequest page = PageRequest.of(1, 10);
+		applicationService.getPageFromSubmittedApplications(page);
+		assertTrue(applicationService.getPageFromSubmittedApplications(page).getSize() != 0);
+
+		queueService.processApplicationsToQueue();
+
+	}
 
 }

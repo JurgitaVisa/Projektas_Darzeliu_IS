@@ -28,10 +28,21 @@ public class KindergartenServiceIntegrationTest {
 
 		PageRequest page = PageRequest.of(1, 10);
 		assertEquals(10, service.getKindergartenPageFilteredByName("Gudrutis", page).getSize());
+
+		assertTrue(service.getKindergartenPage(page).getSize() != 0);
+
+		assertTrue(service.getKindergartenStatistics(page).getSize() != 0);
+
 	}
 
 	@Test
 	public void testGetAllElderates() {
+
+		KindergartenInfo info = new KindergartenInfo();
+		info.setAddress("Adresas 2");
+		info.setElderate("Senamiestis");
+		info.setId("123456987");
+		info.setName("Mazutis");
 
 		assertTrue(service.getAllElderates().size() != 0);
 	}
@@ -45,6 +56,7 @@ public class KindergartenServiceIntegrationTest {
 		KindergartenDTO updatedInfo = new KindergartenDTO("123456789", "Test", "Test", "Test", 10, 10);
 		service.updateKindergarten("123456789", updatedInfo);
 		assertEquals(10, service.findById("123456789").getCapacityAgeGroup2to3());
+
 		service.decreaseNumberOfTakenPlacesInAgeGroup(service.findById("123456789"), 2);
 		assertEquals(10, service.findById("123456789").getCapacityAgeGroup2to3());
 		service.deleteByName("Test");
@@ -52,6 +64,8 @@ public class KindergartenServiceIntegrationTest {
 
 		KindergartenDTO garten = new KindergartenDTO("123456787", "Testas", "Testas", "Testas", 11, 9);
 		service.createNewKindergarten(garten);
+		long age = 4;
+		service.increaseNumberOfTakenPlacesInAgeGroup(service.findById("123456787"), age);
 		assertTrue(service.findById("123456787").getCapacityAgeGroup2to3() == 11);
 		service.deleteKindergarten("123456787");
 		assertNull(service.findById("123456787"));

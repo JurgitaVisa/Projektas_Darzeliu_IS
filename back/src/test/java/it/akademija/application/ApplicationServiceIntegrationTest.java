@@ -1,6 +1,7 @@
 package it.akademija.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import it.akademija.application.priorities.Priorities;
 import it.akademija.application.priorities.PrioritiesDTO;
 import it.akademija.application.queue.ApplicationQueueInfo;
 import it.akademija.application.queue.ApplicationQueueService;
@@ -88,6 +90,34 @@ public class ApplicationServiceIntegrationTest {
 
 		userService.deleteUser("user1@user.lt");
 
+	}
+
+	@Test
+	@Order(3)
+	public void testApplicationInfoAndPriorities() {
+
+		ApplicationInfo app = new ApplicationInfo(123L, "49902261456", "Test", "Test", ApplicationStatus.Laukiantis,
+				"123456789", "123456749", "133456789", "123446789", "128456789");
+		assertTrue(app.getChildSurname().equals("Test"));
+		assertTrue(app.getChildName().equals("Test"));
+		assertTrue(app.getChildPersonalCode().equals("49902261456"));
+
+		Application applic = new Application();
+		Priorities prior = new Priorities();
+		prior.setChildIsAdopted(false);
+		prior.setFamilyHasThreeOrMoreChildrenInSchools(true);
+		prior.setGuardianDisability(false);
+		prior.setGuardianInSchool(true);
+		prior.setLivesInVilnius(true);
+		prior.setApplication(applic);
+
+		assertEquals(12, prior.getScore());
+		assertFalse(prior.isChildIsAdopted());
+		assertTrue(prior.isFamilyHasThreeOrMoreChildrenInSchools());
+		assertFalse(prior.isGuardianDisability());
+		assertTrue(prior.isLivesInVilnius());
+		assertTrue(prior.isGuardianInSchool());
+		assertEquals(applic, prior.getApplication());
 	}
 
 }

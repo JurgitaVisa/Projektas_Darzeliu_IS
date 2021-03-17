@@ -17,7 +17,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -63,7 +62,6 @@ public class ApplicationController {
 	 */
 	@Secured({ "ROLE_USER" })
 	@PostMapping("/user/new")
-	@Async
 	@ApiOperation(value = "Create new application")
 	public ResponseEntity<String> createNewApplication(
 			@ApiParam(value = "Application", required = true) @Valid @RequestBody ApplicationDTO data) {

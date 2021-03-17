@@ -77,7 +77,7 @@ export class KindergartenListContainer extends Component {
 
             }).catch(error => {
                 //console.log(error);
-                console.log("Darzeliai container error", error.response);
+                //console.log("Darzeliai container error", error.response);
                 if (error && error.response.status === 401)
 
                     swal({
@@ -96,7 +96,7 @@ export class KindergartenListContainer extends Component {
                 this.setState({ elderates: response.data });
             })
             .catch((error) => {
-                console.log("Darzeliai container error", error.response);
+                //console.log("Darzeliai container error", error.response);
                 if (error && error.response.status === 401)
 
                     swal({

@@ -51,7 +51,7 @@ export class QueueContainer extends Component {
                     }
                 );
             }).catch(error => {
-                console.log("Queue status error", error);
+                //console.log("Queue status error", error);
             });
     }
 
@@ -94,7 +94,7 @@ export class QueueContainer extends Component {
                     });
 
                 }).catch(error => {
-                    console.log("Queue container error", error);
+                    //console.log("Queue container error", error);
                 });
 
         }

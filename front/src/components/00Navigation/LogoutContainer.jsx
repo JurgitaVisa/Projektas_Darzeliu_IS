@@ -25,7 +25,7 @@ export default function LogoutContainer() {
         history.push("/")
       })
       .catch(error => {
-        console.log("Error on logout", error);
+        //console.log("Error on logout", error);
       });        
 
     }

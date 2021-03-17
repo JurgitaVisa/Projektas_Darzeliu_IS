@@ -58,7 +58,7 @@ export default class UpdateProfileFormContainer extends Component {
 
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 swal({
                     text: "Įvyko klaida perduodant duomenis iš serverio.",
                     button: "Gerai"
@@ -361,7 +361,7 @@ export default class UpdateProfileFormContainer extends Component {
                 })
             })
                 .catch((error) => {
-                    console.log(error);
+                    //console.log(error);
                     swal({
                         text: error.response.data,
                         button: "Gerai"

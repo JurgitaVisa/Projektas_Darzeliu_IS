@@ -37,13 +37,13 @@ function KindergartenInputForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("saugoma į serverį");
-    console.log(data);
+    //console.log("saugoma į serverį");
+    //console.log(data);
     savingStatus = true;
     http
       .post(`${apiEndpoint}/api/darzeliai/manager/createKindergarten`, data)
       .then((response) => {
-        console.log("įrašyta: " + response.data);
+        //console.log("įrašyta: " + response.data);
         swal({
           text: "Naujas darželis „" + data.name + "“ pridėtas sėkmingai!",
           button: "Gerai",

@@ -18,7 +18,10 @@ export default class UpdateProfileFormContainer extends Component {
             address: "",
             phone: "",
             email: "",
-            passwordUpdate: false
+            passwordUpdate: false,
+            oldPassword: "",
+            newPassword: "",
+            newPasswordRepeat: "",
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -169,11 +172,6 @@ export default class UpdateProfileFormContainer extends Component {
                     <div className="form-group">
                         <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
                         <div className="input-group">
-                            {/**<div className="input-group-prepend">
-                                <div className="input-group-text">
-                                    +
-                                </div>
-                                </div>*/}
                             <input
                                 type="tel"
                                 className="form-control"
@@ -355,6 +353,7 @@ export default class UpdateProfileFormContainer extends Component {
                     button: "Gerai"
                 }).then(() => {
                     this.setState({
+                        passwordUpdate: false,
                         oldPassword: "",
                         newPassword: "",
                         newPasswordRepeat: ""

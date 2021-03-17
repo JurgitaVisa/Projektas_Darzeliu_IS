@@ -44,9 +44,7 @@ export class KindergartenStatContainer extends Component {
                     currentPage: response.data.number + 1
                 });
 
-            }).catch(error => {
-                //console.log("Statistics container error", error);
-            });
+            }).catch(() => {});
     }
 
     handlePageChange = (page) => {
@@ -56,8 +54,11 @@ export class KindergartenStatContainer extends Component {
 
 
     render() {
-        const { length: count } = this.state.darzeliai;
+        
         const { darzeliai, totalElements, pageSize } = this.state;
+        let count = 0;
+
+        if(darzeliai!==undefined) count = darzeliai.length;
 
         if (count === 0) return <div className="container pt-5"><h6 className="pt-5">Informacija ruošiama</h6></div>
 

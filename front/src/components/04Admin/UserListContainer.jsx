@@ -100,7 +100,7 @@ export class UserListContainer extends Component {
 
             this.getUserInfo(page);
           })
-          .catch(() => {});
+          .catch(() => { });
       }
     });
   };
@@ -125,7 +125,7 @@ export class UserListContainer extends Component {
               button: "Gerai",
             });
           })
-          .catch(() => {});
+          .catch(() => { });
       }
     });
   };
@@ -136,7 +136,10 @@ export class UserListContainer extends Component {
   };
 
   render() {
-    const { length: count } = this.state.naudotojai;
+    const { naudotojai } = this.state;
+    let count = 0;
+
+    if (naudotojai !== undefined) count = naudotojai.length;
 
     if (count === 0)
       return (
@@ -145,7 +148,7 @@ export class UserListContainer extends Component {
         </div>
       );
 
-    const { naudotojai, totalPages } = this.state;
+    const { totalPages } = this.state;
 
     return (
       <React.Fragment>

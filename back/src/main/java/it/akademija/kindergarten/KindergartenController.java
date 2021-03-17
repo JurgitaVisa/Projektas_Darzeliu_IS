@@ -53,8 +53,7 @@ public class KindergartenController {
 	 * @return list of kindergarten
 	 */
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
-	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
+	@GetMapping	
 	@ApiOperation(value = "Get all kindergarten names and addresses with available places > 0")
 	public List<KindergartenInfo> getAllWithNonZeroCapacity() {
 
@@ -67,8 +66,7 @@ public class KindergartenController {
 	 * @return list of kindergarten
 	 */
 	@Secured({ "ROLE_MANAGER" })
-	@GetMapping("/manager/elderates")
-	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/manager/elderates")	
 	@ApiOperation(value = "Get all elderates")
 	public Set<String> getAllElderates() {
 
@@ -211,8 +209,7 @@ public class KindergartenController {
 	 * @return kindergarten statistics
 	 */
 	@Secured({ "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
-	@GetMapping("/statistics")
-	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/statistics")	
 	@ApiOperation(value = "Get kindergarten statistics")
 	public Page<KindergartenStatistics> getKindergartenStatistics(@RequestParam("page") int page,
 			@RequestParam("size") int size) {

@@ -62,8 +62,7 @@ public class ApplicationController {
 	 * @return message
 	 */
 	@Secured({ "ROLE_USER" })
-	@PostMapping("/user/new")
-	@Async
+	@PostMapping("/user/new")	
 	@ApiOperation(value = "Create new application")
 	public ResponseEntity<String> createNewApplication(
 			@ApiParam(value = "Application", required = true) @Valid @RequestBody ApplicationDTO data) {
@@ -109,8 +108,7 @@ public class ApplicationController {
 	 * @return list applications
 	 */
 	@Secured({ "ROLE_USER" })
-	@GetMapping("/user")
-	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/user")	
 	@ApiOperation(value = "Get all user applications")
 	public Set<ApplicationInfoUser> getAllUserApplications() {
 
@@ -128,8 +126,7 @@ public class ApplicationController {
 	 * @return page of applications
 	 */
 	@Secured({ "ROLE_MANAGER" })
-	@GetMapping("/manager")
-	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/manager")	
 	@ApiOperation(value = "Get a page from all submitted applications")
 	public Page<ApplicationInfo> getPageFromSubmittedApplications(@RequestParam("page") int page,
 			@RequestParam("size") int size) {
@@ -176,7 +173,6 @@ public class ApplicationController {
 	 */
 
 	@Secured({ "ROLE_USER" })
-
 	@DeleteMapping("/user/delete/{id}")
 	@ApiOperation("Delete user application by id")
 	public ResponseEntity<String> deleteApplication(

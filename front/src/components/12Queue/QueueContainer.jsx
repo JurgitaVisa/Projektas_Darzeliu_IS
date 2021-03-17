@@ -247,13 +247,14 @@ export class QueueContainer extends Component {
 
 
     render() {
-
-        const size = this.state.applications.length;
-
+        
         const { applications, totalPages,  searchQuery, isActive, isLocked, currentButtonValue } = this.state;
-
+       
+        let size =0;
+        
+        if(applications!==undefined) size = applications.length;
+       
         const placeholder = "Ieškoti pagal vaiko asmens kodą..."
-
 
         return (
 

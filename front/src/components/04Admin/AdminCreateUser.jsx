@@ -133,24 +133,7 @@ class AdminCreateUser extends Component {
                             />
                         </div>
                     </div>
-                    <div className="form">
-                        {/*<div className="form-group col">
-                        <label htmlFor="txt">Gimimo data <span className="fieldRequired">*</span></label>
-                        {<input 
-                            type="date"
-                            data-date-format="DD/MM/YYYY"
-                            min='1900-01-01'
-                            max={currentDate}
-                            className="form-control"
-                            id="txtBirthdate"
-                            name="birthdate"
-                            value={this.state.birthdate}
-                            onChange={this.handleChange}
-                            onInvalid={(e) => this.validateText(e)}
-                            placeholder="MMMM-MM-DD"
-                            required
-                        />
-                        </div>*/}
+                    <div className="form">                       
                         <div className="form-group">
                             <label htmlFor="txtIdentificationCode">Asmens kodas <span className="fieldRequired">*</span></label>
                             <input
@@ -171,11 +154,7 @@ class AdminCreateUser extends Component {
                         <div className="form-group">
                             <label htmlFor="txtTelNo">Telefonas <span className="fieldRequired">*</span></label>
                             <div className="input-group">
-                                {/**<div className="input-group-prepend">
-                                    <div className="input-group-text">
-                                        +
-                                    </div>
-                                    </div>*/}
+                               
                                 <input
                                     type="tel"
                                     className="form-control"
@@ -255,7 +234,7 @@ class AdminCreateUser extends Component {
             "surname": this.state.surname,
             "username": this.state.email
         })
-            .then((response) => {
+            .then(() => {
                 swal({
                     text: "Naujas naudotojas buvo sėkmingai sukurtas.",
                     button: "Gerai"
@@ -265,7 +244,7 @@ class AdminCreateUser extends Component {
                 })
             })
             .catch((error) => {
-                console.log(error);
+                
                 swal({                   
                     text: error.response.data,                   
                     button: "Gerai"

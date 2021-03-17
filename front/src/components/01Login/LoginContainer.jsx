@@ -11,7 +11,7 @@ import swal from "sweetalert";
 
 import ForgotPasswordWindow from "../01Login/ForgotPasswordWindow";
 
-import instructionsPdf from '../../documents/VDIS_naudotojo_gidas.pdf';
+import instructionsPdf from '../../documents/VMS_VDIS_naudotojo_gidas.pdf';
 
 axios.defaults.withCredentials = true;
 
